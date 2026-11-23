@@ -39,7 +39,8 @@ export function initReplay(m) {
     $('rpInns').innerHTML = `<span class="tag" style="background:${COL[t.i]};${t.i ? 'color:#14254a' : ''}">${t.i ? 'Second' : 'First'} innings</span> <b>${esc(inns[t.i].team)}</b>`;
     $('rpScore').textContent = `${t.runs}/${t.wkts}`; $('rpOvers').textContent = `${Math.floor(t.legal / 6)}.${t.legal % 6} overs`;
     const tgt = inns[1]?.target?.runs;
-    $('rpNeed').textContent = t.i === 1 && tgt ? (t.runs >= tgt ? 'Target reached' : `Need ${tgt - t.runs} from ${Math.max(0, maxBalls - t.legal)} balls`) : (t.i === 0 && g === T.length - 1 ? '' : '');
+    const res = document.querySelector('[data-result]')?.textContent;
+    $('rpNeed').textContent = g === T.length - 1 && res ? res : t.i === 1 && tgt ? (t.runs >= tgt ? 'Target reached' : `Need ${tgt - t.runs} from ${Math.max(0, maxBalls - t.legal)} balls`) : (t.i === 0 && g === T.length - 1 ? '' : '');
     // batters and bowler so far this innings
     const bat = {}, out_ = new Set(); let bowl = {};
     T.forEach((x, k) => { if (k > g || x.i !== t.i) return; const b = x.b;

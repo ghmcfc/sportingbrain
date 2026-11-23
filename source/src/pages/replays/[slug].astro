@@ -17,7 +17,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     <span class="tag" style="background:#2E7D32">Cricket replay · ball by ball</span>
     <h1>{r.title}</h1>
     <p class="teaser" style="font-size:1.1rem">{r.teaser}</p>
-    <p class="small">{m.venue}{m.city && !(m.venue || '').includes(m.city) ? ', ' + m.city : ''} · {new Date(m.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} · {m.overs} overs a side · <b>{result}</b>{m.pom ? ` · Player of the match: ${m.pom.join(', ')}` : ''}</p>
+    <p class="small">{m.venue}{m.city && !(m.venue || '').includes(m.city) ? ', ' + m.city : ''} · {new Date(m.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} · {m.overs} overs a side · <b data-result>{result}</b>{m.pom ? ` · Player of the match: ${m.pom.join(', ')}` : ''}</p>
     <div class="rp-grid">
       <section class="card rp-board" aria-live="polite">
         <div class="rp-inns" id="rpInns"></div>
