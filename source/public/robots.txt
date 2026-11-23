@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /sportingbrain/f1/
+Sitemap: https://ghmcfc.github.io/sportingbrain/sitemap-index.xml

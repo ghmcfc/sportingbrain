@@ -1,0 +1,16 @@
+---
+import Base from './Base.astro';
+interface Props { title: string; description: string; band?: string }
+const { title, description, band = '' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<Base title={title} description={description} wide>
+  <div class="kz" data-band={band}>
+    <nav class="kz-nav" aria-label="Kids Zone">
+      <a href={`${base}kids.html`} class="kz-home"><img src={`${base}assets/brain.svg`} alt="" width="40" height="40">Kids Zone</a>
+      <a href={`${base}kids/6-8.html`}>Ages 6 to 8</a><a href={`${base}kids/9-12.html`}>Ages 9 to 12</a><a href={`${base}kids/parents.html`}>For parents</a>
+    </nav>
+    <slot />
+    <p class="kz-safe">No ads. No chat. No sign-up. Nothing you type here leaves this device.</p>
+  </div>
+</Base>

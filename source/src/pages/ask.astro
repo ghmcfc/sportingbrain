@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import { GUIDES } from '../data/guides.js';
+import { FLASHBACKS } from '../data/flashbacks.js';
+import { BANK } from '../data/bank.js';
+import { WEEK } from '../data/week.js';
+import { CONFIG } from '../data/config.js';
+import { D } from '../data/content.js';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+// A searchable library of everything SportingBrain has checked
+const docs = [];
+for (const g of GUIDES) {
+  const u = `${base}sports/${g.id}.html`;
+  g.how.forEach(p => docs.push([`${g.name}: how it works`, p, u]));
+  docs.push([`${g.name}: scoring`, g.scoring, u]);
+  g.watch.forEach(p => docs.push([`${g.name}: what experts watch for`, p, u]));
+  g.greats.forEach(x => docs.push([`${g.name}: ${x[0]}`, `${x[0]}: ${x[1]}`, u]));
+  g.terms.forEach(x => docs.push([`${g.name}: what is ${x[0].toLowerCase()}?`, `${x[0]}: ${x[1]}`, u]));
+}
+for (const f of FLASHBACKS) { const u = `${base}flashback/${f.id}.html`; docs.push([f.title, f.standfirst, u]); f.body.forEach(p => docs.push([f.title, p, u])); }
+for (const q of BANK) docs.push([q[2], `${q[3][0]}. ${q[5]}`, `${base}daily.html?level=${q[0]}`]);
+for (const e of D.SB_TODAY) docs.push([`${e.y}, ${e.s}`, e.t, `${base}on-this-day.html?d=${e.md}`]);
+for (const s of WEEK.stories) docs.push([s.title, s.body, `${base}this-week.html`]);
+---
+<Base title="Ask the Brain: any sport question, answered | SportingBrain" description="Ask the Brain anything about sport: rules, records, history and the people who made it. Answers come with their sources." wide>
+  <section class="ask">
+    <h1>Ask the Brain</h1>
+    <p class="teaser">Rules, records, history, tactics, the greats. Ask anything about sport and get an answer with its sources.</p>
+    <form id="askForm" class="ask-form" autocomplete="off"><label for="askQ" class="sr">Your question</label>
+      <input id="askQ" maxlength="300" placeholder="Who ended Jahangir Khan's unbeaten run?" required><button class="btn gold">Ask</button></form>
+    <div class="ask-eg">Try: {['What is a doosra?', 'How does offside work?', 'Who was Major Taylor?', 'What is the undercut in F1?', 'Who won the first Cricket World Cup?'].map(e => <button type="button" data-eg={e}>{e}</button>)}</div>
+    <div id="askOut" aria-live="polite"></div>
+    <p class="small">{CONFIG.ASK_ENDPOINT ? 'Live answers are written by AI using web search, with sources. Always check the source for anything important.' : 'Answers come from SportingBrain\'s own checked articles, guides and question bank.'} No betting, ever.</p>
+  </section>
+  <script id="askDocs" type="application/json" set:html={JSON.stringify(docs)} />
+  <script define:vars={{ ENDPOINT: CONFIG.ASK_ENDPOINT }}>
+    const DOCS = JSON.parse(document.getElementById('askDocs').textContent);
+    const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const STOP = new Set('a an the of in on at to is was who what when where why how did does do and or for by with from it its which won win first ever most best this that be are were has have'.split(' '));
+    const tok = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(w => w.length > 1 && !STOP.has(w));
+    const N = DOCS.length, df = {}; const DT = DOCS.map(d => { const t = tok(d[0] + ' ' + d[1]); new Set(t).forEach(w => df[w] = (df[w] || 0) + 1); return t; });
+    function local(q) { const qt = tok(q); if (!qt.length) return [];
+      return DOCS.map((d, i) => { let s = 0; const tt = DT[i], title = tok(d[0]); qt.forEach(w => { const tf = tt.filter(x => x === w || (w.length > 4 && x.startsWith(w.slice(0, -1)))).length; if (tf) s += (1 + Math.log(tf)) * Math.log(1 + N / (df[w] || 1)) * (title.includes(w) ? 1.6 : 1); }); return [s, d]; })
+        .filter(x => x[0] > 0).sort((a, b) => b[0] - a[0]).slice(0, 3); }
+    const out = document.getElementById('askOut');
+    function showLocal(q) { const r = local(q);
+      out.innerHTML = r.length ? `<div class="ask-ans"><p class="fp-kicker">From SportingBrain's checked library</p>${r.map(([, d]) => `<div class="ask-hit"><b>${esc(d[0])}</b><p>${esc(d[1])}</p><a href="${d[2]}">Read more</a></div>`).join('')}</div>`
+        : `<div class="ask-ans"><p>The Brain hasn't got that one in its library yet. Try asking it another way, or browse the <a href="sports.html">sport guides</a>.</p></div>`; }
+    async function ask(q) { out.innerHTML = '<p class="ask-wait">The Brain is thinking…</p>';
+      if (!ENDPOINT) return showLocal(q);
+      try { const r = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ q }) }); const j = await r.json();
+        if (!r.ok || j.error) { out.innerHTML = `<div class="ask-ans"><p>${esc(j.error || 'The Brain is busy.')}</p></div>`; return; }
+        out.innerHTML = `<div class="ask-ans"><p class="fp-kicker">The Brain says</p>${j.answer.split(/\n+/).map(p => `<p>${esc(p)}</p>`).join('')}${j.sources?.length ? `<p class="small">Sources: ${j.sources.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a>`).join(', ')}</p>` : ''}</div>`;
+      } catch (_) { showLocal(q); } }
+    document.getElementById('askForm').addEventListener('submit', e => { e.preventDefault(); const q = document.getElementById('askQ').value.trim(); if (q) ask(q); });
+    document.querySelectorAll('[data-eg]').forEach(b => b.onclick = () => { document.getElementById('askQ').value = b.dataset.eg; ask(b.dataset.eg); });
+    const pre = new URLSearchParams(location.search).get('q'); if (pre) { document.getElementById('askQ').value = pre; ask(pre); }
+  </script>
+</Base>

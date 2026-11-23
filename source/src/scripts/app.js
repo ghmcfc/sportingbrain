@@ -4,6 +4,7 @@ import { FLASHBACKS } from '../data/flashbacks.js';
 import { REPLAYS } from '../data/replays.js';
 import { BANK } from '../data/bank.js';
 import { GUIDES } from '../data/guides.js';
+import { WEEK } from '../data/week.js';
 (function(){
 'use strict';
 const BASE=(document.documentElement.dataset.base||'/');
@@ -90,8 +91,10 @@ const DEFAULT_USP=[['🎯','Call It, every day','We freeze a real moment from a 
   ['📼','Flashback and replays','Forgotten moments told properly, and great finals replayed ball by ball.'],
   ['✅','Free and family-safe','No sign-up to play. No betting. Ever.']];
 function welcome(USP, force){ USP=USP||DEFAULT_USP;
-  if(!force && (store.get('welcomed',false) || store.get('played',0)>0 || store.get('nl_done',false))) return;
-  store.set('welcomed',true);
+  if(new URLSearchParams(location.search).has('welcome')) force=true;
+  const seen=store.get('welcomed_at',0), wk=7*86400000;
+  if(!force && (store.get('played',0)>0 || store.get('nl_done',false) || (store.get('welcomed',false) && Date.now()-seen<wk) || store.get('welcome_count',0)>=2)) return;
+  store.set('welcomed',true); store.set('welcomed_at',Date.now()); store.set('welcome_count',store.get('welcome_count',0)+1);
   const mobile=matchMedia('(max-width:767px)').matches;
   const w=document.createElement('div'); w.className='welcome '+(mobile?'sheet':'modal'); w.setAttribute('role','dialog'); w.setAttribute('aria-modal','true'); w.setAttribute('aria-labelledby','wtitle');
   const pts=(USP||[]).slice(0, mobile?3:5);
@@ -204,8 +207,16 @@ if(P==='home'){
         <p class="q">${esc(cm.q)}</p>
         <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how you did':'Make your call'}</a>
       </section>`:''}
+      <form class="ask-strip" action="${BASE}ask.html"><label class="sr" for="hq">Ask the Brain</label><input id="hq" name="q" placeholder="Ask the Brain any sport question"><button class="btn">Ask</button></form>
       <p class="you-line">${streak?`Your streak: <b>${streak} day${streak===1?'':'s'}</b>.`:'Play a game a day to start a streak.'} ${streakSaverLine()}</p>
     </aside>
+  </div>
+
+  <div class="sec"><h2>This week in sport</h2><a href="${BASE}this-week.html">The full edition</a></div>
+  <div class="fp-week">
+    <div class="fp-week-stories">${WEEK.stories.slice(0,3).map(x=>`<a href="${BASE}this-week.html#stories"><span class="fp-kicker">${esc(x.sport)}</span><b>${esc(x.title)}</b></a>`).join('')}</div>
+    <div class="tw-nums mini">${WEEK.numbers.slice(0,3).map(n=>`<div><b>${esc(n[0])}</b><p>${esc(n[1])}</p></div>`).join('')}</div>
+    <div class="fp-watch"><h3>What to watch</h3><ul>${WEEK.watch.slice(0,4).map(w=>`<li><b>${esc(w.what)}</b><small>${esc(w.when)}</small></li>`).join('')}</ul><a href="${BASE}this-week.html#talking" class="btn ghost" style="font-size:1rem;padding:6px 12px">Have your say: talking points</a></div>
   </div>
 
   <div class="fp-row">
@@ -242,6 +253,26 @@ if(P==='home'){
     </section>
   </div>
 
+  <div class="fp-row">
+    <section class="fp-col">
+      <div class="sec"><h2>Hero and heroine of the week</h2></div>
+      ${H?`<div class="storylist"><a href="${BASE}stories/${H.heroine.story}.html"><span class="noimg" style="background:#5B2C83"></span><span><b>${esc(H.heroine.name)}</b><small>${esc(H.heroine.line)}</small></span></a>
+        <a href="${BASE}stories/${H.hero.story}.html"><span class="noimg" style="background:#1F5FA8"></span><span><b>${esc(H.hero.name)}</b><small>${esc(H.hero.line)}</small></span></a></div>`:`<p class="teaser">Back next week.</p>`}
+    </section>
+    <section class="fp-col">
+      <div class="sec"><h2>Coming tomorrow</h2></div>
+      <ul class="tomorrow-list"><li>A new Call It moment</li><li>Five new Beat the Brain questions at every level</li><li>New moments from ${dlabel(`${String(tmr.getUTCMonth()+1).padStart(2,'0')}-${String(tmr.getUTCDate()).padStart(2,'0')}`)} in sport</li><li>Guide of the day: ${esc(tSport.name)}</li>${weekly?`<li>${esc(weekly)}</li>`:''}</ul>
+      <p class="you-line">Starts in <b class="countdown" id="cd2"></b></p>
+    </section>
+    <section class="fp-col">
+      <div class="sec"><h2>Your record</h2></div>
+      <div class="rec"><div><b>${streak}</b><span>day streak</span></div><div><b>${store.get('played',0)}</b><span>games played</span></div><div><b>${store.get('beaten',0)}</b><span>Brain beaten</span></div></div>
+      <div class="badges flat">${B.map(b=>`<span class="badge ${b.got?'got':''}" title="${esc(b.how)}">${esc(b.n)}</span>`).join('')}</div>
+      <p class="small" style="margin:8px 0 10px">${streakSaverLine()}. Kept on this device only.</p>
+      <div class="sharebtns"><a class="btn ghost" data-share-to="whatsapp" target="_blank" rel="noopener">WhatsApp</a><a class="btn ghost" data-share-to="x" target="_blank" rel="noopener">X</a><a class="btn ghost" data-share-to="facebook" target="_blank" rel="noopener">Facebook</a><button class="btn ghost" data-copy-link>Copy link</button></div>
+    </section>
+  </div>
+
   <section class="nl-band" id="newsletter">
     <div><h3>The Daily Brain</h3><p>Today's Call It, a Flashback, On This Day and one stat to win an argument with. Every morning, free. Your email is the only thing we ever ask for.</p></div>
     <a class="btn nl-open" href="https://tally.so/r/${window.SB_NEWSLETTER_FORM}" target="_blank" rel="noopener">Get the newsletter</a>
@@ -254,6 +285,9 @@ if(P==='home'){
     <div><b>Free, and no betting, ever</b><p>Paid for by adverts. No sign-up to play. Your email only if you want the newsletter.</p></div>
   </div>`;
 
+  countdown($('#cd2'));
+  main.querySelectorAll('[data-share-to]').forEach(a=>{ const u=encodeURIComponent(SITE), t=encodeURIComponent(PITCH);
+    a.href={whatsapp:`https://wa.me/?text=${t}%20${u}`, facebook:`https://www.facebook.com/sharer/sharer.php?u=${u}`, x:`https://twitter.com/intent/tweet?text=${t}&url=${u}`}[a.dataset.shareTo]; });
   (function(){ const sc=document.createElement('script'); sc.src='https://tally.so/widgets/embed.js'; sc.async=true; document.body.appendChild(sc);
     document.addEventListener('click',e=>{ const a=e.target.closest('.nl-open'); if(!a||!window.Tally||!window.Tally.openPopup) return; e.preventDefault(); window.Tally.openPopup(window.SB_NEWSLETTER_FORM,{layout:'modal',width:520,overlay:true,emoji:{text:'🧠',animation:'wave'}}); }); })();
 

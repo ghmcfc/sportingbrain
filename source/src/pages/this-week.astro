@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import { WEEK } from '../data/week.js';
+import { GUIDES } from '../data/guides.js';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const spot = GUIDES.find(g => g.id === WEEK.spotlight.id);
+---
+<Base title="This Week in Sport: the stories, the numbers, the arguments | SportingBrain" description="The week in sport: what happened, the numbers behind the weekend, the talking points, and what to watch next." wide>
+  <section class="tw">
+    <header class="tw-head"><p class="fp-kicker">Edition: {WEEK.edition}</p><h1>This Week in Sport</h1>
+      <nav class="sg-tabs" aria-label="Sections"><a href="#stories">The stories</a><a href="#numbers">The numbers</a><a href="#talking">Talking points</a><a href="#watch">What to watch</a><a href="#spotlight">Spotlight</a></nav></header>
+
+    <div class="sec" id="stories"><h2>The stories that mattered</h2></div>
+    <div class="tw-stories">{WEEK.stories.map((s, i) => (
+      <article class={i === 0 ? 'tw-lead' : 'tw-item'}><p class="fp-kicker">{s.sport}</p><h3>{s.title}</h3><p>{s.body}</p><p class="small">Source: <a href={s.src[1]} target="_blank" rel="noopener">{s.src[0]}</a></p></article>
+    ))}</div>
+
+    <div class="sec" id="numbers"><h2>The numbers behind the weekend</h2></div>
+    <div class="tw-nums">{WEEK.numbers.map(n => <div><b>{n[0]}</b><p>{n[1]}</p></div>)}</div>
+
+    <div class="sec" id="talking"><h2>Talking points</h2></div>
+    <p class="teaser">Have your say. Your vote is kept on this device.</p>
+    <div class="tw-polls">{WEEK.talking.map(t => (
+      <div class="tw-poll" data-poll={t.id}><h3>{t.q}</h3><p class="small">{t.why}</p>
+        <div class="tw-opts">{t.opts.map((o, k) => <button data-k={k}>{o}</button>)}</div><p class="tw-done small" hidden></p></div>
+    ))}</div>
+
+    <div class="sec" id="watch"><h2>What to watch</h2></div>
+    <ol class="tw-watch">{WEEK.watch.map(w => <li><span class="tw-when">{w.when}</span><div><p class="fp-kicker">{w.sport}</p><b>{w.what}</b><p>{w.why}</p></div></li>)}</ol>
+
+    <div class="sec" id="spotlight"><h2>Sport spotlight: {spot.name}</h2><a href={`${base}sports/${spot.id}.html`}>Read the guide</a></div>
+    <p class="teaser">{WEEK.spotlight.why}</p>
+    <ol class="sg-watch">{spot.watch.map(w => <li>{w}</li>)}</ol>
+
+    <section class="fb-src"><b>Sources</b><ul>{[...WEEK.stories.map(s => s.src), ...WEEK.numbersSrc, ...WEEK.watchSrc].map(s => <li><a href={s[1]} target="_blank" rel="noopener">{s[0]}</a></li>)}</ul></section>
+  </section>
+  <script>
+    document.querySelectorAll('[data-poll]').forEach(p => { const key = 'sb_poll_' + p.dataset.poll; let v = null; try { v = localStorage.getItem(key); } catch (_) {}
+      const show = k => { p.querySelectorAll('[data-k]').forEach(b => { b.disabled = true; b.classList.toggle('on', b.dataset.k === String(k)); }); const d = p.querySelector('.tw-done'); d.hidden = false; d.textContent = 'Vote saved. We publish the results in next week\'s edition.'; };
+      if (v !== null) show(v);
+      p.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { try { localStorage.setItem(key, b.dataset.k); } catch (_) {} show(b.dataset.k); }); });
+  </script>
+</Base>

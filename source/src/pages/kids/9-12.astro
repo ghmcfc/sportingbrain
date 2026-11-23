@@ -1,0 +1,40 @@
+---
+import Kids from '../../layouts/Kids.astro';
+import { KIDS } from '../../data/kids.js';
+const K = KIDS.older;
+---
+<Kids title="Junior Brain: sport quiz and challenges for ages 9 to 12 | SportingBrain" description="Five sport questions a day, amazing facts and challenges to try at home. No ads, no chat, no sign-up." band="older">
+  <section class="kz-hero small"><div><h1>{K.name}</h1><p>Ages {K.ages}. Five new questions every day.</p></div></section>
+  <section class="kz-card" id="kzQuiz" aria-live="polite"></section>
+  <section class="kz-cert kz-card" id="kzCert" hidden>
+    <h2>Print your certificate</h2>
+    <label>Your first name <input id="kzName" maxlength="20" autocomplete="off"></label>
+    <div class="cert" id="cert"><div class="cert-in"><img src="../assets/brain.svg" alt="" width="70"><p class="cert-k">SportingBrain {K.name}</p><p class="cert-t">Certificate of Sporting Brilliance</p><p class="cert-n" id="certName">Your name</p><p class="cert-s" id="certScore"></p><p class="cert-d" id="certDate"></p></div></div>
+    <button class="btn gold" onclick="window.print()">Print it</button>
+    <p class="small">Your name stays on this device. We never see it.</p>
+  </section>
+  <h2 class="kz-h">Amazing facts</h2>
+  <div class="kz-facts">{K.facts.map(f => <div class="kz-card">{f}</div>)}</div>
+  <h2 class="kz-h">Try this at home</h2>
+  <div class="kz-try">{K.tryThis.map(t => <div class="kz-card"><b>{t[0]}</b><p>{t[1]}</p></div>)}</div>
+  <script id="kzData" type="application/json" set:html={JSON.stringify(K.qs)} />
+  <script>
+    const Q = JSON.parse(document.getElementById('kzData').textContent), band = document.querySelector('.kz').dataset.band;
+    const uk = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' }));
+    const day = Math.floor(Date.UTC(uk.getFullYear(), uk.getMonth(), uk.getDate()) / 86400000);
+    let seed = day * 13 + (band === 'young' ? 1 : 2); const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+    const start = (day * 5) % Q.length, qs = []; for (let k = 0; k < 5; k++) { const q = Q[(start + k) % Q.length]; const idx = [0, 1, 2, 3].sort(() => rnd() - .5); qs.push({ q: q[0], o: idx.map(i => q[1][i]), a: idx.indexOf(0), f: q[3] }); }
+    const root = document.getElementById('kzQuiz'); let i = 0, score = 0;
+    const cheers = ['Brilliant!', 'Super!', 'Yes! Well done!', 'Spot on!', 'Champion!'];
+    function show() { const q = qs[i]; root.innerHTML = '<p class="kz-step">Question ' + (i + 1) + ' of 5</p><h2>' + q.q + '</h2><div class="kz-opts">' + q.o.map((o, k) => '<button data-k="' + k + '">' + o + '</button>').join('') + '</div><p class="kz-fact" hidden></p>'; }
+    root.addEventListener('click', e => { const b = e.target.closest('button[data-k]'); if (!b || b.disabled) return; const q = qs[i], k = +b.dataset.k;
+      root.querySelectorAll('button[data-k]').forEach((x, j) => { x.disabled = true; if (j === q.a) x.classList.add('right'); }); if (k === q.a) score++; else b.classList.add('wrong');
+      const f = root.querySelector('.kz-fact'); f.hidden = false; f.textContent = (k === q.a ? cheers[i % cheers.length] + ' ' : 'Good try! ') + q.f;
+      const n = document.createElement('button'); n.className = 'btn gold'; n.textContent = i < 4 ? 'Next question' : 'See my score'; n.onclick = () => { i++; i < 5 ? show() : done(); }; root.appendChild(n); });
+    function done() { root.innerHTML = '<h2>You scored ' + score + ' out of 5!</h2><p>' + (score >= 4 ? 'Amazing. You are a true sporting brain.' : score >= 2 ? 'Great effort. Come back tomorrow for five new questions.' : 'Well played for trying. New questions tomorrow!') + '</p>';
+      const c = document.getElementById('kzCert'); c.hidden = false; document.getElementById('certScore').textContent = 'scored ' + score + ' out of 5 in today\'s quiz';
+      document.getElementById('certDate').textContent = uk.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }); }
+    document.getElementById('kzName').addEventListener('input', e => { document.getElementById('certName').textContent = e.target.value.trim() || 'Your name'; });
+    show();
+  </script>
+</Kids>

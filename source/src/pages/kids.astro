@@ -1,0 +1,15 @@
+---
+import Kids from '../layouts/Kids.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<Kids title="Kids Zone | SportingBrain" description="Sport quizzes, amazing facts and games to play at home, for ages 6 to 8 and 9 to 12. No ads, no chat, no sign-up.">
+  <section class="kz-hero">
+    <img src={`${base}assets/brain.svg`} alt="The Brain, SportingBrain's mascot" width="160" height="160">
+    <div><h1>Welcome to the Kids Zone</h1><p>Quizzes, amazing sport facts and challenges to try at home. Pick your age to start.</p></div>
+  </section>
+  <div class="kz-pick">
+    <a class="kz-band young" href={`${base}kids/6-8.html`}><b>Little Legends</b><span>Ages 6 to 8</span><small>Picture-friendly questions, fun facts and games to play with a grown-up.</small></a>
+    <a class="kz-band older" href={`${base}kids/9-12.html`}><b>Junior Brain</b><span>Ages 9 to 12</span><small>Proper sport questions, record breakers and challenges. Earn your certificate.</small></a>
+  </div>
+  <p class="kz-parent">Grown-ups: <a href={`${base}kids/parents.html`}>read how the Kids Zone keeps children safe</a>.</p>
+</Kids>

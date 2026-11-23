@@ -12,13 +12,14 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = image || 'https://images.pexels.com/photos/1657324/pexels-photo-1657324.jpeg?auto=compress&cs=tinysrgb&w=1200';
 const nav = [
-  ['Play', `${base}#games`],
   ['Call It', `${base}call-it.html`],
+  ['This Week', `${base}this-week.html`],
   ['Flashback', `${base}flashback.html`],
   ['On This Day', `${base}on-this-day.html`],
-  ['Replays', `${base}replays.html`],
   ['Guides', `${base}sports.html`],
+  ['Ask the Brain', `${base}ask.html`],
   ['Round-Up', `${base}round-up.html`],
+  ['Kids', `${base}kids.html`],
   ['Newsletter', `${base}newsletter.html`],
 ];
 const ld = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'SportingBrain', url: new URL(base, Astro.site).href, description: 'The free daily sports hub for everyone who loves sport.' };
@@ -61,8 +62,8 @@ const ld = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sporti
 <footer class="site-foot"><div class="wrap wide foot-grid">
   <div><a class="wordmark" href={base}><span class="mark" aria-hidden="true">SB</span><span>SportingBrain</span></a>
     <p>The smartest free sports site in the world. Real matches, real data, stories nobody else tells. No betting, ever.</p></div>
-  <div><h3>Play</h3><a href={`${base}call-it.html`}>Call It</a><a href={`${base}daily.html`}>Beat the Brain</a><a href={`${base}higher-or-lower.html`}>Higher or Lower</a><a href={`${base}the-grid.html`}>The Grid</a><a href={`${base}challenge.html?c=family`}>Family challenge</a></div>
-  <div><h3>Read</h3><a href={`${base}flashback.html`}>Flashback</a><a href={`${base}on-this-day.html`}>On This Day</a><a href={`${base}replays.html`}>Replays</a><a href={`${base}sports.html`}>Sport guides</a><a href={`${base}round-up.html`}>The Cynical Round-Up</a></div>
+  <div><h3>Play</h3><a href={`${base}call-it.html`}>Call It</a><a href={`${base}daily.html`}>Beat the Brain</a><a href={`${base}higher-or-lower.html`}>Higher or Lower</a><a href={`${base}the-grid.html`}>The Grid</a><a href={`${base}challenge.html?c=family`}>Family challenge</a><a href={`${base}kids.html`}>Kids Zone</a></div>
+  <div><h3>Read</h3><a href={`${base}this-week.html`}>This Week in Sport</a><a href={`${base}flashback.html`}>Flashback</a><a href={`${base}on-this-day.html`}>On This Day</a><a href={`${base}replays.html`}>Replays</a><a href={`${base}sports.html`}>Sport guides</a><a href={`${base}round-up.html`}>The Cynical Round-Up</a></div>
   <div><h3>SportingBrain</h3><a href={`${base}newsletter.html`}>The Daily Brain newsletter</a><a href={`${base}about.html`}>About and privacy</a><a href="#" data-welcome>What is SportingBrain?</a><a href="#" data-dys>Dyslexia-friendly font</a></div>
 </div><div class="wrap wide foot-small"><p>Photos from Pexels. Cricket data from Cricsheet (Open Data Commons Attribution License). Facts checked against the sources listed on every article.</p></div></footer>
 <script>
