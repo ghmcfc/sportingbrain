@@ -1,0 +1,23 @@
+name: Data desk (nightly feeds)
+on:
+  schedule: [{cron: '17 4 * * *'}]
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  feeds:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Pull F1 data
+        run: python3 source/scripts/fetch_f1.py
+      - name: Build site
+        run: cd source && npm ci && npx astro build && cp -r dist/. .. && touch ../.nojekyll
+      - name: Commit if changed
+        run: |
+          git config user.name "Continuity Projects"; git config user.email "gavin@continuityprojects.com"
+          git add -A
+          git diff --cached --quiet || (git commit -m "Data desk: nightly feed update" && git push)
