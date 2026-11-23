@@ -390,3 +390,15 @@ header.top .wrap{max-width:1240px;padding:10px 16px}
 .hook-tom{color:#C9D2E0;margin:14px 0 0}
 .fb-mini{display:block;color:var(--ink);text-decoration:none;border-left:4px solid var(--amber);padding-left:12px}.fb-mini b{display:block;font-family:var(--display);font-size:1.4rem;line-height:1.1}.fb-mini span{font-size:.95rem;color:var(--ink-2)}
 @media(max-width:600px){.hook{padding:20px 18px;min-height:0}.hook-opts{grid-template-columns:1fr}.hook-opts.two{grid-template-columns:1fr 1fr}.hook-score{font-size:4.5rem}}
+/* Laugh of the Day */
+.lotd{background:var(--paper);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.lotd-play,.lotd-frame{display:block;width:100%;aspect-ratio:16/9;border:0;padding:0;background:#0F1E36 center/cover no-repeat;cursor:pointer;position:relative}
+.lotd-play span{position:absolute;left:50%;top:50%;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;background:#F2A900}
+.lotd-play span::after{content:'';position:absolute;left:33px;top:24px;border-left:28px solid #0F1E36;border-top:18px solid transparent;border-bottom:18px solid transparent}
+.lotd-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.lotd-cap{padding:14px 16px}.lotd-cap b{display:block;font-family:var(--display);font-size:1.4rem;line-height:1.1}.lotd-cap small{color:var(--mute)}
+.lotd:not(.big) .lotd-cap b{font-size:1.05rem}.lotd:not(.big) .lotd-play span{transform:scale(.6)}
+.lotd-vote{display:flex;gap:8px;align-items:center;margin-top:10px}.lotd-vote button{font:inherit;padding:6px 14px;min-height:40px;border:2px solid var(--ink);background:transparent;color:var(--ink);border-radius:3px;cursor:pointer}
+.lotd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.home-lotd{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:800px){.home-lotd{grid-template-columns:1fr}}

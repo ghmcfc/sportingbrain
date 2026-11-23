@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import V from '../data/feeds/videos.json';
+import CFG from '../data/video-config.json';
+---
+<Base title="Laugh of the Day: the funniest moments in sport | SportingBrain" description="One hand-picked funny sports clip every day, chosen by a person, not an algorithm. Family-safe, and new at midnight." page="laughs">
+  <header class="pg-head"><h1>Laugh of the Day</h1><p>One funny moment from sport every day, hand-picked by a person, not an algorithm, and always family-safe. New at midnight.</p></header>
+  <section id="lotd"></section>
+  <div class="pg-sec"><h2>This week's laughs</h2></div>
+  <div class="lotd-grid" id="lotdWeek"></div>
+  {CFG.channel && <p><a class="btn ghost" href={CFG.channel} target="_blank" rel="noopener">Subscribe on YouTube</a></p>}
+  <p class="pg-note">Clips play in YouTube's privacy-enhanced player and belong to their owners. Spotted something that shouldn't be here? Use "Spotted a mistake?" at the foot of the page.</p>
+  <script id="vids" type="application/json" set:html={JSON.stringify(V.videos)} />
+  <script>
+    import { lotdIndex, renderClip } from '../scripts/laughs.js';
+    const V = JSON.parse(document.getElementById('vids').textContent), box = document.getElementById('lotd'), wk = document.getElementById('lotdWeek');
+    if (!V.length) { box.innerHTML = '<div class="pg-card"><p>The first Laugh of the Day arrives soon.</p></div>'; }
+    else { const i = lotdIndex(V.length); renderClip(box, V[i], true);
+      wk.innerHTML = Array.from({ length: Math.min(6, V.length - 1) }, (_, k) => V[(i - k - 1 + V.length * 9) % V.length]).map(v => `<div class="lotd-mini" data-id="${v.id}"></div>`).join('');
+      wk.querySelectorAll('[data-id]').forEach(el => renderClip(el, V.find(v => v.id === el.dataset.id), false)); }
+  </script>
+</Base>

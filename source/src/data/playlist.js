@@ -2,6 +2,7 @@
 // [slug, name, one line, group, colour]
 export const PLAY = [
   ['call-it', 'Call It: Cricket', 'A real over from a real final. Call the runs and wickets before the ball is bowled.', 'daily', '#F2A900'],
+  ['laughs', 'Laugh of the Day', 'One hand-picked funny moment from sport, every day.', 'daily', '#F2A900'],
   ['call-it-football', 'Call It: Football', 'A moment from a great final. Who scores next, and how many more?', 'daily', '#C8102E'],
   ['daily', 'Beat the Brain', 'Five questions a day at four levels. The Brain has already had a go.', 'daily', '#0B6E4F'],
   ['weekly-expert', 'Weekly Expert', 'Ten expert questions. New every Monday. For people who win pub quizzes.', 'weekly', '#C8102E'],

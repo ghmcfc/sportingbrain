@@ -13,6 +13,8 @@ jobs:
         with: {python-version: '3.12'}
       - name: Pull cricket data (Cricsheet)
         run: python3 source/scripts/fetch_cricket.py
+      - name: Pull Laugh of the Day clips from the playlist
+        run: python3 source/scripts/fetch_videos.py || echo "Video feed failed, keeping yesterday's list"
       - name: Pull F1 data (OpenF1, Jolpica)
         run: python3 source/scripts/fetch_f1.py || echo "F1 feed failed, keeping yesterday's data"
       - uses: actions/setup-node@v4

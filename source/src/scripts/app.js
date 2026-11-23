@@ -7,6 +7,8 @@ import { GUIDES } from '../data/guides.js';
 import { WEEK } from '../data/week.js';
 import { PLAY } from '../data/playlist.js';
 import { FOULS, COUNTDOWN } from '../data/games.js';
+import VIDS from '../data/feeds/videos.json';
+import { lotdIndex, renderClip } from './laughs.js';
 (function(){
 'use strict';
 const BASE=(document.documentElement.dataset.base||'/');
@@ -205,13 +207,14 @@ if(P==='home'){
         <p class="q">${esc(cm.q)}</p>
         <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how you did':'Make your call'}</a><a class="ci-alt" href="${BASE}call-it-football.html">Prefer football? Today's Call It: Football</a>
       </section>`:''}
-      <form class="ask-strip" action="${BASE}ask.html"><label class="sr" for="hq">Ask the Brain</label><input id="hq" name="q" placeholder="Ask the Brain any sport question"><button class="btn">Ask</button></form>
       <p class="you-line">${streak?`Your streak: <b>${streak} day${streak===1?'':'s'}</b>.`:'Play a game a day to start a streak.'} ${streakSaverLine()}</p>
     </aside>
   </div>
 
   <div class="sec"><h2>Play</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></div>
   <div class="pg-hub home-games">${['call-it-football','weekly-expert','pub-quiz','stat-attack','is-it-a-foul','stats-detective','legends-xi','countdown'].map(sl=>{const g=PLAY.find(x=>x[0]===sl);return `<a class="pg-tile" href="${BASE}${g[0]}.html" style="--c:${g[4]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`;}).join('')}</div>
+
+  ${VIDS.videos.length?`<div class="sec"><h2>Laugh of the Day</h2><a href="${BASE}laughs.html">This week's laughs</a></div><div class="home-lotd"><div id="homeLotd"></div><p class="teaser">One funny moment from sport every day, hand-picked by a person and always family-safe. New at midnight.</p></div>`:''}
 
   <div class="sec"><h2>This week in sport</h2><a href="${BASE}this-week.html">The full edition</a></div>
   <div class="fp-week">
@@ -271,6 +274,7 @@ if(P==='home'){
   </div>`;
 
   countdown($('#cd2'));
+  if(VIDS.videos.length&&$('#homeLotd')) renderClip($('#homeLotd'),VIDS.videos[lotdIndex(VIDS.videos.length)],true);
 
   // ---------- the daily hook: a different five-question challenge every day of the week ----------
   (function(){
