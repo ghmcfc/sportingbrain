@@ -24,3 +24,23 @@ What we measure each feature against, where we match it, and where we still fall
 1. Every row names a real product. If we can't verify a claim about it, we write "to check".
 2. A feature isn't "done" until its "fall short" column has a plan.
 3. Re-check this table every month.
+
+## Design review, 23 November 2026 (every page screenshotted on phone and desktop, light and dark)
+
+| Page | Benchmark | Verdict |
+|---|---|---|
+| Header and tabs | The Athletic, Guardian | Matches. One bar, five sections, current tab underlined, no extra strips. |
+| Front page | Guardian and The Athletic fronts | Matches on structure: one lead, games row, photo-led stories, three-column lower section. Behind on photography of people and action (needs licensed agency photos, which need a budget). |
+| Game tiles and Play page | NYT Games hub | Matches. Own icon, colour and played/new state per game. |
+| Game pages | NYT Games game pages | Matches. Icon block, title, one line, then the game. |
+| Read front | Guardian section fronts | Matches. Lead story with photo, photo cards for Flashback and guides. |
+| This Week | Guardian Sport, The Athletic | Matches. Every story has a related, credited photo; "File photo" is labelled. |
+| Flashback articles | The Athletic long reads | Matches. Headline and standfirst first, then the real venue photo, numbers, body, timeline. |
+| Flashback list, guides list | BBC Sport Get Inspired | Matches. Photo cards; sports without a free photo use house artwork. |
+| Watch front | BBC Sport highlights hub | Matches. Replays shown with the actual ground of each final. |
+| Sport guides | BBC Sport Get Inspired | Matches. |
+| Round-Up | Football365 Mediawatch | Matches. |
+| Kids Zone | BBC Newsround, The Week Junior | Matches. Bright, clear, icons per game, no ads. |
+| Replay page | ESPNcricinfo | Matches on data; "More replays" list still text only (next pass). |
+
+Rule from now on: a page is not done until it has a verdict here, and "behind" is only allowed where the fix needs something from Gavin (photo budget, accounts).

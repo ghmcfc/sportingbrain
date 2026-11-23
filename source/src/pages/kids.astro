@@ -1,5 +1,6 @@
 ---
 import Kids from '../layouts/Kids.astro';
+import { icon } from '../scripts/icons.js';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 <Kids title="Kids Zone | SportingBrain" description="Sport quizzes, amazing facts and games to play at home, for ages 6 to 8 and 9 to 12. No ads, no chat, no sign-up.">
@@ -13,11 +14,11 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   </div>
   <h2 class="kz-h">Games</h2>
   <div class="kz-pick kz-games">
-    <a class="kz-band older" href={`${base}kids/true-or-false.html`}><b>True or False</b><small>Ten sporting facts. Spot the fibs.</small></a>
-    <a class="kz-band young" href={`${base}kids/guess-the-sport.html`}><b>Guess the Sport</b><small>Three emoji, one sport.</small></a>
-    <a class="kz-band older" href={`${base}kids/guess-the-player.html`}><b>Guess the Player</b><small>Name the star from three clues.</small></a>
-    <a class="kz-band young" href={`${base}kids/the-grid.html`}><b>The Grid</b><small>Find four groups of four.</small></a>
-    <a class="kz-band older" href={`${base}kids/which-sport.html`}><b>Which Sport Are You?</b><small>Six questions. Find your sport.</small></a>
+    <a class="kz-band older" href={`${base}kids/true-or-false.html`}><span class="kz-ic" set:html={icon('true-or-false', 40)} /><b>True or False</b><small>Ten sporting facts. Spot the fibs.</small></a>
+    <a class="kz-band young" href={`${base}kids/guess-the-sport.html`}><span class="kz-ic" set:html={icon('kids', 40)} /><b>Guess the Sport</b><small>Three emoji, one sport.</small></a>
+    <a class="kz-band older" href={`${base}kids/guess-the-player.html`}><span class="kz-ic" set:html={icon('who-am-i', 40)} /><b>Guess the Player</b><small>Name the star from three clues.</small></a>
+    <a class="kz-band young" href={`${base}kids/the-grid.html`}><span class="kz-ic" set:html={icon('connections', 40)} /><b>The Grid</b><small>Find four groups of four.</small></a>
+    <a class="kz-band older" href={`${base}kids/which-sport.html`}><span class="kz-ic" set:html={icon('sports-day', 40)} /><b>Which Sport Are You?</b><small>Six questions. Find your sport.</small></a>
   </div>
   <p class="kz-parent">Grown-ups: <a href={`${base}kids/parents.html`}>read how the Kids Zone keeps children safe</a>.</p>
 </Kids>

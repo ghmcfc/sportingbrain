@@ -620,3 +620,6 @@ body.dark .pg-sec{border-top-color:#fff}
 .kz-hero .reset-btn{background:#fff;color:#0F1E36;border-color:#fff}
 @media (min-width:900px){.gtiles.guides-all{grid-template-columns:repeat(4,1fr)}}
 .sg-card[hidden]{display:none}
+.kz-games .kz-band{display:grid;grid-template-columns:auto 1fr;column-gap:14px;align-items:center;min-height:0;padding:16px 18px}
+.kz-games .kz-band .kz-ic{grid-row:1 / span 2;display:grid;place-items:center;width:60px;height:60px;border-radius:14px;background:rgba(255,255,255,.18);color:#fff}
+.kz-games .kz-band b{font-size:1.7rem}
