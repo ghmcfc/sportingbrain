@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import { D } from '../data/content.js';
+const r = D.SB_ROUNDUP;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<Base title="The Cynical Round-Up: the week in sport, with an eye-roll | SportingBrain" description="Satire. This week's real sports news, with a big eye-roll from the Brain." type="article">
+  <article class="article">
+    <div class="card" style="margin-top:14px;background:#263238;color:#eceff1">
+      <span class="satire">SATIRE. Tongue firmly in cheek.</span>
+      <h1 style="color:#fff">😎 {r.title}</h1>
+      <p class="small" style="color:#b0bec5">{r.updated} The facts are real. The sarcasm is ours.</p>
+      {r.items.map((i) => <p><b>{i[0]}:</b> {i[1]}</p>)}
+      <div class="brain-says" style="background:rgba(255,255,255,.08)"><img src={`${base}assets/brain.svg`} alt="" /><div><b>The Brain's eye-roll of the week:</b> "{r.brain}"</div></div>
+      <button class="btn gold" data-share-text="The Cynical Round-Up (satire): the week in sport, with a big eye-roll">Share the Round-Up</button>
+    </div>
+  </article>
+</Base>

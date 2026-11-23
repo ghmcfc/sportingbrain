@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import { D } from '../data/content.js';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const list = [...D.SB_SPORTS].sort((a, b) => a.name.localeCompare(b.name));
+---
+<Base title="Sport A to Z | SportingBrain" description="How every sport works, explained in a minute, from curling to kabaddi." wide>
+  <div class="sec"><h2>Sport A to Z</h2></div>
+  <div class="listgrid">{list.map((x) => (
+    <a class="card" style="text-decoration:none" href={`${base}sports/${x.id}.html`}><div class="big-emoji">{x.emoji}</div><div class="title">{x.name}</div><p class="teaser">{x.where}</p></a>
+  ))}</div>
+</Base>

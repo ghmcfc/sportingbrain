@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { D } from '../data/content.js';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const col = (s) => D.SB_SPORT_COLOURS[s] || '#1F3864';
+---
+<Base title="True sports stories | SportingBrain" description="Remarkable true stories from every sport: comebacks, firsts, underdogs and heroes." wide>
+  <div class="sec"><h2>True sports stories</h2></div>
+  <div class="listgrid">
+    {D.SB_STORIES.map((s) => (
+      <article class="card photo-card">
+        {D.SB_PHOTO(s.sport, 800) && <img class="ph" src={D.SB_PHOTO(s.sport, 800)} alt={s.sport} loading="lazy" />}
+        <div class="pc-body"><span class="tag" style={`background:${col(s.sport)}`}>{s.sport}</span>
+          <div class="title">{s.emoji} {s.title}</div><p class="teaser">{s.teaser}</p></div>
+        <a class="stretch" href={`${base}stories/${s.id}.html`} aria-label={`Read: ${s.title}`}></a>
+      </article>
+    ))}
+  </div>
+</Base>

@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import { D } from '../../data/content.js';
+export function getStaticPaths() { return D.SB_SPORTS.map((s) => ({ params: { id: s.id }, props: { s } })); }
+const { s } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const others = D.SB_SPORTS.filter((x) => x.id !== s.id).slice(0, 3);
+---
+<Base title={`${s.name}: how it works | SportingBrain`} description={`${s.name} explained in a minute: how it's played, where, and one fact you'll tell everyone.`}>
+  <article class="article">
+    <div class="card" style="margin-top:14px;border-top:8px solid #8E24AA"><span class="tag" style="background:#8E24AA">Sport A to Z</span>
+      <div class="big-emoji" style="margin-top:8px">{s.emoji}</div><h1>{s.name}</h1>
+      <p><b>Where it's played:</b> {s.where}</p><p>{s.what}</p><div class="fact"><b>Did you know?</b> {s.fact}</div></div>
+    <div class="card" style="margin-top:12px"><span class="tag">Quick quiz</span><div data-quiz="sport" data-id={s.id}></div></div>
+    <div class="sec"><h2>More sports</h2></div>
+    <div class="next3">{others.map((x) => <a href={`${base}sports/${x.id}.html`}><span>{x.emoji}</span>{x.name}</a>)}</div>
+  </article>
+</Base>
