@@ -15,7 +15,8 @@ export function photoFor(text, sport, seed = 0, venue = '') {
   if (!v) { const pool = V.filter(x => x.sport === SPORT(sport)); if (pool.length) { v = pool[Math.abs(seed) % pool.length]; file = true; } }
   if (v) return { src: `${BASE}photos/venues/${v.m.file}`, alt: `${file ? 'File photo of ' : ''}${v.name}, ${v.place}`, credit: `${file ? 'File photo: ' : ''}${v.name}. Photo: ${v.m.author}, ${v.m.licence}, Wikimedia Commons` };
   const u = globalThis.SB_PHOTO ? globalThis.SB_PHOTO(sport, 800) : null, c = globalThis.SB_CREDIT ? globalThis.SB_CREDIT(sport) : null;
-  return u && c ? { src: u, alt: `File photo: ${c.what}`, credit: `File photo: ${c.what}. Photo: ${c.by}, Wikimedia Commons` } : null;
+  if (u && c) return { src: u, alt: `File photo: ${c.what}`, credit: `File photo: ${c.what}. Photo: ${c.by}, Wikimedia Commons` };
+  return u ? { src: u, alt: `${sport} artwork`, credit: 'SportingBrain artwork' } : null;
 }
 export function figure(p, cls = '') {
   return p ? `<figure class="sfig ${cls}"><img src="${p.src}" alt="${esc(p.alt)}" loading="lazy" width="800" height="450"><figcaption>${esc(p.credit)}</figcaption></figure>` : '';

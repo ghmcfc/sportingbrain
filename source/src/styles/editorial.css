@@ -617,3 +617,6 @@ body.dark .sec{border-top-color:#fff}body.dark .sec h2,body.dark .sec a{color:#f
 body.dark .pg-head.game-head{border-bottom-color:#fff}
 .pg-sec{border-top:3px solid #0F1E36;padding-top:8px;margin:30px 0 14px;border-bottom:0}.pg-sec h2{font-family:var(--display);font-weight:900;font-size:clamp(1.5rem,3vw,2rem);border:0;margin:0}
 body.dark .pg-sec{border-top-color:#fff}
+.kz-hero .reset-btn{background:#fff;color:#0F1E36;border-color:#fff}
+@media (min-width:900px){.gtiles.guides-all{grid-template-columns:repeat(4,1fr)}}
+.sg-card[hidden]{display:none}

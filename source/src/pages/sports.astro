@@ -1,14 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 import { GUIDES } from '../data/guides.js';
+import { D } from '../data/content.js';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const list = [...GUIDES].sort((a, b) => a.name.localeCompare(b.name));
 ---
 <Base title="Sport guides: how every sport really works | SportingBrain" description="Proper guides to how each sport works: rules, scoring, tactics experts watch for, the greats, the big events and how to get involved in the UK." wide>
-  <div class="sec"><h2>Sport guides</h2></div>
-  <p class="teaser" style="max-width:62ch">Not "the ball is round". How each sport actually works, what the experts are watching for, and the people who defined it.</p>
+  <header class="art-head"><h1>Sport guides</h1><p class="art-stand">Not "the ball is round". How each sport actually works, what the experts are watching for, and the people who defined it.</p></header>
   <input class="sg-filter" type="search" placeholder="Find a sport" aria-label="Find a sport" oninput="document.querySelectorAll('.sg-card').forEach(c=>c.hidden=!c.dataset.n.includes(this.value.toLowerCase()))">
-  <div class="listgrid">{list.map(g => (
-    <a class="card sg-card" data-n={g.name.toLowerCase()} href={`${base}sports/${g.id}.html`}><div class="big-emoji">{g.emoji}</div><div class="title">{g.name}</div><p class="teaser">{g.line}</p></a>
+  <div class="gtiles guides-all">{list.map(g => (
+    <a class="story guide-card sg-card" data-n={g.name.toLowerCase()} href={`${base}sports/${g.id}.html`}><figure class="sfig"><img src={D.SB_PHOTO(g.name, 800)} alt={g.name} loading="lazy" width="800" height="450"></figure><h3>{g.name}</h3><p>{g.line}</p></a>
   ))}</div>
 </Base>

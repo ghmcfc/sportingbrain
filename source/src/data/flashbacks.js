@@ -21,7 +21,7 @@ export const FLASHBACKS = [
   sources: [['Wikipedia: Dick, Kerr Ladies F.C.','https://en.wikipedia.org/wiki/Dick,_Kerr_Ladies_F.C.']]
 },
 {
-  id: 'tulu-meyer-barcelona', sport: 'Athletics', when: '7 August 1992', date: '1992-08-07',
+  id: 'tulu-meyer-barcelona', venue: 'Estadi Olímpic, Barcelona', sport: 'Athletics', when: '7 August 1992', date: '1992-08-07',
   title: 'The 26th lap',
   standfirst: 'An Ethiopian 20-year-old and a white South African ran the 10,000 metres together. Then they ran one more lap, hand in hand.',
   body: [
@@ -105,7 +105,7 @@ export const FLASHBACKS = [
   sources: [['Wikipedia: 1973 Women\'s Cricket World Cup','https://en.wikipedia.org/wiki/1973_Women%27s_Cricket_World_Cup']]
 },
 {
-  id: 'diane-leather', sport: 'Athletics', when: '29 May 1954', date: '1954-05-29',
+  id: 'diane-leather', venue: 'Alexander Stadium', sport: 'Athletics', when: '29 May 1954', date: '1954-05-29',
   title: 'The other miracle mile',
   standfirst: 'Everyone knows Bannister broke four minutes. Twenty-three days later, a chemist from Birmingham broke five, and the athletics authorities refused to count it.',
   body: [

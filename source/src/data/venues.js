@@ -166,7 +166,7 @@ export const VENUES = [
   ['Epsom Downs Racecourse', 'Epsom Downs', ['epsom', 'epsom downs racecourse'], 'Horse racing', 'Epsom, Surrey', 'Home of the Derby'],
   ['Ascot Racecourse', 'Ascot', ['ascot racecourse', 'royal ascot'], 'Horse racing', 'Ascot, Berkshire', 'Home of Royal Ascot'],
   ['Newmarket Racecourse', 'Newmarket', ['newmarket racecourse', 'rowley mile'], 'Horse racing', 'Newmarket, Suffolk', 'Home of the 2,000 and 1,000 Guineas'],
-  ['York Racecourse', 'York Racecourse', ['knavesmire', 'york'], 'Horse racing', 'York', 'Home of the Ebor'],
+  ['York Racecourse', 'York Racecourse', ['knavesmire'], 'Horse racing', 'York', 'Home of the Ebor'],
   ['Goodwood Racecourse', 'Goodwood', ['goodwood racecourse', 'glorious goodwood'], 'Horse racing', 'West Sussex', 'Home of Glorious Goodwood'],
   // Motor racing
   ['Silverstone Circuit', 'Silverstone', ['silverstone circuit'], 'Formula 1', 'Northamptonshire', 'Home of the British Grand Prix'],
@@ -176,6 +176,13 @@ export const VENUES = [
   ['Suzuka International Racing Course', 'Suzuka', ['suzuka circuit'], 'Formula 1', 'Japan', 'The figure-of-eight circuit'],
   ['Interlagos Circuit', 'Interlagos', ['autodromo jose carlos pace'], 'Formula 1', 'São Paulo', 'Home of the Brazilian Grand Prix'],
   ['Circuit of the Americas', 'Circuit of the Americas', ['cota'], 'Formula 1', 'Austin, Texas', 'Home of the US Grand Prix'],
+  // Athletics
+  ['Iffley Road Stadium', 'Iffley Road', ['iffley road stadium'], 'Athletics', 'Oxford', 'Where Roger Bannister ran the first sub-four-minute mile'],
+  ['Estadi Olímpic Lluís Companys', 'Estadi Olímpic, Barcelona', ['montjuic', 'estadi olimpic', 'olympic stadium barcelona'], 'Athletics', 'Montjuïc, Barcelona', 'Main stadium of the 1992 Olympics'],
+  ['Olympiastadion (Berlin)', 'Olympiastadion, Berlin', ['olympiastadion', 'berlin olympic stadium'], 'Athletics', 'Berlin', 'Built for the 1936 Olympics; Bolt ran 9.58 here'],
+  ['Crystal Palace National Sports Centre', 'Crystal Palace athletics stadium', ['crystal palace national sports centre', 'national sports centre'], 'Athletics', 'Crystal Palace, London', 'Long-time home of British athletics meetings'],
+  ['Alexander Stadium', 'Alexander Stadium', ['alexander sports ground', 'perry barr'], 'Athletics', 'Perry Barr, Birmingham', 'Home of Birchfield Harriers; main stadium of the 2022 Commonwealth Games'],
+  ['Hayward Field', 'Hayward Field', [], 'Athletics', 'Eugene, Oregon', 'Hosted the 2022 World Athletics Championships'],
   // Other sport
   ['Crucible Theatre', 'The Crucible', ['crucible', 'crucible theatre'], 'Snooker', 'Sheffield', 'Home of the World Snooker Championship'],
   ['Alexandra Palace', 'Alexandra Palace', ['ally pally'], 'Darts', 'Muswell Hill, London', 'Home of the PDC World Darts Championship'],
