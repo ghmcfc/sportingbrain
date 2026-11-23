@@ -5,13 +5,15 @@ export function getStaticPaths() { return D.SB_STORIES.map((s) => ({ params: { i
 const { s } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const col = D.SB_SPORT_COLOURS[s.sport] || '#1F3864';
+const credit = D.SB_CREDIT(s.sport);
 const img = D.SB_PHOTO(s.sport, 1200);
 const others = D.SB_STORIES.filter((x) => x.id !== s.id).slice(0, 3);
 const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: s.title, description: s.teaser, publisher: { '@type': 'Organization', name: 'SportingBrain' } };
 ---
-<Base title={`${s.title} | SportingBrain`} description={s.teaser} image={img} type="article">
+<Base title={`${s.title} | SportingBrain`} description={s.teaser} image={credit ? img : undefined} type="article">
   <article class="article">
     {img && <img class="lead-img" src={img} alt={s.sport} />}
+    {credit && <p class="photo-credit">Photo: {credit.what}. <a href={credit.url} target="_blank" rel="noopener">{credit.by} / Wikimedia Commons</a></p>}
     <span class="tag" style={`background:${col};margin-top:14px`}>{s.sport}</span>
     <h1>{s.title}</h1>
     <p class="teaser" style="font-size:1.15rem">{s.teaser}</p>

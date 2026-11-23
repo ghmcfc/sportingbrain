@@ -5,13 +5,14 @@ import { FLASHBACKS } from '../../data/flashbacks.js';
 export function getStaticPaths() { return FLASHBACKS.map(f => ({ params: { id: f.id }, props: { f } })); }
 const { f } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const credit = D.SB_CREDIT(f.sport);
 const img = D.SB_PHOTO(f.sport, 1600);
 const col = D.SB_SPORT_COLOURS[f.sport] || '#1F3864';
 const year = (f.date || '').slice(0, 4) || (f.when.match(/\d{4}/) || [''])[0];
 const others = FLASHBACKS.filter(x => x.id !== f.id).slice(0, 3);
 const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: f.title, description: f.standfirst, about: f.sport, publisher: { '@type': 'Organization', name: 'SportingBrain' } };
 ---
-<Base title={`${f.title} | Flashback | SportingBrain`} description={f.standfirst} image={img} type="article" wide>
+<Base title={`${f.title} | Flashback | SportingBrain`} description={f.standfirst} image={credit ? img : undefined} type="article" wide>
   <article class="fb">
     <header class="fb-hero" style={img ? `--bg:url('${img}')` : ''}>
       <div class="fb-year" aria-hidden="true">{year}</div>
@@ -20,6 +21,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: f.t
       <p class="fb-stand">{f.standfirst}</p>
       <p class="fb-when">{f.when} · <span data-yearsago={year}></span></p>
     </header>
+    {credit && <p class="photo-credit">Photo: {credit.what}. <a href={credit.url} target="_blank" rel="noopener">{credit.by} / Wikimedia Commons</a></p>}
     <section class="fb-nums" aria-label="The numbers">
       {f.numbers.map(n => <div class="fb-num"><b data-count={n[0]}>{n[0]}</b><small>{n[1]}</small></div>)}
     </section>

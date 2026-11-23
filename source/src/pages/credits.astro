@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/Base.astro';
+import '../data/content.js';
+const P = Object.entries(globalThis.SB_PHOTOS).filter(([k], i, a) => a.findIndex(x => x[1][0] === globalThis.SB_PHOTOS[k][0]) === i);
+---
+<Base title="Photo credits | SportingBrain" description="Credits for the photographs used on SportingBrain." page="credits">
+  <header class="pg-head"><h1>Photo credits</h1><p>Our photographs come from Wikimedia Commons and are used under their free licences. Each link goes to the photo's page, which shows its licence. Thank you to every photographer.</p></header>
+  <ul class="credits">{P.map(([k, p]) => <li><b>{p[2]}</b>, by {p[1]}. <a href={`https://commons.wikimedia.org/wiki/File:${encodeURIComponent(p[0])}`} target="_blank" rel="noopener">Photo page and licence</a></li>)}</ul>
+  <p class="pg-note">Data: Cricsheet (Open Data Commons Attribution Licence). Clips in Laugh of the Day belong to their owners and play in YouTube's own player.</p>
+</Base>

@@ -293,6 +293,10 @@ if(P==='home'){
       ['Matchday Saturday','Five football questions before kick-off.',()=>fromBank(q=>q[1]==='Football'&&q[0]>=2,5),3],
     ];
     const [title,sub,make,brain]=THEMES[wd], Q=make(), key='hook_'+DAY, saved=store.get(key,null);
+    const PIC=['Women\'s football','Cricket','Rugby union','Golf','Tennis','Athletics','Football'][wd], pc=window.SB_CREDIT&&SB_CREDIT(PIC);
+    if(pc){ el.style.setProperty('--hookbg',`url('${SB_PHOTO(PIC,1400)}')`); el.classList.add('has-photo'); }
+    const SHORT=['Women\'s Sport','Expert','Is It a Foul?','World Sport','Throwback','Family','Matchday'];
+    const week=`<div class="hook-week" aria-label="This week's challenges">${[1,2,3,4,5,6,0].map(d=>`<span class="${d===wd?'on':''}"><b>${WD[d].slice(0,3)}</b>${SHORT[d]}</span>`).join('')}</div>${pc?`<p class="hook-credit">Photo: ${esc(pc.what)}, ${esc(pc.by)} / Wikimedia Commons</p>`:''}`;
     const nx=COUNTDOWN.find(e=>Date.parse(e[0])>Date.now());
     const chip=nx?`<span class="hook-chip" id="hookChip" data-t="${nx[0]}">${esc(nx[1])} in <b></b></span>`:'';
     const head=`<div class="hook-top"><span>${WD[wd]}'s challenge · 5 questions</span>${chip}</div><h1>${esc(title)}</h1><p class="hook-sub">${esc(sub)}</p>`;
@@ -302,7 +306,7 @@ if(P==='home'){
       const tom=THEMES[(wd+1)%7][0];
       el.innerHTML=head+`<div class="hook-res"><div class="hook-score">${sc}<small>/5</small></div><div><p class="hook-line">${line} It scored ${brain}.</p><div class="hook-pips">${marks.map(m=>`<i class="${m?'y':'n'}"></i>`).join('')}</div></div></div>
         <div class="hook-next"><button class="btn gold" id="hookShare">Challenge a mate</button><a class="btn ghost light" href="${BASE}call-it-football.html">Next: today's Call It: Football</a></div>
-        <p class="hook-tom">Tomorrow: <b>${esc(tom)}</b>. A new challenge every day at midnight.</p>`;
+        <p class="hook-tom">Tomorrow: <b>${esc(tom)}</b>. A new challenge every day at midnight.</p>`+week;
       $('#hookShare').onclick=()=>share(`SportingBrain ${title}: ${sc}/5 ${marks.map(m=>m?'🟩':'🟥').join('')}\nThe Brain got ${brain}. Beat me:\n${SITE}`);
       tickChip();
     }
@@ -311,11 +315,11 @@ if(P==='home'){
     function show(){ const q=Q[i];
       el.innerHTML=head+`<div class="hook-pips">${Q.map((_,k)=>`<i class="${k<i?(marks[k]?'y':'n'):k===i?'c':''}"></i>`).join('')}</div>
         <p class="hook-k">${esc(q.s)}</p><p class="hook-q">${esc(q.q)}</p>
-        <div class="hook-opts ${q.o.length===2?'two':''}">${q.o.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div>`;
+        <div class="hook-opts ${q.o.length===2?'two':''}">${q.o.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div>`+week;
       tickChip(); }
     el.addEventListener('click',e=>{ const b=e.target.closest('.hook-opts [data-k]'); if(b&&!b.disabled){ const q=Q[i], ok=+b.dataset.k===q.a; marks.push(ok);
         el.querySelectorAll('.hook-opts button').forEach(x=>{ x.disabled=true; if(+x.dataset.k===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
-        el.insertAdjacentHTML('beforeend',`<p class="hook-fact">${ok?'Yes.':'No.'} ${esc(q.f)}</p><button class="btn gold" data-hn>${i<4?'Next question':'See your score'}</button>`); return; }
+        el.querySelector('.hook-week').insertAdjacentHTML('beforebegin',`<p class="hook-fact">${ok?'Yes.':'No.'} ${esc(q.f)}</p><button class="btn gold" data-hn>${i<4?'Next question':'See your score'}</button>`); return; }
       if(e.target.closest('[data-hn]')){ i++; if(i<Q.length) show(); else { store.set(key,marks); markPlayed('hook'); done(marks); } } });
     show(); setInterval(tickChip,30000);
   })();

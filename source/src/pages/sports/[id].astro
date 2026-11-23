@@ -5,15 +5,17 @@ import { D } from '../../data/content.js';
 export function getStaticPaths() { return GUIDES.map(g => ({ params: { id: g.id }, props: { g } })); }
 const { g } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const credit = D.SB_CREDIT(g.name);
 const img = D.SB_PHOTO(g.name, 1600);
 const others = GUIDES.filter(x => x.id !== g.id).sort(() => 0).slice(0, 4);
 ---
-<Base title={`${g.name}: how it really works | SportingBrain`} description={`${g.line} Rules, scoring, what the experts watch for, the greats and the big events.`} image={img} type="article" wide>
+<Base title={`${g.name}: how it really works | SportingBrain`} description={`${g.line} Rules, scoring, what the experts watch for, the greats and the big events.`} image={credit ? img : undefined} type="article" wide>
   <article class="sg">
     <header class="fb-hero" style={img ? `--bg:url('${img}')` : ''}>
       <span class="tag" style="background:var(--gold);color:#14254a">Sport guide</span>
       <h1>{g.name}</h1><p class="fb-stand">{g.line}</p>
     </header>
+    {credit && <p class="photo-credit">Photo: {credit.what}. <a href={credit.url} target="_blank" rel="noopener">{credit.by} / Wikimedia Commons</a></p>}
     <nav class="sg-tabs" aria-label="Sections">
       <a href="#how">How it works</a><a href="#watch">What to watch for</a><a href="#greats">The greats</a><a href="#terms">Talk like an expert</a><a href="#when">When it's on</a><a href="#play">Get involved</a>
     </nav>
