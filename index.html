@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SportingBrain: Beat the Brain, the daily sports puzzle</title>
+<meta name="description" content="A free daily sports puzzle for every fan. Five questions across every sport, a cheeky AI opponent to beat, and a score card for the group chat.">
+<meta property="og:title" content="Can you beat the Brain today?">
+<meta property="og:description" content="The free daily sports puzzle for every fan, every sport, every age.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1F3864">
+<link rel="icon" href="assets/brain.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <img src="assets/brain.svg" alt="">
+  <a class="logo" href="./">Sporting<span>Brain</span></a>
+  <nav class="main" aria-label="Main">
+    <a href="./" aria-current="page">Today</a>
+    <a href="higher-or-lower.html">Higher or Lower</a>
+    <a href="about.html">About</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <img src="assets/brain.svg" alt="The Brain, a cheeky cartoon brain in a sweatband">
+    <div>
+      <h1>Think you can beat me? Prove it.</h1>
+      <p>Five questions. Every sport. One cheeky Brain to beat. New puzzle every day at midnight.</p>
+    </div>
+  </section>
+
+  <section class="card" id="daily" aria-live="polite">
+    <div class="row" style="justify-content:space-between">
+      <span class="pill">Beat the Brain #<span id="dayno"></span></span>
+      <span class="small">The Brain scored <b id="brainscore"></b>/5 today</span>
+    </div>
+
+    <div id="play">
+      <div class="progress" id="bar" aria-hidden="true"></div>
+      <div class="small" id="sport"></div>
+      <div class="q" id="qtext"></div>
+      <div class="opts" id="opts"></div>
+      <div class="fact" id="fact" hidden></div>
+      <p><button class="btn" id="next" hidden>Next question</button></p>
+    </div>
+
+    <div id="done" hidden>
+      <div class="small">Your score</div>
+      <div class="score" id="yourscore"></div>
+      <div class="brain-says"><img src="assets/brain.svg" alt=""><div id="verdict"></div></div>
+      <div class="stats">
+        <div><b id="streak">0</b>day streak</div>
+        <div><b id="played">0</b>played</div>
+        <div><b id="beaten">0</b>times you beat the Brain</div>
+      </div>
+      <p class="row" style="margin-top:14px">
+        <button class="btn pink" id="share">Share my score</button>
+        <a class="btn ghost" href="higher-or-lower.html">Play Higher or Lower</a>
+      </p>
+      <p class="small">Next puzzle in <span class="countdown" id="cd">--:--:--</span></p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Coming this month</h2>
+    <p>The Weekly Brain Challenge every Monday, mini-leagues for your mates, your office and your family, Women's Sport Weekly, the Friday Family Challenge, the Unusual Sport of the Week, and The Daily Brain newsletter.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>SportingBrain is free, for every fan, every sport and every age. No betting, ever.</p>
+  <p><a href="about.html">About and privacy</a> · <a href="#" data-dys>Dyslexia-friendly font</a></p>
+</footer>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
