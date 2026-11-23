@@ -17,7 +17,6 @@ const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: s.t
     <p class="teaser" style="font-size:1.15rem">{s.teaser}</p>
     {s.body.map((p) => <p>{p}</p>)}
     <button class="btn ghost" data-share-text={`${s.title}: ${s.teaser}`}>Share this story</button>
-    <div class="card" style="margin-top:16px"><span class="tag">Quick quiz</span><div data-quiz="story" data-id={s.id}></div></div>
     <div class="sec"><h2>Read next</h2></div>
     <div class="next3">{others.map((x) => <a href={`${base}stories/${x.id}.html`}><span>{x.emoji}</span>{x.title}</a>)}</div>
   </article>

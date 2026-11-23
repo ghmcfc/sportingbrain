@@ -4,15 +4,32 @@ import { D } from '../data/content.js';
 const r = D.SB_ROUNDUP;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
-<Base title="The Cynical Round-Up: the week in sport, with an eye-roll | SportingBrain" description="Satire. This week's real sports news, with a big eye-roll from the Brain." type="article">
-  <article class="article">
-    <div class="card" style="margin-top:14px;background:#263238;color:#eceff1">
+<Base title={`The Cynical Round-Up: ${r.headline} | SportingBrain`} description="Satire. This week's real sports news, with a big eye-roll." type="article" wide>
+  <article class="ru">
+    <header class="ru-head">
       <span class="satire">SATIRE. Tongue firmly in cheek.</span>
-      <h1 style="color:#fff">😎 {r.title}</h1>
-      <p class="small" style="color:#b0bec5">{r.updated} The facts are real. The sarcasm is ours.</p>
-      {r.items.map((i) => <p><b>{i[0]}:</b> {i[1]}</p>)}
-      <div class="brain-says" style="background:rgba(255,255,255,.08)"><img src={`${base}assets/brain.svg`} alt="" /><div><b>The Brain's eye-roll of the week:</b> "{r.brain}"</div></div>
-      <button class="btn gold" data-share-text="The Cynical Round-Up (satire): the week in sport, with a big eye-roll">Share the Round-Up</button>
+      <p class="ru-kicker">The Cynical Round-Up · {r.edition}</p>
+      <h1>{r.headline}</h1>
+      <p class="ru-small">{r.updated} The facts are real and sourced below. The sarcasm is ours.</p>
+    </header>
+    <div class="ru-items">
+      {r.items.map((i, k) => (
+        <section class="ru-item">
+          <span class="ru-n">{String(k + 1).padStart(2, '0')}</span>
+          <div><h2>{i[0]}</h2><p>{i[1]}</p>
+          <div class="ru-rate" data-k={k}><span>Funny?</span><button data-v="1">😂</button><button data-v="0">😐</button><small></small></div></div>
+        </section>
+      ))}
     </div>
+    <div class="brain-says ru-brain"><img src={`${base}assets/brain.svg`} alt="" /><div><b>The Brain's eye-roll of the week</b><p>{r.brain}</p></div></div>
+    <button class="btn gold" data-share-text={`The Cynical Round-Up (satire): ${r.headline}`}>Share the Round-Up</button>
+    {r.sources && <section class="fb-src"><b>The real stories behind it</b><ul>{r.sources.map(s => <li><a href={s[1]} target="_blank" rel="noopener">{s[0]}</a></li>)}</ul></section>}
   </article>
+  <script>
+    document.querySelectorAll('.ru-rate').forEach(el => { const key = 'sb_ru_' + el.dataset.k + '_' + document.title.length;
+      const done = (() => { try { return localStorage.getItem(key); } catch (_) { return null; } })();
+      const show = v => { el.querySelector('small').textContent = v === '1' ? 'Glad that landed.' : 'Noted. The Brain will try harder.'; el.querySelectorAll('button').forEach(b => b.disabled = true); };
+      if (done) show(done);
+      el.querySelectorAll('button').forEach(b => b.onclick = () => { try { localStorage.setItem(key, b.dataset.v); } catch (_) {} show(b.dataset.v); }); });
+  </script>
 </Base>

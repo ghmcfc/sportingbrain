@@ -67,5 +67,5 @@ export function initReplay(m) {
   play.addEventListener('click', () => { if (timer) return stop(); if (g >= T.length - 1) go(0); play.textContent = '❚❚ Pause';
     timer = setInterval(() => { if (g >= T.length - 1) return stop(); go(g + 1); }, +$('rpSpeed').value); });
   $('rpSpeed').addEventListener('change', () => { if (timer) { stop(); play.click(); } });
-  go(0);
+  const start = +new URLSearchParams(location.search).get('g') || 0; go(start);
 }

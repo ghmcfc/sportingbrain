@@ -1,12 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
-import { D } from '../data/content.js';
+import { GUIDES } from '../data/guides.js';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const list = [...D.SB_SPORTS].sort((a, b) => a.name.localeCompare(b.name));
+const list = [...GUIDES].sort((a, b) => a.name.localeCompare(b.name));
 ---
-<Base title="Sport A to Z | SportingBrain" description="How every sport works, explained in a minute, from curling to kabaddi." wide>
-  <div class="sec"><h2>Sport A to Z</h2></div>
-  <div class="listgrid">{list.map((x) => (
-    <a class="card" style="text-decoration:none" href={`${base}sports/${x.id}.html`}><div class="big-emoji">{x.emoji}</div><div class="title">{x.name}</div><p class="teaser">{x.where}</p></a>
+<Base title="Sport guides: how every sport really works | SportingBrain" description="Proper guides to how each sport works: rules, scoring, tactics experts watch for, the greats, the big events and how to get involved in the UK." wide>
+  <div class="sec"><h2>Sport guides</h2></div>
+  <p class="teaser" style="max-width:62ch">Not "the ball is round". How each sport actually works, what the experts are watching for, and the people who defined it.</p>
+  <input class="sg-filter" type="search" placeholder="Find a sport" aria-label="Find a sport" oninput="document.querySelectorAll('.sg-card').forEach(c=>c.hidden=!c.dataset.n.includes(this.value.toLowerCase()))">
+  <div class="listgrid">{list.map(g => (
+    <a class="card sg-card" data-n={g.name.toLowerCase()} href={`${base}sports/${g.id}.html`}><div class="big-emoji">{g.emoji}</div><div class="title">{g.name}</div><p class="teaser">{g.line}</p></a>
   ))}</div>
 </Base>

@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import { D } from '../data/content.js';
+const T = [...D.SB_TODAY].sort((a, b) => a.y - b.y);
+---
+<Base title="On This Day in sport | SportingBrain" description="What happened in sport on this day: the matches, records, births and turning points, across every sport, men's and women's." wide>
+  <section class="otd">
+    <div class="otd-head">
+      <span class="tag" style="background:var(--gold);color:#14254a">On This Day</span>
+      <h1 id="otdTitle">On this day in sport</h1>
+      <div class="otd-nav">
+        <button class="iconbtn dark-btn" id="otdPrev" aria-label="Previous day">◀</button>
+        <input type="date" id="otdPick" aria-label="Pick a date">
+        <button class="iconbtn dark-btn" id="otdNext" aria-label="Next day">▶</button>
+        <button class="btn ghost" id="otdToday">Today</button>
+      </div>
+      <div class="otd-filter" id="otdFilter"></div>
+    </div>
+    <ol class="otd-list" id="otdList" aria-live="polite"></ol>
+    <div class="card otd-guess" id="otdGuess"></div>
+    <p class="small" id="otdCount"></p>
+  </section>
+  <script id="otdData" type="application/json" set:html={JSON.stringify(T)} />
+  <script>
+    const T = JSON.parse(document.getElementById('otdData').textContent);
+    const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const uk = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' }));
+    let d = new Date(Date.UTC(2000, uk.getMonth(), uk.getDate())); let sport = 'All';
+    const q = new URLSearchParams(location.search).get('d'); if (/^\d\d-\d\d$/.test(q || '')) d = new Date(Date.UTC(2000, +q.slice(0, 2) - 1, +q.slice(3)));
+    const md = () => `${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+    const nice = () => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', timeZone: 'UTC' });
+    const days = new Set(T.map(e => e.md));
+    function render() {
+      const all = T.filter(e => e.md === md()), sports = ['All', ...new Set(all.map(e => e.s))];
+      if (!sports.includes(sport)) sport = 'All';
+      const list = all.filter(e => sport === 'All' || e.s === sport);
+      document.getElementById('otdTitle').textContent = `${nice()} in sport`;
+      document.getElementById('otdPick').value = `${uk.getFullYear()}-${md()}`;
+      document.getElementById('otdFilter').innerHTML = all.length > 2 ? sports.map(s => `<button class="chip ${s === sport ? 'on' : ''}" data-s="${esc(s)}">${esc(s)}</button>`).join('') : '';
+      const ny = uk.getFullYear();
+      document.getElementById('otdList').innerHTML = list.length ? list.map(e => `<li><div class="otd-y">${e.y}<small>${ny - e.y} years ago</small></div><div><span class="tag">${esc(e.s)}</span><p>${esc(e.t)}</p></div></li>`).join('')
+        : `<li class="otd-empty"><div>We haven't written up ${esc(nice())} yet. We're adding dates every week. Try one of these: ${[...days].slice(0, 6).map(x => `<a href="?d=${x}">${new Date(Date.UTC(2000, +x.slice(0, 2) - 1, +x.slice(3))).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })}</a>`).join(', ')}.</div></li>`;
+      // Guess the year: pick one entry, hide its year, offer four options
+      const g = document.getElementById('otdGuess'); const ny0 = ny;
+      if (all.length) { const e = all[(d.getUTCDate() * 7) % all.length]; const opts = [e.y, e.y - 7, e.y + 4 <= ny ? e.y + 4 : e.y - 3, e.y - 15].sort(() => Math.random() - .5);
+        g.hidden = false; g.innerHTML = `<b>Guess the year</b><p>${esc(e.t.replace(String(e.y), '____'))}</p><div class="row" style="gap:8px;flex-wrap:wrap">${opts.map(y => `<button class="chip" data-y="${y}" data-a="${e.y}">${y}</button>`).join('')}</div><p class="small" id="otdAns"></p>`; }
+      else g.hidden = true;
+      document.getElementById('otdCount').textContent = `${T.length} moments across ${days.size} dates so far, with more added every week.`;
+      history.replaceState(null, '', `?d=${md()}`);
+    }
+    const shift = n => { d = new Date(d.getTime() + n * 86400000); if (d.getUTCFullYear() !== 2000) d = new Date(Date.UTC(2000, d.getUTCMonth(), d.getUTCDate())); render(); };
+    document.getElementById('otdPrev').onclick = () => shift(-1); document.getElementById('otdNext').onclick = () => shift(1);
+    document.getElementById('otdToday').onclick = () => { d = new Date(Date.UTC(2000, uk.getMonth(), uk.getDate())); render(); };
+    document.getElementById('otdPick').onchange = e => { const v = e.target.value; if (v) { d = new Date(Date.UTC(2000, +v.slice(5, 7) - 1, +v.slice(8))); render(); } };
+    document.addEventListener('click', e => { const c = e.target.closest('[data-s]'); if (c) { sport = c.dataset.s; render(); }
+      const y = e.target.closest('[data-y]'); if (y) { const ok = y.dataset.y === y.dataset.a; document.getElementById('otdAns').textContent = ok ? `Right: ${y.dataset.a}.` : `No, it was ${y.dataset.a}.`; y.parentNode.querySelectorAll('[data-y]').forEach(b => { b.disabled = true; if (b.dataset.y === b.dataset.a) b.classList.add('on'); }); } });
+    render();
+  </script>
+</Base>

@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import { D } from '../data/content.js';
+import { FLASHBACKS } from '../data/flashbacks.js';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const r = D.SB_ROUNDUP;
+---
+<Base title="The Daily Brain: the smartest sports email in your inbox | SportingBrain" description="Every morning: today's Call It, a Flashback, On This Day, one stat to win an argument with, and what to watch. Free." wide>
+  <section class="nl">
+    <div class="nl-hero card">
+      <span class="tag" style="background:var(--gold);color:#14254a">The Daily Brain</span>
+      <h1>Sport, properly, before your first coffee.</h1>
+      <p class="teaser">One email, every morning, five minutes. Free. It's the only time we ask for any details, and all we ask for is your email address.</p>
+      <a class="btn gold nl-open" href={`https://tally.so/r/${D.SB_NEWSLETTER_FORM}`} target="_blank" rel="noopener">Sign me up</a>
+      <p class="small">No spam, never sold or shared, unsubscribe in one click. Under 13? Ask a parent to sign up.</p>
+    </div>
+    <h2>What's in it</h2>
+    <div class="nl-grid">
+      <div class="card"><b>🎯 Today's Call It</b><p>The frozen moment from a real match. Make your call before you've had breakfast.</p></div>
+      <div class="card"><b>📼 Flashback</b><p>One forgotten moment, told properly.</p></div>
+      <div class="card"><b>📅 On This Day</b><p>The best of what happened in sport on today's date.</p></div>
+      <div class="card"><b>📊 One stat</b><p>A number to win an argument with.</p></div>
+      <div class="card"><b>📺 What to watch</b><p>The fixtures that matter today, men's and women's.</p></div>
+      <div class="card"><b>😏 Fridays: the Cynical Round-Up</b><p>The week in sport, with an eye-roll. Labelled satire.</p></div>
+    </div>
+    <h2>A taste of this week's issues</h2>
+    <div class="nl-sample card">
+      <p class="small">Sample, Monday 23 November 2026</p>
+      <p><b>📼 Flashback:</b> {FLASHBACKS[0].title}. {FLASHBACKS[0].standfirst}</p>
+      <p><b>😏 The Round-Up:</b> {r.headline}.</p>
+      <p><b>📊 One stat:</b> 555. The number of consecutive matches Jahangir Khan won between 1981 and 1986.</p>
+      <p><a href={`${base}call-it.html`}>Play today's Call It →</a></p>
+    </div>
+  </section>
+  <script>
+    document.addEventListener('click', e => { const a = e.target.closest('.nl-open'); if (!a || !window.Tally?.openPopup) return; e.preventDefault(); window.Tally.openPopup(a.href.split('/r/')[1], { layout: 'modal', width: 520, overlay: true }); });
+    const s = document.createElement('script'); s.src = 'https://tally.so/widgets/embed.js'; s.async = true; document.body.appendChild(s);
+  </script>
+</Base>

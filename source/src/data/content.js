@@ -132,17 +132,7 @@ globalThis.SB_HEROES = {
   heroine:{name:"Kathrine Switzer", sport:"Athletics", emoji:"🏃‍♀️", story:"switzer", line:"Finished the 1967 Boston Marathon after an official tried to drag her off the course."}
 };
 
-globalThis.SB_ROUNDUP = {
-  title:"The Cynical Round-Up: launch edition",
-  items:[
-    ["Kick-off times","Your match has been moved to Monday night for the telly. Again. Away fans are asked to simply take the Tuesday off, sell a kidney for the train fare and enjoy the 'atmosphere'."],
-    ["VAR","The technology that promised to end the arguments has instead given us the joy of arguing for longer, in a stadium that has gone completely silent, while someone in a room draws lines on a screen."],
-    ["Ticket prices","A family day out now costs roughly the same as a family holiday, but with less sun and a pie that is somehow both frozen and on fire."],
-    ["New kits","This season's third kit has been described as 'inspired by the city's heritage'. The city has asked which bit of its heritage was luminous."],
-    ["Pundit corner","This week's award for Saying Absolutely Nothing in 90 Seconds goes to anyone who told us that 'at the end of the day, it's a game of two halves'. Thank you for your service."]
-  ],
-  brain:"I'd tell you what I think about all this, but they'd probably move it to Monday night."
-};
+
 
 // Weekly challenges, run by the challenge page.
 globalThis.SB_CHALLENGES = {
@@ -295,7 +285,42 @@ globalThis.SB_TODAY = [
   {md:"05-25", y:2005, s:"Football", t:"Liverpool come back from 3-0 down to beat AC Milan on penalties in the Champions League final in Istanbul."},
   {md:"07-30", y:1966, s:"Football", t:"England beat West Germany 4-2 after extra time at Wembley to win the World Cup."},
   {md:"07-31", y:2022, s:"Women's football", t:"England's Lionesses beat Germany 2-1 after extra time at Wembley to win the Women's Euro."},
-  {md:"08-16", y:2009, s:"Athletics", t:"Usain Bolt runs the 100 metres in 9.58 seconds in Berlin, still the world record."}
+  {md:"08-16", y:2009, s:"Athletics", t:"Usain Bolt runs the 100 metres in 9.58 seconds in Berlin, still the world record."},
+  {md:"11-25",y:2005,s:"Football",t:"George Best dies aged 59. The Manchester United winger was European Footballer of the Year in 1968, the year United won the European Cup."},
+  {md:"12-01",y:2019,s:"Football",t:"Arsenal beat Bristol City 11-1, the biggest scoreline in Women's Super League history."},
+  {md:"12-01",y:1924,s:"Ice hockey",t:"The Boston Bruins play their first home game, the NHL's first franchise based in the United States."},
+  {md:"12-01",y:1963,s:"Cricket",t:"Arjuna Ranatunga is born. He captained Sri Lanka to the 1996 World Cup."},
+  {md:"12-01",y:1968,s:"Squash",t:"Sarah Fitz-Gerald is born. The Australian won five women's world titles."},
+  {md:"12-01",y:2024,s:"Snooker",t:"Terry Griffiths dies. The Welshman won the 1979 world title at his first attempt, as a qualifier."},
+  {md:"12-02",y:1948,s:"Football",t:"Antonín Panenka is born. His chipped penalty won Czechoslovakia the Euro 1976 final, and every chipped penalty since has carried his name."},
+  {md:"12-02",y:1973,s:"Tennis",t:"Monica Seles is born. She won eight Grand Slam singles titles before she turned 20."},
+  {md:"12-02",y:2004,s:"Figure skating",t:"Ilia Malinin is born. In 2022 he became the first skater to land a quadruple Axel in competition."},
+  {md:"12-02",y:2014,s:"Ice hockey",t:"Jean Béliveau dies. He won the Stanley Cup ten times as a player with the Montreal Canadiens."},
+  {md:"12-03",y:1950,s:"Athletics",t:"Alberto Juantorena is born. At the 1976 Olympics the Cuban won both the 400m and 800m, a double nobody had managed before."},
+  {md:"12-03",y:1965,s:"Figure skating",t:"Katarina Witt is born. She won Olympic gold in 1984 and 1988."},
+  {md:"12-03",y:1979,s:"Hockey",t:"Dhyan Chand dies. The Indian forward won Olympic gold in 1928, 1932 and 1936, and India's national sports day is held on his birthday."},
+  {md:"12-03",y:1953,s:"Skiing",t:"Franz Klammer is born. His wild downhill run at Innsbruck in 1976 won Olympic gold in front of a home crowd."},
+  {md:"12-04",y:1909,s:"Canadian football",t:"The first Grey Cup is played. University of Toronto beat Parkdale Canoe Club 26-6."},
+  {md:"12-04",y:1909,s:"Ice hockey",t:"The Montreal Canadiens are founded. They have won the Stanley Cup more times than any other club."},
+  {md:"12-04",y:1963,s:"Athletics",t:"Sergey Bubka is born. He broke the pole vault world record 35 times, indoors and out."},
+  {md:"12-04",y:1960,s:"Athletics",t:"Glynis Nunn is born. The Australian won the first Olympic heptathlon, in Los Angeles in 1984."},
+  {md:"12-04",y:2011,s:"Football",t:"Sócrates dies. Brazil's captain at the 1982 World Cup was also a qualified doctor."},
+  {md:"12-05",y:1921,s:"Football",t:"The FA bans women's football from its members' grounds, calling the game \"quite unsuitable for females\". The ban lasts 50 years."},
+  {md:"12-05",y:2017,s:"Olympics",t:"The IOC bans Russia from the 2018 Winter Olympics over state-backed doping at the 2014 Sochi Games. Clean Russian athletes compete as neutrals."},
+  {md:"12-05",y:1975,s:"Snooker",t:"Ronnie O'Sullivan is born. Seven world titles, and the fastest 147 ever made: five minutes and eight seconds, in 1997."},
+  {md:"12-05",y:1971,s:"Athletics",t:"Ashia Hansen is born. She won the world indoor triple jump title for Britain in 1999 and 2003."},
+  {md:"12-05",y:1988,s:"Cycling",t:"Joanna Rowsell is born. She won Olympic team pursuit gold for Britain in 2012 and 2016."},
+  {md:"12-05",y:2020,s:"Golf",t:"Peter Alliss dies. He played in eight Ryder Cups before becoming the voice of golf on the BBC."},
+  {md:"12-06",y:1956,s:"Water polo",t:"Hungary play the USSR at the Melbourne Olympics weeks after the Soviet invasion of Hungary. It becomes known as the \"Blood in the Water\" match. Hungary win 4-0 and go on to take gold."},
+  {md:"12-06",y:1977,s:"Cricket",t:"Andrew Flintoff is born. The 2005 Ashes made him a national hero."},
+  {md:"12-06",y:1982,s:"Formula 1",t:"Susie Wolff is born. In 2014 she became the first woman in 22 years to take part in a Formula 1 race weekend, in practice at Silverstone."},
+  {md:"12-06",y:1994,s:"Basketball",t:"Giannis Antetokounmpo is born. He led Milwaukee to the 2021 NBA title, scoring 50 in the deciding game."},
+  {md:"12-06",y:1997,s:"Basketball",t:"Sabrina Ionescu is born. She is the first player in NCAA history, men or women, with 2,000 points, 1,000 assists and 1,000 rebounds."},
+  {md:"12-07",y:1936,s:"Cricket",t:"Jack Fingleton becomes the first batter to score centuries in four consecutive Test innings."},
+  {md:"12-07",y:1963,s:"American football",t:"Instant replay is used on television for the first time, during the Army-Navy game."},
+  {md:"12-07",y:2025,s:"Formula 1",t:"Lando Norris wins his first world title with McLaren, at the season finale in Abu Dhabi."},
+  {md:"12-07",y:1994,s:"Figure skating",t:"Yuzuru Hanyu is born. He won Olympic gold in 2014 and 2018, the first man to retain the title in 66 years."},
+  {md:"12-07",y:1997,s:"Football",t:"Billy Bremner dies. He captained Don Revie's Leeds to two league titles."},
 ];
 globalThis.SB_NEWSLETTER_FORM = "ArB4Z0";
 
@@ -332,16 +357,33 @@ globalThis.SB_PHOTO = (key,w=800) => { const id=globalThis.SB_PHOTOS[key]; retur
 
 // The Cynical Round-Up: built on this week's real, checked news. Satire is the opinion; the facts are real.
 globalThis.SB_ROUNDUP = {
-  title:"The Cynical Round-Up: the week to 22 November",
+  title:"The Cynical Round-Up",
+  edition:"Week ending Sunday 22 November 2026",
+  updated:"Written Monday 23 November 2026.",
+  headline:"Pochettino's bounce, Rassie's loophole and a championship that finished three weeks ago",
   items:[
-    ["VAR's record weekend","The Premier League's own panel ruled there were six on-field refereeing errors in a single round of games, the joint-highest it has ever recorded. A record, at last. Not the one anyone was hoping for, but you have to admire the consistency."],
-    ["Fulham 1, the Etihad's patience 0","Manchester City drew 1-1 with Fulham and had a Haaland equaliser ruled out after he kicked the ball out of the keeper's grasp. It was the first time in 15 years and 21 games that City had failed to beat Fulham. The lines on the screen have never been busier."],
-    ["Welcome to Manchester","Mauricio Pochettino's Manchester United reign got off to a nightmare start at Anfield, where ten-man United were thrashed by Liverpool. New job, and the induction pack turns out to be a trip to your fiercest rivals. Who signed off that rota?"],
-    ["Ticket prices","Nineteen of the 20 Premier League clubs raised prices this season, and fans have been holding up 'Stop Exploiting Loyalty' banners. Clubs insist they hear the concerns. Loudly. From the hospitality suite."],
-    ["Light it up","Washington lit up a bridge in Washington Spirit colours ahead of the NWSL final. Kansas City Current then won it 2-1 with a goal deep in injury time, Washington's third final defeat in a row. Next year, maybe light the bridge afterwards."]
+    ["The new-manager bounce, Old Trafford edition",
+     "Mauricio Pochettino's first game in charge of Manchester United was at Anfield, which is a bit like a new airline pilot's first flight being through a volcano. Leny Yoro was sent off after eight minutes, Szoboszlai curled in the free kick, and by full time it was 4-0. Liverpool, we are told, could have had six or seven. United remain in the relegation zone, where the view is improving only in the sense that they have now seen it from every angle. The bounce did arrive, to be fair. It was the ball, coming back out of United's net."],
+    ["Rassie Erasmus finds the one rule he hadn't bent",
+     "South Africa's coach spent the week banned for six matches, and the Springboks spent Saturday losing 20-17 in Dublin, their second defeat in a row for the first time since 2022. Robert Baloucoune scored twice and the Aviva went, in the measured words of the Irish Times, to bedlam. The Boks still go through to the final of the brand-new Nations Championship anyway. Even from the naughty step, Rassie has found a loophole. It's called the table."],
+    ["Formula 1: the season that ended three weeks ago continues",
+     "Kimi Antonelli wrapped up the world title in Mexico City on 1 November, aged 20 years and 68 days, the youngest champion in the sport's history and Italy's first since Alberto Ascari in 1953. Since then F1 has carried on holding races, in the way a pub keeps the lights on after the band's gone home. Max Verstappen won in Las Vegas, Liam Lawson's car sprang a fuel leak, and two more grands prix remain, in Qatar and Abu Dhabi, for anyone who enjoys watching a result that's already in the post."],
+    ["Manchester City Women: please hold",
+     "City were beaten 3-1 at home by Tottenham on Sunday, the sort of result that makes people say \"it's a long season\" in the voice normally reserved for funerals. Across London, London City Lionesses put six past Crystal Palace, which equals Chelsea's 6-2 against Spurs in October as the highest-scoring game of the WSL season. Two six-goal games before December: somebody check the defensive coaching budgets."],
+    ["New Zealand rugby: worse than a wet Tuesday in Hamilton",
+     "The All Blacks lost again at the weekend and are now, according to their own national broadcaster, on the brink of their worst year in the professional era. New Zealand's media reacted with the calm and perspective you'd expect, which is to say none. In fairness to them, when you've spent a century being the team everyone else measures themselves against, finishing mid-table in a tournament nobody understood until July is going to sting."]
   ],
-  brain:"Six refereeing errors in one weekend and I still only got three out of five on my own quiz. Glass houses, I suppose.",
-  updated:"Based on real news from the week to Sunday 22 November 2026."
+  brain:"Three weeks after the title was decided, F1 is still racing, Rassie is reaching finals without being allowed in the building, and United have found a new way to concede four. Same time next week.",
+  sources:[
+    ["ESPN: Liverpool 4-0 Man Utd, 22 November 2026","https://www.espn.com/soccer/report/_/gameId/401878755"],
+    ["FotMob: Liverpool v Man United match events","https://www.fotmob.com/matches/liverpool-vs-manchester-united/2ygkcb"],
+    ["Sky Sports: Ireland 20-17 South Africa","https://www.skysports.com/rugby-union/news/13614348/ireland-20-17-south-africa-springboks-downed-as-andy-farrells-side-hold-on-for-big-victory-in-nations-championship"],
+    ["Irish Times: Ireland v South Africa as it happened","https://www.irishtimes.com/sport/rugby/2026/11/21/live-ireland-v-south-africa-updates-from-nations-championship-showdown-in-dublin/"],
+    ["Al Jazeera: Antonelli becomes F1's youngest world champion","https://www.aljazeera.com/sports/2026/11/2/kimi-antonelli-becomes-formula-ones-youngest-world-champion-in-mexico-city"],
+    ["RNZ Sport, 22 November 2026","https://www.rnz.co.nz/news/sport"],
+    ["Sky Sports: Man City Women 1-3 Tottenham Women","https://www.skysports.com/football/manchester-city-women-vs-tottenham-hotspur-women/live/575831"],
+    ["Wikipedia: 2026-27 Women's Super League","https://en.wikipedia.org/wiki/2026%E2%80%9327_Women%27s_Super_League"]
+  ]
 };
 
 export const D = globalThis;

@@ -7,12 +7,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = image || 'https://images.pexels.com/photos/1657324/pexels-photo-1657324.jpeg?auto=compress&cs=tinysrgb&w=1200';
 const nav = [
   ['Play', `${base}#games`],
-  ["Flashback", `${base}flashback.html`],
-  ["Replays", `${base}replays.html`],
-  ['Family', `${base}challenge.html?c=family`],
+  ['Call It', `${base}call-it.html`],
+  ['Flashback', `${base}flashback.html`],
+  ['On This Day', `${base}on-this-day.html`],
+  ['Replays', `${base}replays.html`],
+  ['Guides', `${base}sports.html`],
   ['Round-Up', `${base}round-up.html`],
-  ['Sport A to Z', `${base}sports.html`],
-  ['Newsletter', `${base}#newsletter`],
+  ['Newsletter', `${base}newsletter.html`],
 ];
 const ld = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'SportingBrain', url: new URL(base, Astro.site).href, description: 'The free daily sports hub for everyone who loves sport.' };
 ---
@@ -54,7 +55,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sporti
 <main class:list={['wrap', { wide }]} data-page={page} id="main"><slot /></main>
 <footer class="wrap">
   <p>SportingBrain is free, for every fan, every sport and every age. No betting, ever.</p>
-  <p><a href={base}>Home</a> · <a href={`${base}#who`}>Who we are</a> · <a href={`${base}#newsletter`}>Newsletter</a> · <a href={`${base}about.html`}>About and privacy</a> · <a href="#" data-dys>Dyslexia-friendly font</a> · <a href="#" data-welcome>What is SportingBrain?</a></p>
+  <p><a href={base}>Home</a> · <a href={`${base}#who`}>Who we are</a> · <a href={`${base}newsletter.html`}>Newsletter</a> · <a href={`${base}challenge.html?c=family`}>Family challenge</a> · <a href={`${base}about.html`}>About and privacy</a> · <a href="#" data-dys>Dyslexia-friendly font</a> · <a href="#" data-welcome>What is SportingBrain?</a></p>
   <p class="small">Sport photos from Pexels. The Brain is our own creation.</p>
 </footer>
 <script>

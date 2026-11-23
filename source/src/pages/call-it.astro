@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import { buildMoments } from '../data/callit.js';
+const moments = buildMoments();
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<Base title="Call It: the daily sports prediction game built on real matches | SportingBrain" description="We freeze a real moment from a real final. You call what happens next. Then the replay shows you. One a day." page="callit" wide>
+  <section class="ci">
+    <div class="ci-head"><span class="tag" style="background:var(--gold);color:#14254a">Call It #<span id="ciNum"></span></span>
+      <h1>We freeze a real match. You call what happens next.</h1>
+      <p class="teaser">A real moment from a real final, stopped mid-match. Make your calls, then watch what actually happened. Even if you saw it live, you won't remember this.</p></div>
+    <div class="ci-grid">
+      <div class="card ci-board" id="ciBoard"></div>
+      <div class="card ci-calls" id="ciCalls"></div>
+    </div>
+    <div class="card ci-result" id="ciResult" hidden></div>
+    <p class="small">Matches rebuilt from Cricsheet ball-by-ball data (Open Data Commons Attribution License). A new Call It every day at midnight UK time. Want more? <a href={`${base}call-it.html?practice=1`}>Practice mode</a>.</p>
+  </section>
+  <script id="ciData" type="application/json" set:html={JSON.stringify(moments)} />
+  <script>
+    const M = JSON.parse(document.getElementById('ciData').textContent);
+    const BASE = document.documentElement.dataset.base || '/';
+    const S = { get(k, d) { try { const v = localStorage.getItem('sb_' + k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } }, set(k, v) { try { localStorage.setItem('sb_' + k, JSON.stringify(v)); } catch (_) {} } };
+    const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const uk = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' }));
+    const DAY = Math.floor((Date.UTC(uk.getFullYear(), uk.getMonth(), uk.getDate()) - Date.UTC(2026, 10, 23)) / 86400000) + 1;
+    // fixed shuffle so the order isn't match by match
+    const order = M.map((_, i) => i).sort((a, b) => ((a * 2654435761) % 997) - ((b * 2654435761) % 997));
+    const practice = new URLSearchParams(location.search).has('practice');
+    const idx = practice ? Math.floor(Math.random() * M.length) : order[(DAY - 1 + M.length * 10) % M.length];
+    const m = M[idx]; document.getElementById('ciNum').textContent = practice ? 'practice' : DAY;
+    const key = 'ci_' + DAY, saved = practice ? null : S.get(key, null);
+    document.getElementById('ciBoard').innerHTML = `
+      <div class="small">${esc(m.match)} · ${esc(new Date(m.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }))}</div>
+      <div class="ci-team">${esc(m.team)} <span>${m.innings ? 'second innings' : 'first innings'}, v ${esc(m.opp)}</span></div>
+      <div class="ci-score">${esc(m.score)} <small>after ${esc(m.at)} overs</small></div>
+      ${m.need ? `<div class="ci-need">${esc(m.need)}</div>` : ''}
+      <div class="ci-bat">${m.pair.map(p => `<div><b>${esc(p[0])}</b> ${p[1]}${p === m.pair[0] ? ' <small>on strike</small>' : ''}</div>`).join('')}</div>`;
+    let picks = saved ? saved.picks : [];
+    function renderCalls() {
+      document.getElementById('ciCalls').innerHTML = m.qs.map((q, qi) => `<fieldset class="ci-q"><legend>${qi + 1}. ${esc(q.q)}</legend>
+        <div class="ci-opts">${q.opts.map((o, oi) => `<button class="ci-opt ${picks[qi] === oi ? 'on' : ''} ${saved ? (oi === q.a ? 'right' : (picks[qi] === oi ? 'wrong' : '')) : ''}" data-q="${qi}" data-o="${oi}" ${saved ? 'disabled' : ''}>${esc(o)}</button>`).join('')}</div></fieldset>`).join('')
+        + (saved ? '' : `<button class="btn gold wide" id="ciLock" ${picks.filter(x => x !== undefined).length < m.qs.length ? 'disabled' : ''}>Lock in my calls</button>`);
+    }
+    function reveal() {
+      const marks = m.qs.map((q, i) => picks[i] === q.a);
+      const n = marks.filter(Boolean).length;
+      const r = document.getElementById('ciResult'); r.hidden = false;
+      r.innerHTML = `<div class="ci-verdict">${n === m.qs.length ? 'Called it.' : n ? 'Half right.' : 'Not this time.'} <span>${marks.map(x => x ? '✅' : '❌').join('')}</span></div>
+        <p>What actually happened: ${m.qs.map(q => `<b>${esc(q.reveal)}</b>`).join(' and ')}. ${esc(m.team)} were ${esc(m.after)}.</p>
+        <div class="row" style="gap:8px;flex-wrap:wrap"><a class="btn" href="${BASE}replays/${m.slug}.html?g=${m.g}">Watch it play out ▶</a>
+        <button class="btn ghost" id="ciShare">Share my result</button>${practice ? `<a class="btn ghost" href="?practice=1">Another one</a>` : ''}</div>
+        ${practice ? '' : `<p class="small" style="margin-top:10px">Call It streak: <b>${S.get('ci_streak', 0)}</b> day${S.get('ci_streak', 0) === 1 ? '' : 's'}. Next one at midnight.</p>`}`;
+      document.getElementById('ciShare').onclick = () => { const t = `🧠 SportingBrain Call It #${DAY}\n${marks.map(x => x ? '✅' : '❌').join('')}\nCan you call it? ${location.origin + BASE}call-it.html`;
+        if (navigator.share) navigator.share({ text: t }).catch(() => {}); else navigator.clipboard?.writeText(t); };
+    }
+    document.addEventListener('click', e => { const b = e.target.closest('.ci-opt'); if (b && !saved) { picks[+b.dataset.q] = +b.dataset.o; renderCalls(); }
+      if (e.target.id === 'ciLock') { if (!practice) { const last = S.get('ci_last', 0); S.set('ci_streak', last === DAY - 1 ? S.get('ci_streak', 0) + 1 : 1); S.set('ci_last', DAY); S.set(key, { picks }); }
+        renderCalls(); reveal(); document.getElementById('ciResult').scrollIntoView({ behavior: 'smooth', block: 'center' }); } });
+    renderCalls(); if (saved) reveal();
+  </script>
+</Base>

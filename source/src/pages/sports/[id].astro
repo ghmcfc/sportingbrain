@@ -1,18 +1,42 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { GUIDES } from '../../data/guides.js';
 import { D } from '../../data/content.js';
-export function getStaticPaths() { return D.SB_SPORTS.map((s) => ({ params: { id: s.id }, props: { s } })); }
-const { s } = Astro.props;
+export function getStaticPaths() { return GUIDES.map(g => ({ params: { id: g.id }, props: { g } })); }
+const { g } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const others = D.SB_SPORTS.filter((x) => x.id !== s.id).slice(0, 3);
+const img = D.SB_PHOTO(g.name, 1600);
+const others = GUIDES.filter(x => x.id !== g.id).sort(() => 0).slice(0, 4);
 ---
-<Base title={`${s.name}: how it works | SportingBrain`} description={`${s.name} explained in a minute: how it's played, where, and one fact you'll tell everyone.`}>
-  <article class="article">
-    <div class="card" style="margin-top:14px;border-top:8px solid #8E24AA"><span class="tag" style="background:#8E24AA">Sport A to Z</span>
-      <div class="big-emoji" style="margin-top:8px">{s.emoji}</div><h1>{s.name}</h1>
-      <p><b>Where it's played:</b> {s.where}</p><p>{s.what}</p><div class="fact"><b>Did you know?</b> {s.fact}</div></div>
-    <div class="card" style="margin-top:12px"><span class="tag">Quick quiz</span><div data-quiz="sport" data-id={s.id}></div></div>
-    <div class="sec"><h2>More sports</h2></div>
-    <div class="next3">{others.map((x) => <a href={`${base}sports/${x.id}.html`}><span>{x.emoji}</span>{x.name}</a>)}</div>
+<Base title={`${g.name}: how it really works | SportingBrain`} description={`${g.line} Rules, scoring, what the experts watch for, the greats and the big events.`} image={img} type="article" wide>
+  <article class="sg">
+    <header class="fb-hero" style={img ? `--bg:url('${img}')` : ''}>
+      <span class="tag" style="background:var(--gold);color:#14254a">Sport guide</span>
+      <h1>{g.emoji} {g.name}</h1><p class="fb-stand">{g.line}</p>
+    </header>
+    <nav class="sg-tabs" aria-label="Sections">
+      <a href="#how">How it works</a><a href="#watch">What to watch for</a><a href="#greats">The greats</a><a href="#terms">Talk like an expert</a><a href="#when">When it's on</a><a href="#play">Get involved</a>
+    </nav>
+    <div class="fb-grid">
+      <div class="fb-body">
+        <h2 id="how">How it works</h2>{g.how.map(p => <p>{p}</p>)}
+        <div class="sg-score card"><b>Scoring</b><p>{g.scoring}</p></div>
+        <h3>Formats</h3><ul class="sg-list">{g.formats.map(f => <li>{f}</li>)}</ul>
+        <h2 id="watch">What the experts watch for</h2>
+        <ol class="sg-watch">{g.watch.map(w => <li>{w}</li>)}</ol>
+        <h2 id="greats">The greats</h2>
+        <div class="sg-greats">{g.greats.map(x => <div class="card"><b>{x[0]}</b><p>{x[1]}</p></div>)}</div>
+        <h2 id="terms">Talk like an expert</h2>
+        <p class="small">Tap a term to see what it means.</p>
+        <div class="sg-terms">{g.terms.map(t => <details class="card"><summary>{t[0]}</summary><p>{t[1]}</p></details>)}</div>
+      </div>
+      <aside class="fb-time">
+        <div class="card" id="when"><b>When it's on</b><ul class="sg-list">{g.events.map(e => <li><b>{e[0]}</b>: {e[1]}</li>)}</ul></div>
+        <div class="card" id="play" style="margin-top:12px"><b>Get involved in the UK</b><ul class="sg-list">{g.uk.map(u => <li><a href={u[1]} target="_blank" rel="noopener">{u[0]}</a></li>)}</ul></div>
+        <div class="card" style="margin-top:12px"><b>Think you know it?</b><p class="small">Try today's Beat the Brain on Expert.</p><a class="btn" href={`${base}daily.html?level=4`}>Play on Expert</a></div>
+      </aside>
+    </div>
+    <div class="sec"><h2>More guides</h2><a href={`${base}sports.html`}>All</a></div>
+    <div class="next3">{others.map(x => <a href={`${base}sports/${x.id}.html`}><span>{x.emoji}</span>{x.name}</a>)}</div>
   </article>
 </Base>

@@ -2,6 +2,8 @@ import '../data/data.js';
 import '../data/content.js';
 import { FLASHBACKS } from '../data/flashbacks.js';
 import { REPLAYS } from '../data/replays.js';
+import { BANK } from '../data/bank.js';
+import { GUIDES } from '../data/guides.js';
 (function(){
 'use strict';
 const BASE=(document.documentElement.dataset.base||'/');
@@ -82,7 +84,7 @@ function badges(){
     {e:'📈',n:'Stat master',got:store.get('hl_best',0)>=10,how:'Get 10 in a row in Higher or Lower'},
     {e:'🧩',n:'Grid cracker',got:store.get('grid_solved',0)>=1,how:'Solve The Grid'}];
 }
-const DEFAULT_USP=[['🧠','A new puzzle every day','Beat the Brain, our cheeky AI rival, and keep your streak going.'],
+const DEFAULT_USP=[['🎯','Call It, every day','We freeze a real moment from a real final. You call what happens next.'],
   ['🌍','Every sport, every fan','Football first, then cricket to darts, F1 to kabaddi. Men\'s and women\'s, same billing.'],
   ['👥','Take on your mates','Share your score to the group chat and see who beats the Brain.'],
   ['📼','Flashback and replays','Forgotten moments told properly, and great finals replayed ball by ball.'],
@@ -129,7 +131,7 @@ if(P==='home'){
   main.classList.add('wide');
   const played=store.get('daily_'+ukKey(),null);
   const brainScore = 2+Math.floor(seeded(DAY)()*3);
-  const story=pickDaily(SB_STORIES), sport=pickDaily(SB_SPORTS,1), stat=pickDaily(SB_STATS);
+  const story=pickDaily(SB_STORIES), sport=pickDaily(GUIDES,1), stat=pickDaily(SB_STATS);
   const p=ukParts(); const todayN=Date.UTC(2001,p.m-1,p.d);
   const mdNow=`${String(p.m).padStart(2,'0')}-${String(p.d).padStart(2,'0')}`;
   const H=(window.SB_HEROES_WEEKS||[]).find(w=>w.from<=w.to ? (mdNow>=w.from&&mdNow<=w.to) : (mdNow>=w.from||mdNow<=w.to)) || null;
@@ -144,11 +146,12 @@ if(P==='home'){
   // tomorrow's teaser
   const tmr=new Date(Date.now()+86400000); const tdow=tmr.toLocaleDateString('en-GB',{weekday:'long',timeZone:'Europe/London'});
   const weekly={Monday:'the new Weekly Brain Challenge',Wednesday:'World Sport Wednesday',Friday:'the Friday Family Challenge',Sunday:'a fresh Cynical Round-Up'}[tdow];
-  const tSport=pickDaily(SB_SPORTS,2);
+  const tSport=pickDaily(GUIDES,2);
 
   // badges
   const B=badges();
   const tiles=[
+    ['🎯','Call It',store.get('ci_'+DAY,null)?'Done today':'Make your call',BASE+'call-it.html','#F9A825'],
     ['🧠','Beat the Brain',played?`You: ${played.marks.filter(Boolean).length}/5`:`Brain: ${brainScore}/5`,BASE+'daily.html','#C2185B'],
     ['📈','Higher or Lower',`Best: ${bestHL}`,BASE+'higher-or-lower.html','#1565C0'],
     ['🕵️','Guess the Player',`Best: ${store.get('gtp_best',0)}`,BASE+'guess-the-player.html','#6A1B9A'],
@@ -156,7 +159,7 @@ if(P==='home'){
     ['⏱️','Speed Round',`Best: ${bestSp}`,BASE+'speed-round.html','#D32F2F'],
     ['🤔','Guess the Sport','Emoji clues',BASE+'guess-the-sport.html','#EF6C00'],
     ['✅','True or False','Fact or fib?',BASE+'true-or-false.html','#2E7D32']];
-  const USP=[['🧠','A new puzzle every day','Beat the Brain, our cheeky AI rival, and keep your streak going.'],
+  const USP=[['🎯','Call It, every day','We freeze a real moment from a real final. You call what happens next.'],
     ['🌍','Every sport, every fan','Football first, then cricket to darts, F1 to kabaddi. Men\'s and women\'s, same billing.'],
     ['👥','Take on your mates','Share your score to the group chat and see who beats the Brain.'],
     ['📼','Flashback and replays','Forgotten moments told properly, and great finals replayed ball by ball.'],
@@ -175,14 +178,14 @@ if(P==='home'){
     <div class="hero-grid">
       <div>
         <span class="tag" style="background:var(--gold);color:#14254a">The free daily sports hub</span>
-        <h1 class="promise">Play, learn and argue about sport. Every single day.</h1>
-        <p class="sub">For everyone who loves sport. Every sport, every level, every age.</p>
+        <h1 class="promise">The smartest free sports site in the world.</h1>
+        <p class="sub">A daily game built on real matches, the stories nobody else tells, and data you can play with.</p>
         <div class="today-box">
           <img src="assets/brain.svg" alt="The Brain" class="mini-brain">
           <div><b>Beat the Brain #${DAY}</b><br>${played?`You scored ${played.marks.filter(Boolean).length}/5 today.`:`The Brain scored ${brainScore}/5. Your turn.`}</div>
         </div>
         <div class="meta"><div><b>${streak}</b><span>day streak</span></div><div><b class="countdown" id="cd">--:--</b><span>next puzzle in</span></div></div>
-        <a class="btn gold wide" href="${BASE}daily.html">${played?'See your score and share':'Play today\'s puzzle'}</a>
+        <div class="hero-ctas"><a class="btn gold" href="${BASE}call-it.html">Play today's Call It</a><a class="btn ghost light" href="${BASE}daily.html">${played?'Your Beat the Brain score':'Beat the Brain: pick your level'}</a></div><p class="small" style="margin:8px 0 0;opacity:.85">Call It: we freeze a real match, you call what happens next.</p>
       </div>
       <ul class="usp">${USP.map(u=>`<li><span>${u[0]}</span><div><b>${u[1]}</b><small>${u[2]}</small></div></li>`).join('')}</ul>
     </div>
@@ -208,7 +211,7 @@ if(P==='home'){
     </div>
 
     <div class="col col-read">
-      <div class="sec"><h2>${dlabel(mdNow)} in sport</h2><span class="small" id="tihcount"></span></div>
+      <div class="sec"><h2>${dlabel(mdNow)} in sport</h2><a href="${BASE}on-this-day.html">On This Day</a></div>
       <section class="card tih" id="tih" aria-roledescription="carousel" aria-label="Today in sporting history">
         <div class="tih-track">${tih.map((e,k)=>`<div class="tih-slide" role="group" aria-label="${k+1} of ${tih.length}" ${k?'hidden':''} style="--c:${colour(e.s)}">
           <div class="tih-year">${e.y}</div><span class="tag" style="background:${colour(e.s)}">${esc(e.s)}</span>${e.md!==mdNow?` <span class="small">${dlabel(e.md)}</span>`:''}
@@ -241,8 +244,8 @@ if(P==='home'){
       <div class="sec"><h2>The Cynical Round-Up</h2></div>
       <div class="card" style="background:#263238;color:#eceff1">
         <span class="satire">SATIRE. Tongue firmly in cheek.</span>
-        <div class="title">😎 ${esc(SB_ROUNDUP.items[0][0])}, a luminous bridge and more</div>
-        <p style="margin:0;color:#b0bec5">${esc(SB_ROUNDUP.updated)} The week in sport, with a big eye-roll from the Brain.</p>
+        <div class="title">😎 ${esc(SB_ROUNDUP.headline)}</div>
+        <p style="margin:0;color:#b0bec5">${esc(SB_ROUNDUP.edition)}. The real week in sport, with a big eye-roll.</p>
         <a class="stretch" href="${BASE}round-up.html" aria-label="Read the Cynical Round-Up"></a>
       </div>
 
@@ -268,7 +271,7 @@ if(P==='home'){
       <div class="sec"><h2>Coming tomorrow</h2></div>
       <div class="card tomorrow">
         <div class="title" style="margin-top:0">⏰ ${tdow}</div>
-        <ul class="tlist"><li>A brand new Beat the Brain</li><li>Sport of the day: ${tSport.emoji} ${esc(tSport.name)}</li>${weekly?`<li>${esc(weekly)}</li>`:''}<li>New moments from ${dlabel(`${String(tmr.getUTCMonth()+1).padStart(2,'0')}-${String(tmr.getUTCDate()).padStart(2,'0')}`)} in sport</li></ul>
+        <ul class="tlist"><li>A brand new Beat the Brain</li><li>A new Call It moment to make your call on</li><li>Guide of the day: ${tSport.emoji} ${esc(tSport.name)}</li>${weekly?`<li>${esc(weekly)}</li>`:''}<li>New moments from ${dlabel(`${String(tmr.getUTCMonth()+1).padStart(2,'0')}-${String(tmr.getUTCDate()).padStart(2,'0')}`)} in sport</li></ul>
         <p class="small" style="margin:6px 0 0">Starts in <span class="countdown" id="cd2"></span></p>
       </div>
 
@@ -285,9 +288,9 @@ if(P==='home'){
         <p class="row" style="margin:10px 0 0"><button class="btn ghost" id="statshare" style="padding:8px 12px">Share this stat</button></p>
       </div>
 
-      <div class="sec"><h2>Sport of the day</h2><a href="${BASE}sports.html">A to Z</a></div>
+      <div class="sec"><h2>Guide of the day</h2><a href="${BASE}sports.html">All guides</a></div>
       <article class="card" style="border-left:8px solid ${colour('Unusual')}">
-        <div class="title" style="margin-top:0">${sport.emoji} ${esc(sport.name)}</div><p class="teaser">${esc(sport.what.split('. ')[0])}.</p>
+        <div class="title" style="margin-top:0">${sport.emoji} ${esc(sport.name)}</div><p class="teaser">${esc(sport.line)}</p>
         <a class="stretch" href="${BASE}sports/${sport.id}.html" aria-label="Learn about ${esc(sport.name)}"></a>
       </article>
 
@@ -323,7 +326,7 @@ if(P==='home'){
   main.querySelectorAll('[data-share-to]').forEach(a=>{ const u=encodeURIComponent(SITE), t=encodeURIComponent(PITCH);
     a.href={whatsapp:`https://wa.me/?text=${t}%20${u}`, facebook:`https://www.facebook.com/sharer/sharer.php?u=${u}`, x:`https://twitter.com/intent/tweet?text=${t}&url=${u}`}[a.dataset.shareTo]; });
   (function(){ const root=$('#tih'); if(!root) return; const slides=[...root.querySelectorAll('.tih-slide')], dots=[...root.querySelectorAll('.tih-dots button')]; let k=0, paused=matchMedia('(prefers-reduced-motion: reduce)').matches, t;
-    const go=n=>{ k=(n+slides.length)%slides.length; slides.forEach((sl,j)=>sl.hidden=j!==k); dots.forEach((d,j)=>d.classList.toggle('on',j===k)); $('#tihcount').textContent=`${k+1} of ${slides.length}`; };
+    const go=n=>{ k=(n+slides.length)%slides.length; slides.forEach((sl,j)=>sl.hidden=j!==k); dots.forEach((d,j)=>d.classList.toggle('on',j===k)); const tc=$('#tihcount'); if(tc) tc.textContent=`${k+1} of ${slides.length}`; };
     const play=()=>{ clearInterval(t); if(!paused) t=setInterval(()=>go(k+1),5000); $('#tihpause').textContent=paused?'▶︎ Play':'❚❚'; $('#tihpause').setAttribute('aria-label',paused?'Play':'Pause'); };
     $('#tihnext').onclick=()=>{go(k+1);play();}; $('#tihprev').onclick=()=>{go(k-1);play();}; $('#tihpause').onclick=()=>{paused=!paused;play();};
     dots.forEach(d=>d.onclick=()=>{go(+d.dataset.k);play();});
@@ -342,25 +345,36 @@ if(P==='home'){
 
 // ================= DAILY =================
 if(P==='daily'){
-  const Q=SB_QUESTIONS, N=5, start=((DAY-1)*N)%Q.length; let today=[]; for(let k=0;k<N;k++) today.push(Q[(start+k)%Q.length]);
-  const fi=today.findIndex(q=>/football/i.test(q.s)); if(fi>0){const [f]=today.splice(fi,1); today.unshift(f);}
-  const brainScore=2+Math.floor(seeded(DAY)()*3), key=ukKey(), saved=store.get('daily_'+key,null);
-  main.innerHTML=`<section class="hero"><div class="row1"><img src="assets/brain.svg" alt="The Brain"><div><span class="tag" style="background:var(--gold);color:#14254a">Beat the Brain #${DAY}</span><h1>The Brain scored ${brainScore}/5 today.</h1><p>Your turn. Go on then, beat me.</p></div></div></section><section class="card" style="margin-top:12px" id="game" aria-live="polite"></section><div class="sec"><h2>Keep playing</h2></div>${moreExcept(BASE+'daily.html')}`;
-  const g=$('#game');
-  function finish(marks,save){
-    const score=marks.filter(Boolean).length;
-    markPlayed('daily'); if(save){ store.set('daily_'+key,{marks}); const y=new Date(); y.setDate(y.getDate()-1); const last=store.get('lastday',null); let st=store.get('streak',0); const y2=new Date(); y2.setDate(y2.getDate()-2);
-      if(last===ukKey(y)) st=st+1; else if(last===key) st=st; else if(last===ukKey(y2) && st>0 && saverAvailable()){ st=st+1; store.set('saver_week',isoWeek()); setTimeout(()=>toast('🛟 Streak saver used. Your streak lives on!'),800); } else st=1; store.set('streak',st); store.set('lastday',key); store.set('played',store.get('played',0)+1); if(score>brainScore) store.set('beaten',store.get('beaten',0)+1); }
-    const line=score>brainScore?"You've out-thought the Brain! Frame this score.":score===brainScore?"A draw. The Brain demands a rematch tomorrow.":"Brains 1, Brawn 0. Ooh, same time tomorrow?";
-    g.innerHTML=`<div class="small">Your score</div><div class="score">${score}/5</div><div class="brain-says"><img src="assets/brain.svg" alt=""><div>${line}</div></div>
-      <div class="stats"><div><b>${store.get('streak',1)}</b>day streak</div><div><b>${store.get('played',1)}</b>played</div><div><b>${store.get('beaten',0)}</b>times you beat the Brain</div></div>
-      <p><button class="btn pink wide" id="sh">Share my score</button></p><p class="small">Next puzzle in <span class="countdown" id="cd"></span></p>`;
-    const card=`SportingBrain #${DAY} 🧠\n${marks.map(m=>m?'🟩':'🟥').join('')}  ${score}/5\nThe Brain got ${brainScore}/5. ${score>brainScore?'I beat the Brain!':score===brainScore?'Honours even.':'He got me today.'}\nsportingbrain.com`;
-    $('#sh').onclick=()=>share(card); countdown($('#cd'));
-    if(save && score>brainScore) confetti();
+  const LV=[null,{n:'Easy',c:'#2E7D32',d:'For anyone who follows sport.'},{n:'Medium',c:'#1565C0',d:'For keen fans.'},{n:'Hard',c:'#C62828',d:'For the ones who read the long reads.'},{n:'Expert',c:'#14254a',d:'Pub-quiz champion territory.'}];
+  const N=5, key=ukKey(); let level=+new URLSearchParams(location.search).get('level')||store.get('daily_level',2); if(!LV[level]) level=2;
+  const pool=l=>BANK.filter(q=>q[0]===l);
+  function todays(l){ const Q=pool(l), start=((DAY-1)*N)%Q.length, r=seeded(DAY*7+l), out=[];
+    for(let k=0;k<N;k++){ const q=Q[(start+k)%Q.length]; const idx=[0,1,2,3].sort(()=>r()-.5); out.push({q:q[2],o:idx.map(i=>q[3][i]),a:idx.indexOf(0),f:q[5],s:`${q[1]} · ${LV[l].n}`}); } return out; }
+  const brainFor=l=>Math.max(1,Math.min(5,[0,4,4,3,2][l]+Math.floor(seeded(DAY*3+l)()*2)));
+  function render(){
+    const brainScore=brainFor(level), saved=store.get(`daily_${key}_${level}`,null);
+    main.innerHTML=`<section class="hero"><div class="row1"><img src="${BASE}assets/brain.svg" alt="The Brain"><div><span class="tag" style="background:var(--gold);color:#14254a">Beat the Brain #${DAY}</span><h1>Five questions. Pick your level.</h1><p>The Brain scored ${brainScore}/5 on ${LV[level].n} today. Your turn.</p></div></div></section>
+      <div class="lv-pick" role="tablist" aria-label="Difficulty">${[1,2,3,4].map(l=>{const done=store.get(`daily_${key}_${l}`,null);return `<button role="tab" aria-selected="${l===level}" class="lv ${l===level?'on':''}" data-lv="${l}" style="--c:${LV[l].c}"><b>${LV[l].n}</b><small>${done?`Done: ${done.marks.filter(Boolean).length}/5`:LV[l].d}</small></button>`;}).join('')}</div>
+      <section class="card" style="margin-top:12px" id="game" aria-live="polite"></section><div class="sec"><h2>Keep playing</h2></div>${moreExcept(BASE+'daily.html')}`;
+    main.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ level=+b.dataset.lv; store.set('daily_level',level); history.replaceState(null,'',`?level=${level}`); render(); });
+    const g=$('#game');
+    function finish(marks,save){
+      const score=marks.filter(Boolean).length;
+      markPlayed('daily'); if(save){ store.set(`daily_${key}_${level}`,{marks}); store.set('daily_'+key,{marks}); const y=new Date(); y.setDate(y.getDate()-1); const last=store.get('lastday',null); let st=store.get('streak',0); const y2=new Date(); y2.setDate(y2.getDate()-2);
+        if(last===ukKey(y)) st=st+1; else if(last===key) st=st; else if(last===ukKey(y2) && st>0 && saverAvailable()){ st=st+1; store.set('saver_week',isoWeek()); setTimeout(()=>toast('Streak saver used. Your streak lives on.'),800); } else st=1; store.set('streak',st); store.set('lastday',key); store.set('played',store.get('played',0)+1); if(score>brainScore) store.set('beaten',store.get('beaten',0)+1); }
+      const line=score>brainScore?"You beat the Brain. Try the next level up.":score===brainScore?"Level with the Brain. Rematch tomorrow.":"The Brain wins this one. Same time tomorrow?";
+      g.innerHTML=`<div class="small">${LV[level].n}</div><div class="score">${score}/5</div><div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${line}</div></div>
+        <div class="stats"><div><b>${store.get('streak',1)}</b>day streak</div><div><b>${store.get('played',1)}</b>played</div><div><b>${store.get('beaten',0)}</b>times you beat the Brain</div></div>
+        <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn pink" id="sh">Share my score</button>${level<4?`<button class="btn ghost" data-lv="${level+1}">Try ${LV[level+1].n}</button>`:''}<a class="btn ghost" href="${BASE}call-it.html">Play Call It</a></div><p class="small">New questions in <span class="countdown" id="cd"></span></p>`;
+      g.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ level=+b.dataset.lv; store.set('daily_level',level); render(); window.scrollTo({top:0,behavior:'smooth'}); });
+      const card=`SportingBrain #${DAY} 🧠 ${LV[level].n}\n${marks.map(m=>m?'🟩':'🟥').join('')}  ${score}/5\nThe Brain got ${brainScore}/5.\n${SITE}daily.html?level=${level}`;
+      $('#sh').onclick=()=>share(card); countdown($('#cd'));
+      if(save && score>brainScore) confetti();
+    }
+    if(saved&&saved.marks&&saved.marks.length===N) finish(saved.marks,false);
+    else runQuiz(g, todays(level), {done:m=>finish(m,true)});
   }
-  if(saved&&saved.marks&&saved.marks.length===N) finish(saved.marks,false);
-  else runQuiz(g, today.map(q=>({...q,s:q.s})), {done:m=>finish(m,true)});
+  render();
 }
 
 // ================= HIGHER OR LOWER =================
