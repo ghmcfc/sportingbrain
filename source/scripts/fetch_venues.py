@@ -22,10 +22,22 @@ for t in titles:
     if k in data and (DIR / data[k]['file']).exists(): continue
     try:
         s = get('https://en.wikipedia.org/api/rest_v1/page/summary/' + urllib.parse.quote(t.replace(' ', '_'), safe=''))
+        if s.get('type') == 'disambiguation': print('disambiguation page', t); continue
+        qid = s.get('wikibase_item'); claims = {}
+        if qid:
+            try: claims = get(f'https://www.wikidata.org/wiki/Special:EntityData/{qid}.json')['entities'][qid]['claims']
+            except Exception as ex: print('wikidata', t, ex)
+        cands = []
+        for c in claims.get('P18', []):
+            v = c['mainsnak'].get('datavalue', {}).get('value')
+            if v: cands.append(v)
         img = (s.get('originalimage') or {}).get('source', '')
-        if not img: print('no image', t); continue
-        fname = urllib.parse.unquote(img.rsplit('/', 1)[-1])
-        if not re.search(r'\.(jpe?g)$', fname, re.I): print('not a photo', t, fname); continue
+        if img:
+            path = urllib.parse.urlparse(img).path.split('/')
+            cands.append(urllib.parse.unquote(path[-2] if 'thumb' in path else path[-1]).replace('_', ' '))
+        cands = [c for c in cands if re.search(r'\.(jpe?g)$', c, re.I)]
+        if not cands: print('no photo', t); continue
+        fname = cands[0]
         q = get('https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url|extmetadata|size&iiurlwidth=1600&titles=' + urllib.parse.quote('File:' + fname))
         page = next(iter(q['query']['pages'].values()))
         if 'missing' in page or 'imageinfo' not in page: print('not on Commons', t); continue
@@ -37,16 +49,11 @@ for t in titles:
         if b[:3] != b'\xff\xd8\xff': print('bad jpeg', t); continue
         (DIR / (k + '.jpg')).write_bytes(b)
         opened = None
-        qid = s.get('wikibase_item')
-        if qid:
-            try:
-                e = get(f'https://www.wikidata.org/wiki/Special:EntityData/{qid}.json')['entities'][qid]['claims']
-                for p in ('P1619', 'P571'):
-                    if p in e:
-                        v = e[p][0]['mainsnak'].get('datavalue', {}).get('value', {}).get('time', '')
-                        m = re.match(r'\+(\d{4})', v)
-                        if m: opened = int(m.group(1)); break
-            except Exception as ex: print('wikidata', t, ex)
+        for p in ('P1619', 'P571'):
+            if p in claims:
+                v = claims[p][0]['mainsnak'].get('datavalue', {}).get('value', {}).get('time', '')
+                m = re.match(r'\+(\d{4})', v)
+                if m: opened = int(m.group(1)); break
         data[k] = {'title': t, 'file': k + '.jpg', 'commons': fname, 'author': strip(md.get('Artist', {}).get('value'))[:120] or 'Unknown',
                    'licence': lic, 'opened': opened, 'source': 'https://commons.wikimedia.org/wiki/File:' + urllib.parse.quote(fname.replace(' ', '_'))}
         done += 1; print('saved', t, lic, opened)

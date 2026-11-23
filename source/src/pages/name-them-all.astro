@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { LISTS } from '../data/lists.js';
+---
+<Base title="Name Them All: timed sport list quizzes | SportingBrain" description="Every Premier League champion, every Ballon d'Or winner, every PDC world champion. Type them all before the clock runs out." page="lists">
+  <header class="pg-head"><h1>Name Them All</h1><p>Type every answer before the clock runs out. No options to pick from, and spelling doesn't need to be perfect. {LISTS.length} lists, each checked against its official record.</p></header>
+  <div id="vs"></div>
+  <section id="nt" aria-live="polite"></section>
+  <AdSlot name="game_result" />
+  <script id="ntData" type="application/json" set:html={JSON.stringify(LISTS)} />
+  <script>
+    import { ukDayNo, esc, store, markPlayed, challengeBox, showChallenge, share, SITE } from '../scripts/play.js';
+    const L = JSON.parse(document.getElementById('ntData').textContent), box = document.getElementById('nt'), D = ukDayNo();
+    showChallenge(document.getElementById('vs'));
+    const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/&/g, 'and').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+    const today = L[D % L.length];
+    function menu() {
+      const best = store.get('nt_best', {});
+      box.innerHTML = `<div class="nt-today"><p class="pg-step">Today's list</p><h2>${esc(today[1])}</h2><p>${esc(today[2])}</p><button class="btn gold" data-id="${today[0]}">Start: ${today[4].length} to find</button></div>
+        <div class="pg-sec"><h2>Every list</h2></div><div class="hub-grid">${L.map(l => `<button class="hub-card nt-pick" data-id="${l[0]}"><b>${esc(l[1])}</b><span>${l[4].length} answers${best[l[0]] !== undefined ? ` · your best ${best[l[0]]}/${l[4].length}` : ''}</span></button>`).join('')}</div>`;
+      box.querySelectorAll('[data-id]').forEach(b => b.onclick = () => play(L.find(l => l[0] === b.dataset.id)));
+    }
+    function play(l) {
+      const items = l[4], got = new Set(), total = Math.min(300, Math.max(90, items.length * 15)); let left = total, timer;
+      const keys = items.map(it => [it[0], ...it[1]].map(norm));
+      box.innerHTML = `<div class="pg-card"><p class="pg-step">${esc(l[1])}</p><p class="pg-q">${esc(l[2])}</p>
+        <div class="nt-bar"><b id="ntT"></b><span id="ntN">0 / ${items.length}</span><button class="btn ghost" id="ntGive">Give up</button></div>
+        <label for="ntI" class="sr">Type an answer</label><input id="ntI" class="pg-input nt-in" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Start typing. Right answers fill in by themselves.">
+        <ol class="nt-grid">${items.map((it, i) => `<li data-i="${i}"><span class="nt-h">${esc(it[2] || '')}</span><b></b></li>`).join('')}</ol></div>`;
+      const inp = document.getElementById('ntI'), T = document.getElementById('ntT');
+      const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; T.textContent = fmt(left);
+      inp.oninput = () => { const n = norm(inp.value); if (!n) return; const i = keys.findIndex((k, j) => !got.has(j) && k.includes(n));
+        if (i >= 0) { got.add(i); const li = box.querySelector(`[data-i="${i}"]`); li.classList.add('got'); li.querySelector('b').textContent = items[i][0]; inp.value = '';
+          document.getElementById('ntN').textContent = `${got.size} / ${items.length}`; if (got.size === items.length) end(); } };
+      timer = setInterval(() => { left--; T.textContent = fmt(left); if (left <= 10) T.classList.add('low'); if (left <= 0) end(); }, 1000);
+      document.getElementById('ntGive').onclick = end; inp.focus();
+      function end() { clearInterval(timer); inp.disabled = true; markPlayed('name-them-all');
+        items.forEach((it, i) => { if (!got.has(i)) { const li = box.querySelector(`[data-i="${i}"]`); li.classList.add('miss'); li.querySelector('b').textContent = it[0]; } });
+        const best = store.get('nt_best', {}); const pb = best[l[0]] === undefined || got.size > best[l[0]]; if (pb) { best[l[0]] = got.size; store.set('nt_best', best); }
+        const card = box.querySelector('.pg-card'), used = total - left;
+        card.insertAdjacentHTML('beforeend', `<div class="pg-score">${got.size} of ${items.length}${got.size === items.length ? `, in ${fmt(used)}` : ''}</div>
+          <p>${got.size === items.length ? 'Every one. Proper sports brain.' : pb ? 'Your best on this list so far.' : `Your best is ${best[l[0]]}.`} <a href="${l[3]}" target="_blank" rel="noopener">Check the official record</a>.</p>
+          <div class="pg-btns"><button class="btn gold" id="ntShare">Share</button><button class="btn ghost" id="ntMenu">Another list</button></div>`);
+        document.getElementById('ntShare').onclick = () => share(`SportingBrain Name Them All: ${l[1]}\nI got ${got.size}/${items.length}${got.size === items.length ? ' in ' + fmt(used) : ''}. Can you name them all?`, SITE + 'name-them-all.html');
+        document.getElementById('ntMenu').onclick = () => { menu(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+        card.appendChild(challengeBox(got.size, items.length, 'Name Them All: ' + l[1])); }
+    }
+    menu();
+  </script>
+</Base>
