@@ -264,7 +264,7 @@ if(P==='home'){
 
   <section class="nl-band" id="newsletter">
     <div><h3>The Daily Brain</h3><p>Today's games, a Flashback, On This Day and one stat to win an argument with. Every morning, free. Your email is the only thing we ever ask for.</p></div>
-    <a class="btn nl-open" href="https://tally.so/r/${window.SB_NEWSLETTER_FORM}" target="_blank" rel="noopener">Get the newsletter</a>
+    <a class="btn nl-open" href="${BASE}newsletter.html#signup" target="_blank" rel="noopener">Get the newsletter</a>
   </section>`;
 
   countdown($('#cd2'));
@@ -320,8 +320,6 @@ if(P==='home'){
   })();
   main.querySelectorAll('[data-share-to]').forEach(a=>{ const u=encodeURIComponent(SITE), t=encodeURIComponent(PITCH);
     a.href={whatsapp:`https://wa.me/?text=${t}%20${u}`, facebook:`https://www.facebook.com/sharer/sharer.php?u=${u}`, x:`https://twitter.com/intent/tweet?text=${t}&url=${u}`}[a.dataset.shareTo]; });
-  (function(){ const sc=document.createElement('script'); sc.src='https://tally.so/widgets/embed.js'; sc.async=true; document.body.appendChild(sc);
-    document.addEventListener('click',e=>{ const a=e.target.closest('.nl-open'); if(!a||!window.Tally||!window.Tally.openPopup) return; e.preventDefault(); window.Tally.openPopup(window.SB_NEWSLETTER_FORM,{layout:'modal',width:520,overlay:true,emoji:{text:'🧠',animation:'wave'}}); }); })();
 
   // streak at risk: a small banner, not a pop-up (Super Prompt 5A)
   (function(){ const y=new Date(); y.setDate(y.getDate()-1); const h=+new Date().toLocaleString('en-GB',{timeZone:'Europe/London',hour:'2-digit',hour12:false});

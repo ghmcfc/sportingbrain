@@ -11,8 +11,13 @@ const r = D.SB_ROUNDUP;
       <span class="tag" style="background:var(--gold);color:#14254a">The Daily Brain</span>
       <h1>Sport, properly, before your first coffee.</h1>
       <p class="teaser">One email, every morning, five minutes. Free. It's the only time we ask for any details, and all we ask for is your email address.</p>
-      <a class="btn gold nl-open" href={`https://tally.so/r/${D.SB_NEWSLETTER_FORM}`} target="_blank" rel="noopener">Sign me up</a>
+      <a class="btn gold" href="#signup">Sign me up</a>
       <p class="small">No spam, never sold or shared, unsubscribe in one click. Under 13? Ask a parent to sign up.</p>
+    </div>
+    <div class="card nl-form" id="signup">
+      <h2>Sign up</h2>
+      <iframe src={D.SB_NEWSLETTER_FORM} title="Sign up to The Daily Brain" loading="lazy" style="width:100%;min-height:560px;border:0;display:block"></iframe>
+      <p class="small">We'll email you a link to confirm. You're only signed up once you click it. Form not showing? <a href={D.SB_NEWSLETTER_FORM} target="_blank" rel="noopener">Open it in a new tab</a>.</p>
     </div>
     <h2>What's in it</h2>
     <div class="nl-grid">
@@ -32,8 +37,4 @@ const r = D.SB_ROUNDUP;
       <p><a href={`${base}call-it.html`}>Play today's Call It →</a></p>
     </div>
   </section>
-  <script>
-    document.addEventListener('click', e => { const a = e.target.closest('.nl-open'); if (!a || !window.Tally?.openPopup) return; e.preventDefault(); window.Tally.openPopup(a.href.split('/r/')[1], { layout: 'modal', width: 520, overlay: true }); });
-    const s = document.createElement('script'); s.src = 'https://tally.so/widgets/embed.js'; s.async = true; document.body.appendChild(s);
-  </script>
 </Base>

@@ -372,7 +372,7 @@ globalThis.SB_TODAY = [
   {md:"11-23",y:1976,s:"Freediving",t:"Jacques Mayol becomes the first person to reach 100 metres underwater on a single breath."},
   {md:"11-23",y:2006,s:"Boxing",t:"Willie Pep dies. The featherweight, nicknamed Will o' the Wisp for his defence, won 229 of his 241 professional fights."}
 ];
-globalThis.SB_NEWSLETTER_FORM = "ArB4Z0";
+globalThis.SB_NEWSLETTER_FORM = "https://fd11700d.sibforms.com/serve/MUIFAJgc5cpazbaWaJl9ZiHpHSD-40XnqFF738oUI36WSx8rYGXYaeD9z6J4v_hluWowR4_0EjsO3rVU3FJuniGjsoSow49NsUtDmeLWB6imCGPl6PCBIjMG77DvLdc_taLVpH1CkquGbgmqOnbyojSMcv7szn-aQK3GYDiDFLkkvPr5cblu-FuTcBGcPr9wQRxj1Q8E0Y_imJZ4eg==";
 
 // Hero and Heroine of the Week: tied to that week's anniversaries or news. 'from'/'to' are month-day ranges.
 globalThis.SB_HEROES_WEEKS = [
