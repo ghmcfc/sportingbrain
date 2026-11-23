@@ -26,6 +26,7 @@ const P = {
   'sports-day': '<circle cx="24" cy="31" r="10"/><path d="M17 5l7 15 7-15M24 26v10M21 28l3-2"/>',
   'challenge': '<circle cx="16" cy="15" r="6"/><circle cx="33" cy="17" r="5"/><path d="M5 41c1-8 5-13 11-13s10 5 11 13M27 41c1-6 3-10 6-10s6 4 7 10"/>',
   'laughs': '<circle cx="24" cy="24" r="18"/><path d="M15 27c2 6 5 8 9 8s7-2 9-8z" fill="currentColor"/><path d="M16 18l4 2-4 2M32 18l-4 2 4 2"/>',
+  'sports-grid': '<rect x="6" y="6" width="36" height="36" rx="3"/><path d="M18 6v36M30 6v36M6 18h36M6 30h36"/><path d="M20 24l3 3 5-6"/>',
   'kids': '<circle cx="24" cy="24" r="17"/><path d="M24 7l5 8-5 6-5-6zM7.5 20l9 1 2 8M40.5 20l-9 1-2 8M15 38l5-8h8l5 8"/>',
 };
 export function icon(slug, size = 40) {

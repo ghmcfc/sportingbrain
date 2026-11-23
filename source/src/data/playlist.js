@@ -7,6 +7,7 @@ export const PLAY = [
   ['connections', 'Connections: Sport', 'Sixteen names, four hidden groups. One a day.', 'daily', '#9BB8E3'],
   ['who-am-i', 'Who Am I?', 'Five clues, hardest first. Name the sporting great.', 'daily', '#C8102E'],
   ['ground-guesser', 'Ground Guesser', 'A real venue, zoomed right in. Name it in as few steps as you can.', 'daily', '#0B6E4F'],
+  ['sports-grid', 'Sports Grid', 'Nine squares, nine guesses. Name the club that fits the row and the column.', 'daily', '#0B6E4F'],
   ['name-them-all', 'Name Them All', 'Every Ballon d\'Or winner, every PDC champion. Type them all before the clock stops.', 'quiz', '#C8102E'],
   ['daily', 'Beat the Brain', 'Five questions a day at four levels. The Brain has already had a go.', 'daily', '#0B6E4F'],
   ['weekly-expert', 'Weekly Expert', 'Ten expert questions. New every Monday. For people who win pub quizzes.', 'quiz', '#C8102E'],

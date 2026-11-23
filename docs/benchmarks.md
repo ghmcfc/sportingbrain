@@ -44,3 +44,13 @@ What we measure each feature against, where we match it, and where we still fall
 | Replay page | ESPNcricinfo | Matches on data; "More replays" list still text only (next pass). |
 
 Rule from now on: a page is not done until it has a verdict here, and "behind" is only allowed where the fix needs something from Gavin (photo budget, accounts).
+
+## Added 23 November 2026 (second pass)
+
+| Page | Benchmark | Verdict |
+|---|---|---|
+| Sports Grid | Immaculate Grid, Footy Grid | Matches: 3x3, nine guesses, one club per square, share grid, answers shown at the end. Behind on "rarity" scores, which need a server to count everyone's answers. |
+| Quick games (Higher or Lower, True or False, Speed Round) | NYT Games, The Higher Lower Game | Matches: game header with icon, big scoreboard numbers, game tiles to "keep playing". |
+| Replay pages | ESPNcricinfo | Matches: "More replays" now photo cards of the actual grounds. |
+| Photo credits | Guardian picture credits | Matches: every venue photo listed with author, licence and link. |
+| Photography of players and action | The Athletic, Guardian | Behind, by choice: no paid agency photos. Free-licence venue photos and house artwork only. |

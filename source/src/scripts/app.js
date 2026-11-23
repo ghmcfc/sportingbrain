@@ -50,7 +50,8 @@ function confetti(){
   let t=0; (function f(){ x.clearRect(0,0,c.width,c.height); P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=.1;x.fillStyle=p.c;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillRect(-p.r/2,-p.r/2,p.r,p.r*1.6);x.restore();}); if(++t<200) requestAnimationFrame(f); else c.remove(); })();
 }
 function countdown(el){ function tick(){ const now=new Date(); const lon=new Date(now.toLocaleString('en-US',{timeZone:'Europe/London'})); const nx=new Date(lon); nx.setHours(24,0,0,0); let s=Math.max(0,Math.floor((nx-lon)/1000)); const h=String(Math.floor(s/3600)).padStart(2,'0'); s%=3600; el.textContent=`${h}:${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; } tick(); setInterval(tick,1000); }
-function next3(items){ return `<div class="next3">${items.map(i=>`<a href="${i[2]}">${esc(i[1])}</a>`).join('')}</div>`; }
+function next3(items){ return `<div class="gtiles three-up">${items.map(i=>{ const sl=i[2].replace(BASE,'').replace(/\.html.*$/,''); const g=PLAY.find(x=>x[0]===sl)||[sl,i[1],'','','#0F1E36'];
+  return `<a class="gt" href="${i[2]}" style="--c:${g[4]}"><span class="gt-ic">${icon(sl,40)}</span><span class="gt-tx"><b>${esc(i[1])}</b>${g[2]?`<small>${esc(g[2])}</small>`:''}</span></a>`; }).join('')}</div>`; }
 const MORE = PLAY.filter(g=>!['archive','passport','sports-day','challenge','advent'].includes(g[0])).map(g=>['',g[1],BASE+g[0]+'.html']);
 const KIDZ = !!document.querySelector('.kz');
 const KIDS_GAMES=[['kids/9-12','Junior Brain quiz'],['kids/6-8','Little Legends quiz'],['kids/true-or-false','True or False'],['kids/guess-the-sport','Guess the Sport'],['kids/guess-the-player','Guess the Player'],['kids/the-grid','The Grid'],['kids/which-sport','Which Sport Are You?'],['kids/academy','Brain Academy']];
@@ -213,7 +214,7 @@ if(P==='home'){
   const more=FLASHBACKS.filter(f=>f.id!==fb.id).sort((a,b)=>((FLASHBACKS.indexOf(a)+DAY)%FLASHBACKS.length)-((FLASHBACKS.indexOf(b)+DAY)%FLASHBACKS.length)).slice(0,3);
   const yrOf=f=>(f.date||f.when).match(/\d{4}/)[0];
 
-  const POOL=['connections','who-am-i','ground-guesser','call-it','call-it-football','daily','name-them-all','weekly-expert','pub-quiz','is-it-a-foul','stat-attack','pick-your-xi','stats-detective','higher-or-lower','speed-round','true-or-false'];
+  const POOL=['sports-grid','connections','who-am-i','ground-guesser','call-it','call-it-football','daily','name-them-all','weekly-expert','pub-quiz','is-it-a-foul','stat-attack','pick-your-xi','stats-detective','higher-or-lower','speed-round','true-or-false'];
   const FIX=['connections','who-am-i','ground-guesser'];
   const rot=shuffle(POOL.filter(x=>!FIX.includes(x)),seeded(DAY*13)).slice(0,5);
   const dk=ukKey(), ud=Math.floor(Date.UTC(p.y,p.m-1,p.d)/86400000);
@@ -486,7 +487,10 @@ document.querySelectorAll('[data-quiz]').forEach(el=>{
 document.querySelectorAll('[data-share-text]').forEach(b=>b.addEventListener('click',()=>share(`${b.dataset.shareText}\n${location.href}`)));
 
 // ================= GAME PAGE HEADER: the game's own icon and colour =================
-(function(){ const h=document.querySelector('main .pg-head'); if(!h||KIDZ) return; const sl=location.pathname.replace(/\.html$/,'').split('/').pop(); const g=PLAY.find(x=>x[0]===sl); if(!g) return;
+(function(){ if(KIDZ) return; const sl=location.pathname.replace(/\.html$/,'').split('/').pop(); const g=PLAY.find(x=>x[0]===sl); if(!g) return;
+  let h=document.querySelector('main .pg-head');
+  if(!h && sl!=='daily' && sl!=='challenge'){ h=document.createElement('header'); h.className='pg-head'; h.innerHTML=`<h1>${esc(g[1])}</h1><p>${esc(g[2])}</p>`; main.prepend(h); main.classList.add('has-gh'); }
+  if(!h) return;
   h.classList.add('game-head'); h.style.setProperty('--c',g[4]); const s=document.createElement('span'); s.className='gh-ic'; s.innerHTML=icon(sl,52); h.prepend(s); })();
 
 // ================= START AGAIN (every game) =================
@@ -495,7 +499,7 @@ document.querySelectorAll('[data-share-text]').forEach(b=>b.addEventListener('cl
   const slug=location.pathname.replace(/\.html$/,'').split('/').filter(Boolean).slice(-2).join('/').replace(/^sportingbrain\//,'');
   const name=slug.split('/').pop();
   const GAMES={'call-it':['ci_'],'call-it-football':['fc_'],'connections':['cx_'],'who-am-i':['wa_'],'ground-guesser':['gg2_'],'daily':['daily_'],'weekly-expert':['expert2_'],
-    'pub-quiz':[],'countdown':[],'is-it-a-foul':[],'stat-attack':[],'stats-detective':[],'rewind':[],'advent':[],'bingo':['bingo'],'higher-or-lower':[],'true-or-false':[],'speed-round':[],'name-them-all':[],
+    'pub-quiz':[],'countdown':[],'is-it-a-foul':[],'stat-attack':[],'stats-detective':[],'rewind':[],'advent':[],'bingo':['bingo'],'higher-or-lower':[],'true-or-false':[],'speed-round':[],'name-them-all':[],'sports-grid':['sg_'],
     'challenge':[],'pick-your-xi':['xi_draft'],'guess-the-sport':[],'the-grid':[],'guess-the-player':[],'which-sport':[],'6-8':[],'9-12':[],'archive':[]};
   if(!(name in GAMES)) return;
   const pre=GAMES[name], up=ukParts(), abs=Math.floor(Date.UTC(up.y,up.m-1,up.d)/86400000), dkey=ukKey();

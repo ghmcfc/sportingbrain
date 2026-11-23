@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { CLUBS, CATS } from '../data/grid.js';
+const has = (c, k) => c[2] === k || c[4].includes(k);
+const H = Object.keys(CATS).filter(k => CATS[k][2] === 'honour'), O = Object.keys(CATS).filter(k => CATS[k][2] !== 'honour');
+const combos = (a, n) => n === 0 ? [[]] : a.flatMap((x, i) => combos(a.slice(i + 1), n - 1).map(r => [x, ...r]));
+// Every grid where each square has at least two possible answers, so no square is a trick.
+const GRIDS = [];
+for (const r of combos(H, 3)) for (const c of combos(O, 3)) if (r.every(x => c.every(y => CLUBS.filter(cl => has(cl, x) && has(cl, y)).length >= 2))) GRIDS.push([r, c]);
+const DATA = { clubs: CLUBS.map(c => [c[0], c[1], c[2], c[4]]), cats: CATS, grids: GRIDS };
+---
+<Base title="Sports Grid: name the club that fits both | SportingBrain" description="Nine squares. Each one needs an English club that fits its row and its column. One club per square, nine guesses, a new grid every day." page="sportsgrid">
+  <header class="pg-head"><h1>Sports Grid</h1><p>Tap a square and name a club that fits both its row and its column. Nine guesses, and each club can only be used once. Records run to the end of the 2024-25 season. A new grid every day.</p></header>
+  <div id="vs"></div>
+  <section class="sgrid-wrap" id="sg" aria-live="polite"></section>
+  <datalist id="sgNames">{CLUBS.map(c => <option value={c[0]} />)}</datalist>
+  <AdSlot name="game_result" />
+  <p class="pg-note">{GRIDS.length} possible grids from {CLUBS.length} clubs. Every square has at least two right answers.</p>
+  <script id="sgData" type="application/json" set:html={JSON.stringify(DATA)} />
+  <script>
+    import { ukDayNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share, SITE } from '../scripts/play.js';
+    const { clubs, cats, grids } = JSON.parse(document.getElementById('sgData').textContent), box = document.getElementById('sg');
+    showChallenge(document.getElementById('vs'));
+    const D = ukDayNo(), practice = new URLSearchParams(location.search).has('practice');
+    const pick = shuffle(grids, seeded(4242))[practice ? Math.floor(Math.random() * grids.length) : D % grids.length];
+    const [R, C] = [shuffle(pick[0], seeded(D)), shuffle(pick[1], seeded(D + 1))];
+    const has = (c, k) => c[2] === k || c[3].includes(k);
+    const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/&/g, 'and').replace(/[^a-z ]/g, ' ').replace(/\b(fc|afc|the)\b/g, ' ').replace(/\s+/g, ' ').trim();
+    const find = t => clubs.find(c => [c[0], ...c[1]].some(n => norm(n) === norm(t)));
+    const key = 'sg_' + D, S = (!practice && store.get(key, null)) || { cells: Array(9).fill(null), left: 9, done: false, wrong: [] };
+    let sel = null;
+    const save = () => { if (!practice) store.set(key, S); };
+    function render() {
+      const head = k => `<div class="sg-h"><b>${esc(cats[k][0])}</b><small>${esc(cats[k][1])}</small></div>`;
+      box.innerHTML = `<div class="sg-meta"><span>Guesses left: <b>${S.left}</b></span><span>Filled: <b>${S.cells.filter(Boolean).length}/9</b></span></div>
+        <div class="sg-grid"><div class="sg-corner"></div>${C.map(head).join('')}
+        ${R.map((r, i) => head(r) + C.map((c, j) => { const k = i * 3 + j, v = S.cells[k];
+          return `<button class="sg-cell ${v ? 'ok' : ''} ${sel === k ? 'on' : ''}" data-k="${k}" ${v || S.done ? 'disabled' : ''} aria-label="${esc(cats[r][0])} and ${esc(cats[c][0])}">${v ? esc(v) : (S.done ? '' : '+')}</button>`; }).join('')).join('')}</div>
+        ${S.done ? '' : sel === null ? '<p class="pg-note">Tap a square to answer it.</p>' : `<form class="wa-form" id="sgF" autocomplete="off"><label for="sgG" class="sr">Club</label><input id="sgG" class="pg-input" list="sgNames" placeholder="${esc(cats[R[Math.floor(sel / 3)]][0])} and ${esc(cats[C[sel % 3]][0])}"><button class="btn gold">Guess</button></form>`}
+        ${S.wrong.length ? `<p class="pg-note">Not right: ${S.wrong.map(esc).join(', ')}.</p>` : ''}
+        ${S.done ? '' : '<div class="pg-btns"><button class="btn ghost" id="sgGive">Give up and show answers</button></div>'}<div id="sgEnd"></div>`;
+      box.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { sel = +b.dataset.k; render(); document.getElementById('sgG')?.focus(); });
+      const f = document.getElementById('sgF'); if (f) f.onsubmit = e => { e.preventDefault(); const t = document.getElementById('sgG').value.trim(); if (!t) return; const cl = find(t);
+        if (!cl) { box.querySelector('.pg-note')?.remove(); document.getElementById('sgG').value = ''; document.getElementById('sgG').placeholder = 'Not a club in this grid. Try again.'; return; }
+        if (S.cells.includes(cl[0])) { document.getElementById('sgG').value = ''; document.getElementById('sgG').placeholder = 'Already used. One square each.'; return; }
+        S.left--; const r = R[Math.floor(sel / 3)], c = C[sel % 3];
+        if (has(cl, r) && has(cl, c)) S.cells[sel] = cl[0]; else S.wrong.push(cl[0]);
+        sel = null; if (S.left === 0 || S.cells.every(Boolean)) S.done = true; save(); render(); if (S.done) end(); };
+      const g = document.getElementById('sgGive'); if (g) g.onclick = () => { S.done = true; save(); render(); end(); };
+    }
+    function end() { markPlayed('sports-grid'); const n = S.cells.filter(Boolean).length, grid = [0, 1, 2].map(i => [0, 1, 2].map(j => S.cells[i * 3 + j] ? '🟩' : '⬜').join('')).join('\n');
+      const ans = R.map((r, i) => C.map((c, j) => { const all = clubs.filter(cl => has(cl, r) && has(cl, c)).map(cl => cl[0]); return `<li><b>${esc(cats[r][0])} + ${esc(cats[c][0])}:</b> ${all.map(esc).join(', ')}</li>`; }).join('')).join('');
+      const e = document.getElementById('sgEnd'); e.innerHTML = `<div class="pg-card"><p class="pg-step">Your grid</p><div class="pg-score">${n} of 9</div><pre class="sg-share">${grid}</pre>
+        <div class="pg-btns"><button class="btn gold" id="sgShare">Share</button><a class="btn ghost" href="?practice=1">Practice grid</a></div><details><summary>Every right answer</summary><ul class="sg-ans">${ans}</ul></details></div>`;
+      document.getElementById('sgShare').onclick = () => share(`SportingBrain Sports Grid #${D}\n${grid}\n${n}/9`, SITE + 'sports-grid.html');
+      e.querySelector('.pg-card').appendChild(challengeBox(n, 9, 'Sports Grid')); }
+    render(); if (S.done) end();
+  </script>
+</Base>

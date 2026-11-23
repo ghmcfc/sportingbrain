@@ -23,7 +23,7 @@ const nav = [
 ];
 const path = Astro.url.pathname.replace(base, '/').replace(/\.html$/, '');
 const section = /^\/kids/.test(path) ? 'kids' : /^\/(replays|laughs|watch)/.test(path) ? 'watch'
-  : /^\/(this-week|flashback|on-this-day|stories|sports|round-up|read|newsletter)/.test(path) ? 'read'
+  : /^\/(this-week|flashback|on-this-day|stories|sports(\/|$)|round-up|read|newsletter)/.test(path) ? 'read'
   : (path === '/' || path === '/index') ? 'today' : /^\/(about|credits|settings|offline)/.test(path) ? '' : 'play';
 const ld = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'SportingBrain', url: new URL(base, Astro.site).href, description: 'The free daily sports hub for everyone who loves sport.' };
 ---
