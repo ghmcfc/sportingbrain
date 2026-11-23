@@ -3,6 +3,7 @@ on:
   schedule: [{cron: '17 4 * * *'}]
   workflow_dispatch:
 permissions: {contents: write}
+concurrency: {group: data-desk, cancel-in-progress: false}
 jobs:
   feeds:
     runs-on: ubuntu-latest
@@ -10,14 +11,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - uses: actions/setup-node@v4
-        with: {node-version: '22'}
-      - name: Pull F1 data
-        run: python3 source/scripts/fetch_f1.py
-      - name: Build site
-        run: cd source && npm ci && npx astro build && cp -r dist/. .. && touch ../.nojekyll
-      - name: Commit if changed
+      - name: Pull cricket data (Cricsheet)
+        run: python3 source/scripts/fetch_cricket.py
+      - name: Pull F1 data (OpenF1, Jolpica)
+        run: python3 source/scripts/fetch_f1.py || echo "F1 feed failed, keeping yesterday's data"
+      - name: Commit data if changed
         run: |
           git config user.name "Continuity Projects"; git config user.email "gavin@continuityprojects.com"
-          git add -A
-          git diff --cached --quiet || (git commit -m "Data desk: nightly feed update" && git push)
+          git add source/src/data/feeds
+          git diff --cached --quiet || (git commit -m "Data desk: nightly feed update" && git pull --rebase && git push)
