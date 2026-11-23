@@ -454,3 +454,15 @@ body.reduce-motion *{animation:none!important;transition:none!important;scroll-b
 .nudge span{flex:1 1 260px}
 .nudge .btn.ghost{color:#fff;border-color:rgba(255,255,255,.6);min-height:44px}
 .xi-pitch.is-pitch::before,.xi-pitch.is-pitch::after{pointer-events:none;z-index:0}
+/* Connections */
+.cx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:720px}
+.cx-t{font:inherit;font-family:var(--display);font-weight:800;font-size:clamp(.9rem,2.6vw,1.25rem);min-height:70px;padding:6px;border:0;border-radius:6px;background:#E2E6EC;color:#0F1E36;cursor:pointer;line-height:1.1}
+.cx-t.on{background:#0F1E36;color:#fff}
+.cx-band{border-radius:6px;padding:12px;margin:0 0 8px;max-width:720px;text-align:center;color:#0F1E36}.cx-band b{display:block;font-family:var(--display);font-size:1.3rem}.cx-band span{font-size:.95rem}
+.cx-miss{margin:12px 0 0;font-family:var(--display);font-size:1.1rem}
+/* Who Am I? */
+.wa-clues{padding-left:1.4em;margin:8px 0 14px}.wa-clues li{margin:0 0 8px;font-size:1.12rem}.wa-clues li.new{font-weight:600}
+.wa-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.wa-form .pg-input{flex:1 1 220px;margin:0;max-width:none}
+.wa-ans{font-size:2.6rem;margin:8px 0}
+/* Ground Guesser */
+.gg-photo{width:100%;aspect-ratio:16/9;border-radius:4px;background-color:#0F1E36;background-repeat:no-repeat;margin:6px 0 14px;transition:background-size .5s ease}

@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+---
+<Base title="Who Am I? Name the sporting great in five clues | SportingBrain" description="Five clues, hardest first. Name the sporting great in as few as you can. Men and women, every sport. New every day." page="whoami">
+  <header class="pg-head"><h1>Who Am I?</h1><p>Five clues, hardest first. Guess after any clue: the fewer you need, the more points you get. One wrong guess costs you a clue. New every day.</p></header>
+  <div id="vs"></div>
+  <section class="pg-card" id="wa" aria-live="polite"></section>
+  <AdSlot name="game_result" />
+  <script>
+    import { WHOAMI } from '../data/whoami.js';
+    import { ukDayNo, esc, store, markPlayed, challengeBox, showChallenge, shuffle } from '../scripts/play.js';
+    showChallenge(document.getElementById('vs'));
+    const practice = new URLSearchParams(location.search).has('practice'), D = ukDayNo(), P = practice ? shuffle(WHOAMI)[0] : WHOAMI[D % WHOAMI.length], key = 'wa_' + D;
+    const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim();
+    const S = (!practice && store.get(key, null)) || { shown: 1, done: false, won: false, tries: [] }, box = document.getElementById('wa');
+    function render() { const pts = S.won ? 6 - S.shown : 0;
+      box.innerHTML = `<p class="pg-step">${esc(P[2])} · ${S.done ? (S.won ? `${pts} point${pts === 1 ? '' : 's'}` : 'The answer') : `Clue ${S.shown} of 5 · worth ${6 - S.shown} point${S.shown === 5 ? '' : 's'}`}</p>
+        <ol class="wa-clues">${P[3].slice(0, S.done ? 5 : S.shown).map((c, i) => `<li class="${i === S.shown - 1 && !S.done ? 'new' : ''}">${esc(c)}</li>`).join('')}</ol>
+        ${S.tries.length ? `<p class="pg-note">Your guesses: ${S.tries.map(esc).join(', ')}</p>` : ''}
+        ${S.done ? `<h2 class="wa-ans">${esc(P[0])}</h2>` : `<form class="wa-form" id="waF"><label for="waG" class="sr">Your guess</label><input id="waG" class="pg-input" autocomplete="off" placeholder="Type a name"><button class="btn gold">Guess</button>${S.shown < 5 ? '<button type="button" class="btn ghost" id="waNext">Next clue</button>' : '<button type="button" class="btn ghost" id="waGive">Show me</button>'}</form>`}`;
+      if (!S.done) { const f = document.getElementById('waF'); f.onsubmit = e => { e.preventDefault(); const g = document.getElementById('waG').value; if (!g.trim()) return; S.tries.push(g.trim());
+          if (P[1].includes(norm(g))) { S.won = true; S.done = true; } else if (S.shown < 5) S.shown++; else S.done = true; save(); };
+        const n = document.getElementById('waNext'); if (n) n.onclick = () => { S.shown++; save(); };
+        const gv = document.getElementById('waGive'); if (gv) gv.onclick = () => { S.done = true; save(); };
+        document.getElementById('waG').focus(); }
+      else { markPlayed('who-am-i'); box.insertAdjacentHTML('beforeend', `<div class="pg-btns"><a class="btn ghost" href="?practice=1">Practice round</a></div>`); box.appendChild(challengeBox(pts, 5, 'Who Am I?')); } }
+    const save = () => { if (!practice) store.set(key, S); render(); };
+    render();
+  </script>
+</Base>

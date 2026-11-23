@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+---
+<Base title="Ground Guesser: name the venue from a close-up | SportingBrain" description="A real photograph of a famous sporting venue, starting zoomed right in. Name it in as few steps as you can." page="ground">
+  <header class="pg-head"><h1>Ground Guesser</h1><p>A real photograph of a famous venue, zoomed right in. Each step pulls the camera back. Name it in as few steps as you can.</p></header>
+  <div id="vs"></div>
+  <section class="pg-card" id="gg" aria-live="polite"></section>
+  <AdSlot name="game_result" />
+  <script>
+    import '../data/content.js';
+    import { ukDayNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge } from '../scripts/play.js';
+    showChallenge(document.getElementById('vs'));
+    const V = [['Football', 'Wembley Stadium'], ['Cricket', 'Lord\'s'], ['Tennis', 'Centre Court, Wimbledon'], ['Rugby union', 'Twickenham'], ['Golf', 'The Old Course, St Andrews'], ['Formula 1', 'Silverstone'], ['Snooker', 'The Crucible, Sheffield'], ['Swimming', 'London Aquatics Centre'], ['Horse racing', 'Aintree']];
+    const ZOOM = [520, 340, 230, 150, 100], practice = new URLSearchParams(location.search).has('practice'), D = ukDayNo();
+    const r = seeded(practice ? Date.now() : D * 31), pick = V[Math.floor(r() * V.length)], fx = 15 + Math.floor(r() * 70), fy = 25 + Math.floor(r() * 50);
+    const opts = shuffle([pick, ...shuffle(V.filter(v => v !== pick), r).slice(0, 3)], r), key = 'gg_' + D;
+    const S = (!practice && store.get(key, null)) || { step: 0, done: false, won: false, wrong: [] }, box = document.getElementById('gg'), cr = SB_CREDIT(pick[0]);
+    function render() { const z = S.done ? 100 : ZOOM[S.step], pts = S.won ? 5 - S.step : 0;
+      box.innerHTML = `<p class="pg-step">${S.done ? (S.won ? `${pts} point${pts === 1 ? '' : 's'}` : 'The answer') : `Step ${S.step + 1} of 5 · worth ${5 - S.step}`}</p>
+        <div class="gg-photo" role="img" aria-label="A close-up of a sporting venue" style="background-image:url('${SB_PHOTO(pick[0], 1600)}');background-size:${z}% auto;background-position:${fx}% ${fy}%"></div>
+        ${S.done ? `<h2 class="wa-ans">${esc(pick[1])}</h2><p class="photo-credit">Photo: ${esc(cr.by)} / Wikimedia Commons</p>` : `<div class="pg-opts">${opts.map(o => `<button data-v="${esc(o[1])}" ${S.wrong.includes(o[1]) ? 'disabled class="no"' : ''}>${esc(o[1])}</button>`).join('')}</div>${S.step < 4 ? '<div class="pg-btns"><button class="btn ghost" id="ggOut">Zoom out</button></div>' : ''}`}`;
+      if (!S.done) { box.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { if (b.dataset.v === pick[1]) { S.won = true; S.done = true; } else { S.wrong.push(b.dataset.v); if (S.step < 4) S.step++; else S.done = true; } save(); });
+        const o = document.getElementById('ggOut'); if (o) o.onclick = () => { S.step++; save(); }; }
+      else { markPlayed('ground-guesser'); box.insertAdjacentHTML('beforeend', '<div class="pg-btns"><a class="btn ghost" href="?practice=1">Practice round</a></div>'); box.appendChild(challengeBox(pts, 5, 'Ground Guesser')); } }
+    const save = () => { if (!practice) store.set(key, S); render(); };
+    render();
+  </script>
+</Base>

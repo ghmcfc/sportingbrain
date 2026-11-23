@@ -12,6 +12,9 @@ import Base from '../layouts/Base.astro';
     <label><input type="checkbox" data-k="dys" data-c="dyslexic"> Dyslexia-friendly font</label>
     <label><input type="checkbox" data-k="reduce_motion" data-c="reduce-motion"> Reduce motion</label>
     <label><input type="checkbox" data-k="big_text" data-c="big-text"> Larger text</label>
+    <h2>Add to your home screen</h2>
+    <p id="a2hs">Open SportingBrain like an app, one tap from your home screen. <button class="btn ghost" id="a2hsBtn" hidden>Add SportingBrain</button></p>
+    <p class="pg-note" id="a2hsHow">iPhone or iPad: tap the Share button in Safari, then <b>Add to Home Screen</b>. Android: open the browser menu, then <b>Add to Home screen</b> or <b>Install app</b>.</p>
     <h2>Cookies and advertising</h2>
     <p>We only use cookies for advertising and statistics after you agree. <button class="btn ghost" id="cookieBtn">Cookie settings</button></p>
     <h2>Newsletter</h2>
@@ -25,6 +28,8 @@ import Base from '../layouts/Base.astro';
     import { store } from '../scripts/play.js';
     document.querySelectorAll('[data-k]').forEach(c => { c.checked = !!store.get(c.dataset.k, c.dataset.k === 'dark' ? document.body.classList.contains('dark') : false);
       c.onchange = () => { store.set(c.dataset.k, c.checked); if (c.dataset.c) document.body.classList.toggle(c.dataset.c, c.checked); document.getElementById('msg').textContent = 'Saved.'; }; });
+    let dp; addEventListener('beforeinstallprompt', e => { e.preventDefault(); dp = e; const b = document.getElementById('a2hsBtn'); b.hidden = false; b.onclick = async () => { dp.prompt(); const r = await dp.userChoice; document.getElementById('msg').textContent = r.outcome === 'accepted' ? 'Added. Look for the SB icon.' : 'No problem.'; b.hidden = true; }; });
+    if (matchMedia('(display-mode: standalone)').matches) document.getElementById('a2hs').textContent = 'You are already using SportingBrain from your home screen.';
     document.getElementById('cookieBtn').onclick = () => { if (window.googlefc && window.googlefc.showRevocationMessage) window.googlefc.showRevocationMessage(); else document.getElementById('msg').textContent = 'No advertising or statistics cookies are in use yet.'; };
     document.getElementById('clearAll').onclick = () => { if (!confirm('Clear all your streaks, scores and saved teams on this device?')) return; Object.keys(localStorage).filter(k => k.startsWith('sb_')).forEach(k => localStorage.removeItem(k)); document.getElementById('msg').textContent = 'Cleared.'; };
   </script>

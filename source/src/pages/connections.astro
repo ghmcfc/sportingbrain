@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+---
+<Base title="Connections: Sport. Find the four hidden groups | SportingBrain" description="Sixteen sporting names, four hidden groups of four. One puzzle a day. Four mistakes and you're out." page="connections">
+  <header class="pg-head"><h1>Connections: Sport</h1><p>Sixteen names hide four groups of four. Pick four you think belong together and press Submit. Watch for red herrings. Four mistakes and it's over. A new puzzle every day.</p></header>
+  <div id="vs"></div>
+  <section id="cx" aria-live="polite"></section>
+  <div class="pg-btns"><button class="btn ghost" id="cxShuffle">Shuffle</button><button class="btn ghost" id="cxClear">Deselect all</button><button class="btn gold" id="cxGo" disabled>Submit</button></div>
+  <p class="pg-note" id="cxMsg" aria-live="assertive"></p>
+  <div id="cxEnd"></div>
+  <AdSlot name="game_result" />
+  <script>
+    import { CONNECTIONS } from '../data/connections.js';
+    import { ukDayNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge } from '../scripts/play.js';
+    showChallenge(document.getElementById('vs'));
+    const D = ukDayNo(), practice = new URLSearchParams(location.search).has('practice'), idx = practice ? Math.floor(Math.random() * CONNECTIONS.length) : D % CONNECTIONS.length;
+    const P = CONNECTIONS[idx], key = 'cx_' + D, COL = ['#F2D06B', '#8BC6A6', '#9BB8E3', '#C7A3D9'];
+    const S = (!practice && store.get(key, null)) || { solved: [], miss: 0, done: false, guesses: [] };
+    let tiles = shuffle(P.flatMap(g => g[2]), seeded(D)), sel = [];
+    const box = document.getElementById('cx'), msg = document.getElementById('cxMsg'), go = document.getElementById('cxGo');
+    const groupOf = w => P.findIndex(g => g[2].includes(w));
+    function render() {
+      const left = tiles.filter(w => !S.solved.includes(groupOf(w)));
+      box.innerHTML = `<div class="cx-solved">${S.solved.map(gi => { const g = P[gi]; return `<div class="cx-band" style="background:${COL[g[1] - 1]}"><b>${esc(g[0])}</b><span>${g[2].map(esc).join(', ')}</span></div>`; }).join('')}</div>
+        <div class="cx-grid" role="group" aria-label="Names">${left.map(w => `<button class="cx-t ${sel.includes(w) ? 'on' : ''}" aria-pressed="${sel.includes(w)}" data-w="${esc(w)}">${esc(w)}</button>`).join('')}</div>
+        <p class="cx-miss">Mistakes left: ${'● '.repeat(4 - S.miss)}${'○ '.repeat(S.miss)}</p>`;
+      go.disabled = sel.length !== 4 || S.done;
+    }
+    box.addEventListener('click', e => { const b = e.target.closest('[data-w]'); if (!b || S.done) return; const w = b.dataset.w;
+      sel = sel.includes(w) ? sel.filter(x => x !== w) : sel.length < 4 ? [...sel, w] : sel; msg.textContent = ''; render(); });
+    go.onclick = () => { const gs = sel.map(groupOf), same = gs.every(g => g === gs[0]); S.guesses.push(gs);
+      if (same) { S.solved.push(gs[0]); sel = []; msg.textContent = 'Correct: ' + P[gs[0]][0] + '.'; }
+      else { S.miss++; const best = Math.max(...[0, 1, 2, 3].map(g => gs.filter(x => x === g).length)); msg.textContent = best === 3 ? 'One away.' : 'Not a group.'; }
+      if (S.solved.length === 4 || S.miss >= 4) { S.done = true; if (S.miss >= 4) S.solved = [...S.solved, ...[0, 1, 2, 3].filter(g => !S.solved.includes(g))]; end(); }
+      if (!practice) store.set(key, S); render(); };
+    document.getElementById('cxShuffle').onclick = () => { tiles = shuffle(tiles); render(); };
+    document.getElementById('cxClear').onclick = () => { sel = []; render(); };
+    function end() { markPlayed('connections'); const won = S.miss < 4, grid = S.guesses.map(gs => gs.map(g => ['🟨', '🟩', '🟦', '🟪'][P[g][1] - 1]).join('')).join('\n');
+      const out = document.getElementById('cxEnd'); out.innerHTML = `<div class="pg-card"><p class="pg-step">${won ? 'Solved' : 'Out of guesses'}</p><div class="pg-score">${won ? 4 - S.miss + ' mistakes left' : 'Next time'}</div><div class="pg-btns"><button class="btn gold" id="cxShare">Share</button><a class="btn ghost" href="?practice=1">Practice puzzle</a></div></div>`;
+      document.getElementById('cxShare').onclick = () => navigator.clipboard.writeText(`Connections: Sport #${idx + 1}\n${grid}\nsportingbrain.com`).then(() => msg.textContent = 'Copied. Paste it anywhere.');
+      out.querySelector('.pg-card').appendChild(challengeBox(4 - S.miss, 4, 'Connections: Sport')); }
+    render(); if (S.done) end();
+  </script>
+</Base>

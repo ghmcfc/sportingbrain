@@ -25,6 +25,7 @@ const others = GUIDES.filter(x => x.id !== g.id).sort(() => 0).slice(0, 4);
         <h2 id="how">How it works</h2>{g.how.map(p => <p>{p}</p>)}
         <div class="sg-score card"><b>Scoring</b><p>{g.scoring}</p></div>
         <h3>Formats</h3><ul class="sg-list">{g.formats.map(f => <li>{f}</li>)}</ul>
+        <AdSlot name="article_mid" />
         <h2 id="watch">What the experts watch for</h2>
         <ol class="sg-watch">{g.watch.map(w => <li>{w}</li>)}</ol>
         <h2 id="greats">The greats</h2>
