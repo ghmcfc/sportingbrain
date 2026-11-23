@@ -1,29 +1,101 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import { VENUES } from '../data/venues.js';
+import META from '../data/venues.json';
+const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+const G = VENUES.map(v => ({ k: slug(v[0]), v })).filter(x => META[x.k]).map(({ k, v }) => ({
+  k, name: v[1], alt: v[2], sport: v[3], place: v[4], known: v[5], file: META[k].file, opened: META[k].opened, by: META[k].author, lic: META[k].licence, src: META[k].source,
+}));
+const sports = [...new Set(G.map(g => g.sport))];
 ---
-<Base title="Ground Guesser: name the venue from a close-up | SportingBrain" description="A real photograph of a famous sporting venue, starting zoomed right in. Name it in as few steps as you can." page="ground">
-  <header class="pg-head"><h1>Ground Guesser</h1><p>A real photograph of a famous venue, zoomed right in. Each step pulls the camera back. Name it in as few steps as you can.</p></header>
+<Base title="Ground Guesser: name the stadium from a close-up | SportingBrain" description={`${G.length} real grounds and venues: football, cricket, rugby, tennis, golf, racing and F1. Start zoomed right in, type your answer, and name them in as few clues as you can.`} page="ground">
+  <header class="pg-head"><h1>Ground Guesser</h1><p>A real photo of a real ground, starting zoomed right in. Type your answer whenever you think you know it. Every clue you need costs you a point. {G.length} grounds and venues across {sports.length} sports.</p></header>
   <div id="vs"></div>
+  <div class="gg-modes" role="tablist" aria-label="Mode">
+    <button role="tab" data-mode="daily" aria-selected="true">Today's five</button>
+    <button role="tab" data-mode="endless" aria-selected="false">Endless</button>
+    <button role="tab" data-mode="collection" aria-selected="false">My grounds</button>
+  </div>
+  <div class="gg-sport" id="ggSport" hidden><label>Sport <select id="ggSel"><option value="">Every sport</option>{sports.map(s => <option>{s}</option>)}</select></label></div>
   <section class="pg-card" id="gg" aria-live="polite"></section>
+  <datalist id="ggNames">{[...new Set(G.map(g => g.name))].sort().map(n => <option value={n} />)}</datalist>
   <AdSlot name="game_result" />
+  <p class="pg-note">Photos from Wikimedia Commons under free licences, credited after every ground. Opening years from Wikidata.</p>
+  <script id="ggData" type="application/json" set:html={JSON.stringify(G)} />
   <script>
-    import '../data/content.js';
-    import { ukDayNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge } from '../scripts/play.js';
+    import { ukDayNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share, SITE, BASE } from '../scripts/play.js';
+    const G = JSON.parse(document.getElementById('ggData').textContent), box = document.getElementById('gg');
     showChallenge(document.getElementById('vs'));
-    const V = [['Football', 'Wembley Stadium'], ['Cricket', 'Lord\'s'], ['Tennis', 'Centre Court, Wimbledon'], ['Rugby union', 'Twickenham'], ['Golf', 'The Old Course, St Andrews'], ['Formula 1', 'Silverstone'], ['Snooker', 'The Crucible, Sheffield'], ['Swimming', 'London Aquatics Centre'], ['Horse racing', 'Aintree']];
-    const ZOOM = [520, 340, 230, 150, 100], practice = new URLSearchParams(location.search).has('practice'), D = ukDayNo();
-    const r = seeded(practice ? Date.now() : D * 31), pick = V[Math.floor(r() * V.length)], fx = 15 + Math.floor(r() * 70), fy = 25 + Math.floor(r() * 50);
-    const opts = shuffle([pick, ...shuffle(V.filter(v => v !== pick), r).slice(0, 3)], r), key = 'gg_' + D;
-    const S = (!practice && store.get(key, null)) || { step: 0, done: false, won: false, wrong: [] }, box = document.getElementById('gg'), cr = SB_CREDIT(pick[0]);
-    function render() { const z = S.done ? 100 : ZOOM[S.step], pts = S.won ? 5 - S.step : 0;
-      box.innerHTML = `<p class="pg-step">${S.done ? (S.won ? `${pts} point${pts === 1 ? '' : 's'}` : 'The answer') : `Step ${S.step + 1} of 5 · worth ${5 - S.step}`}</p>
-        <div class="gg-photo" role="img" aria-label="A close-up of a sporting venue" style="background-image:url('${SB_PHOTO(pick[0], 1600)}');background-size:${z}% auto;background-position:${fx}% ${fy}%"></div>
-        ${S.done ? `<h2 class="wa-ans">${esc(pick[1])}</h2><p class="photo-credit">Photo: ${esc(cr.by)} / Wikimedia Commons</p>` : `<div class="pg-opts">${opts.map(o => `<button data-v="${esc(o[1])}" ${S.wrong.includes(o[1]) ? 'disabled class="no"' : ''}>${esc(o[1])}</button>`).join('')}</div>${S.step < 4 ? '<div class="pg-btns"><button class="btn ghost" id="ggOut">Zoom out</button></div>' : ''}`}`;
-      if (!S.done) { box.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { if (b.dataset.v === pick[1]) { S.won = true; S.done = true; } else { S.wrong.push(b.dataset.v); if (S.step < 4) S.step++; else S.done = true; } save(); });
-        const o = document.getElementById('ggOut'); if (o) o.onclick = () => { S.step++; save(); }; }
-      else { markPlayed('ground-guesser'); box.insertAdjacentHTML('beforeend', '<div class="pg-btns"><a class="btn ghost" href="?practice=1">Practice round</a></div>'); box.appendChild(challengeBox(pts, 5, 'Ground Guesser')); } }
-    const save = () => { if (!practice) store.set(key, S); render(); };
-    render();
+    const ZOOM = [620, 400, 260, 160, 100], D = ukDayNo(), KEY = 'gg2_' + D;
+    const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/&/g, 'and').replace(/[^a-z0-9 ]/g, ' ').replace(/\b(the|stadium|ground|park|arena|racecourse|circuit|golf|club|links)\b/g, ' ').replace(/\s+/g, ' ').trim();
+    const isRight = (g, t) => { const n = norm(t); if (!n) return false; return [g.name, ...g.alt].some(a => norm(a) === n); };
+    const found = () => store.get('gg_found', []);
+    if (!G.length) { box.innerHTML = '<p class="pg-q">The grounds are being loaded tonight. Come back tomorrow.</p>'; }
+    // Today's five: three football grounds and two from other sports, the same for everyone today.
+    function todays() { const r = seeded(D * 97 + 5), fb = shuffle(G.filter(g => g.sport === 'Football'), r), ot = shuffle(G.filter(g => g.sport !== 'Football'), r);
+      return shuffle([...fb.slice(0, 3), ...ot.slice(0, 2)], r).map(g => g.k); }
+    let mode = 'daily', state = null;
+    function newRound(k, i) { const r = seeded(D * 31 + i * 7 + k.length); return { k, step: 0, wrong: [], done: false, won: false, fx: 20 + Math.floor(r() * 60), fy: 25 + Math.floor(r() * 50) }; }
+    function load() {
+      if (mode === 'daily') { state = store.get(KEY, null); if (!state || !state.rounds) state = { rounds: todays().map((k, i) => newRound(k, i)), i: 0 }; }
+      else if (mode === 'endless') { state = { rounds: [], i: 0, lives: 3, score: 0 }; addEndless(); }
+      render();
+    }
+    function addEndless() { const s = document.getElementById('ggSel').value, pool = G.filter(g => !s || g.sport === s), seen = state.rounds.map(r => r.k);
+      const left = pool.filter(g => !seen.includes(g.k)), g = (left.length ? left : pool)[Math.floor(Math.random() * (left.length ? left : pool).length)];
+      const r = newRound(g.k, Math.floor(Math.random() * 9999)); r.fx = 20 + Math.floor(Math.random() * 60); r.fy = 25 + Math.floor(Math.random() * 50); state.rounds.push(r); }
+    const save = () => { if (mode === 'daily') store.set(KEY, state); };
+    const pts = r => r.won ? 5 - r.step : 0;
+    function clues(g, step, done) { const c = [];
+      if (step >= 3 || done) c.push(`<li><b>Sport:</b> ${esc(g.sport)}. <b>Where:</b> ${esc(g.place)}${g.opened ? `. <b>Opened:</b> ${g.opened}` : ''}</li>`);
+      if (step >= 4 || done) c.push(`<li><b>Clue:</b> ${esc(g.known)}</li>`);
+      return c.length ? `<ul class="gg-clues">${c.join('')}</ul>` : ''; }
+    function render() {
+      if (mode === 'collection') return collection();
+      const r = state.rounds[state.i], g = G.find(x => x.k === r.k), z = r.done ? 100 : ZOOM[r.step];
+      const head = mode === 'daily' ? `Ground ${state.i + 1} of 5` : `Endless · score ${state.score} · lives ${'●'.repeat(state.lives)}${'○'.repeat(3 - state.lives)}`;
+      box.innerHTML = `<p class="pg-step">${head} · ${r.done ? (r.won ? `${pts(r)} point${pts(r) === 1 ? '' : 's'}` : 'No points') : `Clue ${r.step + 1} of 5, worth ${5 - r.step}`}</p>
+        <div class="gg-dots" aria-hidden="true">${ZOOM.map((_, j) => `<i class="${j < r.step ? 'used' : j === r.step && !r.done ? 'now' : ''}"></i>`).join('')}</div>
+        <div class="gg-photo" role="img" aria-label="${r.done ? esc(g.name) : 'A close-up of a sporting venue'}" style="background-image:url('${BASE}photos/venues/${g.file}');background-size:${z}% auto;background-position:${r.fx}% ${r.fy}%"></div>
+        ${clues(g, r.step, r.done)}
+        ${r.wrong.length ? `<p class="pg-note">Not ${r.wrong.map(esc).join(', not ')}.</p>` : ''}
+        ${r.done ? `<h2 class="wa-ans">${r.won ? '✅ ' : ''}${esc(g.name)}</h2><p class="photo-credit">Photo: ${esc(g.by)}, ${esc(g.lic)}, via <a href="${g.src}" target="_blank" rel="noopener">Wikimedia Commons</a></p>
+          <div class="pg-btns"><button class="btn gold" id="ggNext">${mode === 'daily' && state.i === 4 ? 'See my score' : mode === 'endless' && state.lives === 0 ? 'See my score' : 'Next ground'}</button></div>`
+        : `<form class="wa-form" id="ggF" autocomplete="off"><label for="ggG" class="sr">Name the ground</label><input id="ggG" class="pg-input" list="ggNames" placeholder="Type the ground's name"><button class="btn gold">Guess</button><button type="button" class="btn ghost" id="ggClue">${r.step < 4 ? 'Next clue' : 'Show me'}</button></form>`}`;
+      if (r.done) { document.getElementById('ggNext').onclick = next; return; }
+      document.getElementById('ggF').onsubmit = e => { e.preventDefault(); const t = document.getElementById('ggG').value.trim(); if (!t) return;
+        if (isRight(g, t)) { r.won = true; r.done = true; const f = found(); if (!f.includes(g.k)) { f.push(g.k); store.set('gg_found', f); } if (mode === 'endless') state.score += pts(r); }
+        else { r.wrong.push(t); advance(r); } save(); render(); };
+      document.getElementById('ggClue').onclick = () => { advance(r); save(); render(); };
+      document.getElementById('ggG').focus({ preventScroll: true });
+    }
+    function advance(r) { if (r.step < 4) r.step++; else { r.done = true; if (mode === 'endless') state.lives--; } }
+    function next() {
+      if (mode === 'daily') { if (state.i < 4) { state.i++; save(); render(); } else summary(); }
+      else { if (state.lives <= 0) return summary(); state.i++; addEndless(); render(); }
+      box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    function summary() { markPlayed('ground-guesser');
+      const R = state.rounds, total = R.reduce((a, r) => a + pts(r), 0), out = mode === 'daily' ? 25 : R.length * 5, grid = R.map(r => r.won ? ['', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'][pts(r)] : '❌').join('');
+      box.innerHTML = `<p class="pg-step">${mode === 'daily' ? 'Today\'s five' : 'Endless'}</p><div class="pg-score">${total} point${total === 1 ? '' : 's'}${mode === 'daily' ? ' out of 25' : ` from ${R.length} grounds`}</div><p style="font-size:1.6rem">${grid}</p>
+        <ol class="gg-list">${R.map(r => { const g = G.find(x => x.k === r.k); return `<li>${r.won ? '✅' : '❌'} <b>${esc(g.name)}</b>, ${esc(g.place)} ${r.won ? `(${pts(r)})` : ''}</li>`; }).join('')}</ol>
+        <p>You've named <b>${found().length}</b> of ${G.length} grounds so far.</p>
+        <div class="pg-btns"><button class="btn gold" id="ggShare">Share</button>${mode === 'daily' ? '<button class="btn ghost" data-go="endless">Play Endless</button>' : '<button class="btn ghost" data-go="endless">Go again</button>'}</div>`;
+      document.getElementById('ggShare').onclick = () => share(`🏟️ SportingBrain Ground Guesser${mode === 'daily' ? ' #' + D : ''}\n${grid}  ${total}${mode === 'daily' ? '/25' : ''}`, SITE + 'ground-guesser.html');
+      box.querySelector('[data-go]').onclick = () => setMode('endless');
+      box.appendChild(challengeBox(total, out, 'Ground Guesser'));
+    }
+    function collection() { const f = found(), by = {};
+      G.forEach(g => { (by[g.sport] = by[g.sport] || { n: 0, got: [] }).n++; if (f.includes(g.k)) by[g.sport].got.push(g.name); });
+      box.innerHTML = `<p class="pg-step">My grounds</p><div class="pg-score">${f.length} of ${G.length}</div><p>Every ground you name correctly is ticked off here, on this device.</p>
+        ${Object.entries(by).map(([s, o]) => `<details class="gg-col"><summary><b>${esc(s)}</b> ${o.got.length} of ${o.n}<span class="gg-bar"><i style="width:${Math.round(o.got.length / o.n * 100)}%"></i></span></summary><p>${o.got.length ? o.got.map(esc).join(', ') : 'None yet.'}</p></details>`).join('')}
+        <div class="pg-btns"><button class="btn gold" data-go="endless">Play Endless</button></div>`;
+      box.querySelector('[data-go]').onclick = () => setMode('endless'); }
+    function setMode(m) { mode = m; document.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.mode === m)));
+      document.getElementById('ggSport').hidden = m !== 'endless'; if (G.length) load(); }
+    document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+    document.getElementById('ggSel').onchange = () => { if (mode === 'endless') load(); };
+    if (G.length) { load(); if (mode === 'daily' && state.rounds[state.i].done && state.i === 4) summary(); }
   </script>
 </Base>

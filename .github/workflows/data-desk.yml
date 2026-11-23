@@ -17,6 +17,8 @@ jobs:
         run: python3 source/scripts/fetch_videos.py || echo "Video feed failed, keeping yesterday's list"
       - name: Copy venue photos from Wikimedia Commons to our own server
         run: python3 source/scripts/fetch_photos.py || echo "Photo copy failed, using Commons links"
+      - name: Ground Guesser photos and facts (Wikipedia, Wikidata, Commons)
+        run: python3 source/scripts/fetch_venues.py || echo "Venue fetch failed, keeping yesterday's set"
       - name: Pull F1 data (OpenF1, Jolpica)
         run: python3 source/scripts/fetch_f1.py || echo "F1 feed failed, keeping yesterday's data"
       - uses: actions/setup-node@v4

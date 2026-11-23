@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { REPLAYS } from '../data/replays.js';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<Base title="Watch: ball-by-ball replays and Laugh of the Day | SportingBrain" description="Great cricket finals replayed ball by ball, Call It play-outs and a funny moment from sport every day." page="watch" wide>
+  <header class="pg-head"><h1>Watch</h1><p>Great finals replayed ball by ball, and one funny moment from sport every day.</p></header>
+  <div class="hub-grid">
+    <a class="hub-card" href={`${base}laughs.html`}><b>Laugh of the Day</b><span>One hand-picked funny moment from sport, every day.</span></a>
+    <a class="hub-card" href={`${base}call-it.html`}><b>Call It, then watch it</b><span>Call the next five overs of a real final, then watch them play out ball by ball.</span></a>
+    <a class="hub-card" href={`${base}call-it-football.html`}><b>Call It: Football</b><span>Call the rest of a great final, then watch the goals go in minute by minute.</span></a>
+  </div>
+  <div class="pg-sec"><h2>Ball-by-ball replays</h2></div>
+  <div class="hub-grid">{REPLAYS.map(r => <a class="hub-card" href={`${base}replays/${r.slug}.html`}><b>{r.title}</b><span>{r.teaser}</span></a>)}</div>
+</Base>

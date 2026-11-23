@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import { WEEK } from '../data/week.js';
+import { FLASHBACKS } from '../data/flashbacks.js';
+import { GUIDES } from '../data/guides.js';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const lead = WEEK.stories[0];
+const S = [
+  ['this-week', 'This Week in Sport', `${WEEK.stories.length} stories from the week, men's and women's, each with its source. New every Monday.`],
+  ['flashback', 'Flashback', `${FLASHBACKS.length} forgotten moments told properly, with photos and sources.`],
+  ['on-this-day', 'On This Day', 'What happened in sport on today\'s date, through the years.'],
+  ['sports', 'Sport guides', `${GUIDES.length} guides: how each sport works, what experts watch for, the greats and the language.`],
+  ['round-up', 'The Cynical Round-Up', 'The real week in sport, with an eye-roll. Satire, clearly labelled.'],
+  ['newsletter', 'The Daily Brain', 'Today\'s game, a Flashback and one stat to win an argument with. Free, every morning.'],
+];
+---
+<Base title="Read: This Week, Flashback, On This Day and sport guides | SportingBrain" description="This Week in Sport, Flashback, On This Day, guides to every sport and the Cynical Round-Up." page="read" wide>
+  <header class="pg-head"><h1>Read</h1><p>Proper sports writing: this week's stories with sources, forgotten moments, today in history and guides to every sport.</p></header>
+  <a class="hub-lead" href={`${base}this-week.html`}><span class="pg-step">This Week · {WEEK.edition}</span><b>{lead.title}</b><span>{lead.body.slice(0, 180).replace(/\s\S*$/, '')}…</span></a>
+  <div class="hub-grid">{S.map(([h, t, d]) => <a class="hub-card" href={`${base}${h}.html`}><b>{t}</b><span>{d}</span></a>)}</div>
+</Base>
