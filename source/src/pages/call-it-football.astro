@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import { FINALS, buildFootMoments } from '../data/footcall.js';
+const M = buildFootMoments();
+---
+<Base title="Call It: Football. Great finals, minute by minute | SportingBrain" description="A moment from a great World Cup, Euro or Champions League final, men's and women's. Call who scores next and how many more goals there will be." page="callitfoot">
+  <header class="pg-head"><h1>Call It: Football</h1><p>A real moment from a great final. You know the score and the minute, nothing else. Make two calls, then see what actually happened. A new moment every day, and practice moments whenever you want.</p></header>
+  <section class="card ci-board fc-board" id="board" aria-live="polite"></section>
+  <div class="pg-btns"><button class="btn ghost" id="practice">Practice moment</button><a class="btn ghost" href="call-it.html">Call It: Cricket</a></div>
+  <p class="pg-note">Goal times from the official match records. Extra time counts; penalty shoot-outs don't. Finals included: {FINALS.length}, from 1966 to 2025.</p>
+  <script id="fcData" type="application/json" set:html={JSON.stringify({ F: FINALS, M })} />
+  <script>
+    import { ukDayNo, seeded, shuffle, esc, store, markPlayed, share, SITE } from '../scripts/play.js';
+    const { F, M } = JSON.parse(document.getElementById('fcData').textContent), board = document.getElementById('board');
+    const order = shuffle(M.map((_, i) => i), seeded(20261123)), D = ukDayNo(), todayIdx = order[D % order.length];
+    function render(idx, daily) {
+      const m = M[idx], f = F.find(x => x.id === m.f), key = 'fc_' + D, saved = daily ? store.get(key, null) : null; let pick = {};
+      board.innerHTML = `<p class="pg-step" style="color:#F2A900">${daily ? 'Today’s moment' : 'Practice'} · ${esc(f.title)}</p>
+        <h2 style="color:#fff;margin:4px 0">${esc(f.teams[0])} v ${esc(f.teams[1])}</h2>
+        <p style="color:#C9D2E0;margin:0">${esc(f.where)}, ${esc(f.when)}</p>
+        <div class="ci-score" style="font-size:4rem;color:#F2A900;line-height:1.1">${m.score[0]}-${m.score[1]}</div><p style="color:#fff;margin:0 0 14px"><b>${esc(m.clock)}</b></p>
+        <p style="color:#fff"><b>Call 1: who scores next?</b></p><div class="pg-opts fc-o" data-q="next">${[f.teams[0], f.teams[1], 'No more goals'].map((t, k) => `<button data-v="${k}">${esc(t)}</button>`).join('')}</div>
+        <p style="color:#fff;margin-top:14px"><b>Call 2: how many more goals in the match?</b></p><div class="pg-opts fc-o" data-q="more">${['None', '1', '2', '3 or more'].map((t, k) => `<button data-v="${k}">${t}</button>`).join('')}</div>
+        <div id="fcRes"></div>`;
+      const reveal = p => { board.querySelectorAll('.fc-o button').forEach(b => { b.disabled = true; const q = b.parentElement.dataset.q, right = +b.dataset.v === m[q]; if (right) b.classList.add('ok'); else if (+b.dataset.v === p[q]) b.classList.add('no'); });
+        const s = (p.next === m.next) + (p.more === m.more), after = f.goals.filter(g => { const [a, b] = String(g[0]).split('+'); return +a + (b ? +b / 10 : 0) > m.at; });
+        document.getElementById('fcRes').innerHTML = `<div class="pg-fact" style="background:#fff;color:#0F1E36"><b>${s}/2.</b> ${after.length ? 'What happened next: ' + after.map(g => `${esc(g[2])} ${g[0]}' (${esc(f.teams[g[1]])})`).join(', ') + '.' : 'No more goals.'} ${esc(f.end)}</div>
+          <div class="pg-btns"><button class="btn gold" id="fcShare">Share</button></div>`;
+        document.getElementById('fcShare').onclick = () => share(`Call It: Football. ${f.title}, ${m.score[0]}-${m.score[1]}, ${m.clock.toLowerCase()}. I got ${s}/2.`, SITE + 'call-it-football.html');
+        if (daily && !saved) { store.set(key, { p, s }); markPlayed('call-it-football'); } };
+      if (saved) return reveal(saved.p);
+      board.querySelectorAll('.fc-o').forEach(g => g.addEventListener('click', e => { const b = e.target.closest('button'); if (!b || b.disabled) return; g.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); g.querySelectorAll('button').forEach(x => x.classList.toggle('sel', x === b)); pick[g.dataset.q] = +b.dataset.v; if ('next' in pick && 'more' in pick) reveal(pick); }));
+    }
+    document.getElementById('practice').onclick = () => { render(Math.floor(Math.random() * M.length), false); board.scrollIntoView({ behavior: 'smooth' }); };
+    render(todayIdx, true);
+  </script>
+</Base>

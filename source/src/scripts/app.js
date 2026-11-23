@@ -2,7 +2,7 @@ import '../data/data.js';
 import '../data/content.js';
 import { FLASHBACKS } from '../data/flashbacks.js';
 import { REPLAYS } from '../data/replays.js';
-import { BANK } from '../data/bank.js';
+import { ALL as BANK } from '../data/bank_all.js';
 import { GUIDES } from '../data/guides.js';
 import { WEEK } from '../data/week.js';
 import { PLAY } from '../data/playlist.js';
@@ -175,7 +175,7 @@ if(P==='home'){
   let fb=null, fbAnn='';
   for(const [k,md] of soon){ const f=FLASHBACKS.find(x=>mdOf(x.date)===md); if(f){ fb=f; const yrs=new Date().getUTCFullYear()-(+f.date.slice(0,4)); fbAnn=k===0?`${yrs} years ago today`:`${yrs} years ago this week`; break; } }
   if(!fb) fb=FLASHBACKS[DAY%FLASHBACKS.length];
-  const rp=REPLAYS[DAY%REPLAYS.length];
+  const RP6=REPLAYS.slice(0,6), rp=RP6[DAY%RP6.length];
 
   // today's Call It moment (same order as the Call It page)
   const CM=JSON.parse(($('#ciHome')||{}).textContent||'[]');
@@ -206,7 +206,7 @@ if(P==='home'){
         <p class="ctx">${esc(cm.match)}, ${cm.innings?'second':'first'} innings</p>
         <div class="lamp"><b>${esc(cm.score)}</b><span>after ${esc(cm.at)} overs${cm.need?`<br>${esc(cm.need.replace(cm.team+' ',''))}`:''}</span></div>
         <p class="q">${esc(cm.q)}</p>
-        <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how you did':'Make your call'}</a>
+        <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how you did':'Make your call'}</a><a class="ci-alt" href="${BASE}call-it-football.html">Prefer football? Today's Call It: Football</a>
       </section>`:''}
       <form class="ask-strip" action="${BASE}ask.html"><label class="sr" for="hq">Ask the Brain</label><input id="hq" name="q" placeholder="Ask the Brain any sport question"><button class="btn">Ask</button></form>
       <p class="you-line">${streak?`Your streak: <b>${streak} day${streak===1?'':'s'}</b>.`:'Play a game a day to start a streak.'} ${streakSaverLine()}</p>
@@ -214,7 +214,7 @@ if(P==='home'){
   </div>
 
   <div class="sec"><h2>Play</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></div>
-  <div class="pg-hub home-games">${['weekly-expert','pub-quiz','stat-attack','is-it-a-foul','stats-detective','legends-xi','countdown','rewind'].map(sl=>{const g=PLAY.find(x=>x[0]===sl);return `<a class="pg-tile" href="${BASE}${g[0]}.html" style="--c:${g[4]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`;}).join('')}</div>
+  <div class="pg-hub home-games">${['call-it-football','weekly-expert','pub-quiz','stat-attack','is-it-a-foul','stats-detective','legends-xi','countdown'].map(sl=>{const g=PLAY.find(x=>x[0]===sl);return `<a class="pg-tile" href="${BASE}${g[0]}.html" style="--c:${g[4]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`;}).join('')}</div>
 
   <div class="sec"><h2>This week in sport</h2><a href="${BASE}this-week.html">The full edition</a></div>
   <div class="fp-week">
@@ -241,32 +241,14 @@ if(P==='home'){
 
   <div class="fp-row">
     <section class="fp-col">
-      <div class="sec"><h2>Replay the final</h2><a href="${BASE}replays.html">All replays</a></div>
-      <div class="storylist">${[rp,...REPLAYS.filter(r=>r.slug!==rp.slug).slice(0,2)].map(r=>`<a href="${BASE}replays/${r.slug}.html"><span class="noimg" style="background:#0B6E4F url('${photo('Cricket',300)||''}') center/cover"></span><span><b>${esc(r.title)}</b><small>${esc(r.teaser)}</small></span></a>`).join('')}</div>
-    </section>
-    <section class="fp-col">
-      <div class="sec"><h2>More Flashbacks</h2><a href="${BASE}flashback.html">All</a></div>
-      <div class="storylist">${more.map(f=>`<a href="${BASE}flashback/${f.id}.html">${photo(f.sport,300)?`<img src="${photo(f.sport,300)}" alt="" loading="lazy">`:'<span class="noimg"></span>'}<span><b>${esc(f.title)}</b><small>${esc(f.sport)}, ${esc(f.when)}</small></span></a>`).join('')}</div>
-    </section>
-    <section class="fp-col">
-      <div class="sec"><h2>Sport guides</h2><a href="${BASE}sports.html">All ${GUIDES.length}</a></div>
-      <p class="teaser" style="margin:0 0 12px">How each sport really works, what the experts watch for, and the people who defined it.</p>
-      <div class="guide-links">${guidesPick.map(g=>`<a href="${BASE}sports/${g.id}.html">${esc(g.name)}</a>`).join('')}</div>
-      <div class="sec" style="margin-top:26px"><h2>Quick games</h2></div>
-      <div class="guide-links"><a href="${BASE}higher-or-lower.html">Higher or Lower</a><a href="${BASE}the-grid.html">The Grid</a><a href="${BASE}speed-round.html">Speed Round</a><a href="${BASE}true-or-false.html">True or False</a><a href="${BASE}guess-the-player.html">Guess the Player</a></div>
-    </section>
-  </div>
-
-  <div class="fp-row">
-    <section class="fp-col">
       <div class="sec"><h2>Hero and heroine of the week</h2></div>
       ${H?`<div class="storylist"><a href="${BASE}stories/${H.heroine.story}.html"><span class="noimg" style="background:#5B2C83"></span><span><b>${esc(H.heroine.name)}</b><small>${esc(H.heroine.line)}</small></span></a>
         <a href="${BASE}stories/${H.hero.story}.html"><span class="noimg" style="background:#1F5FA8"></span><span><b>${esc(H.hero.name)}</b><small>${esc(H.hero.line)}</small></span></a></div>`:`<p class="teaser">Back next week.</p>`}
     </section>
     <section class="fp-col">
-      <div class="sec"><h2>Coming tomorrow</h2></div>
-      <ul class="tomorrow-list"><li>A new Call It moment</li><li>Five new Beat the Brain questions at every level</li><li>New moments from ${dlabel(`${String(tmr.getUTCMonth()+1).padStart(2,'0')}-${String(tmr.getUTCDate()).padStart(2,'0')}`)} in sport</li><li>Guide of the day: ${esc(tSport.name)}</li>${weekly?`<li>${esc(weekly)}</li>`:''}</ul>
-      <p class="you-line">Starts in <b class="countdown" id="cd2"></b></p>
+      <div class="sec"><h2>Replay the final</h2><a href="${BASE}replays.html">All replays</a></div>
+      <div class="storylist">${[rp].map(r=>`<a href="${BASE}replays/${r.slug}.html"><span class="noimg" style="background:#0B6E4F"></span><span><b>${esc(r.title)}</b><small>${esc(r.teaser)}</small></span></a>`).join('')}</div>
+      <p class="you-line">New Call It and Beat the Brain in <b class="countdown" id="cd2"></b></p>
     </section>
     <section class="fp-col">
       <div class="sec"><h2>Your record</h2></div>

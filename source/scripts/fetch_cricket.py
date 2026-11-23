@@ -11,6 +11,13 @@ MATCHES = [  # slug, zip, date, two teams
   ('cwc-2019-final', 'odis_json.zip', '2019-07-14', {'England', 'New Zealand'}),
   ('cwc-2023-final', 'odis_json.zip', '2023-11-19', {'Australia', 'India'}),
   ('t20wc-2022-final', 't20s_json.zip', '2022-11-13', {'England', 'Pakistan'}),
+  ('cwc-2011-final', 'odis_json.zip', '2011-04-02', {'India', 'Sri Lanka'}),
+  ('cwc-2015-final', 'odis_json.zip', '2015-03-29', {'Australia', 'New Zealand'}),
+  ('t20wc-2016-final', 't20s_json.zip', '2016-04-03', {'England', 'West Indies'}),
+  ('t20wc-2024-final', 't20s_json.zip', '2024-06-29', {'India', 'South Africa'}),
+  ('wwc-2025-final', 'odis_female_json.zip', '2025-11-02', {'India', 'South Africa'}),
+  ('wt20-2023-final', 't20s_female_json.zip', '2023-02-26', {'Australia', 'South Africa'}),
+  ('wt20-2024-final', 't20s_female_json.zip', '2024-10-20', {'New Zealand', 'South Africa'}),
 ]
 todo = [m for m in MATCHES if not os.path.exists(f'{OUT}/{m[0]}.json')]
 zips = {}

@@ -6,7 +6,7 @@ import Base from '../layouts/Base.astro';
   <div id="vs"></div>
   <section class="pg-card" id="game" aria-live="polite"></section>
   <script>
-    import { BANK } from '../data/bank.js';
+    import { ALL as BANK } from '../data/bank_all.js';
     import { weekNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge } from '../scripts/play.js';
     showChallenge(document.getElementById('vs'));
     const W = weekNo(), pool = shuffle(BANK.filter(q => q[0] === 4), seeded(99)), start = (W * 10) % pool.length;

@@ -2,7 +2,9 @@
 // ball = [over, n, batter, bowler, batRuns, extras, total, wicket|null, extraType 'w'|'n'|'']
 const COL = ['#1F3864', '#E0A800'];
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-export function initReplay(m) {
+import { withFullNames } from '../data/cricnames.js';
+export function initReplay(m0) {
+  const m = withFullNames(m0);
   const inns = m.innings.slice(0, 2), maxBalls = (m.overs || 50) * 6;
   // Flatten into a timeline with running state per ball
   const T = []; const wk = [];

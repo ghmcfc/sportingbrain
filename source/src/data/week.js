@@ -3,15 +3,15 @@
 export const WEEK = {
   edition: 'Monday 23 November 2026',
   stories: [
+    { sport: 'Football', title: 'Spurs win 3-1 at Manchester City in the WSL',
+      body: 'Tottenham beat Manchester City 3-1 on Sunday at City\'s home ground. A day earlier, London City Lionesses beat Crystal Palace 6-2, equalling Chelsea\'s 6-2 win over Spurs in October as the highest-scoring WSL game of the season.',
+      src: ['Sky Sports', 'https://www.skysports.com/football/manchester-city-women-vs-tottenham-hotspur-women/live/575831'] },
     { sport: 'Football', title: 'Pochettino\'s first game ends 4-0 at Anfield',
       body: 'Manchester United\'s new manager could hardly have had a worse start. Leny Yoro was sent off for a professional foul after eight minutes, Dominik Szoboszlai scored from the free kick, and Florian Wirtz, Rio Ngumoha and Víctor Muñoz added the rest. United stay in the relegation zone.',
       src: ['FotMob', 'https://www.fotmob.com/matches/liverpool-vs-manchester-united/2ygkcb'] },
     { sport: 'Rugby union', title: 'Ireland beat the world champions, who still reach the final',
       body: 'Robert Baloucoune scored twice as Ireland held on to beat South Africa 20-17 in Dublin. It was the Springboks\' second defeat in a row, the first time that has happened since 2022, and they were without coach Rassie Erasmus, who is serving a six-match ban. They still go through to the first Nations Championship final, at Twickenham on Sunday.',
       src: ['Sky Sports', 'https://www.skysports.com/rugby-union/news/13614348/ireland-20-17-south-africa-springboks-downed-as-andy-farrells-side-hold-on-for-big-victory-in-nations-championship'] },
-    { sport: 'Football', title: 'Spurs win 3-1 at Manchester City in the WSL',
-      body: 'Tottenham beat Manchester City 3-1 on Sunday at City\'s home ground. A day earlier, London City Lionesses beat Crystal Palace 6-2, equalling Chelsea\'s 6-2 win over Spurs in October as the highest-scoring WSL game of the season.',
-      src: ['Sky Sports', 'https://www.skysports.com/football/manchester-city-women-vs-tottenham-hotspur-women/live/575831'] },
     { sport: 'Formula 1', title: 'Verstappen wins in Las Vegas, three weeks after the title was settled',
       body: 'Max Verstappen won the Las Vegas Grand Prix on Saturday night. The championship itself was decided on 1 November in Mexico City, where Kimi Antonelli became the youngest world champion in Formula 1 history, aged 20 years and 68 days.',
       src: ['Al Jazeera', 'https://www.aljazeera.com/sports/2026/11/2/kimi-antonelli-becomes-formula-ones-youngest-world-champion-in-mexico-city'] },

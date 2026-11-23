@@ -7,7 +7,7 @@ import Base from '../layouts/Base.astro';
   <section class="pg-card" id="game" aria-live="polite"><p>Choose a decade to start.</p></section>
   <script>
     import '../data/content.js';
-    import { BANK } from '../data/bank.js';
+    import { ALL as BANK } from '../data/bank_all.js';
     import { shuffle, esc, markPlayed, challengeBox } from '../scripts/play.js';
     const DECS = [1950, 1960, 1970, 1980, 1990, 2000, 2010], dec = document.getElementById('dec'), g = document.getElementById('game');
     dec.innerHTML = DECS.map(d => `<button aria-pressed="false" data-d="${d}">${d}s</button>`).join('');

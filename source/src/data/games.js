@@ -80,9 +80,13 @@ export const COUNTDOWN = [
   ['2026-12-11T19:00:00Z', 'PDC World Darts Championship', 'Darts', 'Alexandra Palace, until 3 January', 'https://www.alexandrapalace.com/whats-on/world-darts-championship-2026-2027/'],
   ['2026-12-17T08:00:00Z', 'South Africa v England, first Test', 'Cricket', 'The Wanderers, Johannesburg', 'https://en.wikipedia.org/wiki/English_cricket_team_in_South_Africa_in_2026%E2%80%9327'],
   ['2027-02-05T20:10:00Z', 'Six Nations: Ireland v England', 'Rugby union', 'Aviva Stadium, Dublin', 'https://www.skysports.com/rugby-union/news/12040/13517225/six-nations-2027-ireland-vs-england-starts-mens-tournament-with-england-vs-scotland-on-final-weekend'],
+  ['2027-02-14T23:30:00Z', 'Super Bowl LXI', 'American football', 'SoFi Stadium, Los Angeles', 'https://en.wikipedia.org/wiki/Super_Bowl_LXI'],
   ['2027-03-11T00:00:00Z', '150th anniversary Test, Australia v England', 'Cricket', 'Melbourne Cricket Ground', 'https://skysports.com/cricket/news/12040/13566231/england-cricket-schedule-2027-men-and-women-fixtures-including-the-ashes-150th-anniversary-test-against-australia-world-cup-champions-trophy'],
   ['2027-04-08T12:00:00Z', 'The Masters', 'Golf', 'Augusta National, 8 to 11 April', 'https://www.pgatour.com/tournaments/2027/masters-tournament/R2027014/overview'],
+  ['2027-04-10T11:30:00Z', 'Women\'s Six Nations', 'Rugby union', 'Starts with Italy v France; England v France on the final weekend, 15 May', 'https://www.planetrugby.com/news/womens-six-nations-latest-2027-fixtures-and-broadcasters-announced-as-championship-adopts-super-saturday-format-with-possible-grand-slam-decider-picked-for-final-round'],
   ['2027-06-24T22:00:00Z', 'Women\'s World Cup', 'Football', 'Brazil, final at the Maracanã on 25 July', 'https://www.flashscore.com/news/soccer-world-cup-women-rio-s-iconic-maracana-stadium-to-host-2027-opener-and-final/bTeyYS3U/'],
+  ['2027-06-28T10:30:00Z', 'Wimbledon', 'Tennis', 'The All England Club, 28 June to 11 July', 'https://www.wimbledon.com/en_GB/atoz/dates.html'],
+  ['2027-07-02T11:00:00Z', 'Tour de France Grand Départ', 'Cycling', 'Edinburgh to Carlisle, the first Tour start in Scotland', 'https://www.cyclingweekly.com/racing/tour-de-france-2027-route-revealed'],
   ['2027-10-01T10:45:00Z', 'Men\'s Rugby World Cup', 'Rugby union', 'Australia, final in Sydney on 13 November', 'https://experiences.rugbyworldcup.com/rwc2027/faq/tournament/'],
   ['2027-10-02T08:00:00Z', 'Men\'s Cricket World Cup', 'Cricket', 'South Africa, Zimbabwe and Namibia, final on 21 November', 'https://www.icc-cricket.com/tournaments/cricketworldcup/news/fixture-schedule-announced-for-icc-men-s-cricket-world-cup-2027'],
 ];

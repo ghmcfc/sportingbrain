@@ -8,7 +8,7 @@ import '../styles/editorial.css';
 <body style="background:transparent;margin:0">
 <div class="pg-card" style="margin:0" id="w" aria-live="polite"></div>
 <script>
-  import { BANK } from '../data/bank.js';
+  import { ALL as BANK } from '../data/bank_all.js';
   import { ukDayNo, seeded, shuffle, esc, SITE } from '../scripts/play.js';
   const pool = BANK.filter(q => q[0] <= 2), d = ukDayNo(), q = pool[Math.floor(seeded(d * 17)() * pool.length)], idx = shuffle([0, 1, 2, 3], seeded(d));
   const w = document.getElementById('w');

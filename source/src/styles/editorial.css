@@ -362,3 +362,8 @@ header.top .wrap{max-width:1240px;padding:10px 16px}
 .mainnav a{white-space:nowrap}
 @media (min-width:1024px) and (max-width:1359px){ .mainnav{display:none} .menu-btn{display:inline-block} }
 @media (min-width:1360px){ .mainnav{display:flex} .menu-btn{display:none} }
+.fc-board .pg-opts button{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.35)}
+.fc-board .pg-opts button.sel{border-color:#F2A900;background:rgba(242,169,0,.18)}
+.fc-board .pg-opts button.ok{background:#0B6E4F;border-color:#0B6E4F;color:#fff}
+.fc-board .pg-opts button.no{background:#C8102E;border-color:#C8102E;color:#fff}
+.ci-alt{display:block;margin-top:10px;color:#F2A900;font-family:var(--display);font-weight:700;font-size:1.05rem}

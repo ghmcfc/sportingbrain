@@ -1,10 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import { REPLAYS } from '../data/replays.js';
+import { withFullNames } from '../data/cricnames.js';
 const feeds = import.meta.glob('../data/feeds/cricket/*.json', { eager: true });
 const CASES = [];
 for (const r of REPLAYS) {
-  const f = Object.values(feeds).find(x => (x.default || x).slug === r.slug); if (!f) continue; const m = f.default || f;
+  const f = Object.values(feeds).find(x => (x.default || x).slug === r.slug); if (!f) continue; const m = withFullNames(f.default || f);
   m.innings.slice(0, 2).forEach((inn, n) => {
     const bat = {}, bowl = {};
     for (const b of inn.balls) { const [, , batter, bowler, runs, , , wk, ex] = b;
@@ -20,7 +21,7 @@ for (const r of REPLAYS) {
 }
 ---
 <Base title="Stats Detective: whose World Cup final was it? | SportingBrain" description="A batting or bowling line from a real World Cup final, men's and women's. Work out who it belonged to." page="detective">
-  <header class="pg-head"><h1>Stats Detective</h1><p>Each case is a real line from a World Cup final, worked out ball by ball from Cricsheet's scorecards. Names are shown the way scorers write them. Who was it?</p></header>
+  <header class="pg-head"><h1>Stats Detective</h1><p>Each case is a real line from a World Cup final, worked out ball by ball from Cricsheet's scorecards. Who was it?</p></header>
   <div id="vs"></div>
   <section class="pg-card" id="game" aria-live="polite"></section>
   <p class="pg-note">Data: Cricsheet, under the Open Data Commons Attribution Licence. Wickets exclude run outs.</p>

@@ -8,7 +8,7 @@ import Base from '../layouts/Base.astro';
   <section class="pg-card" id="door" hidden aria-live="polite" style="margin-top:18px"></section>
   <script>
     import '../data/content.js';
-    import { BANK } from '../data/bank.js';
+    import { ALL as BANK } from '../data/bank_all.js';
     import { ukNow, seeded, shuffle, esc, store, markPlayed } from '../scripts/play.js';
     const now = ukNow(), Y = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear(), inDec = now.getMonth() === 11, today = inDec ? now.getDate() : (now.getMonth() === 0 ? 25 : 0);
     const opened = store.get('advent_' + Y, []), doors = document.getElementById('doors'), box = document.getElementById('door'), st = document.getElementById('st');

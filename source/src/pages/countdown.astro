@@ -16,7 +16,7 @@ const fmt = iso => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', m
     ))}
   </div>
   <script>
-    import { BANK } from '../data/bank.js';
+    import { ALL as BANK } from '../data/bank_all.js';
     import { shuffle, esc, markPlayed } from '../scripts/play.js';
     const items = [...document.querySelectorAll('.cd-item')];
     function tick() { const now = Date.now(); items.forEach(el => { const t = Date.parse(el.dataset.t), c = el.querySelector('[data-c]'), d = t - now;

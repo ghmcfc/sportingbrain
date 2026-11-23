@@ -12,7 +12,7 @@ import Base from '../layouts/Base.astro';
   <div class="pg-btns no-print" style="margin:0 0 16px"><button class="btn gold" onclick="window.print()">Print this</button><button class="btn ghost" id="prev">Last week's quiz</button></div>
   <section class="pg-card" id="out"></section>
   <script>
-    import { BANK } from '../data/bank.js';
+    import { ALL as BANK } from '../data/bank_all.js';
     import { weekNo, seeded, shuffle, esc, markPlayed, challengeBox } from '../scripts/play.js';
     const ROUNDS = [
       ['Round 1: Football', q => q[1] === 'Football'],

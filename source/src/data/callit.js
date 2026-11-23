@@ -1,5 +1,6 @@
 // Call It: freeze a real moment, ask what happens next. Built from Cricsheet ball-by-ball data.
 import { REPLAYS } from './replays.js';
+import { withFullNames } from './cricnames.js';
 const feeds = import.meta.glob('./feeds/cricket/*.json', { eager: true });
 const legal = b => b[8] !== 'w' && b[8] !== 'n';
 const isWkt = b => b[7] && !/retired hurt/.test(b[7]);
@@ -11,7 +12,7 @@ export function buildMoments() {
   const out = [];
   for (const r of REPLAYS) {
     const f = Object.entries(feeds).find(([k]) => k.endsWith(`/${r.slug}.json`)); if (!f) continue;
-    const m = f[1].default, overs = m.overs || 50, t20 = overs <= 20, span = t20 ? 3 : 5;
+    const m = withFullNames(f[1].default), overs = m.overs || 50, t20 = overs <= 20, span = t20 ? 3 : 5;
     let g0 = 0;
     m.innings.slice(0, 2).forEach((inn, i) => {
       const B = inn.balls; let runs = 0, wk = 0, lg = 0; const state = [];
