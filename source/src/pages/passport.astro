@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Ground Hopper Passport: stamp every ground you visit | SportingBrain" description="Keep a passport of every stadium, ground and venue you've been to, any sport. Saved on your device only, nothing sent to us." page="passport">
+  <header class="pg-head"><h1>Ground Hopper Passport</h1><p>Every ground, stadium, course and court you've been to, any sport, any level. Add a stamp after each visit. It lives on this device only: we never see it.</p></header>
+  <form class="pg-card pg-form" id="f">
+    <label>Ground or venue <input name="g" required maxlength="60" placeholder="e.g. Edgeley Park"></label>
+    <label>Sport <select name="s"><option>Football</option><option>Cricket</option><option>Rugby union</option><option>Rugby league</option><option>Tennis</option><option>Golf</option><option>Netball</option><option>Athletics</option><option>Horse racing</option><option>Darts</option><option>Snooker</option><option>Motorsport</option><option>Other</option></select></label>
+    <label>Date <input name="d" type="date" required></label>
+    <label>What you saw (optional) <input name="m" maxlength="60" placeholder="e.g. County v Rovers, 2-1"></label>
+    <button class="btn gold">Stamp it</button>
+  </form>
+  <div class="pg-sec"><h2>Your stamps</h2><span id="n"></span></div>
+  <div class="stamps" id="stamps"></div>
+  <div class="pg-btns"><button class="btn ghost" onclick="window.print()">Print my passport</button><button class="btn ghost" id="shr">Share my total</button></div>
+  <script>
+    import { store, esc, share, markPlayed } from '../scripts/play.js';
+    const f = document.getElementById('f'), el = document.getElementById('stamps'); let P = store.get('passport', []);
+    f.d.valueAsDate = new Date();
+    function render() { const grounds = new Set(P.map(p => p.g.toLowerCase())).size, sports = new Set(P.map(p => p.s)).size;
+      document.getElementById('n').textContent = `${grounds} ground${grounds === 1 ? '' : 's'}, ${sports} sport${sports === 1 ? '' : 's'}`;
+      el.innerHTML = P.length ? P.slice().reverse().map((p, k) => `<div class="stamp" style="--r:${(k * 37 % 13) - 6}deg">${esc(p.g)}<small>${esc(p.s)} · ${new Date(p.d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}${p.m ? '<br>' + esc(p.m) : ''}</small></div>`).join('') : '<p>No stamps yet. Add your first ground above.</p>'; }
+    f.addEventListener('submit', e => { e.preventDefault(); P.push({ g: f.g.value.trim(), s: f.s.value, d: f.d.value, m: f.m.value.trim() }); store.set('passport', P); markPlayed('passport'); f.g.value = ''; f.m.value = ''; render(); });
+    document.getElementById('shr').onclick = () => share(`My Ground Hopper Passport: ${document.getElementById('n').textContent}. Start yours at SportingBrain.`, location.origin + location.pathname);
+    render();
+  </script>
+</Base>

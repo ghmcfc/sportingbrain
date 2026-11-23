@@ -8,9 +8,15 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   <div class="kz" data-band={band}>
     <nav class="kz-nav" aria-label="Kids Zone">
       <a href={`${base}kids.html`} class="kz-home"><img src={`${base}assets/brain.svg`} alt="" width="40" height="40">Kids Zone</a>
-      <a href={`${base}kids/6-8.html`}>Ages 6 to 8</a><a href={`${base}kids/9-12.html`}>Ages 9 to 12</a><a href={`${base}kids/parents.html`}>For parents</a>
+      <a href={`${base}kids/6-8.html`}>Ages 6 to 8</a><a href={`${base}kids/9-12.html`}>Ages 9 to 12</a><a href={`${base}kids/kit.html`}>Design a kit</a><a href={`${base}kids/academy.html`}>Brain Academy</a><a href={`${base}sports-day.html`}>Sports Day</a><a href={`${base}kids/parents.html`}>For parents</a>
     </nav>
     <slot />
+    <div class="kz-break" id="kzBreak" hidden role="status"><b>Time for a move break!</b> You've been playing for 20 minutes. Stand up, do ten star jumps, then come back. <button class="btn gold" id="kzBreakOk">Done it</button></div>
+    <script>
+      (function(){ const k='sb_kz_start', now=Date.now(); let t=+sessionStorage.getItem(k)||now; sessionStorage.setItem(k,t);
+        const b=document.getElementById('kzBreak'); const chk=()=>{ if(Date.now()-t>20*60000){ b.hidden=false; } }; setInterval(chk,30000); chk();
+        document.getElementById('kzBreakOk').onclick=()=>{ t=Date.now(); sessionStorage.setItem(k,t); b.hidden=true; }; })();
+    </script>
     <p class="kz-safe">No ads. No chat. No sign-up. Nothing you type here leaves this device.</p>
   </div>
 </Base>

@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Pick your all-time Legends XI: football and cricket | SportingBrain" description="Build your greatest-ever football or cricket team from the best men and women to play the game. Share it and start the argument." page="legends">
+  <header class="pg-head"><h1>Pick Your Legends XI</h1><p>Your all-time eleven, from the best men and women ever to play. Mixed teams are allowed here, and so are arguments. Share it when you're done.</p></header>
+  <div class="pg-tabs" role="group" aria-label="Sport"><button aria-pressed="true" data-sp="football">Football</button><button aria-pressed="false" data-sp="cricket">Cricket</button></div>
+  <section class="pg-card" id="build"></section>
+  <section id="sheet"></section>
+  <script>
+    import { LEGENDS } from '../data/games.js';
+    import { esc, share, store, markPlayed, toast } from '../scripts/play.js';
+    const build = document.getElementById('build'), sheet = document.getElementById('sheet');
+    const p = new URLSearchParams(location.search); let sp = p.get('sp') === 'cricket' ? 'cricket' : 'football';
+    let picks = p.get('xi') ? p.get('xi').split('|') : store.get('xi_' + sp, []);
+    function render() { const L = LEGENDS[sp]; let n = 0;
+      build.innerHTML = `<h2>${L.name}</h2>` + L.slots.map(([label, pool, count]) => Array.from({ length: count }, (_, c) => { const k = n++; return `<div class="lx-slot"><label for="s${k}">${label}${count > 1 ? ' ' + (c + 1) : ''}</label><select id="s${k}" data-k="${k}"><option value="">Choose…</option>${L.pools[pool].map(x => `<option ${picks[k] === x ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select></div>`; }).join('')).join('')
+        + `<div class="pg-btns"><button class="btn gold" id="done">Show my XI</button><button class="btn ghost" id="rand">Fill the gaps for me</button></div>`;
+      document.querySelectorAll('[data-sp]').forEach(b => b.setAttribute('aria-pressed', b.dataset.sp === sp));
+      if (picks.filter(Boolean).length === 11) showSheet(); else sheet.innerHTML = ''; }
+    build.addEventListener('change', e => { const k = +e.target.dataset.k, v = e.target.value; if (v && picks.includes(v) && picks[k] !== v) { toast(`${v} is already in your team.`); e.target.value = picks[k] || ''; return; } picks[k] = v; store.set('xi_' + sp, picks); });
+    build.addEventListener('click', e => { if (e.target.id === 'done') { if (picks.filter(Boolean).length < 11) return toast('Pick all eleven first.'); showSheet(); markPlayed('legends-xi'); sheet.scrollIntoView({ behavior: 'smooth' }); }
+      if (e.target.id === 'rand') { const L = LEGENDS[sp]; let n = 0; L.slots.forEach(([, pool, count]) => { for (let c = 0; c < count; c++, n++) if (!picks[n]) { const free = L.pools[pool].filter(x => !picks.includes(x)); picks[n] = free[Math.floor(Math.random() * free.length)]; } }); store.set('xi_' + sp, picks); render(); } });
+    function showSheet() { const L = LEGENDS[sp]; let n = 0; const rows = L.slots.map(([label, , count]) => [label, Array.from({ length: count }, () => picks[n++])]);
+      const order = sp === 'football' ? rows.slice().reverse() : rows;
+      sheet.innerHTML = `<div class="lx-sheet"><h3>My ${L.name} Legends XI</h3>${order.map(([l, ps]) => `<div class="lx-line">${ps.map(x => `<span>${esc(x)}</span>`).join('')}</div>`).join('')}</div><div class="pg-btns"><button class="btn gold" id="sh">Share my XI</button></div>`;
+      document.getElementById('sh').onclick = () => { const u = new URL(location.origin + location.pathname); u.searchParams.set('sp', sp); u.searchParams.set('xi', picks.join('|'));
+        share(`My all-time ${L.name} XI: ${picks.join(', ')}. Pick yours:`, u.href); }; }
+    document.querySelectorAll('[data-sp]').forEach(b => b.onclick = () => { sp = b.dataset.sp; picks = store.get('xi_' + sp, []); render(); });
+    render();
+  </script>
+</Base>

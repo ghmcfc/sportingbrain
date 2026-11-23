@@ -1,0 +1,17 @@
+---
+import '@fontsource/big-shoulders-display/800';
+import '@fontsource-variable/source-serif-4/opsz';
+import '../styles/global.css';
+import '../styles/editorial.css';
+---
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>SportingBrain question of the day</title></head>
+<body style="background:transparent;margin:0">
+<div class="pg-card" style="margin:0" id="w" aria-live="polite"></div>
+<script>
+  import { BANK } from '../data/bank.js';
+  import { ukDayNo, seeded, shuffle, esc, SITE } from '../scripts/play.js';
+  const pool = BANK.filter(q => q[0] <= 2), d = ukDayNo(), q = pool[Math.floor(seeded(d * 17)() * pool.length)], idx = shuffle([0, 1, 2, 3], seeded(d));
+  const w = document.getElementById('w');
+  w.innerHTML = `<p class="pg-step">SportingBrain · question of the day · ${esc(q[1])}</p><p class="pg-q">${esc(q[2])}</p><div class="pg-opts">${idx.map(k => `<button data-k="${k}">${esc(q[3][k])}</button>`).join('')}</div><p class="pg-note"><a href="${SITE}" target="_blank" rel="noopener">More free puzzles at SportingBrain</a></p>`;
+  w.addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b || b.disabled) return; w.querySelectorAll('[data-k]').forEach(x => { x.disabled = true; if (+x.dataset.k === q[4]) x.classList.add('ok'); else if (x === b) x.classList.add('no'); }); w.querySelector('.pg-opts').insertAdjacentHTML('afterend', `<p class="pg-fact">${esc(q[5])}</p>`); });
+</script></body></html>

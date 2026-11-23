@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import { REPLAYS } from '../data/replays.js';
+const feeds = import.meta.glob('../data/feeds/cricket/*.json', { eager: true });
+const CASES = [];
+for (const r of REPLAYS) {
+  const f = Object.values(feeds).find(x => (x.default || x).slug === r.slug); if (!f) continue; const m = f.default || f;
+  m.innings.slice(0, 2).forEach((inn, n) => {
+    const bat = {}, bowl = {};
+    for (const b of inn.balls) { const [, , batter, bowler, runs, , , wk, ex] = b;
+      bat[batter] ??= { r: 0, b: 0, six: 0 }; if (ex !== 'w') bat[batter].b++; bat[batter].r += runs; if (runs === 6) bat[batter].six++;
+      bowl[bowler] ??= { w: 0 }; if (wk && !/run out|retired/i.test(wk)) bowl[bowler].w++; }
+    const top = Object.entries(bat).sort((a, b) => b[1].r - a[1].r);
+    const opts = top.slice(0, 4).map(t => t[0]);
+    top.slice(0, 2).forEach(([name, s]) => { if (s.r < 20) return;
+      CASES.push({ match: r.title, team: inn.team, opts, a: name, clue: `In the ${r.title.replace(/:.*/, '')}, this ${inn.team} batter made ${s.r} from ${s.b} balls${s.six ? `, including ${s.six} six${s.six > 1 ? 'es' : ''}` : ''}.` }); });
+    const tb = Object.entries(bowl).sort((a, b) => b[1].w - a[1].w).slice(0, 4);
+    if (tb[0] && tb[0][1].w >= 3 && (!tb[1] || tb[1][1].w < tb[0][1].w)) CASES.push({ match: r.title, opts: tb.map(t => t[0]), a: tb[0][0], clue: `In the ${r.title.replace(/:.*/, '')}, this bowler took ${tb[0][1].w} wickets when ${inn.team} batted.` });
+  });
+}
+---
+<Base title="Stats Detective: whose World Cup final was it? | SportingBrain" description="A batting or bowling line from a real World Cup final, men's and women's. Work out who it belonged to." page="detective">
+  <header class="pg-head"><h1>Stats Detective</h1><p>Each case is a real line from a World Cup final, worked out ball by ball from Cricsheet's scorecards. Names are shown the way scorers write them. Who was it?</p></header>
+  <div id="vs"></div>
+  <section class="pg-card" id="game" aria-live="polite"></section>
+  <p class="pg-note">Data: Cricsheet, under the Open Data Commons Attribution Licence. Wickets exclude run outs.</p>
+  <script id="cases" type="application/json" set:html={JSON.stringify(CASES)} />
+  <script>
+    import { shuffle, esc, markPlayed, challengeBox, showChallenge } from '../scripts/play.js';
+    showChallenge(document.getElementById('vs'));
+    const ALL = JSON.parse(document.getElementById('cases').textContent), g = document.getElementById('game'); let Q, i, s;
+    function start() { Q = shuffle(ALL).slice(0, 8); i = 0; s = 0; show(); }
+    function show() { const q = Q[i], o = shuffle(q.opts); g.innerHTML = `<p class="pg-step">Case ${i + 1} of ${Q.length}</p><p class="pg-q">${esc(q.clue)}</p><div class="pg-opts">${o.map(x => `<button data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div>`; }
+    g.addEventListener('click', e => { const b = e.target.closest('[data-v]'), q = Q[i];
+      if (b && !b.disabled) { const ok = b.dataset.v === q.a; if (ok) s++; g.querySelectorAll('[data-v]').forEach(x => { x.disabled = true; if (x.dataset.v === q.a) x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
+        g.insertAdjacentHTML('beforeend', `<p class="pg-fact">${ok ? 'Case closed.' : 'It was ' + esc(q.a) + '.'} ${esc(q.match)}.</p><div class="pg-btns"><button class="btn" data-n>${i + 1 < Q.length ? 'Next case' : 'Finish'}</button><a class="btn ghost" href="replays.html">Watch the replays</a></div>`); }
+      if (e.target.closest('[data-n]')) { i++; if (i < Q.length) show(); else { markPlayed('stats-detective'); g.innerHTML = `<p class="pg-step">Cases solved</p><div class="pg-score">${s}/${Q.length}</div><div class="pg-btns"><button class="btn ghost" data-again>New cases</button></div>`; g.appendChild(challengeBox(s, Q.length, 'Stats Detective')); } }
+      if (e.target.closest('[data-again]')) start(); });
+    start();
+  </script>
+</Base>

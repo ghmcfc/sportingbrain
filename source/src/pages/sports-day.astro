@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import { SPORTS_DAY, THIRTY_DAYS } from '../data/games.js';
+---
+<Base title="Sports Day at Home and the 30-day challenge | SportingBrain" description="Eight sports day events for the garden or the park with a printable scorecard, plus a 30-day get-moving challenge for the whole family." page="sportsday">
+  <header class="pg-head"><h1>Sports Day at Home</h1><p>Eight events you can run in a garden, a park or a hallway, with things you already own. Print the scorecard, pick teams and go. Then try the 30-day challenge.</p></header>
+  <div class="pg-btns no-print" style="margin:0 0 16px"><button class="btn gold" onclick="window.print()">Print the pack</button></div>
+  <section class="pg-card"><h2>The events</h2><ol>{SPORTS_DAY.map(([t, d]) => <li><b>{t}.</b> {d}</li>)}</ol>
+    <p class="pg-note">Grown-ups: pick a safe, clear space and keep an eye on younger ones. Points idea: 3 for first, 2 for second, 1 for everyone who takes part.</p></section>
+  <section class="pg-card"><h2>Scorecard</h2><table class="sd-table"><thead><tr><th>Event</th><th>Name</th><th>Name</th><th>Name</th><th>Name</th></tr></thead><tbody>{SPORTS_DAY.map(([t]) => <tr><td>{t}</td><td></td><td></td><td></td><td></td></tr>)}<tr><td><b>Total</b></td><td></td><td></td><td></td><td></td></tr></tbody></table></section>
+  <section class="pg-card print-break"><h2>The 30-day challenge</h2><p>One small thing a day. Tick it off when it's done. Your ticks stay on this device.</p>
+    <p class="pg-step" id="tc" aria-live="polite"></p>
+    <div class="track" id="track">{THIRTY_DAYS.map((t, k) => <label><input type="checkbox" data-k={k}><b>{k + 1}</b><span>{t}</span></label>)}</div></section>
+  <script>
+    import { store, toast, markPlayed } from '../scripts/play.js';
+    let done = store.get('thirty', []); const tc = document.getElementById('tc');
+    const upd = () => { document.querySelectorAll('[data-k]').forEach(c => { c.checked = done.includes(+c.dataset.k); c.parentElement.classList.toggle('done', c.checked); }); tc.textContent = `${done.length} of 30 done.`; };
+    document.getElementById('track').addEventListener('change', e => { const k = +e.target.dataset.k; done = e.target.checked ? [...done, k] : done.filter(x => x !== k); store.set('thirty', done); markPlayed('sports-day'); upd(); if (done.length === 30) toast('Thirty out of thirty. Brilliant.'); });
+    upd();
+  </script>
+</Base>

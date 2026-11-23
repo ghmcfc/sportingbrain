@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import { COUNTDOWN } from '../data/games.js';
+const fmt = iso => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/London' });
+---
+<Base title="Countdown Clock: the big sporting events coming up | SportingBrain" description="Live countdowns to the next big events in sport: the UK Championship, the Darts, the Six Nations, the Masters, the Women's World Cup, the Rugby and Cricket World Cups. With a quick quiz for each." page="countdown">
+  <header class="pg-head"><h1>Countdown Clock</h1><p>The next big events, ticking down to the start. Each one has a three-question warm-up quiz. Dates are confirmed by the organisers; start times are approximate and shown in UK time.</p></header>
+  <div class="cd-list">
+    {COUNTDOWN.map((e, k) => (
+      <article class="cd-item" data-t={e[0]} data-sport={e[2]} id={`ev${k}`}>
+        <div><p class="pg-step">{e[2]} · {fmt(e[0])}</p><h3>{e[1]}</h3><p>{e[3]}. <a href={e[4]} rel="noopener" target="_blank">Source</a></p></div>
+        <div class="cd-clock" aria-live="off"><span data-c>–</span><small>days, hours, minutes</small></div>
+        <div class="pg-btns"><button class="btn ghost" data-quiz>Warm-up quiz</button></div>
+        <div class="cd-quiz" hidden></div>
+      </article>
+    ))}
+  </div>
+  <script>
+    import { BANK } from '../data/bank.js';
+    import { shuffle, esc, markPlayed } from '../scripts/play.js';
+    const items = [...document.querySelectorAll('.cd-item')];
+    function tick() { const now = Date.now(); items.forEach(el => { const t = Date.parse(el.dataset.t), c = el.querySelector('[data-c]'), d = t - now;
+      if (d <= 0) { c.textContent = 'Under way'; el.querySelector('small').textContent = 'or finished'; return; }
+      const days = Math.floor(d / 864e5), h = Math.floor(d / 36e5) % 24, m = Math.floor(d / 6e4) % 60; c.textContent = `${days}d ${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}m`; }); }
+    tick(); setInterval(tick, 30000);
+    document.addEventListener('click', e => { const b = e.target.closest('[data-quiz]'); if (!b) return; const el = b.closest('.cd-item'), box = el.querySelector('.cd-quiz');
+      if (!box.hidden) { box.hidden = true; return; } box.hidden = false; const qs = shuffle(BANK.filter(q => q[1] === el.dataset.sport)).slice(0, 3); let i = 0, s = 0;
+      const show = () => { const q = qs[i], idx = shuffle([0, 1, 2, 3]); box.innerHTML = `<p class="pg-step">${i + 1} of ${qs.length}</p><p class="pg-q">${esc(q[2])}</p><div class="pg-opts">${idx.map(k => `<button data-k="${k}">${esc(q[3][k])}</button>`).join('')}</div>`;
+        box.onclick = ev => { const o = ev.target.closest('[data-k]'); if (o && !o.disabled) { const ok = +o.dataset.k === q[4]; if (ok) s++; box.querySelectorAll('[data-k]').forEach(x => { x.disabled = true; if (+x.dataset.k === q[4]) x.classList.add('ok'); else if (x === o) x.classList.add('no'); });
+          box.insertAdjacentHTML('beforeend', `<p class="pg-fact">${esc(q[5])}</p><div class="pg-btns"><button class="btn" data-n>${i < qs.length - 1 ? "Next" : "Finish"}</button></div>`); }
+          if (ev.target.closest('[data-n]')) { i++; if (i < qs.length) show(); else { markPlayed('countdown'); box.innerHTML = `<p class="pg-q"><b>${s}/${qs.length}.</b> ${s === qs.length ? 'Ready for it.' : 'Good warm-up.'}</p>`; } } }; };
+      show(); });
+  </script>
+</Base>

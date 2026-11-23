@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Free pub and club sports quiz, new every week | SportingBrain" description="Four rounds of ten sports questions with answers, a team answer sheet and host notes. Free to print and run at your pub, club or school. New every Monday." page="pubquiz">
+  <header class="pg-head no-print"><h1>Pub and Club Quiz</h1><p>Forty fact-checked questions in four rounds, a team answer sheet and notes for the host. New every Monday, free to print and run. A credit to SportingBrain is all we ask.</p></header>
+  <div class="pg-tabs no-print" role="group" aria-label="Show">
+    <button aria-pressed="true" data-v="host">Host sheet with answers</button>
+    <button aria-pressed="false" data-v="teams">Team answer sheet</button>
+    <button aria-pressed="false" data-v="notes">Host notes</button>
+    <button aria-pressed="false" data-v="play">Play it here</button>
+  </div>
+  <div class="pg-btns no-print" style="margin:0 0 16px"><button class="btn gold" onclick="window.print()">Print this</button><button class="btn ghost" id="prev">Last week's quiz</button></div>
+  <section class="pg-card" id="out"></section>
+  <script>
+    import { BANK } from '../data/bank.js';
+    import { weekNo, seeded, shuffle, esc, markPlayed, challengeBox } from '../scripts/play.js';
+    const ROUNDS = [
+      ['Round 1: Football', q => q[1] === 'Football'],
+      ['Round 2: Bat, ball and oval ball', q => ['Cricket', 'Rugby union', 'Rugby league'].includes(q[1])],
+      ['Round 3: Track, court and course', q => ['Tennis', 'Athletics', 'Golf'].includes(q[1])],
+      ['Round 4: Everything else', q => !['Football', 'Cricket', 'Rugby union', 'Rugby league', 'Tennis', 'Athletics', 'Golf'].includes(q[1])],
+    ];
+    let wk = weekNo(), view = 'host';
+    function quiz(w) { const ok = BANK.filter(q => !/of these/i.test(q[2]));
+      return ROUNDS.map(([name, f], r) => { const pool = ok.filter(f), rnd = seeded(w * 31 + r), sh = shuffle(pool, seeded(r + 7)); const start = (w * 10) % sh.length; const qs = []; for (let k = 0; k < 10; k++) qs.push(sh[(start + k) % sh.length]); return [name, shuffle(qs, rnd).sort((a, b) => a[0] - b[0])]; }); }
+    const mondayOf = w => { const d = new Date((w * 7 - 3) * 86400000); return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }); };
+    const out = document.getElementById('out');
+    function render() {
+      const Q = quiz(wk), title = `<h2>SportingBrain Pub and Club Quiz</h2><p class="pg-note">Week of ${mondayOf(wk)}. sportingbrain.com</p>`;
+      if (view === 'host') out.innerHTML = title + Q.map(([n, qs]) => `<div class="pq-round"><h3>${n}</h3><ol>${qs.map(q => `<li>${esc(q[2])}<br><span class="pq-ans">${esc(q[3][q[4]])}</span><br><span class="pg-note">${esc(q[5])}</span></li>`).join('')}</ol></div>`).join('');
+      if (view === 'teams') out.innerHTML = `<h2>Team answer sheet</h2><p>Team name: ______________________________</p>` + Q.map(([n], r) => `<div class="pq-round"><h3>${n}</h3><ol class="pq-sheet">${'<li></li>'.repeat(10)}</ol><p><b>Round total: ____ / 10</b></p></div>`).join('') + '<p><b>Grand total: ____ / 40</b></p>';
+      if (view === 'notes') out.innerHTML = `<h2>Host notes</h2><ol>
+        <li>Print the host sheet for yourself and one team answer sheet per team. Teams of up to six work best.</li>
+        <li>Read each question twice. Allow about a minute per question and five minutes at the end of each round for teams to finish.</li>
+        <li>Swap answer sheets between teams to mark, then read the answers. The short fact under each answer is there to read out: it settles arguments and keeps the room interested.</li>
+        <li>Questions run from easy to hard within each round, so everyone gets a few early.</li>
+        <li>Spellings: accept anything that's clearly the right answer. Surnames alone are fine for people.</li>
+        <li>Tie-break: pick any event from today's On This Day page and ask each team for the year. Closest wins.</li>
+        <li>A new quiz appears every Monday. Last week's is one tap away if you need a spare round.</li>
+        <li>No prizes involving betting, please. A round of drinks or a box of biscuits is traditional.</li></ol>`;
+      if (view === 'play') playHere(Q);
+    }
+    function playHere(Q) { const all = Q.flatMap(([n, qs]) => qs.map(q => [n, q])); let i = 0, s = 0;
+      const show = () => { const [n, q] = all[i], r = seeded(i + wk), idx = shuffle([0, 1, 2, 3], r);
+        out.innerHTML = `<p class="pg-step">${n} · ${i + 1} of 40</p><p class="pg-q">${esc(q[2])}</p><div class="pg-opts">${idx.map(k => `<button data-k="${k}">${esc(q[3][k])}</button>`).join('')}</div>`;
+        out.onclick = e => { const b = e.target.closest('[data-k]'); if (b && !b.disabled) { const ok = +b.dataset.k === q[4]; if (ok) s++; out.querySelectorAll('[data-k]').forEach(x => { x.disabled = true; if (+x.dataset.k === q[4]) x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
+          out.insertAdjacentHTML('beforeend', `<p class="pg-fact">${esc(q[5])}</p><div class="pg-btns"><button class="btn" data-n>Next</button></div>`); }
+          if (e.target.closest('[data-n]')) { i++; if (i < all.length) show(); else { markPlayed('pub-quiz'); out.onclick = null; out.innerHTML = `<p class="pg-step">Final score</p><div class="pg-score">${s}/40</div>`; out.appendChild(challengeBox(s, 40, 'the Pub and Club Quiz')); } } }; };
+      show(); }
+    document.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { view = b.dataset.v; document.querySelectorAll('[data-v]').forEach(x => x.setAttribute('aria-pressed', x === b)); out.onclick = null; render(); });
+    document.getElementById('prev').onclick = e => { wk = wk === weekNo() ? wk - 1 : weekNo(); e.target.textContent = wk === weekNo() ? "Last week's quiz" : "This week's quiz"; out.onclick = null; render(); };
+    render();
+  </script>
+</Base>

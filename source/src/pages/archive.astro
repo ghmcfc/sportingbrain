@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Beat the Brain puzzle archive | SportingBrain" description="Every Beat the Brain puzzle since launch. Missed a day? Play it here. Archive games don't affect your streak." page="archive">
+  <header class="pg-head"><h1>Puzzle archive</h1><p>Every Beat the Brain since launch. Archive games don't count towards your streak, so play as many as you like.</p></header>
+  <div class="pg-hub" id="list"></div>
+  <script>
+    import { BASE, ukNow, store } from '../scripts/play.js';
+    const LAUNCH = Date.UTC(2026, 10, 23), u = ukNow(), DAY = Math.max(1, Math.floor((Date.UTC(u.getFullYear(), u.getMonth(), u.getDate()) - LAUNCH) / 864e5) + 1);
+    const el = document.getElementById('list'), items = [];
+    for (let d = DAY; d >= 1; d--) { const date = new Date(LAUNCH + (d - 1) * 864e5).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', timeZone: 'UTC' });
+      const done = [1, 2, 3, 4].filter(l => store.get(`daily_${d === DAY ? '' : 'arch' + d}_${l}`, null)).length;
+      items.push(`<a class="pg-tile" href="${BASE}daily.html${d === DAY ? '' : '?day=' + d}" style="--c:${d === DAY ? '#F2A900' : '#0B6E4F'}"><b>#${d}</b><span>${date}${d === DAY ? ' · today' : ''}</span><small>${done ? done + ' of 4 levels played' : 'Four levels'}</small></a>`); }
+    el.innerHTML = items.join('') + (DAY === 1 ? '<p class="pg-note">The archive starts today. Each day\'s puzzle stays here for good.</p>' : '');
+  </script>
+</Base>

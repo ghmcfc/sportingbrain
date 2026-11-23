@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Weekly Expert: ten hard sports questions every Monday | SportingBrain" description="Ten expert-level sports questions, new every Monday. For people who win pub quizzes. Challenge a mate with a link." page="expert">
+  <header class="pg-head"><h1>Weekly Expert</h1><p>Ten of the hardest questions in the bank. One go each week, new every Monday. Seven is good. Ten is very rare.</p></header>
+  <div id="vs"></div>
+  <section class="pg-card" id="game" aria-live="polite"></section>
+  <script>
+    import { BANK } from '../data/bank.js';
+    import { weekNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge } from '../scripts/play.js';
+    showChallenge(document.getElementById('vs'));
+    const W = weekNo(), pool = shuffle(BANK.filter(q => q[0] === 4), seeded(99)), start = (W * 10) % pool.length;
+    const Q = Array.from({ length: 10 }, (_, k) => pool[(start + k) % pool.length]);
+    const g = document.getElementById('game'), key = 'expert_' + W; let i = 0, s = 0, marks = [];
+    const saved = store.get(key, null);
+    function show() { const q = Q[i], idx = shuffle([0, 1, 2, 3], seeded(W * 10 + i));
+      g.innerHTML = `<p class="pg-step">${i + 1} of 10 · ${esc(q[1])}</p><p class="pg-q">${esc(q[2])}</p><div class="pg-opts">${idx.map(k => `<button data-k="${k}">${esc(q[3][k])}</button>`).join('')}</div>`; }
+    g.addEventListener('click', e => { const b = e.target.closest('[data-k]'); const q = Q[i];
+      if (b && !b.disabled) { const ok = +b.dataset.k === q[4]; marks.push(ok); if (ok) s++; g.querySelectorAll('[data-k]').forEach(x => { x.disabled = true; if (+x.dataset.k === q[4]) x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
+        g.insertAdjacentHTML('beforeend', `<p class="pg-fact">${esc(q[5])}</p><div class="pg-btns"><button class="btn" data-n>${i < 9 ? 'Next' : 'Finish'}</button></div>`); }
+      if (e.target.closest('[data-n]')) { i++; if (i < 10) show(); else { store.set(key, { s, marks }); markPlayed('weekly-expert'); end(s, marks); } } });
+    function end(s, marks) { const v = s >= 9 ? 'Genuinely expert.' : s >= 7 ? 'Very good indeed.' : s >= 5 ? 'Respectable on the hardest questions we have.' : 'These are hard. Try again next Monday.';
+      g.innerHTML = `<p class="pg-step">This week</p><div class="pg-score">${s}/10</div><p>${marks.map(m => m ? '■' : '□').join(' ')}</p><p>${v} New questions on Monday.</p>`;
+      g.appendChild(challengeBox(s, 10, 'Weekly Expert')); }
+    if (saved) end(saved.s, saved.marks); else show();
+  </script>
+</Base>

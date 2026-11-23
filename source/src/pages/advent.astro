@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Sporting Advent Calendar | SportingBrain" description="A door a day from 1 to 25 December. Each one has a sporting moment from that date in history and a question to go with it." page="advent">
+  <header class="pg-head"><h1>Sporting Advent Calendar</h1><p>Twenty-five doors, one a day from 1 December. Behind each is a moment from that date in sporting history and a question to go with it. Doors open at midnight UK time.</p></header>
+  <p class="pg-step" id="st" aria-live="polite"></p>
+  <div class="adv" id="doors"></div>
+  <section class="pg-card" id="door" hidden aria-live="polite" style="margin-top:18px"></section>
+  <script>
+    import '../data/content.js';
+    import { BANK } from '../data/bank.js';
+    import { ukNow, seeded, shuffle, esc, store, markPlayed } from '../scripts/play.js';
+    const now = ukNow(), Y = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear(), inDec = now.getMonth() === 11, today = inDec ? now.getDate() : (now.getMonth() === 0 ? 25 : 0);
+    const opened = store.get('advent_' + Y, []), doors = document.getElementById('doors'), box = document.getElementById('door'), st = document.getElementById('st');
+    if (!today) { const d1 = new Date(Y, 11, 1), days = Math.ceil((d1 - now) / 864e5); st.textContent = `Door 1 opens on 1 December. ${days} day${days === 1 ? '' : 's'} to go.`; }
+    else st.textContent = today >= 25 ? 'All twenty-five doors are open. Happy Christmas.' : `Door ${today} is open today.`;
+    const order = shuffle([...Array(25).keys()].map(k => k + 1), seeded(Y));
+    doors.innerHTML = order.map(d => `<button data-d="${d}" ${d > today ? 'disabled aria-label="Door ' + d + ', opens ' + d + ' December"' : ''} class="${opened.includes(d) ? 'open' : ''}">${d}</button>`).join('');
+    doors.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b || b.disabled) return; const d = +b.dataset.d;
+      if (!opened.includes(d)) { opened.push(d); store.set('advent_' + Y, opened); b.classList.add('open'); markPlayed('advent'); }
+      const md = '12-' + String(d).padStart(2, '0'), ev = globalThis.SB_TODAY.filter(x => x && x.md === md).sort((a, b) => a.y - b.y)[0];
+      const pool = BANK.filter(q => q[0] <= 2), q = pool[Math.floor(seeded(Y * 100 + d)() * pool.length)], idx = shuffle([0, 1, 2, 3], seeded(d));
+      box.hidden = false;
+      box.innerHTML = `<p class="pg-step">Door ${d}</p>${ev ? `<h2>${d} December ${ev.y}</h2><p>${esc(ev.t)}</p>` : `<h2>${d} December</h2>`}<p class="pg-q">${esc(q[2])}</p><div class="pg-opts">${idx.map(k => `<button data-k="${k}">${esc(q[3][k])}</button>`).join('')}</div>`;
+      box.onclick = ev2 => { const o = ev2.target.closest('[data-k]'); if (!o || o.disabled) return; box.querySelectorAll('[data-k]').forEach(x => { x.disabled = true; if (+x.dataset.k === q[4]) x.classList.add('ok'); else if (x === o) x.classList.add('no'); }); box.insertAdjacentHTML('beforeend', `<p class="pg-fact">${esc(q[5])}</p>`); };
+      box.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  </script>
+</Base>

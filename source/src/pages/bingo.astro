@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Matchday Bingo: a bingo card for the next football match you watch | SportingBrain" description="A free bingo card for watching football at home or at the ground. Tap squares as they happen, or print cards for everyone." page="bingo">
+  <header class="pg-head no-print"><h1>Matchday Bingo</h1><p>Twenty-four things that happen in most matches, and a few that don't. Tap a square when it happens. First to a line shouts. Each card is different, so give everyone their own.</p></header>
+  <div class="pg-btns no-print" style="margin:0 0 14px"><button class="btn" id="newc">New card</button><button class="btn ghost" onclick="window.print()">Print this card</button><button class="btn ghost" id="clear">Clear marks</button></div>
+  <p class="pg-step" id="st" aria-live="polite"></p>
+  <div class="bingo" id="card" role="group" aria-label="Bingo card"></div>
+  <p class="pg-note">Card number <span id="cno"></span>. Your marks stay on this device.</p>
+  <script>
+    import { BINGO } from '../data/games.js';
+    import { seeded, shuffle, esc, store, toast, markPlayed } from '../scripts/play.js';
+    const el = document.getElementById('card'), st = document.getElementById('st');
+    let s = store.get('bingo', null);
+    function newCard() { const no = Math.floor(Math.random() * 99999) + 1; s = { no, marks: [12] }; store.set('bingo', s); render(); }
+    const lines = []; for (let r = 0; r < 5; r++) { lines.push([0, 1, 2, 3, 4].map(c => r * 5 + c)); lines.push([0, 1, 2, 3, 4].map(c => c * 5 + r)); } lines.push([0, 6, 12, 18, 24], [4, 8, 12, 16, 20]);
+    function render() { const sq = shuffle(BINGO, seeded(s.no)).slice(0, 24); sq.splice(12, 0, 'FREE');
+      el.innerHTML = sq.map((t, k) => `<button data-k="${k}" class="${k === 12 ? 'free' : ''} ${s.marks.includes(k) ? 'on' : ''}" aria-pressed="${s.marks.includes(k)}">${esc(t)}</button>`).join('');
+      document.getElementById('cno').textContent = s.no; const n = lines.filter(l => l.every(k => s.marks.includes(k))).length;
+      st.textContent = n ? `${n} line${n > 1 ? 's' : ''}! Shout it.` : `${s.marks.length - 1} of 24 marked.`; }
+    el.addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b || +b.dataset.k === 12) return; const k = +b.dataset.k, before = lines.filter(l => l.every(x => s.marks.includes(x))).length;
+      s.marks = s.marks.includes(k) ? s.marks.filter(x => x !== k) : [...s.marks, k]; store.set('bingo', s); render();
+      if (lines.filter(l => l.every(x => s.marks.includes(x))).length > before) { toast('Bingo! That\'s a line.'); markPlayed('bingo'); } });
+    document.getElementById('newc').onclick = newCard; document.getElementById('clear').onclick = () => { s.marks = [12]; store.set('bingo', s); render(); };
+    if (!s) newCard(); else render();
+  </script>
+</Base>

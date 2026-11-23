@@ -1,0 +1,28 @@
+// Every game on the site, for the Play hub and the home page.
+// [slug, name, one line, group, colour]
+export const PLAY = [
+  ['call-it', 'Call It', 'A real over from a real final. Call the runs and wickets before the ball is bowled.', 'daily', '#F2A900'],
+  ['daily', 'Beat the Brain', 'Five questions a day at four levels. The Brain has already had a go.', 'daily', '#0B6E4F'],
+  ['weekly-expert', 'Weekly Expert', 'Ten expert questions. New every Monday. For people who win pub quizzes.', 'weekly', '#C8102E'],
+  ['pub-quiz', 'Pub and Club Quiz', 'Four rounds of ten, answer sheet and host notes. Free to print and run.', 'weekly', '#0F1E36'],
+  ['countdown', 'Countdown Clock', 'The big events coming up, ticking down, with a quick quiz for each.', 'weekly', '#2A3A55'],
+  ['is-it-a-foul', 'Is It a Foul?', 'Eighteen real rules scenarios across eight sports. Fair or foul?', 'games', '#C8102E'],
+  ['stat-attack', 'Stat Attack', 'Top trumps against the Brain with Grand Slam legends. Pick your stat.', 'games', '#0F1E36'],
+  ['stats-detective', 'Stats Detective', 'A batting line from a World Cup final. Whose was it?', 'games', '#0B6E4F'],
+  ['legends-xi', 'Pick Your Legends XI', 'Build your all-time football or cricket team, men and women. Share it and start the argument.', 'games', '#0B6E4F'],
+  ['rewind', 'Grandparent Rewind', 'A round for every decade from the 1950s. Play it with someone who was there.', 'games', '#2A3A55'],
+  ['which-sport', 'Which Sport Are You?', 'Six questions. One sport that fits you.', 'games', '#F2A900'],
+  ['bingo', 'Matchday Bingo', 'A card for the next game you watch. Tap squares as they happen, or print it.', 'games', '#F2A900'],
+  ['advent', 'Sporting Advent Calendar', 'A door a day from 1 December, each with a question and a story.', 'seasonal', '#0B6E4F'],
+  ['higher-or-lower', 'Higher or Lower', 'Which number is bigger? Keep the run going.', 'quick', '#2A3A55'],
+  ['guess-the-player', 'Guess the Player', 'Clue by clue. The fewer you need, the better.', 'quick', '#2A3A55'],
+  ['true-or-false', 'True or False', 'Sporting facts and fibs.', 'quick', '#2A3A55'],
+  ['speed-round', 'Speed Round', 'Sixty seconds. As many as you can.', 'quick', '#2A3A55'],
+  ['the-grid', 'The Grid', 'Fill the grid where the rows and columns meet.', 'quick', '#2A3A55'],
+  ['guess-the-sport', 'Guess the Sport', 'Work out the sport from the clues.', 'quick', '#2A3A55'],
+  ['archive', 'Puzzle archive', 'Missed a day? Every Beat the Brain is here.', 'quick', '#2A3A55'],
+  ['passport', 'Ground Hopper Passport', 'Stamp every ground and venue you visit. Kept on your device only.', 'family', '#C8102E'],
+  ['sports-day', 'Sports Day at Home', 'Eight events for the garden or the park, a scorecard and a 30-day challenge.', 'family', '#0B6E4F'],
+  ['challenge', 'Family challenge', 'Pass the phone round. Who knows the most?', 'family', '#0B6E4F'],
+];
+export const GROUPS = [['daily', 'Every day'], ['weekly', 'Every week'], ['games', 'Games'], ['seasonal', 'Seasonal'], ['quick', 'Quick games'], ['family', 'Family and days out']];

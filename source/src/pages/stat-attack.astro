@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Stat Attack: sports top trumps against the Brain | SportingBrain" description="Top trumps with Grand Slam tennis legends, men and women. Pick your best stat and take the Brain's cards." page="statattack">
+  <header class="pg-head"><h1>Stat Attack</h1><p>Top trumps with fourteen Grand Slam singles legends, seven women and seven men. Pick a stat from your top card. Higher number wins both cards. Win the round, choose again. Most cards after fifteen rounds wins.</p></header>
+  <div id="vs"></div>
+  <p class="pg-step" id="status" aria-live="polite"></p>
+  <div class="sa-table"><div class="sa-card" id="mine"></div><div class="sa-card brain" id="theirs"></div></div>
+  <div class="pg-btns" id="ctl"></div>
+  <p class="pg-note">Grand Slam singles titles: Australian, French, Wimbledon and US Opens, including the amateur era. Margaret Court's total includes thirteen won before the Open era began in 1968.</p>
+  <script>
+    import { STAT_DECK } from '../data/games.js';
+    import { shuffle, esc, markPlayed, challengeBox, showChallenge } from '../scripts/play.js';
+    showChallenge(document.getElementById('vs'));
+    const C = STAT_DECK.cats, mine = document.getElementById('mine'), theirs = document.getElementById('theirs'), st = document.getElementById('status'), ctl = document.getElementById('ctl');
+    let you, brain, pot, turn, round, over;
+    const card = c => ({ n: c[0], v: c.slice(1) });
+    function start() { const d = shuffle(STAT_DECK.cards).map(card); you = d.slice(0, 7); brain = d.slice(7); pot = []; turn = 'you'; round = 1; over = false; draw(); }
+    function draw(reveal) {
+      const a = you[0], b = brain[0];
+      mine.innerHTML = `<p class="pg-step" style="color:#C9D2E0">Your card · ${you.length} in hand</p><h3>${esc(a.n)}</h3>` + C.map((c, k) => turn === 'you' && !reveal ? `<button data-k="${k}"><span>${c[1]}</span><b>${a.v[k]}</b></button>` : `<div class="sa-row"><span>${c[1]}</span><b>${a.v[k]}</b></div>`).join('');
+      theirs.innerHTML = reveal !== undefined || over ? `<p class="pg-step">The Brain's card · ${brain.length} in hand</p><h3>${esc(b.n)}</h3>` + C.map((c, k) => `<div class="sa-row" ${k === reveal ? 'style="background:#FFF1C7"' : ''}><span>${c[1]}</span><b>${b.v[k]}</b></div>`).join('') : `<p class="pg-step">The Brain · ${brain.length} cards</p><div class="sa-hidden">?</div>`;
+      st.textContent = `Round ${round} of 15. ${turn === 'you' ? 'Your choice: pick a stat.' : 'The Brain chooses…'}`;
+      ctl.innerHTML = '';
+      if (turn === 'brain' && reveal === undefined) setTimeout(brainPick, 900);
+    }
+    function brainPick() { const b = brain[0], best = C.map((_, k) => [k, b.v[k] / Math.max(...STAT_DECK.cards.map(c => c[k + 1]))]).sort((x, y) => y[1] - x[1])[0][0]; play(best); }
+    function play(k) {
+      const a = you.shift(), b = brain.shift(), cat = C[k][1]; pot.push(a, b); let msg;
+      you.unshift(a); brain.unshift(b); draw(k); you.shift(); brain.shift();
+      if (a.v[k] > b.v[k]) { you.push(...pot); pot = []; turn = 'you'; msg = `${a.n} wins on ${cat.toLowerCase()}, ${a.v[k]} to ${b.v[k]}. Your cards.`; }
+      else if (a.v[k] < b.v[k]) { brain.push(...pot); pot = []; turn = 'brain'; msg = `${b.n} wins on ${cat.toLowerCase()}, ${b.v[k]} to ${a.v[k]}. The Brain takes them.`; }
+      else msg = `Level at ${a.v[k]}. Both cards go in the middle for the next round.`;
+      st.textContent = msg; round++;
+      if (!you.length || !brain.length || round > 15) { over = true; ctl.innerHTML = ''; return setTimeout(end, 1400); }
+      ctl.innerHTML = `<button class="btn" data-next>Next round</button>`;
+    }
+    function end() { markPlayed('stat-attack'); const s = you.length, won = you.length > brain.length;
+      st.textContent = won ? `You win, ${you.length} cards to ${brain.length}.` : you.length === brain.length ? `A draw, ${you.length} each.` : `The Brain wins, ${brain.length} cards to ${you.length}.`;
+      ctl.innerHTML = `<button class="btn gold" data-again>Play again</button>`; ctl.appendChild(challengeBox(s, 14, 'Stat Attack (cards won)')); }
+    document.addEventListener('click', e => { const b = e.target.closest('#mine [data-k]'); if (b) play(+b.dataset.k);
+      if (e.target.closest('[data-next]')) draw(); if (e.target.closest('[data-again]')) start(); });
+    start();
+  </script>
+</Base>

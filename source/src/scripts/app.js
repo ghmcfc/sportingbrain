@@ -5,6 +5,7 @@ import { REPLAYS } from '../data/replays.js';
 import { BANK } from '../data/bank.js';
 import { GUIDES } from '../data/guides.js';
 import { WEEK } from '../data/week.js';
+import { PLAY } from '../data/playlist.js';
 (function(){
 'use strict';
 const BASE=(document.documentElement.dataset.base||'/');
@@ -212,6 +213,9 @@ if(P==='home'){
     </aside>
   </div>
 
+  <div class="sec"><h2>Play</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></div>
+  <div class="pg-hub home-games">${['weekly-expert','pub-quiz','stat-attack','is-it-a-foul','stats-detective','legends-xi','countdown','rewind'].map(sl=>{const g=PLAY.find(x=>x[0]===sl);return `<a class="pg-tile" href="${BASE}${g[0]}.html" style="--c:${g[4]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`;}).join('')}</div>
+
   <div class="sec"><h2>This week in sport</h2><a href="${BASE}this-week.html">The full edition</a></div>
   <div class="fp-week">
     <div class="fp-week-stories">${WEEK.stories.slice(0,3).map(x=>`<a href="${BASE}this-week.html#stories"><span class="fp-kicker">${esc(x.sport)}</span><b>${esc(x.title)}</b></a>`).join('')}</div>
@@ -302,28 +306,28 @@ if(P==='home'){
 // ================= DAILY =================
 if(P==='daily'){
   const LV=[null,{n:'Easy',c:'#2E7D32',d:'For anyone who follows sport.'},{n:'Medium',c:'#1565C0',d:'For keen fans.'},{n:'Hard',c:'#C62828',d:'For the ones who read the long reads.'},{n:'Expert',c:'#14254a',d:'Pub-quiz champion territory.'}];
-  const N=5, key=ukKey(); let level=+new URLSearchParams(location.search).get('level')||store.get('daily_level',2); if(!LV[level]) level=2;
+  const ARCH=+new URLSearchParams(location.search).get('day'), QD=(ARCH>0&&ARCH<DAY)?ARCH:DAY, N=5, key=QD===DAY?ukKey():'arch'+QD; let level=+new URLSearchParams(location.search).get('level')||store.get('daily_level',2); if(!LV[level]) level=2;
   const pool=l=>BANK.filter(q=>q[0]===l);
-  function todays(l){ const Q=pool(l), start=((DAY-1)*N)%Q.length, r=seeded(DAY*7+l), out=[];
+  function todays(l){ const Q=pool(l), start=((QD-1)*N)%Q.length, r=seeded(QD*7+l), out=[];
     for(let k=0;k<N;k++){ const q=Q[(start+k)%Q.length]; const idx=[0,1,2,3].sort(()=>r()-.5); out.push({q:q[2],o:idx.map(i=>q[3][i]),a:idx.indexOf(0),f:q[5],s:`${q[1]} · ${LV[l].n}`}); } return out; }
-  const brainFor=l=>Math.max(1,Math.min(5,[0,4,3,2,2][l]+Math.floor(seeded(DAY*3+l)()*2)));
+  const brainFor=l=>Math.max(1,Math.min(5,[0,4,3,2,2][l]+Math.floor(seeded(QD*3+l)()*2)));
   function render(){
     const brainScore=brainFor(level), saved=store.get(`daily_${key}_${level}`,null);
-    main.innerHTML=`<section class="hero"><div class="row1"><img src="${BASE}assets/brain.svg" alt="The Brain"><div><span class="tag" style="background:var(--gold);color:#14254a">Beat the Brain #${DAY}</span><h1>Five questions. Pick your level.</h1><p>The Brain scored ${brainScore}/5 on ${LV[level].n} today. Your turn.</p></div></div></section>
+    main.innerHTML=`<section class="hero"><div class="row1"><img src="${BASE}assets/brain.svg" alt="The Brain"><div><span class="tag" style="background:var(--gold);color:#14254a">Beat the Brain #${QD}</span><h1>Five questions. Pick your level.</h1><p>The Brain scored ${brainScore}/5 on ${LV[level].n} today. Your turn.</p></div></div></section>
       <div class="lv-pick" role="tablist" aria-label="Difficulty">${[1,2,3,4].map(l=>{const done=store.get(`daily_${key}_${l}`,null);return `<button role="tab" aria-selected="${l===level}" class="lv ${l===level?'on':''}" data-lv="${l}" style="--c:${LV[l].c}"><b>${LV[l].n}</b><small>${done?`Done: ${done.marks.filter(Boolean).length}/5`:LV[l].d}</small></button>`;}).join('')}</div>
       <section class="card" style="margin-top:12px" id="game" aria-live="polite"></section><div class="sec"><h2>Keep playing</h2></div>${moreExcept(BASE+'daily.html')}`;
     main.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ level=+b.dataset.lv; store.set('daily_level',level); history.replaceState(null,'',`?level=${level}`); render(); });
     const g=$('#game');
     function finish(marks,save){
       const score=marks.filter(Boolean).length;
-      markPlayed('daily'); if(save){ store.set(`daily_${key}_${level}`,{marks}); store.set('daily_'+key,{marks}); const y=new Date(); y.setDate(y.getDate()-1); const last=store.get('lastday',null); let st=store.get('streak',0); const y2=new Date(); y2.setDate(y2.getDate()-2);
-        if(last===ukKey(y)) st=st+1; else if(last===key) st=st; else if(last===ukKey(y2) && st>0 && saverAvailable()){ st=st+1; store.set('saver_week',isoWeek()); setTimeout(()=>toast('Streak saver used. Your streak lives on.'),800); } else st=1; store.set('streak',st); store.set('lastday',key); store.set('played',store.get('played',0)+1); if(score>brainScore) store.set('beaten',store.get('beaten',0)+1); }
+      markPlayed('daily'); if(save){ store.set(`daily_${key}_${level}`,{marks}); store.set('daily_'+key,{marks}); if(QD===DAY){ const y=new Date(); y.setDate(y.getDate()-1); const last=store.get('lastday',null); let st=store.get('streak',0); const y2=new Date(); y2.setDate(y2.getDate()-2);
+        if(last===ukKey(y)) st=st+1; else if(last===key) st=st; else if(last===ukKey(y2) && st>0 && saverAvailable()){ st=st+1; store.set('saver_week',isoWeek()); setTimeout(()=>toast('Streak saver used. Your streak lives on.'),800); } else st=1; store.set('streak',st); store.set('lastday',key); store.set('played',store.get('played',0)+1); if(score>brainScore) store.set('beaten',store.get('beaten',0)+1); } }
       const line=score>brainScore?"You beat the Brain. Try the next level up.":score===brainScore?"Level with the Brain. Rematch tomorrow.":"The Brain wins this one. Same time tomorrow?";
       g.innerHTML=`<div class="small">${LV[level].n}</div><div class="score">${score}/5</div><div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${line}</div></div>
         <div class="stats"><div><b>${store.get('streak',1)}</b>day streak</div><div><b>${store.get('played',1)}</b>played</div><div><b>${store.get('beaten',0)}</b>times you beat the Brain</div></div>
         <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn pink" id="sh">Share my score</button>${level<4?`<button class="btn ghost" data-lv="${level+1}">Try ${LV[level+1].n}</button>`:''}<a class="btn ghost" href="${BASE}call-it.html">Play Call It</a></div><p class="small">New questions in <span class="countdown" id="cd"></span></p>`;
       g.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ level=+b.dataset.lv; store.set('daily_level',level); render(); window.scrollTo({top:0,behavior:'smooth'}); });
-      const card=`SportingBrain #${DAY} 🧠 ${LV[level].n}\n${marks.map(m=>m?'🟩':'🟥').join('')}  ${score}/5\nThe Brain got ${brainScore}/5.\n${SITE}daily.html?level=${level}`;
+      const card=`SportingBrain #${QD} 🧠 ${LV[level].n}\n${marks.map(m=>m?'🟩':'🟥').join('')}  ${score}/5\nThe Brain got ${brainScore}/5.\n${SITE}daily.html?level=${level}`;
       $('#sh').onclick=()=>share(card); countdown($('#cd'));
       if(save && score>brainScore) confetti();
     }

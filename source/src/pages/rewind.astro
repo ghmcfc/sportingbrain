@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Grandparent Rewind: a sports quiz round for every decade | SportingBrain" description="Pick a decade from the 1950s to the 2010s and play a round about it. Best played with someone who was there." page="rewind">
+  <header class="pg-head"><h1>Grandparent Rewind</h1><p>Pick a decade and play a round about it. The idea is simple: hand the phone to someone who was there, then see if they remember it better than you know it.</p></header>
+  <div class="pg-tabs" role="group" aria-label="Decade" id="dec"></div>
+  <section class="pg-card" id="game" aria-live="polite"><p>Choose a decade to start.</p></section>
+  <script>
+    import '../data/content.js';
+    import { BANK } from '../data/bank.js';
+    import { shuffle, esc, markPlayed, challengeBox } from '../scripts/play.js';
+    const DECS = [1950, 1960, 1970, 1980, 1990, 2000, 2010], dec = document.getElementById('dec'), g = document.getElementById('game');
+    dec.innerHTML = DECS.map(d => `<button aria-pressed="false" data-d="${d}">${d}s</button>`).join('');
+    let Q, i, s, D;
+    function round(d) {
+      const otd = globalThis.SB_TODAY.filter(e => e && e.y >= d && e.y < d + 10).map(e => { const others = shuffle([...Array(10).keys()].map(k => d + k).filter(y => y !== e.y)).slice(0, 3);
+        const o = shuffle([e.y, ...others]); return { s: e.s, q: `In which year? ${e.t}`, o: o.map(String), a: o.indexOf(e.y), f: `It happened in ${e.y}.` }; });
+      const bank = BANK.filter(q => { const m = q[2].match(/\b(19\d\d|20\d\d)\b/); return m && +m[1] >= d && +m[1] < d + 10; }).map(q => { const idx = shuffle([0, 1, 2, 3]); return { s: q[1], q: q[2], o: idx.map(k => q[3][k]), a: idx.indexOf(q[4]), f: q[5] }; });
+      return shuffle([...shuffle(otd).slice(0, 4), ...shuffle(bank)]).slice(0, 8);
+    }
+    function start(d) { D = d; Q = round(d); i = 0; s = 0; dec.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', +b.dataset.d === d)); show(); }
+    function show() { const q = Q[i]; g.innerHTML = `<p class="pg-step">The ${D}s · ${i + 1} of ${Q.length} · ${esc(q.s)}</p><p class="pg-q">${esc(q.q)}</p><div class="pg-opts">${q.o.map((o, k) => `<button data-k="${k}">${esc(o)}</button>`).join('')}</div>`; }
+    dec.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) start(+b.dataset.d); });
+    g.addEventListener('click', e => { const b = e.target.closest('[data-k]'), q = Q && Q[i];
+      if (b && !b.disabled) { const ok = +b.dataset.k === q.a; if (ok) s++; g.querySelectorAll('[data-k]').forEach(x => { x.disabled = true; if (+x.dataset.k === q.a) x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
+        g.insertAdjacentHTML('beforeend', `<p class="pg-fact">${esc(q.f)}</p><div class="pg-btns"><button class="btn" data-n>${i + 1 < Q.length ? 'Next' : 'Finish'}</button></div>`); }
+      if (e.target.closest('[data-n]')) { i++; if (i < Q.length) show(); else { markPlayed('rewind'); g.innerHTML = `<p class="pg-step">The ${D}s</p><div class="pg-score">${s}/${Q.length}</div><p>Now pass it on, or try another decade.</p>`; g.appendChild(challengeBox(s, Q.length, `Grandparent Rewind: the ${D}s`)); } } });
+  </script>
+</Base>
