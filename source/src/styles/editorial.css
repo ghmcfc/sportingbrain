@@ -510,3 +510,6 @@ body.dark .gg-modes button{background:transparent;color:#fff;border-color:#fff}b
 .nt-grid li{display:flex;gap:10px;align-items:baseline;padding:8px 10px;background:#EEF1F5;border-radius:4px;min-height:42px}
 .nt-h{min-width:6.5em;font-size:.9rem;opacity:.75}.nt-grid li.got{background:#CDEBD9}.nt-grid li.miss{background:#F6D3D6}.nt-grid li b{font-weight:700}
 body.dark .nt-grid li{background:#16263f}body.dark .nt-grid li.got{background:#1d4a35}body.dark .nt-grid li.miss{background:#5a2229}
+.pq-pics{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(min-width:900px){.pq-pics{grid-template-columns:1fr 1fr 1fr}}
+.pq-pics figure{margin:0}.pq-pics img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:3px}.pq-pics figcaption{padding:6px 0 0}
+@media print{.pq-pics{grid-template-columns:1fr 1fr}.pq-pics figure{break-inside:avoid}}

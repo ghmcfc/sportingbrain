@@ -1,16 +1,22 @@
 ---
 import Base from '../layouts/Base.astro';
+import { VENUES } from '../data/venues.js';
+import META from '../data/venues.json';
+const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+const PICS = VENUES.map(v => [slug(v[0]), v]).filter(([k]) => META[k]).map(([k, v]) => [v[1], v[4], v[5], META[k].file, META[k].author, META[k].licence]);
 ---
 <Base title="Free pub and club sports quiz, new every week | SportingBrain" description="Four rounds of ten sports questions with answers, a team answer sheet and host notes. Free to print and run at your pub, club or school. New every Monday." page="pubquiz">
-  <header class="pg-head no-print"><h1>Pub and Club Quiz</h1><p>Forty fact-checked questions in four rounds, a team answer sheet and notes for the host. New every Monday, free to print and run. A credit to SportingBrain is all we ask.</p></header>
+  <header class="pg-head no-print"><h1>Pub and Club Quiz</h1><p>Forty fact-checked questions in four rounds, a picture round of ten grounds to print, a team answer sheet and notes for the host. New every Monday, free to print and run. A credit to SportingBrain is all we ask.</p></header>
   <div class="pg-tabs no-print" role="group" aria-label="Show">
     <button aria-pressed="true" data-v="host">Host sheet with answers</button>
     <button aria-pressed="false" data-v="teams">Team answer sheet</button>
+    <button aria-pressed="false" data-v="pics">Picture round</button>
     <button aria-pressed="false" data-v="notes">Host notes</button>
     <button aria-pressed="false" data-v="play">Play it here</button>
   </div>
   <div class="pg-btns no-print" style="margin:0 0 16px"><button class="btn gold" onclick="window.print()">Print this</button><button class="btn ghost" id="prev">Last week's quiz</button></div>
   <section class="pg-card" id="out"></section>
+  <script id="pqPics" type="application/json" set:html={JSON.stringify(PICS)} />
   <script>
     import { ALL as BANK } from '../data/bank_all.js';
     import { weekNo, seeded, shuffle, esc, markPlayed, challengeBox } from '../scripts/play.js';
@@ -20,6 +26,8 @@ import Base from '../layouts/Base.astro';
       ['Round 3: Track, court and course', q => ['Tennis', 'Athletics', 'Golf'].includes(q[1])],
       ['Round 4: Everything else', q => !['Football', 'Cricket', 'Rugby union', 'Rugby league', 'Tennis', 'Athletics', 'Golf'].includes(q[1])],
     ];
+    const PICS = JSON.parse(document.getElementById('pqPics').textContent), BASEP = document.documentElement.dataset.base || '/';
+    const pics = w => shuffle(PICS, seeded(w * 53 + 11)).slice(0, 10);
     let wk = weekNo(), view = 'host';
     function quiz(w) { const ok = BANK.filter(q => !/of these/i.test(q[2]));
       return ROUNDS.map(([name, f], r) => { const pool = ok.filter(f), rnd = seeded(w * 31 + r), sh = shuffle(pool, seeded(r + 7)); const start = (w * 10) % sh.length; const qs = []; for (let k = 0; k < 10; k++) qs.push(sh[(start + k) % sh.length]); return [name, shuffle(qs, rnd).sort((a, b) => a[0] - b[0])]; }); }
@@ -27,8 +35,12 @@ import Base from '../layouts/Base.astro';
     const out = document.getElementById('out');
     function render() {
       const Q = quiz(wk), title = `<h2>SportingBrain Pub and Club Quiz</h2><p class="pg-note">Week of ${mondayOf(wk)}. sportingbrain.com</p>`;
-      if (view === 'host') out.innerHTML = title + Q.map(([n, qs]) => `<div class="pq-round"><h3>${n}</h3><ol>${qs.map(q => `<li>${esc(q[2])}<br><span class="pq-ans">${esc(q[3][q[4]])}</span><br><span class="pg-note">${esc(q[5])}</span></li>`).join('')}</ol></div>`).join('');
-      if (view === 'teams') out.innerHTML = `<h2>Team answer sheet</h2><p>Team name: ______________________________</p>` + Q.map(([n], r) => `<div class="pq-round"><h3>${n}</h3><ol class="pq-sheet">${'<li></li>'.repeat(10)}</ol><p><b>Round total: ____ / 10</b></p></div>`).join('') + '<p><b>Grand total: ____ / 40</b></p>';
+      if (view === 'host') out.innerHTML = title + Q.map(([n, qs]) => `<div class="pq-round"><h3>${n}</h3><ol>${qs.map(q => `<li>${esc(q[2])}<br><span class="pq-ans">${esc(q[3][q[4]])}</span><br><span class="pg-note">${esc(q[5])}</span></li>`).join('')}</ol></div>`).join('')
+        + `<div class="pq-round"><h3>Picture round: name the ground</h3><ol>${pics(wk).map(p => `<li><span class="pq-ans">${esc(p[0])}</span>, ${esc(p[1])}. ${esc(p[2])}.<br><span class="pg-note">Photo: ${esc(p[4])}, ${esc(p[5])}, Wikimedia Commons</span></li>`).join('')}</ol></div>`;
+      if (view === 'teams') out.innerHTML = `<h2>Team answer sheet</h2><p>Team name: ______________________________</p>` + Q.map(([n], r) => `<div class="pq-round"><h3>${n}</h3><ol class="pq-sheet">${'<li></li>'.repeat(10)}</ol><p><b>Round total: ____ / 10</b></p></div>`).join('') + `<div class="pq-round"><h3>Picture round</h3><ol class="pq-sheet">${'<li></li>'.repeat(10)}</ol><p><b>Round total: ____ / 10</b></p></div>` + '<p><b>Grand total: ____ / 50</b></p>';
+      if (view === 'pics') { const P = pics(wk);
+        out.innerHTML = `<h2>Picture round: name the ground</h2><p class="pg-note">Week of ${mondayOf(wk)}. Print this page for each team. Answers and photo credits are on the host sheet.</p>
+          <div class="pq-pics">${P.map((p, k) => `<figure><img src="${BASEP}photos/venues/${p[3]}" alt="Ground ${k + 1}" loading="lazy"><figcaption><b>${k + 1}.</b> ____________________</figcaption></figure>`).join('')}</div>`; }
       if (view === 'notes') out.innerHTML = `<h2>Host notes</h2><ol>
         <li>Print the host sheet for yourself and one team answer sheet per team. Teams of up to six work best.</li>
         <li>Read each question twice. Allow about a minute per question and five minutes at the end of each round for teams to finish.</li>

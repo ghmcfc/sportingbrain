@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Weekly Expert: ten hard sports questions every Monday | SportingBrain" description="Ten expert-level sports questions, new every Monday. For people who win pub quizzes. Challenge a mate with a link." page="expert">
-  <header class="pg-head"><h1>Weekly Expert</h1><p>Ten of the hardest questions in the bank. One go each week, new every Monday. Seven is good. Ten is very rare.</p></header>
+  <header class="pg-head"><h1>Weekly Expert</h1><p>Ten of the hardest questions in the bank, one go a week, new every Monday. Type the answer for 2 points, or ask for the options and get 1. Fourteen out of 20 is good. Twenty is very rare.</p></header>
   <div id="vs"></div>
   <section class="pg-card" id="game" aria-live="polite"></section>
   <script>
@@ -11,17 +11,30 @@ import Base from '../layouts/Base.astro';
     showChallenge(document.getElementById('vs'));
     const W = weekNo(), pool = shuffle(BANK.filter(q => q[0] === 4), seeded(99)), start = (W * 10) % pool.length;
     const Q = Array.from({ length: 10 }, (_, k) => pool[(start + k) % pool.length]);
-    const g = document.getElementById('game'), key = 'expert_' + W; let i = 0, s = 0, marks = [];
+    const g = document.getElementById('game'), key = 'expert2_' + W; let i = 0, s = 0, marks = [];
     const saved = store.get(key, null);
-    function show() { const q = Q[i], idx = shuffle([0, 1, 2, 3], seeded(W * 10 + i));
-      g.innerHTML = `<p class="pg-step">${i + 1} of 10 · ${esc(q[1])}</p><p class="pg-q">${esc(q[2])}</p><div class="pg-opts">${idx.map(k => `<button data-k="${k}">${esc(q[3][k])}</button>`).join('')}</div>`; }
+    const norm = t => String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/&/g, 'and').replace(/[^a-z0-9 ]/g, ' ').replace(/\b(the|a|an|fc)\b/g, ' ').replace(/\s+/g, ' ').trim();
+    const typedOk = (guess, ans) => { const gN = norm(guess), aN = norm(ans); if (!gN) return false; if (gN === aN) return true;
+      const head = norm(String(ans).split(/,| then | and |\(/)[0]); if (gN === head) return true;
+      const words = head.split(' '); return gN.length >= 4 && words.length > 1 && gN === words[words.length - 1]; };
+    function show() { const q = Q[i];
+      g.innerHTML = `<p class="pg-step">${i + 1} of 10 · ${esc(q[1])} · score ${s}</p><p class="pg-q">${esc(q[2])}</p>
+        <form class="wa-form" id="exF" autocomplete="off"><label for="exG" class="sr">Your answer</label><input id="exG" class="pg-input" placeholder="Type your answer for 2 points"><button class="btn gold">Answer</button><button type="button" class="btn ghost" id="exOpt">Show options (1 point)</button></form><div id="exO"></div>`;
+      document.getElementById('exF').onsubmit = e => { e.preventDefault(); const t = document.getElementById('exG').value.trim(); if (!t) return;
+        if (typedOk(t, q[3][q[4]])) { s += 2; marks.push(2); done(true, `Right: ${esc(q[3][q[4]])}. Two points.`); } else options(`Not quite. Pick from these for 1 point.`); };
+      document.getElementById('exOpt').onclick = () => options('Pick one for 1 point.');
+      document.getElementById('exG').focus({ preventScroll: true }); }
+    function options(msg) { const q = Q[i], idx = shuffle([0, 1, 2, 3], seeded(W * 10 + i)); document.getElementById('exF').remove();
+      document.getElementById('exO').innerHTML = `<p class="pg-note">${msg}</p><div class="pg-opts">${idx.map(k => `<button data-k="${k}">${esc(q[3][k])}</button>`).join('')}</div>`; }
+    function done(ok, msg) { const q = Q[i]; const f = document.getElementById('exF'); if (f) f.remove();
+      document.getElementById('exO').insertAdjacentHTML('beforeend', `<p class="pg-fact"><b>${msg}</b> ${esc(q[5])}</p><div class="pg-btns"><button class="btn" data-n>${i < 9 ? 'Next' : 'Finish'}</button></div>`); }
     g.addEventListener('click', e => { const b = e.target.closest('[data-k]'); const q = Q[i];
-      if (b && !b.disabled) { const ok = +b.dataset.k === q[4]; marks.push(ok); if (ok) s++; g.querySelectorAll('[data-k]').forEach(x => { x.disabled = true; if (+x.dataset.k === q[4]) x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
-        g.insertAdjacentHTML('beforeend', `<p class="pg-fact">${esc(q[5])}</p><div class="pg-btns"><button class="btn" data-n>${i < 9 ? 'Next' : 'Finish'}</button></div>`); }
+      if (b && !b.disabled) { const ok = +b.dataset.k === q[4]; marks.push(ok ? 1 : 0); if (ok) s++; g.querySelectorAll('[data-k]').forEach(x => { x.disabled = true; if (+x.dataset.k === q[4]) x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
+        done(ok, ok ? 'One point.' : `It was ${esc(q[3][q[4]])}.`); }
       if (e.target.closest('[data-n]')) { i++; if (i < 10) show(); else { store.set(key, { s, marks }); markPlayed('weekly-expert'); end(s, marks); } } });
-    function end(s, marks) { const v = s >= 9 ? 'Genuinely expert.' : s >= 7 ? 'Very good indeed.' : s >= 5 ? 'Respectable on the hardest questions we have.' : 'These are hard. Try again next Monday.';
-      g.innerHTML = `<p class="pg-step">This week</p><div class="pg-score">${s}/10</div><p>${marks.map(m => m ? '■' : '□').join(' ')}</p><p>${v} New questions on Monday.</p>`;
-      g.appendChild(challengeBox(s, 10, 'Weekly Expert')); }
+    function end(s, marks) { const v = s >= 17 ? 'Genuinely expert.' : s >= 13 ? 'Very good indeed.' : s >= 9 ? 'Respectable on the hardest questions we have.' : 'These are hard. Try again next Monday.';
+      g.innerHTML = `<p class="pg-step">This week</p><div class="pg-score">${s}/20</div><p style="font-size:1.4rem">${marks.map(m => m === 2 ? '🟩' : m === 1 ? '🟨' : '⬜').join('')}</p><p>🟩 typed it, 🟨 needed the options. ${v} New questions on Monday.</p>`;
+      g.appendChild(challengeBox(s, 20, 'Weekly Expert')); }
     if (saved) end(saved.s, saved.marks); else show();
   </script>
 </Base>
