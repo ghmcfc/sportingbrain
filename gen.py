@@ -30,6 +30,7 @@ T = """<!DOCTYPE html>
   <a href="./"><img src="assets/brain.svg" alt="SportingBrain home"></a>
   <a class="logo" href="./">Sporting<span>Brain</span></a>
   <div class="hdr-right">
+    <button class="iconbtn" data-share-site aria-label="Share SportingBrain">Share</button>
     <button class="iconbtn" data-dark aria-label="Switch dark mode">🌙</button>
     <a class="iconbtn" href="./#games">Play</a>
   </div>
@@ -38,7 +39,7 @@ T = """<!DOCTYPE html>
 <main class="wrap" data-page="{page}" id="main"></main>
 <footer class="wrap">
   <p>SportingBrain is free, for every fan, every sport and every age. No betting, ever.</p>
-  <p><a href="./">Home</a> · <a href="about.html">About and privacy</a> · <a href="#" data-dys>Dyslexia-friendly font</a></p>
+  <p><a href="./">Home</a> · <a href="./#who">Who we are</a> · <a href="./#newsletter">Newsletter</a> · <a href="about.html">About and privacy</a> · <a href="#" data-dys>Dyslexia-friendly font</a></p>
 </footer>
 <script src="assets/data.js"></script>
 <script src="assets/content.js"></script>

@@ -47,6 +47,13 @@ document.addEventListener('click', e=>{
   if(e.target.closest('[data-dark]')){ const on=!document.body.classList.contains('dark'); document.body.classList.toggle('dark',on); store.set('dark',on); }
   if(e.target.closest('[data-dys]')){ e.preventDefault(); const on=!document.body.classList.contains('dyslexic'); document.body.classList.toggle('dyslexic',on); store.set('dys',on); }
 });
+const SITE=new URL('./',location.href).href.replace(/index\.html$/,'');
+const PITCH='SportingBrain: the free daily sports hub. Puzzles, games and stories from every sport. Can you beat the Brain?';
+document.addEventListener('click', e=>{
+  if(e.target.closest('[data-share-site]')){ share(`${PITCH}\n${SITE}`); }
+  if(e.target.closest('[data-copy-link]')){ navigator.clipboard.writeText(SITE).then(()=>toast('Link copied!'),()=>prompt('Copy this link:',SITE)); }
+});
+document.querySelectorAll('[data-share-to]').forEach(a=>{});
 const td=$('#today-date'); if(td) td.textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',timeZone:'Europe/London'});
 
 // ---------- shared quiz runner ----------
@@ -76,7 +83,13 @@ if(P==='home'){
   let hist=SB_HISTORY.map(h=>{const [m,d]=h.md.split('-').map(Number); let diff=(Date.UTC(2001,m-1,d)-todayN)/86400000; if(diff>182)diff-=365; if(diff<-182)diff+=365; return {...h,diff};}).sort((a,b)=>Math.abs(a.diff)-Math.abs(b.diff)).slice(0,3);
   const onToday = hist.some(h=>h.diff===0);
   const bestHL=store.get('hl_best',0), bestSp=store.get('speed_best',0), streak=store.get('streak',0);
-  const H=SB_HEROES;
+  const mdNow=`${String(p.m).padStart(2,'0')}-${String(p.d).padStart(2,'0')}`;
+  const H=(window.SB_HEROES_WEEKS||[]).find(w=>w.from<=w.to ? (mdNow>=w.from&&mdNow<=w.to) : (mdNow>=w.from||mdNow<=w.to)) || null;
+  // Today in Sporting History: today's entries newest first, topped up from the nearest dates
+  const dist=md=>{const [m,d]=md.split('-').map(Number); let x=(Date.UTC(2001,m-1,d)-todayN)/86400000; if(x>182)x-=365; if(x<-182)x+=365; return x;};
+  let tih=SB_TODAY.filter(e=>e.md===mdNow).sort((a,b)=>b.y-a.y);
+  if(tih.length<4){ tih=tih.concat(SB_TODAY.filter(e=>e.md!==mdNow).sort((a,b)=>Math.abs(dist(a.md))-Math.abs(dist(b.md))||b.y-a.y).slice(0,4-tih.length)); }
+  const dlabel=md=>new Date(Date.UTC(2001,+md.slice(0,2)-1,+md.slice(3))).toLocaleDateString('en-GB',{day:'numeric',month:'long',timeZone:'UTC'});
   const tiles=[
     ['📈','Higher or Lower',`Best: ${bestHL}`,'higher-or-lower.html','#1565C0'],
     ['🕵️','Guess the Player',`Score: ${store.get('gtp_best',0)}`,'guess-the-player.html','#6A1B9A'],
@@ -95,6 +108,24 @@ if(P==='home'){
     <a class="btn gold wide" href="daily.html">${played?'See your score and share':'Play today\'s puzzle'}</a>
   </section>
 
+  <div class="sec"><h2>${dlabel(mdNow)} in sport</h2><span class="small" id="tihcount"></span></div>
+  <section class="card tih" id="tih" aria-roledescription="carousel" aria-label="Today in sporting history">
+    <div class="tih-track">${tih.map((e,k)=>`<div class="tih-slide" role="group" aria-label="${k+1} of ${tih.length}" ${k?'hidden':''} style="--c:${colour(e.s)}">
+      <div class="tih-year">${e.y}</div><span class="tag" style="background:${colour(e.s)}">${esc(e.s)}</span>${e.md!==mdNow?` <span class="small">${dlabel(e.md)}</span>`:''}
+      <p class="tih-text">${esc(e.t)}</p></div>`).join('')}</div>
+    <div class="row" style="justify-content:space-between;margin-top:6px">
+      <div class="tih-dots">${tih.map((_,k)=>`<button aria-label="Show ${tih[k].y}" data-k="${k}" class="${k?'':'on'}"></button>`).join('')}</div>
+      <div class="row" style="gap:6px"><button class="iconbtn dark-btn" id="tihprev" aria-label="Previous">◀</button><button class="iconbtn dark-btn" id="tihpause" aria-label="Pause">❚❚</button><button class="iconbtn dark-btn" id="tihnext" aria-label="Next">▶</button></div>
+    </div>
+  </section>
+
+  <section class="card who">
+    <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><img src="assets/brain.svg" alt="" style="width:56px;height:56px;flex:none">
+    <div><div class="title" style="margin-top:0">Welcome to SportingBrain</div>
+    <p class="teaser">The free daily sports hub for anyone who loves sport. Puzzles, games, true stories and stats from every sport, men's and women's, for every age. Built by sports fans, for sports fans.</p></div></div>
+    <div class="row" style="margin-top:10px"><a class="btn ghost" href="#who" style="padding:8px 14px">Who we are</a><button class="btn pink" data-share-site style="padding:8px 14px">Share SportingBrain</button></div>
+  </section>
+
   <div class="sec" id="games"><h2>Quick games</h2><span class="small">Swipe for more →</span></div>
   <div class="strip">${tiles.map(t=>`<a class="tile" href="${t[3]}" style="background:${t[4]}"><div class="e">${t[0]}</div><b>${t[1]}</b><small>${t[2]}</small></a>`).join('')}</div>
 
@@ -106,19 +137,11 @@ if(P==='home'){
     <a class="stretch" href="read.html?s=story&id=${story.id}" aria-label="Read: ${esc(story.title)}"></a>
   </article>
 
-  <div class="g2 stack" style="margin-top:12px">
-    <div class="card stat" style="background:linear-gradient(135deg,#14254a,#1F3864);color:#fff">
+  <div class="card stat" style="margin-top:12px;background:linear-gradient(135deg,#14254a,#1F3864);color:#fff">
       <span class="tag" style="background:var(--gold);color:#14254a">Stat of the day</span>
       <div class="n">${esc(stat.n)}</div><p style="margin:0">${esc(stat.t)}</p>
       <p class="row" style="margin:10px 0 0"><button class="btn ghost" id="statshare" style="padding:8px 12px">Share this stat</button></p>
     </div>
-    <div class="card otd">
-      <span class="tag" style="background:#5D4037">${onToday?'On this day':'This week in history'}</span>
-      <ul>${hist.map((h,k)=>`<li><span class="yr">${h.y}</span> <small class="small">${fmtd(h)}</small><br>${esc(h.t)}
-        <div class="small" style="margin-top:4px">True or false: ${esc(h.tf.s)}</div>
-        <div class="tf" data-a="${h.tf.a}"><button data-v="true">True</button><button data-v="false">False</button></div></li>`).join('')}</ul>
-    </div>
-  </div>
 
   <div class="sec"><h2>Sport of the day</h2><a href="read.html?s=sports">A to Z</a></div>
   <article class="card" style="border-left:8px solid ${colour('Unusual')}">
@@ -132,22 +155,22 @@ if(P==='home'){
   </div>
 
   <div class="sec"><h2>Women's sport</h2><a href="challenge.html?c=women">Play the weekly</a></div>
-  <div class="card" style="border-top:6px solid ${colour("Women's sport")}">
+  ${H?`<div class="card" style="border-top:6px solid ${colour("Women's sport")}">
     <span class="tag" style="background:${colour("Women's sport")}">Heroine of the week</span>
-    <div class="row" style="flex-wrap:nowrap;margin-top:6px"><div class="big-emoji">${H.heroine.emoji}</div><div><div class="title">${esc(H.heroine.name)}</div><p class="teaser">${esc(H.heroine.line)}</p></div></div>
+    <div class="row" style="flex-wrap:nowrap;margin-top:6px"><div class="big-emoji">${H.heroine.emoji}</div><div><div class="title">${esc(H.heroine.name)}</div><span class="tag" style="background:${colour(H.heroine.sport)}">${esc(H.heroine.sport)}</span><p class="teaser">${esc(H.heroine.line)}</p></div></div>
     <a class="stretch" href="read.html?s=story&id=${H.heroine.story}" aria-label="Read about ${esc(H.heroine.name)}"></a>
-  </div>
+  </div>`:''}
   <div class="card">
     <span class="tag" style="background:${colour("Women's football")}">The big story</span>
     <div class="title">🦁 Football came home</div><p class="teaser">A sold-out Wembley, extra time, and a moment that changed the women's game.</p>
     <a class="stretch" href="read.html?s=story&id=lionesses" aria-label="Read: Football came home"></a>
   </div>
 
-  <div class="sec"><h2>Hero of the week</h2></div>
+  ${H?`<div class="sec"><h2>Hero of the week</h2></div>
   <div class="card">
-    <div class="row" style="flex-wrap:nowrap"><div class="big-emoji">${H.hero.emoji}</div><div><div class="title">${esc(H.hero.name)}</div><p class="teaser">${esc(H.hero.line)}</p></div></div>
+    <div class="row" style="flex-wrap:nowrap"><div class="big-emoji">${H.hero.emoji}</div><div><div class="title">${esc(H.hero.name)}</div><span class="tag" style="background:${colour(H.hero.sport)}">${esc(H.hero.sport)}</span><p class="teaser">${esc(H.hero.line)}</p></div></div>
     <a class="stretch" href="read.html?s=story&id=${H.hero.story}" aria-label="Read about ${esc(H.hero.name)}"></a>
-  </div>
+  </div>`:''}
 
   <div class="sec"><h2>Unusual sport of the week</h2></div>
   <div class="card" style="background:linear-gradient(135deg,#8E24AA,#C2185B);color:#fff">
@@ -169,8 +192,52 @@ if(P==='home'){
   </div>
 
   <div class="sec"><h2>More stories</h2></div>
-  ${shuffle(SB_STORIES.filter(s=>s.id!==story.id),seeded(DAY+7)).slice(0,3).map(s=>`<article class="card" style="border-left:6px solid ${colour(s.sport)}"><div class="row" style="flex-wrap:nowrap"><div class="big-emoji">${s.emoji}</div><div><div class="title" style="font-size:1.05rem">${esc(s.title)}</div><p class="teaser">${esc(s.teaser)}</p></div></div><a class="stretch" href="read.html?s=story&id=${s.id}" aria-label="${esc(s.title)}"></a></article>`).join('')}
+  ${shuffle(SB_STORIES.filter(s=>![story.id,'lionesses',H&&H.hero.story,H&&H.heroine.story].includes(s.id)),seeded(DAY+7)).slice(0,3).map(s=>`<article class="card" style="border-left:6px solid ${colour(s.sport)}"><div class="row" style="flex-wrap:nowrap"><div class="big-emoji">${s.emoji}</div><div><div class="title" style="font-size:1.05rem">${esc(s.title)}</div><p class="teaser">${esc(s.teaser)}</p></div></div><a class="stretch" href="read.html?s=story&id=${s.id}" aria-label="${esc(s.title)}"></a></article>`).join('')}
+
+  <div class="sec" id="newsletter"><h2>The Daily Brain newsletter</h2></div>
+  <section class="card news">
+    <div class="title" style="margin-top:0">📬 Get the Brain in your inbox every morning</div>
+    <p class="teaser">Today's puzzle, the story of the day and one stat to win an argument with. Free. This is the only time we ever ask for any of your details, and it's just your email address.</p>
+    <iframe data-tally-src="https://tally.so/embed/${window.SB_NEWSLETTER_FORM}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="330" frameborder="0" title="Sign up to The Daily Brain"></iframe>
+  </section>
+
+  <div class="sec" id="who"><h2>Who we are</h2></div>
+  <section class="card">
+    <p style="margin-top:0">SportingBrain is a free daily sports hub, built by sports fans for anyone who loves sport. Whether you know every Premier League scorer since 1992, never miss the snooker, or just want something fun to play with the kids on a Friday night, there's something here for you every single day.</p>
+    <div class="values">
+      <div><span>🆓</span><b>Free, always</b>No paywall, no subscriptions. Paid for by adverts and sponsors.</div>
+      <div><span>🌍</span><b>Every sport</b>Football gets you in. Netball, darts, F1, kabaddi and the rest keep you here.</div>
+      <div><span>⚖️</span><b>Women's sport, front and centre</b>Equal billing everywhere, not a tab at the side.</div>
+      <div><span>👨‍👩‍👧</span><b>Family-safe</b>No chat, no sign-up to play, nothing you wouldn't want the kids to see.</div>
+      <div><span>🚫</span><b>No betting. Ever.</b>No betting ads, no betting links, no gambling.</div>
+      <div><span>🔒</span><b>Your data stays yours</b>The only thing we ever ask for is your email, and only if you want the newsletter.</div>
+    </div>
+    <p>And the Brain? He's our own cartoon mascot. He sets the puzzles, plays against you every day, and is a terrible loser.</p>
+  </section>
+
+  <div class="sec"><h2>Share SportingBrain</h2></div>
+  <section class="card share-panel">
+    <p class="teaser" style="margin-top:0">Know someone who'd love this? Send it to the group chat and see who can beat the Brain.</p>
+    <div class="sharebtns">
+      <a class="btn" style="background:#25D366" data-share-to="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn" style="background:#1877F2" data-share-to="facebook" target="_blank" rel="noopener">Facebook</a>
+      <a class="btn" style="background:#000" data-share-to="x" target="_blank" rel="noopener">X</a>
+      <button class="btn ghost" data-copy-link>Copy link</button>
+    </div>
+  </section>
   `;
+  main.querySelectorAll('[data-share-to]').forEach(a=>{ const u=encodeURIComponent(SITE), t=encodeURIComponent(PITCH);
+    a.href={whatsapp:`https://wa.me/?text=${t}%20${u}`, facebook:`https://www.facebook.com/sharer/sharer.php?u=${u}`, x:`https://twitter.com/intent/tweet?text=${t}&url=${u}`}[a.dataset.shareTo]; });
+  // carousel behaviour
+  (function(){ const root=$('#tih'); if(!root) return; const slides=[...root.querySelectorAll('.tih-slide')], dots=[...root.querySelectorAll('.tih-dots button')]; let k=0, paused=matchMedia('(prefers-reduced-motion: reduce)').matches, t;
+    const go=n=>{ k=(n+slides.length)%slides.length; slides.forEach((sl,j)=>sl.hidden=j!==k); dots.forEach((d,j)=>d.classList.toggle('on',j===k)); $('#tihcount').textContent=`${k+1} of ${slides.length}`; };
+    const play=()=>{ clearInterval(t); if(!paused) t=setInterval(()=>go(k+1),5000); $('#tihpause').textContent=paused?'▶︎ Play':'❚❚'; $('#tihpause').setAttribute('aria-label',paused?'Play':'Pause'); };
+    $('#tihnext').onclick=()=>{go(k+1);play();}; $('#tihprev').onclick=()=>{go(k-1);play();}; $('#tihpause').onclick=()=>{paused=!paused;play();};
+    dots.forEach(d=>d.onclick=()=>{go(+d.dataset.k);play();});
+    let x0=null; root.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true}); root.addEventListener('touchend',e=>{ if(x0===null)return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>40){go(k+(dx<0?1:-1));play();} x0=null; });
+    go(0); play(); })();
+  // newsletter embed
+  (function(){ const f=main.querySelector('iframe[data-tally-src]'); if(!f) return; f.src=f.dataset.tallySrc; const sc=document.createElement('script'); sc.src='https://tally.so/widgets/embed.js'; sc.async=true; document.body.appendChild(sc); })();
   countdown($('#cd'));
   $('#statshare').onclick=()=>share(`🧠 SportingBrain Stat of the Day\n${stat.n}: ${stat.t}\nsportingbrain.com`);
   main.querySelectorAll('.tf').forEach(box=>box.addEventListener('click',e=>{const b=e.target.closest('button'); if(!b||box.dataset.done)return; box.dataset.done=1; const right=b.dataset.v===box.dataset.a; b.classList.add(right?'right':'wrong'); if(!right) box.querySelector(`[data-v="${box.dataset.a}"]`).classList.add('right'); toast(right?'Spot on!':'Not quite!');}));
@@ -337,7 +404,7 @@ if(P==='read'){
 // ================= ABOUT =================
 if(P==='about'){
   main.innerHTML=`<section class="card" style="margin-top:14px"><h1 class="title">About SportingBrain</h1><p>SportingBrain is a free daily sports hub for every fan, every sport and every age. Football gets you through the door. Everything else, from netball to darts, F1 to kabaddi, keeps you coming back. Women's sport sits front and centre, right alongside the men's game.</p><p>The Brain is our own cartoon mascot. He sets the puzzles, plays against you, and is a terrible loser.</p><p><b>No betting. No gambling ads. Ever.</b></p></section>
-  <section class="card"><h2 class="title">Privacy, in plain English</h2><p><b>What we collect:</b> nothing about you. You don't need an account to play.</p><p><b>What stays on your device:</b> your scores, streaks and settings are saved in your own browser so they're there next time. They never leave your device. Clearing your browser data removes them.</p><p><b>Cookies and adverts:</b> there are none yet. Before we add any, we'll ask your permission first, and there will never be targeted adverts aimed at children.</p><p><b>For parents:</b> there's no chat, no messaging between users and no sign-up needed to play.</p></section>
+  <section class="card"><h2 class="title">Privacy, in plain English</h2><p><b>What we collect:</b> nothing, unless you sign up to The Daily Brain newsletter. That is the only time we ask for any details, and it's just your email address. You don't need an account to play anything.</p><p><b>The newsletter:</b> we use your email address only to send you the newsletter. We never sell it or share it for marketing. The sign-up form is run for us by Tally, a European form service that follows GDPR. You can unsubscribe at any time with one click, and you can ask us to delete your email address whenever you like. You must be 13 or over to sign up.</p><p><b>What stays on your device:</b> your scores, streaks and settings are saved in your own browser so they're there next time. They never leave your device. Clearing your browser data removes them.</p><p><b>Cookies and adverts:</b> there are none yet. Before we add any, we'll ask your permission first, and there will never be targeted adverts aimed at children.</p><p><b>For parents:</b> there's no chat, no messaging between users and no sign-up needed to play.</p></section>
   <section class="card"><h2 class="title">Spotted a mistake?</h2><p>We check our facts carefully. If you think we've got one wrong, tell us and we'll fix it.</p></section>`;
 }
 })();

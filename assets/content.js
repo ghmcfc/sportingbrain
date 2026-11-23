@@ -252,3 +252,76 @@ window.SB_EMOJI = [
   {e:"🏊 🚴 🏃", a:"Triathlon", o:["Pentathlon","Triathlon","Heptathlon","Biathlon"]},
   {e:"⛷️ 🎿 🔫", a:"Biathlon", o:["Biathlon","Ski jumping","Slalom","Triathlon"]}
 ];
+
+// Today in Sporting History: rotates through years for today's date. Written in our own words from checked listings.
+Object.assign(window.SB_SPORT_COLOURS, {"American football":"#6D4C41","Canadian football":"#C62828","Surfing":"#0288D1","Baseball":"#283593"});
+window.SB_TODAY = [
+  {md:"11-22", y:2003, s:"Rugby union", t:"Jonny Wilkinson's extra-time drop goal wins England the Rugby World Cup, 20-17 against Australia in Sydney."},
+  {md:"11-23", y:2018, s:"Golf", t:"Phil Mickelson beats Tiger Woods in a winner-takes-all head-to-head match worth $9 million."},
+  {md:"11-23", y:2008, s:"Canadian football", t:"The Calgary Stampeders beat the Montreal Alouettes 22-14 to win the Grey Cup."},
+  {md:"11-23", y:2002, s:"American football", t:"Penn State's Larry Johnson runs for 279 yards against Michigan State to pass 2,000 yards for the season."},
+  {md:"11-23", y:1947, s:"American football", t:"Sammy Baugh throws six touchdown passes as Washington beat the St. Louis Cardinals 45-21."},
+  {md:"11-24", y:2024, s:"American football", t:"Saquon Barkley runs for 255 yards, an Eagles club record, in a 37-20 win over the Los Angeles Rams."},
+  {md:"11-24", y:2015, s:"Basketball", t:"The Golden State Warriors go 16-0, the best start to a season in NBA history, thrashing the Lakers 111-77."},
+  {md:"11-24", y:1996, s:"Golf", t:"Karrie Webb wins the LPGA Tour Championship to become the first player to earn more than $1 million in a season on the women's tour."},
+  {md:"11-24", y:1960, s:"Basketball", t:"Wilt Chamberlain grabs 55 rebounds in a single NBA game, a record that still stands."},
+  {md:"11-24", y:1934, s:"Canadian football", t:"The Sarnia Imperials beat the Regina Roughriders 20-12 to win their first Grey Cup."},
+  {md:"11-25", y:1953, s:"Football", t:"Hungary beat England 6-3 at Wembley, England's first home defeat by a team from outside the British Isles."},
+  {md:"11-26", y:2010, s:"American football", t:"Auburn come back from 24 points down to beat Alabama 28-27 in one of the great Iron Bowls."},
+  {md:"11-26", y:1999, s:"Ice hockey", t:"Steve Yzerman scores his 600th NHL goal as Detroit beat Edmonton 4-2."},
+  {md:"11-26", y:1995, s:"American football", t:"Miami's Dan Marino breaks the NFL record for career touchdown passes."},
+  {md:"11-26", y:1949, s:"American football", t:"Boston College beat Holy Cross 76-0, with Al Cannava running for 229 yards."},
+  {md:"11-26", y:1917, s:"Ice hockey", t:"The National Hockey League is formed in Montreal."},
+  {md:"11-27", y:2014, s:"Surfing", t:"Australia's Stephanie Gilmore wins her sixth women's world surfing title."},
+  {md:"11-27", y:2013, s:"Golf", t:"Tiger Woods is named PGA Tour Player of the Year for the 11th time."},
+  {md:"11-27", y:1998, s:"American football", t:"Texas running back Ricky Williams becomes the all-time leading rusher in college football's top division, passing Tony Dorsett."},
+  {md:"11-27", y:1966, s:"American football", t:"Washington beat the New York Giants 72-41 in the highest-scoring game in NFL history."},
+  {md:"11-27", y:1941, s:"Baseball", t:"Joe DiMaggio is named the American League's Most Valuable Player for the second time."},
+  {md:"11-28", y:2015, s:"Football", t:"Jamie Vardy scores against Manchester United to make it 11 Premier League games in a row with a goal, a new record."},
+  {md:"11-28", y:2015, s:"Boxing", t:"Tyson Fury outpoints Wladimir Klitschko in Dusseldorf to become world heavyweight champion."},
+  {md:"11-28", y:2004, s:"American football", t:"Cincinnati beat Cleveland 58-48, one of the highest-scoring games in NFL history."},
+  {md:"11-28", y:1981, s:"American football", t:"Alabama's Paul 'Bear' Bryant wins his 315th game, becoming the winningest coach in college football history."},
+  {md:"11-28", y:1929, s:"American football", t:"Ernie Nevers scores all 40 of the Chicago Cardinals' points in a 40-6 win over the Bears, an NFL record."},
+  {md:"11-29", y:2021, s:"Football", t:"Lionel Messi wins his seventh Ballon d'Or."},
+  {md:"11-29", y:1998, s:"American football", t:"Dan Marino becomes the first quarterback in NFL history to throw 400 career touchdown passes."},
+  {md:"11-29", y:1987, s:"American football", t:"The New Orleans Saints beat Pittsburgh 20-16 to secure the first winning season in their 20-year history."},
+  {md:"11-29", y:1890, s:"American football", t:"Navy beat Army 24-0 at West Point in the very first Army-Navy game."},
+  {md:"11-30", y:1991, s:"Women's football", t:"The USA beat Norway 2-1 in China to win the first FIFA Women's World Cup."},
+  {md:"11-30", y:1956, s:"Boxing", t:"Floyd Patterson knocks out Archie Moore in Chicago to become world heavyweight champion."},
+  {md:"11-30", y:1872, s:"Football", t:"Scotland and England draw 0-0 in Glasgow in the first official international football match."},
+  {md:"04-19", y:1967, s:"Athletics", t:"Kathrine Switzer becomes the first woman to run the Boston Marathon as a registered entrant."},
+  {md:"05-02", y:2016, s:"Football", t:"Leicester City are crowned Premier League champions after Tottenham draw 2-2 at Chelsea."},
+  {md:"05-06", y:1954, s:"Athletics", t:"Roger Bannister runs the first mile under four minutes, 3:59.4 at Iffley Road, Oxford."},
+  {md:"05-25", y:2005, s:"Football", t:"Liverpool come back from 3-0 down to beat AC Milan on penalties in the Champions League final in Istanbul."},
+  {md:"07-30", y:1966, s:"Football", t:"England beat West Germany 4-2 after extra time at Wembley to win the World Cup."},
+  {md:"07-31", y:2022, s:"Women's football", t:"England's Lionesses beat Germany 2-1 after extra time at Wembley to win the Women's Euro."},
+  {md:"08-16", y:2009, s:"Athletics", t:"Usain Bolt runs the 100 metres in 9.58 seconds in Berlin, still the world record."}
+];
+window.SB_NEWSLETTER_FORM = "ArB4Z0";
+
+// Hero and Heroine of the Week: tied to that week's anniversaries or news. 'from'/'to' are month-day ranges.
+window.SB_HEROES_WEEKS = [
+  {from:"11-23", to:"11-29",
+   hero:{name:"Jamie Vardy", sport:"Football", emoji:"🦊", story:"vardy", line:"This week in 2015 he scored in an 11th Premier League game in a row. A record, from a striker who was playing non-league football a few years before."},
+   heroine:{name:"Stephanie Gilmore", sport:"Surfing", emoji:"🏄‍♀️", story:"gilmore", line:"This week in 2014 she won her sixth world surfing title. She went on to win eight, a record for a woman."}}
+];
+window.SB_STORIES.push(
+  {id:"vardy", sport:"Football", emoji:"🦊", title:"From the factory floor to the record books",
+   teaser:"Non-league, a factory job, and then the Premier League scoring record. This week is his anniversary.",
+   body:["Jamie Vardy's route to the top was anything but normal. He played non-league football for Stocksbridge Park Steels while working in a factory, then moved on to Halifax and Fleetwood.",
+         "In 2012 Leicester City paid around £1 million for him, a record fee for a non-league player at the time.",
+         "On 28 November 2015 he scored against Manchester United. It was his 11th Premier League game in a row with a goal, beating Ruud van Nistelrooy's record of ten.",
+         "Five months later, Leicester were champions. Never let anyone tell you it's too late."],
+   quiz:[{q:"Which non-league club did Vardy play for while working in a factory?",o:["Stocksbridge Park Steels","Fleetwood Town","Halifax Town","Kidderminster"],a:0},
+         {q:"Whose record of ten games in a row did he beat?",o:["Alan Shearer","Ruud van Nistelrooy","Thierry Henry","Daniel Sturridge"],a:1},
+         {q:"Against which club did he score in his 11th game in a row?",o:["Liverpool","Chelsea","Manchester United","Arsenal"],a:2}]},
+  {id:"gilmore", sport:"Surfing", emoji:"🏄‍♀️", title:"The queen of the waves",
+   teaser:"A world title in her first year on tour, then seven more. This week marks her sixth.",
+   body:["Stephanie Gilmore burst onto the women's world surfing tour from Australia and won the world title in her very first season, 2007.",
+         "She kept on winning. On 27 November 2014 she clinched her sixth world title.",
+         "In 2022 she won her eighth, the most ever by a woman in the history of the world championship.",
+         "Smooth, stylish and almost impossible to beat, she's often called the queen of women's surfing."],
+   quiz:[{q:"Which country is Stephanie Gilmore from?",o:["USA","Brazil","Australia","South Africa"],a:2},
+         {q:"In which year did she win her first world title?",o:["2005","2007","2010","2014"],a:1},
+         {q:"How many world titles has she won?",o:["5","6","7","8"],a:3}]}
+);
