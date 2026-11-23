@@ -37,14 +37,18 @@ for t in titles:
             cands.append(urllib.parse.unquote(path[-2] if 'thumb' in path else path[-1]).replace('_', ' '))
         cands = [c for c in cands if re.search(r'\.(jpe?g)$', c, re.I)]
         if not cands: print('no photo', t); continue
-        fname = cands[0]
-        q = get('https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url|extmetadata|size&iiurlwidth=1600&titles=' + urllib.parse.quote('File:' + fname))
-        page = next(iter(q['query']['pages'].values()))
-        if 'missing' in page or 'imageinfo' not in page: print('not on Commons', t); continue
-        ii = page['imageinfo'][0]; md = ii.get('extmetadata', {})
-        lic = strip(md.get('LicenseShortName', {}).get('value'))
-        if not FREE.match(lic): print('not free', t, lic); continue
-        if ii.get('width', 0) < 1000: print('too small', t); continue
+        pick = None
+        for fname in dict.fromkeys(cands):
+            q = get('https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url|extmetadata|size&iiurlwidth=1600&titles=' + urllib.parse.quote('File:' + fname))
+            page = next(iter(q['query']['pages'].values()))
+            if 'missing' in page or 'imageinfo' not in page: print('not on Commons', t, fname); continue
+            ii = page['imageinfo'][0]; md = ii.get('extmetadata', {})
+            lic = strip(md.get('LicenseShortName', {}).get('value'))
+            if not FREE.match(lic): print('not free', t, lic); continue
+            if ii.get('width', 0) < 800: print('too small', t, fname, ii.get('width')); continue
+            pick = (fname, ii, md, lic); break
+        if not pick: continue
+        fname, ii, md, lic = pick
         b = get(ii.get('thumburl') or ii['url'], raw=True)
         if b[:3] != b'\xff\xd8\xff': print('bad jpeg', t); continue
         (DIR / (k + '.jpg')).write_bytes(b)
