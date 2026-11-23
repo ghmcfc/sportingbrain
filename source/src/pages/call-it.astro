@@ -55,7 +55,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
         if (navigator.share) navigator.share({ text: t }).catch(() => {}); else navigator.clipboard?.writeText(t); };
     }
     document.addEventListener('click', e => { const b = e.target.closest('.ci-opt'); if (b && !saved) { picks[+b.dataset.q] = +b.dataset.o; renderCalls(); }
-      if (e.target.id === 'ciLock') { if (!practice) { const last = S.get('ci_last', 0); S.set('ci_streak', last === DAY - 1 ? S.get('ci_streak', 0) + 1 : 1); S.set('ci_last', DAY); S.set(key, { picks }); }
+      if (e.target.id === 'ciLock') { if (!practice) { const last = S.get('ci_last', 0); S.set('ci_streak', last === DAY ? S.get('ci_streak', 1) : last === DAY - 1 ? S.get('ci_streak', 0) + 1 : 1); S.set('ci_last', DAY); S.set(key, { picks }); }
         renderCalls(); reveal(); document.getElementById('ciResult').scrollIntoView({ behavior: 'smooth', block: 'center' }); } });
     renderCalls(); if (saved) reveal();
   </script>

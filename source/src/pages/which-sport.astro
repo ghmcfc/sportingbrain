@@ -1,20 +1,4 @@
 ---
-import Base from '../layouts/Base.astro';
+const to = import.meta.env.BASE_URL.replace(/\/?$/, '/') + 'kids/which-sport.html';
 ---
-<Base title="Which sport are you? | SportingBrain" description="Six quick questions to find the sport that matches your personality. Then read our guide to it." page="whichsport">
-  <header class="pg-head"><h1>Which Sport Are You?</h1><p>Six questions, no right answers. At the end you get your sport and a guide to it, in case you fancy watching or trying it.</p></header>
-  <section class="pg-card" id="game" aria-live="polite"></section>
-  <script>
-    import { PERSONALITY } from '../data/games.js';
-    import { esc, share, markPlayed, BASE } from '../scripts/play.js';
-    const g = document.getElementById('game'); let i = 0, tally = {};
-    function show() { const [q, opts] = PERSONALITY.qs[i];
-      g.innerHTML = `<p class="pg-step">${i + 1} of ${PERSONALITY.qs.length}</p><p class="pg-q">${esc(q)}</p><div class="pg-opts">${opts.map(o => `<button data-s="${o[1]}">${esc(o[0])}</button>`).join('')}</div>`; }
-    g.addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (b) { tally[b.dataset.s] = (tally[b.dataset.s] || 0) + 1 + i / 100; i++; if (i < PERSONALITY.qs.length) show(); else end(); }
-      if (e.target.closest('[data-again]')) { i = 0; tally = {}; show(); } });
-    function end() { markPlayed('which-sport'); const s = Object.entries(tally).sort((a, b) => b[1] - a[1])[0][0], line = PERSONALITY.results[s];
-      g.innerHTML = `<p class="pg-step">Your sport</p><p class="pg-q" style="font-size:1.5rem">${esc(line)}</p><div class="pg-btns"><a class="btn gold" href="${BASE}sports/${s}.html">Read the guide</a><button class="btn ghost" id="sh">Share</button><button class="btn ghost" data-again>Try again</button></div>`;
-      document.getElementById('sh').onclick = () => share(`SportingBrain says: ${line}`, location.origin + location.pathname); }
-    show();
-  </script>
-</Base>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href={to}><meta http-equiv="refresh" content={`0;url=${to}`}><title>Moved to the Kids Zone</title></head><body><a href={to}>This game has moved to the Kids Zone.</a></body></html>

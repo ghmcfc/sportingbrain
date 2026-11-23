@@ -137,50 +137,50 @@ globalThis.SB_HEROES = {
 
 // Weekly challenges, run by the challenge page.
 globalThis.SB_CHALLENGES = {
-  weekly:{title:"The Weekly Brain Challenge", sub:"Week 1: ten questions, football and beyond", colour:"#1E8E3E", qs:[
-    {q:"Who is England men's record goalscorer, and joined Bayern Munich in 2023?",o:["Wayne Rooney","Harry Kane","Marcus Rashford","Jamie Vardy"],a:1},
-    {q:"Which club has won the most European Cups and Champions Leagues?",o:["AC Milan","Bayern Munich","Real Madrid","Liverpool"],a:2},
-    {q:"Who won Euro 2024?",o:["England","France","Spain","Germany"],a:2},
-    {q:"Who won the 2022 men's World Cup?",o:["France","Argentina","Brazil","Croatia"],a:1},
-    {q:"Which '5,000-to-1' club won the Premier League in 2015-16?",o:["Leicester City","Southampton","West Ham","Burnley"],a:0},
-    {q:"What is the name of Manchester United's home ground?",o:["Old Trafford","Villa Park","Maine Road","Goodison Park"],a:0},
-    {q:"What does VAR stand for?",o:["Video Action Review","Video Assistant Referee","Visual Assist Replay","Video Analysis Room"],a:1},
-    {q:"Which F1 team is known as the Prancing Horse?",o:["McLaren","Red Bull","Ferrari","Williams"],a:2},
-    {q:"At which circuit is the British Grand Prix held?",o:["Brands Hatch","Donington","Silverstone","Goodwood"],a:2},
-    {q:"Which British driver won the F1 world title in 1992?",o:["Damon Hill","Jenson Button","Nigel Mansell","James Hunt"],a:2}]},
+  weekly:{title:"The Weekly Brain Challenge", sub:"Ten questions, football and beyond", colour:"#1E8E3E", qs:[
+    {q:"Who scored Manchester United's stoppage-time winner in the 1999 Champions League final?",o:["Teddy Sheringham","Ole Gunnar Solskjær","Dwight Yorke","Andy Cole"],a:1},
+    {q:"Which club did Nottingham Forest beat in the 1980 European Cup final?",o:["Malmö","Hamburg","Ajax","Liverpool"],a:1},
+    {q:"Who is the Premier League's all-time top scorer?",o:["Wayne Rooney","Harry Kane","Alan Shearer","Thierry Henry"],a:2},
+    {q:"Who scored Germany's extra-time winner in the 2014 World Cup final?",o:["Thomas Müller","Miroslav Klose","André Schürrle","Mario Götze"],a:3},
+    {q:"Which club won the first Champions League under that name, in 1993?",o:["AC Milan","Marseille","Barcelona","Ajax"],a:1},
+    {q:"Which club won the 2025 FA Cup, beating Manchester City for their first major trophy?",o:["Crystal Palace","Aston Villa","Newcastle United","Brighton"],a:0},
+    {q:"Who won the 2021 F1 title on the final lap of the final race in Abu Dhabi?",o:["Lewis Hamilton","Max Verstappen","Valtteri Bottas","Sergio Pérez"],a:1},
+    {q:"Brawn GP was bought at the end of 2009 and became which team?",o:["Mercedes","Red Bull","Aston Martin","Renault"],a:0},
+    {q:"Who was the first Formula 1 driver to win 100 Grands Prix?",o:["Michael Schumacher","Lewis Hamilton","Max Verstappen","Sebastian Vettel"],a:1},
+    {q:"Which country beat England 2-1 in the Euro 2024 final in Berlin?",o:["France","Spain","Germany","Italy"],a:1}]},
   women:{title:"Women's Sport Weekly", sub:"Ten questions on the women's game", colour:"#C2185B", qs:[
-    {q:"Which tournament did England's Lionesses win in 2022 and 2025?",o:["The World Cup","The Women's Euro","The Olympics","The SheBelieves Cup"],a:1},
-    {q:"Which country won the 2023 FIFA Women's World Cup?",o:["England","USA","Spain","Sweden"],a:2},
-    {q:"Which country won the first Women's World Cup in 1991?",o:["Norway","USA","Germany","China"],a:1},
-    {q:"Which country won the 2023 Netball World Cup?",o:["England","Australia","Jamaica","New Zealand"],a:1},
-    {q:"Which British player won the 2021 US Open as a qualifier?",o:["Johanna Konta","Heather Watson","Emma Raducanu","Katie Boulter"],a:2},
-    {q:"Who won heptathlon gold for Great Britain at London 2012?",o:["Katarina Johnson-Thompson","Jessica Ennis","Denise Lewis","Kelly Holmes"],a:1},
-    {q:"Who was the first woman to ride the winner of the Grand National?",o:["Rachael Blackmore","Bryony Frost","Hollie Doyle","Katie Walsh"],a:0},
-    {q:"Which club won the first Women's Super League title in 2011?",o:["Chelsea","Arsenal","Everton","Liverpool"],a:1},
-    {q:"Which club has won the most Women's Champions League titles?",o:["Barcelona","Wolfsburg","Lyon","Arsenal"],a:2},
-    {q:"Which British woman won the Wimbledon singles title in 1977?",o:["Virginia Wade","Sue Barker","Ann Jones","Jo Durie"],a:0}]},
-  world:{title:"World Sport Wednesday", sub:"Weird and wonderful sports from around the globe", colour:"#8E24AA", qs:[
-    {q:"Which country does hurling come from?",o:["Scotland","Ireland","Wales","Australia"],a:1},
-    {q:"Where does kabaddi come from?",o:["India","Thailand","Iran","Japan"],a:0},
-    {q:"In which country did sumo wrestling begin?",o:["China","Korea","Japan","Mongolia"],a:2},
-    {q:"Korfball was invented in which country?",o:["Belgium","The Netherlands","Denmark","Germany"],a:1},
-    {q:"Curling began in which country?",o:["Canada","Scotland","Sweden","Switzerland"],a:1},
-    {q:"Which body part can't you use in sepak takraw?",o:["Head","Feet","Hands","Knees"],a:2},
-    {q:"Which national rugby team performs the haka?",o:["Fiji","Samoa","New Zealand","Tonga"],a:2},
-    {q:"In which city is the Australian Open tennis played?",o:["Sydney","Melbourne","Brisbane","Perth"],a:1},
-    {q:"In which sport is the Stanley Cup awarded?",o:["Lacrosse","Ice hockey","Baseball","Curling"],a:1},
-    {q:"How many players does a polo team have?",o:["3","4","6","8"],a:1}]},
+    {q:"Who scored England's extra-time winner in the Euro 2022 final?",o:["Alessia Russo","Ella Toone","Chloe Kelly","Beth Mead"],a:2},
+    {q:"Which goalkeeper saved a penalty in the 2023 Women's World Cup final?",o:["Cata Coll","Mary Earps","Hannah Hampton","Mackenzie Arnold"],a:1},
+    {q:"Which Spain player won the women's Ballon d'Or in 2023, 2024 and 2025?",o:["Alexia Putellas","Aitana Bonmatí","Salma Paralluelo","Jenni Hermoso"],a:1},
+    {q:"Which country won the 2025 Women's Cricket World Cup?",o:["Australia","England","India","South Africa"],a:2},
+    {q:"Who captained the Red Roses at the 2025 Rugby World Cup?",o:["Zoe Aldcroft","Marlie Packer","Sarah Hunter","Ellie Kildunne"],a:0},
+    {q:"Who was England head coach for both Euro 2022 and Euro 2025?",o:["Phil Neville","Hope Powell","Sarina Wiegman","Emma Hayes"],a:2},
+    {q:"Which club won the 2024-25 Women's Champions League?",o:["Barcelona","Lyon","Chelsea","Arsenal"],a:3},
+    {q:"Which jockey won the 2021 Champion Hurdle on Honeysuckle?",o:["Rachael Blackmore","Bryony Frost","Hollie Doyle","Nina Carberry"],a:0},
+    {q:"Which Australian has played in both a cricket World Cup and a FIFA Women's World Cup?",o:["Meg Lanning","Alyssa Healy","Ellyse Perry","Sam Kerr"],a:2},
+    {q:"Which England player won the Golden Boot at Euro 2022?",o:["Alessia Russo","Beth Mead","Ella Toone","Lauren Hemp"],a:1}]},
+  world:{title:"World Sport Wednesday", sub:"Sport from around the globe", colour:"#8E24AA", qs:[
+    {q:"Which country won the 2023 men's Hockey World Cup in India?",o:["Belgium","Netherlands","Australia","Germany"],a:3},
+    {q:"In which sport is the Sam Maguire Cup awarded?",o:["Hurling","Gaelic football","Camogie","Shinty"],a:1},
+    {q:"Which country won the 2023 Basketball World Cup?",o:["USA","Serbia","Germany","Canada"],a:2},
+    {q:"What is the highest rank in professional sumo?",o:["Ozeki","Sekiwake","Yokozuna","Komusubi"],a:2},
+    {q:"What colour jersey does the leader of the Giro d'Italia wear?",o:["Yellow","Pink","Red","Green"],a:1},
+    {q:"Which country won men's kabaddi gold at the 2022 Asian Games, held in 2023?",o:["Iran","India","South Korea","Pakistan"],a:1},
+    {q:"Which team won baseball's 2024 World Series, beating the New York Yankees?",o:["Los Angeles Dodgers","Houston Astros","Texas Rangers","Atlanta Braves"],a:0},
+    {q:"What is hurling's All-Ireland trophy called?",o:["Sam Maguire Cup","Liam MacCarthy Cup","Christy Ring Cup","Brendan Martin Cup"],a:1},
+    {q:"Which country has won the most Olympic gold medals in table tennis?",o:["Japan","South Korea","Sweden","China"],a:3},
+    {q:"In which city is the Australian Football League Grand Final traditionally played?",o:["Sydney","Melbourne","Adelaide","Perth"],a:1}]},
   family:{title:"The Friday Family Challenge", sub:"Kids' questions and grown-ups' questions. Add up a family score!", colour:"#F57C00", qs:[
     {q:"KIDS: What shape is a football pitch?",o:["Circle","Rectangle","Triangle","Star"],a:1},
-    {q:"GROWN-UPS: How many players start a football match on each team?",o:["9","10","11","12"],a:2},
+    {q:"GROWN-UPS: What was the score in the 1966 World Cup final after 90 minutes?",o:["1-1","2-2","3-2","2-1"],a:1},
     {q:"KIDS: Which sport uses a racket and a fuzzy yellow ball?",o:["Tennis","Golf","Cricket","Rugby"],a:0},
-    {q:"GROWN-UPS: Which Grand Slam tennis tournament is played on clay?",o:["Wimbledon","US Open","French Open","Australian Open"],a:2},
+    {q:"GROWN-UPS: How many French Open titles did Rafael Nadal win?",o:["11","12","14","16"],a:2},
     {q:"KIDS: How many rings are on the Olympic flag?",o:["3","4","5","6"],a:2},
-    {q:"GROWN-UPS: Which city hosted the 2012 Olympics?",o:["Paris","London","Beijing","Tokyo"],a:1},
+    {q:"GROWN-UPS: Which city hosted the 1948 Olympics, known as the Austerity Games?",o:["Helsinki","Berlin","London","Amsterdam"],a:2},
     {q:"KIDS: In which sport do you score a try?",o:["Football","Rugby","Tennis","Swimming"],a:1},
-    {q:"GROWN-UPS: How many points is a try worth in rugby union?",o:["3","4","5","7"],a:2},
+    {q:"GROWN-UPS: How many points was a rugby union try worth from 1971 until 1992?",o:["3","4","5","6"],a:1},
     {q:"KIDS: In cricket, do you hit a ball or a shuttlecock?",o:["A ball","A shuttlecock"],a:0},
-    {q:"GROWN-UPS: How many balls are there in a cricket over?",o:["4","5","6","8"],a:2}]}
+    {q:"GROWN-UPS: Who managed Blackburn Rovers to the 1994-95 Premier League title?",o:["Ray Harford","Kenny Dalglish","Graeme Souness","Tony Parkes"],a:1}]}
 };
 
 // Guess the Player: three clues, four options.
@@ -199,7 +199,33 @@ globalThis.SB_PLAYERS = [
   {a:"Erling Haaland", c:["Norwegian striker","His father also played in the Premier League","Scored 36 goals in his first Premier League season"], o:["Erling Haaland","Martin Odegaard","Alexander Sorloth","Ole Gunnar Solskjaer"]}
 ];
 
+// True or False for adults. Settled facts only.
 globalThis.SB_TF = [
+  ["Geoff Hurst is the only man to score a hat-trick in a men's World Cup final.",false],["Steve Davis won six world snooker titles in the 1980s.",true],
+  ["Jack Nicklaus won his last Masters at the age of 46.",true],["Brian Lara's 400 not out came against England.",true],
+  ["The first Wimbledon Championships were held in 1877.",true],["A hole-in-one on a par 5 is called a condor.",true],
+  ["Dennis Taylor beat Steve Davis on the final black of the 1985 world final.",true],["Usain Bolt never won an Olympic 200m title.",false],
+  ["Mo Farah won the London Marathon.",false],["Italy joined the Five Nations to make it the Six Nations in 2000.",true],
+  ["The Ryder Cup was first played in 1927.",true],["Nigel Mansell won his world title with Ferrari.",false],
+  ["Ayrton Senna won all three of his world titles with McLaren.",true],["Martina Navratilova won nine Wimbledon singles titles.",true],
+  ["Roger Federer won eight Wimbledon men's singles titles.",true],["Phil Taylor's first world title came in 1990.",true],
+  ["England's Lionesses beat Spain on penalties in the Euro 2025 final.",true],["Red Rum won the Grand National four times.",false],
+  ["Ellyse Perry has played at a FIFA Women's World Cup.",true],["Michael Johnson's 200m world record from 1996 stood until Usain Bolt broke it in 2008.",true],
+  ["Jonny Wilkinson kicked the 2003 World Cup-winning drop goal with his right foot.",true],["Bradley Wiggins won the Olympic road time trial at London 2012.",true],
+  ["Sachin Tendulkar never captained India.",false],["Wayne Rooney is Manchester United's all-time top scorer.",true],
+  ["Alan Shearer won the Premier League with Newcastle United.",false],["Manchester City won their first Champions League in 2023.",true],
+  ["Liverpool were 3-0 down at half-time in the 2005 Champions League final.",true],["Tiger Woods held all four men's major titles at the same time in 2000-01.",true],
+  ["Dina Asher-Smith won the 200m world title in 2019.",true],["Jessica Ennis-Hill won two Olympic gold medals.",false],
+  ["The Tour de France has never started outside France.",false],["The 2026 men's World Cup has three host countries.",true],
+  ["Wigan won eight Challenge Cups in a row from 1988.",true],["Billie Jean King won 20 Wimbledon titles across singles and doubles.",true],
+  ["Leicester City were 5,000-1 to win the 2015-16 Premier League.",true],["Lewis Hamilton won his first world title with Mercedes.",false],
+  ["England's men have won the Cricket World Cup twice.",false],["Ronnie O'Sullivan's fastest 147 took less than six minutes.",true],
+  ["Kelly Holmes won her two Olympic golds at the Sydney 2000 Games.",false],["Andy Murray won two Olympic singles gold medals.",true],
+  ["Celtic were the first British club to win the European Cup.",true]
+];
+
+// Kids Zone True or False (the old adult set, which was too easy for adults).
+globalThis.SB_TF_KIDS = [
   ["A marathon is 26.2 miles long.",true],["Snooker's maximum break is 147.",true],["The Olympic flag has six rings.",false],
   ["In golf, an albatross is three under par on a hole.",true],["A try in rugby union is worth 3 points.",false],["The bullseye in darts is worth 50.",true],
   ["Wimbledon is played on clay.",false],["A cricket wicket has three stumps.",true],["Sepak takraw players can use their hands.",false],

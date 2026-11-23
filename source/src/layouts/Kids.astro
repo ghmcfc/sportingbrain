@@ -1,10 +1,10 @@
 ---
 import Base from './Base.astro';
-interface Props { title: string; description: string; band?: string }
-const { title, description, band = '' } = Astro.props;
+interface Props { title: string; description: string; band?: string; page?: string }
+const { title, description, band = '', page = '' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
-<Base title={title} description={description} wide noads>
+<Base title={title} description={description} page={page} wide noads>
   <div class="kz" data-band={band}>
     <nav class="kz-nav" aria-label="Kids Zone">
       <a href={`${base}kids.html`} class="kz-home"><img src={`${base}assets/brain.svg`} alt="" width="40" height="40">Kids Zone</a>

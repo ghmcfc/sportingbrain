@@ -467,3 +467,4 @@ body.reduce-motion *{animation:none!important;transition:none!important;scroll-b
 /* Ground Guesser */
 .gg-photo{width:100%;aspect-ratio:16/9;border-radius:4px;background-color:#0F1E36;background-repeat:no-repeat;margin:6px 0 14px;transition:background-size .5s ease}
 main[data-page="home"]{min-height:110vh}
+.reset-wrap{margin:10px 0 0}.reset-btn{font-size:1rem;padding:6px 14px}
