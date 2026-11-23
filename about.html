@@ -4,46 +4,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>About and privacy | SportingBrain</title>
-<meta name="theme-color" content="#1F3864">
+<meta name="description" content="About SportingBrain and how we look after your privacy.">
+<meta property="og:title" content="About and privacy | SportingBrain">
+<meta property="og:description" content="About SportingBrain and how we look after your privacy.">
+<meta name="theme-color" content="#14254a">
 <link rel="icon" href="assets/brain.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <img src="assets/brain.svg" alt="">
+  <a href="./"><img src="assets/brain.svg" alt="SportingBrain home"></a>
   <a class="logo" href="./">Sporting<span>Brain</span></a>
-  <nav class="main" aria-label="Main">
-    <a href="./">Today</a>
-    <a href="higher-or-lower.html">Higher or Lower</a>
-    <a href="about.html" aria-current="page">About</a>
-  </nav>
+  <div class="hdr-right">
+    <button class="iconbtn" data-dark aria-label="Switch dark mode">🌙</button>
+    <a class="iconbtn" href="./#games">Play</a>
+  </div>
 </div></header>
-
-<main class="wrap">
-  <section class="card">
-    <h2>About SportingBrain</h2>
-    <p>SportingBrain is a free daily sports hub for every fan, every sport and every age. Football gets you through the door; everything else, from netball to darts, F1 to kabaddi, keeps you coming back. Women's sport sits front and centre, right alongside the men's game.</p>
-    <p>The Brain is our own cartoon mascot. He sets the puzzles, plays against you, and is a terrible loser.</p>
-    <p>No betting. No gambling ads. Ever.</p>
-  </section>
-
-  <section class="card">
-    <h2>Privacy, in plain English</h2>
-    <p><b>What we collect:</b> nothing about you. You don't need an account to play.</p>
-    <p><b>What stays on your device:</b> your scores, streak and font choice are saved in your own browser so they're there next time. They never leave your device, and clearing your browser data removes them.</p>
-    <p><b>Cookies and adverts:</b> there are none yet. Before we add any, we'll ask your permission first, and there will never be targeted adverts aimed at children.</p>
-    <p><b>For parents:</b> SportingBrain is built to be safe for families. There's no chat, no messaging between users and no sign-up needed to play.</p>
-  </section>
-
-  <section class="card">
-    <h2>Got a fact wrong?</h2>
-    <p>We check our facts carefully, but if you spot a mistake, please tell us and we'll fix it.</p>
-  </section>
-</main>
-
+<div class="datebar"><div class="wrap"><span id="today-date"></span><span>Every fan. Every sport. Every day.</span></div></div>
+<main class="wrap" data-page="about" id="main"></main>
 <footer class="wrap">
-  <p>SportingBrain is run by Continuity Projects. <a href="#" data-dys>Dyslexia-friendly font</a></p>
+  <p>SportingBrain is free, for every fan, every sport and every age. No betting, ever.</p>
+  <p><a href="./">Home</a> · <a href="about.html">About and privacy</a> · <a href="#" data-dys>Dyslexia-friendly font</a></p>
 </footer>
+<script src="assets/data.js"></script>
+<script src="assets/content.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>

@@ -4,52 +4,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Higher or Lower: the sports stats game | SportingBrain</title>
-<meta name="description" content="Two sports stats. Is the next one higher or lower? Keep going until you get one wrong. Free, every sport.">
-<meta name="theme-color" content="#1F3864">
+<meta name="description" content="Is the next sports stat higher or lower? Keep going until you get one wrong.">
+<meta property="og:title" content="Higher or Lower: the sports stats game | SportingBrain">
+<meta property="og:description" content="Is the next sports stat higher or lower? Keep going until you get one wrong.">
+<meta name="theme-color" content="#14254a">
 <link rel="icon" href="assets/brain.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <img src="assets/brain.svg" alt="">
+  <a href="./"><img src="assets/brain.svg" alt="SportingBrain home"></a>
   <a class="logo" href="./">Sporting<span>Brain</span></a>
-  <nav class="main" aria-label="Main">
-    <a href="./">Today</a>
-    <a href="higher-or-lower.html" aria-current="page">Higher or Lower</a>
-    <a href="about.html">About</a>
-  </nav>
+  <div class="hdr-right">
+    <button class="iconbtn" data-dark aria-label="Switch dark mode">🌙</button>
+    <a class="iconbtn" href="./#games">Play</a>
+  </div>
 </div></header>
-
-<main class="wrap">
-  <section class="hero">
-    <img src="assets/brain.svg" alt="The Brain">
-    <div>
-      <h1>Higher or Lower</h1>
-      <p>Is the next stat higher or lower? Keep going until you get one wrong. Then go again.</p>
-    </div>
-  </section>
-
-  <section class="card" id="hl" aria-live="polite">
-    <div class="stats"><div><b id="run">0</b>in a row</div><div><b id="best">0</b>your best</div></div>
-    <div class="hl" style="margin-top:12px">
-      <div class="item"><div class="lab" id="alab"></div><div class="val" id="aval"></div></div>
-      <div class="item mystery"><div class="lab" id="blab"></div><div class="val" id="bval">?</div></div>
-    </div>
-    <p class="row" id="hlbtns" style="margin-top:14px">
-      <button class="btn" id="higher">Higher ▲</button>
-      <button class="btn pink" id="lower">Lower ▼</button>
-    </p>
-    <div id="hlres" hidden>
-      <div class="brain-says"><img src="assets/brain.svg" alt=""><div id="hlmsg"></div></div>
-      <p class="row"><button class="btn pink" id="hlshare">Share</button><button class="btn ghost" id="again">Go again</button></p>
-    </div>
-  </section>
-</main>
-
+<div class="datebar"><div class="wrap"><span id="today-date"></span><span>Every fan. Every sport. Every day.</span></div></div>
+<main class="wrap" data-page="hl" id="main"></main>
 <footer class="wrap">
-  <p><a href="./">Today's Beat the Brain</a> · <a href="about.html">About and privacy</a> · <a href="#" data-dys>Dyslexia-friendly font</a></p>
+  <p>SportingBrain is free, for every fan, every sport and every age. No betting, ever.</p>
+  <p><a href="./">Home</a> · <a href="about.html">About and privacy</a> · <a href="#" data-dys>Dyslexia-friendly font</a></p>
 </footer>
 <script src="assets/data.js"></script>
+<script src="assets/content.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>
