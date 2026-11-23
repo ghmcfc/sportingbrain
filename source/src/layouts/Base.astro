@@ -61,7 +61,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sporti
     <button class="iconbtn" data-dark aria-label="Switch dark mode">Dark</button>
   </div>
 </div>
-<nav class="tabs" aria-label="Main"><div class="wrap">{nav.map(([t, h, k]) => <a href={h} aria-current={section === k ? "page" : undefined}>{t}</a>)}</div></nav>
+<nav class="sb-tabs" aria-label="Main"><div class="wrap">{nav.map(([t, h, k]) => <a href={h} aria-current={section === k ? "page" : undefined}>{t}</a>)}</div></nav>
 </header>
 <div class="datebar"><div class="wrap"><span id="today-date"></span><span>Free to play. No betting, ever.</span></div></div>
 <script>document.addEventListener('click',e=>{const a=e.target.closest('[data-mistake]');if(a)a.href='https://tally.so/r/zE7LVZ?page='+encodeURIComponent(location.pathname+location.search);});</script>
