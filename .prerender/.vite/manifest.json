@@ -1,0 +1,1230 @@
+{
+  "_AdSlot_YzCgxnYl.mjs": {
+    "file": "chunks/AdSlot_YzCgxnYl.mjs",
+    "name": "AdSlot",
+    "imports": [
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_ads_D17Y6DFZ.mjs"
+    ]
+  },
+  "_Base.3s-1-586.css": {
+    "file": "_astro/Base.3s-1-586.css",
+    "src": "_Base.3s-1-586.css"
+  },
+  "_Base_Cqf3cu7R.mjs": {
+    "file": "chunks/Base_Cqf3cu7R.mjs",
+    "name": "Base",
+    "imports": [
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_ads_D17Y6DFZ.mjs"
+    ],
+    "css": [
+      "_astro/Base.3s-1-586.css"
+    ],
+    "assets": [
+      "_astro/big-shoulders-display-vietnamese-700-normal.DCH5bIkD.woff2",
+      "_astro/big-shoulders-display-vietnamese-700-normal.D5dmK5Ek.woff",
+      "_astro/big-shoulders-display-latin-ext-700-normal.C8xZtiKd.woff2",
+      "_astro/big-shoulders-display-latin-ext-700-normal.D98SaizC.woff",
+      "_astro/big-shoulders-display-latin-700-normal.KM2fueoL.woff2",
+      "_astro/big-shoulders-display-latin-700-normal.CMi6UoP4.woff",
+      "_astro/big-shoulders-display-vietnamese-900-normal.B_uE6zXf.woff2",
+      "_astro/big-shoulders-display-vietnamese-900-normal.BKSkdzuv.woff",
+      "_astro/big-shoulders-display-latin-ext-900-normal.HMld4L9H.woff2",
+      "_astro/big-shoulders-display-latin-ext-900-normal.DkuviPcI.woff",
+      "_astro/big-shoulders-display-latin-900-normal.CW8trzgu.woff2",
+      "_astro/big-shoulders-display-latin-900-normal.DMT-1gsg.woff",
+      "_astro/source-serif-4-cyrillic-ext-opsz-italic.Bl6DJqma.woff2",
+      "_astro/source-serif-4-cyrillic-opsz-italic.Dibx14aP.woff2",
+      "_astro/source-serif-4-greek-opsz-italic.CMW9dfKg.woff2",
+      "_astro/source-serif-4-vietnamese-opsz-italic.Hh3oeMt5.woff2",
+      "_astro/source-serif-4-latin-ext-opsz-italic.BhUEwDRF.woff2",
+      "_astro/source-serif-4-latin-opsz-italic.BOLXpvkj.woff2"
+    ]
+  },
+  "_Kids_D9Q6L2Ma.mjs": {
+    "file": "chunks/Kids_D9Q6L2Ma.mjs",
+    "name": "Kids",
+    "imports": [
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "_ads_D17Y6DFZ.mjs": {
+    "file": "chunks/ads_D17Y6DFZ.mjs",
+    "name": "ads"
+  },
+  "_callit_cB5Iv1ix.mjs": {
+    "file": "chunks/callit_cB5Iv1ix.mjs",
+    "name": "callit",
+    "imports": [
+      "_wwc-2025-final_BRNN80t-.mjs",
+      "_replays_C2M6bPcX.mjs",
+      "_cricnames_CZwpT7iv.mjs"
+    ]
+  },
+  "_compiler_CVFqGt4m.mjs": {
+    "file": "chunks/compiler_CVFqGt4m.mjs",
+    "name": "compiler",
+    "imports": [
+      "_server_-BCFLE-H.mjs"
+    ]
+  },
+  "_content_6vITlJRi.mjs": {
+    "file": "chunks/content_6vITlJRi.mjs",
+    "name": "content"
+  },
+  "_cricnames_CZwpT7iv.mjs": {
+    "file": "chunks/cricnames_CZwpT7iv.mjs",
+    "name": "cricnames"
+  },
+  "_editorial.CxFNuhBm.css": {
+    "file": "_astro/editorial.CxFNuhBm.css",
+    "src": "_editorial.CxFNuhBm.css"
+  },
+  "_editorial_CA9FmRQi.mjs": {
+    "file": "chunks/editorial_CA9FmRQi.mjs",
+    "name": "editorial",
+    "imports": [
+      "_server_-BCFLE-H.mjs"
+    ],
+    "css": [
+      "_astro/editorial.CxFNuhBm.css"
+    ],
+    "assets": [
+      "_astro/big-shoulders-display-vietnamese-800-normal.TfqTMNKp.woff2",
+      "_astro/big-shoulders-display-vietnamese-800-normal.zHzF0To4.woff",
+      "_astro/big-shoulders-display-latin-ext-800-normal.fpv_pHPA.woff2",
+      "_astro/big-shoulders-display-latin-ext-800-normal.BQnXNQRw.woff",
+      "_astro/big-shoulders-display-latin-800-normal.DDUD9Xuh.woff2",
+      "_astro/big-shoulders-display-latin-800-normal.CI0lhnTM.woff",
+      "_astro/source-serif-4-cyrillic-ext-opsz-normal.DIwfbPUE.woff2",
+      "_astro/source-serif-4-cyrillic-opsz-normal.C0olyEE-.woff2",
+      "_astro/source-serif-4-greek-opsz-normal.DrHU7SY7.woff2",
+      "_astro/source-serif-4-vietnamese-opsz-normal.DX68cEVD.woff2",
+      "_astro/source-serif-4-latin-ext-opsz-normal.HoL-AExg.woff2",
+      "_astro/source-serif-4-latin-opsz-normal.BpEBLj1O.woff2"
+    ]
+  },
+  "_flashbacks_C9iOEUpR.mjs": {
+    "file": "chunks/flashbacks_C9iOEUpR.mjs",
+    "name": "flashbacks"
+  },
+  "_games_C3d5Ac21.mjs": {
+    "file": "chunks/games_C3d5Ac21.mjs",
+    "name": "games"
+  },
+  "_guides_wX4Wgl8Y.mjs": {
+    "file": "chunks/guides_wX4Wgl8Y.mjs",
+    "name": "guides"
+  },
+  "_kids_CZXCgZbO.mjs": {
+    "file": "chunks/kids_CZXCgZbO.mjs",
+    "name": "kids"
+  },
+  "_replays_C2M6bPcX.mjs": {
+    "file": "chunks/replays_C2M6bPcX.mjs",
+    "name": "replays"
+  },
+  "_rolldown-runtime_D8jQpDG7.mjs": {
+    "file": "chunks/rolldown-runtime_D8jQpDG7.mjs",
+    "name": "rolldown-runtime"
+  },
+  "_server_-BCFLE-H.mjs": {
+    "file": "chunks/server_-BCFLE-H.mjs",
+    "name": "server"
+  },
+  "_venues_DA5n52Va.mjs": {
+    "file": "chunks/venues_DA5n52Va.mjs",
+    "name": "venues"
+  },
+  "_week_D70pcIAI.mjs": {
+    "file": "chunks/week_D70pcIAI.mjs",
+    "name": "week"
+  },
+  "_wwc-2025-final_BRNN80t-.mjs": {
+    "file": "chunks/wwc-2025-final_BRNN80t-.mjs",
+    "name": "wwc-2025-final",
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs"
+    ]
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-ext-opsz-italic.woff2": {
+    "file": "_astro/source-serif-4-cyrillic-ext-opsz-italic.Bl6DJqma.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-ext-opsz-italic.woff2"
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-ext-opsz-normal.woff2": {
+    "file": "_astro/source-serif-4-cyrillic-ext-opsz-normal.DIwfbPUE.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-ext-opsz-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-opsz-italic.woff2": {
+    "file": "_astro/source-serif-4-cyrillic-opsz-italic.Dibx14aP.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-opsz-italic.woff2"
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-opsz-normal.woff2": {
+    "file": "_astro/source-serif-4-cyrillic-opsz-normal.C0olyEE-.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-opsz-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-greek-opsz-italic.woff2": {
+    "file": "_astro/source-serif-4-greek-opsz-italic.CMW9dfKg.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-greek-opsz-italic.woff2"
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-greek-opsz-normal.woff2": {
+    "file": "_astro/source-serif-4-greek-opsz-normal.DrHU7SY7.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-greek-opsz-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-ext-opsz-italic.woff2": {
+    "file": "_astro/source-serif-4-latin-ext-opsz-italic.BhUEwDRF.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-ext-opsz-italic.woff2"
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-ext-opsz-normal.woff2": {
+    "file": "_astro/source-serif-4-latin-ext-opsz-normal.HoL-AExg.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-ext-opsz-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-opsz-italic.woff2": {
+    "file": "_astro/source-serif-4-latin-opsz-italic.BOLXpvkj.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-opsz-italic.woff2"
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-opsz-normal.woff2": {
+    "file": "_astro/source-serif-4-latin-opsz-normal.BpEBLj1O.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-opsz-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-vietnamese-opsz-italic.woff2": {
+    "file": "_astro/source-serif-4-vietnamese-opsz-italic.Hh3oeMt5.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-vietnamese-opsz-italic.woff2"
+  },
+  "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-vietnamese-opsz-normal.woff2": {
+    "file": "_astro/source-serif-4-vietnamese-opsz-normal.DX68cEVD.woff2",
+    "src": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-vietnamese-opsz-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-700-normal.woff": {
+    "file": "_astro/big-shoulders-display-latin-700-normal.CMi6UoP4.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-700-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-700-normal.woff2": {
+    "file": "_astro/big-shoulders-display-latin-700-normal.KM2fueoL.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-700-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff": {
+    "file": "_astro/big-shoulders-display-latin-800-normal.CI0lhnTM.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2": {
+    "file": "_astro/big-shoulders-display-latin-800-normal.DDUD9Xuh.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-900-normal.woff": {
+    "file": "_astro/big-shoulders-display-latin-900-normal.DMT-1gsg.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-900-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-900-normal.woff2": {
+    "file": "_astro/big-shoulders-display-latin-900-normal.CW8trzgu.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-900-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-700-normal.woff": {
+    "file": "_astro/big-shoulders-display-latin-ext-700-normal.D98SaizC.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-700-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-700-normal.woff2": {
+    "file": "_astro/big-shoulders-display-latin-ext-700-normal.C8xZtiKd.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-700-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-800-normal.woff": {
+    "file": "_astro/big-shoulders-display-latin-ext-800-normal.BQnXNQRw.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-800-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-800-normal.woff2": {
+    "file": "_astro/big-shoulders-display-latin-ext-800-normal.fpv_pHPA.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-800-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-900-normal.woff": {
+    "file": "_astro/big-shoulders-display-latin-ext-900-normal.DkuviPcI.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-900-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-900-normal.woff2": {
+    "file": "_astro/big-shoulders-display-latin-ext-900-normal.HMld4L9H.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-900-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-700-normal.woff": {
+    "file": "_astro/big-shoulders-display-vietnamese-700-normal.D5dmK5Ek.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-700-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-700-normal.woff2": {
+    "file": "_astro/big-shoulders-display-vietnamese-700-normal.DCH5bIkD.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-700-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-800-normal.woff": {
+    "file": "_astro/big-shoulders-display-vietnamese-800-normal.zHzF0To4.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-800-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-800-normal.woff2": {
+    "file": "_astro/big-shoulders-display-vietnamese-800-normal.TfqTMNKp.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-800-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-900-normal.woff": {
+    "file": "_astro/big-shoulders-display-vietnamese-900-normal.BKSkdzuv.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-900-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-900-normal.woff2": {
+    "file": "_astro/big-shoulders-display-vietnamese-900-normal.B_uE6zXf.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-900-normal.woff2"
+  },
+  "node_modules/astro/dist/entrypoints/prerender.js": {
+    "file": "prerender-entry.CcaWD0eT.mjs",
+    "name": "prerender",
+    "src": "node_modules/astro/dist/entrypoints/prerender.js",
+    "isEntry": true,
+    "imports": [
+      "_server_-BCFLE-H.mjs"
+    ],
+    "dynamicImports": [
+      "virtual:astro:page:src/pages/about@_@astro",
+      "virtual:astro:page:src/pages/ads.txt@_@ts",
+      "virtual:astro:page:src/pages/advent@_@astro",
+      "virtual:astro:page:src/pages/archive@_@astro",
+      "virtual:astro:page:src/pages/bingo@_@astro",
+      "virtual:astro:page:src/pages/call-it@_@astro",
+      "virtual:astro:page:src/pages/call-it-football@_@astro",
+      "virtual:astro:page:src/pages/challenge@_@astro",
+      "virtual:astro:page:src/pages/connections@_@astro",
+      "virtual:astro:page:src/pages/countdown@_@astro",
+      "virtual:astro:page:src/pages/credits@_@astro",
+      "virtual:astro:page:src/pages/daily@_@astro",
+      "virtual:astro:page:src/pages/embed@_@astro",
+      "virtual:astro:page:src/pages/f1/[key]@_@astro",
+      "virtual:astro:page:src/pages/flashback/[id]@_@astro",
+      "virtual:astro:page:src/pages/flashback@_@astro",
+      "virtual:astro:page:src/pages/ground-guesser@_@astro",
+      "virtual:astro:page:src/pages/guess-the-player@_@astro",
+      "virtual:astro:page:src/pages/guess-the-sport@_@astro",
+      "virtual:astro:page:src/pages/higher-or-lower@_@astro",
+      "virtual:astro:page:src/pages/is-it-a-foul@_@astro",
+      "virtual:astro:page:src/pages/kids/6-8@_@astro",
+      "virtual:astro:page:src/pages/kids/9-12@_@astro",
+      "virtual:astro:page:src/pages/kids/academy@_@astro",
+      "virtual:astro:page:src/pages/kids/guess-the-player@_@astro",
+      "virtual:astro:page:src/pages/kids/guess-the-sport@_@astro",
+      "virtual:astro:page:src/pages/kids/kit@_@astro",
+      "virtual:astro:page:src/pages/kids/parents@_@astro",
+      "virtual:astro:page:src/pages/kids/the-grid@_@astro",
+      "virtual:astro:page:src/pages/kids/true-or-false@_@astro",
+      "virtual:astro:page:src/pages/kids/which-sport@_@astro",
+      "virtual:astro:page:src/pages/kids@_@astro",
+      "virtual:astro:page:src/pages/laughs@_@astro",
+      "virtual:astro:page:src/pages/legends-xi@_@astro",
+      "virtual:astro:page:src/pages/manifest.webmanifest@_@ts",
+      "virtual:astro:page:src/pages/name-them-all@_@astro",
+      "virtual:astro:page:src/pages/newsletter@_@astro",
+      "virtual:astro:page:src/pages/offline@_@astro",
+      "virtual:astro:page:src/pages/on-this-day@_@astro",
+      "virtual:astro:page:src/pages/passport@_@astro",
+      "virtual:astro:page:src/pages/pick-your-xi@_@astro",
+      "virtual:astro:page:src/pages/play@_@astro",
+      "virtual:astro:page:src/pages/pub-quiz@_@astro",
+      "virtual:astro:page:src/pages/read@_@astro",
+      "virtual:astro:page:src/pages/replays/[slug]@_@astro",
+      "virtual:astro:page:src/pages/replays@_@astro",
+      "virtual:astro:page:src/pages/rewind@_@astro",
+      "virtual:astro:page:src/pages/round-up@_@astro",
+      "virtual:astro:page:src/pages/settings@_@astro",
+      "virtual:astro:page:src/pages/speed-round@_@astro",
+      "virtual:astro:page:src/pages/sports/[id]@_@astro",
+      "virtual:astro:page:src/pages/sports@_@astro",
+      "virtual:astro:page:src/pages/sports-day@_@astro",
+      "virtual:astro:page:src/pages/stat-attack@_@astro",
+      "virtual:astro:page:src/pages/stats-detective@_@astro",
+      "virtual:astro:page:src/pages/stories/[id]@_@astro",
+      "virtual:astro:page:src/pages/stories@_@astro",
+      "virtual:astro:page:src/pages/the-grid@_@astro",
+      "virtual:astro:page:src/pages/this-week@_@astro",
+      "virtual:astro:page:src/pages/true-or-false@_@astro",
+      "virtual:astro:page:src/pages/watch@_@astro",
+      "virtual:astro:page:src/pages/weekly-expert@_@astro",
+      "virtual:astro:page:src/pages/which-sport@_@astro",
+      "virtual:astro:page:src/pages/who-am-i@_@astro",
+      "virtual:astro:page:src/pages/index@_@astro",
+      "virtual:astro:actions/noop-entrypoint",
+      "noop-middleware",
+      "virtual:astro:session-driver",
+      "virtual:astro:server-island-manifest"
+    ]
+  },
+  "noop-middleware": {
+    "file": "chunks/_noop-middleware_D5dhqGDj.mjs",
+    "name": "_noop-middleware",
+    "src": "noop-middleware",
+    "isDynamicEntry": true
+  },
+  "virtual:astro:actions/noop-entrypoint": {
+    "file": "chunks/noop-entrypoint_CxXy0p4B.mjs",
+    "name": "noop-entrypoint",
+    "src": "virtual:astro:actions/noop-entrypoint",
+    "isDynamicEntry": true
+  },
+  "virtual:astro:page:src/pages/about@_@astro": {
+    "file": "chunks/about_eHakCM1s.mjs",
+    "name": "about@_@astro",
+    "src": "virtual:astro:page:src/pages/about@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/ads.txt@_@ts": {
+    "file": "chunks/ads_482P8MB3.mjs",
+    "name": "ads",
+    "src": "virtual:astro:page:src/pages/ads.txt@_@ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_ads_D17Y6DFZ.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/advent@_@astro": {
+    "file": "chunks/advent_D_BI9cFj.mjs",
+    "name": "advent@_@astro",
+    "src": "virtual:astro:page:src/pages/advent@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/archive@_@astro": {
+    "file": "chunks/archive_-fhuaJz6.mjs",
+    "name": "archive@_@astro",
+    "src": "virtual:astro:page:src/pages/archive@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/bingo@_@astro": {
+    "file": "chunks/bingo_Dj2ehDJx.mjs",
+    "name": "bingo@_@astro",
+    "src": "virtual:astro:page:src/pages/bingo@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/call-it-football@_@astro": {
+    "file": "chunks/call-it-football_DnhdBhZo.mjs",
+    "name": "call-it-football@_@astro",
+    "src": "virtual:astro:page:src/pages/call-it-football@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/call-it@_@astro": {
+    "file": "chunks/call-it_VespUU5j.mjs",
+    "name": "call-it@_@astro",
+    "src": "virtual:astro:page:src/pages/call-it@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_callit_cB5Iv1ix.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/challenge@_@astro": {
+    "file": "chunks/challenge_CTMnj3zM.mjs",
+    "name": "challenge@_@astro",
+    "src": "virtual:astro:page:src/pages/challenge@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/connections@_@astro": {
+    "file": "chunks/connections_BeW0PV0g.mjs",
+    "name": "connections@_@astro",
+    "src": "virtual:astro:page:src/pages/connections@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_AdSlot_YzCgxnYl.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/countdown@_@astro": {
+    "file": "chunks/countdown_BeshQU5B.mjs",
+    "name": "countdown@_@astro",
+    "src": "virtual:astro:page:src/pages/countdown@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_games_C3d5Ac21.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/credits@_@astro": {
+    "file": "chunks/credits_BCjY-1GP.mjs",
+    "name": "credits@_@astro",
+    "src": "virtual:astro:page:src/pages/credits@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_content_6vITlJRi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/daily@_@astro": {
+    "file": "chunks/daily_CK962wIW.mjs",
+    "name": "daily@_@astro",
+    "src": "virtual:astro:page:src/pages/daily@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/embed@_@astro": {
+    "file": "chunks/embed_DOetAGQz.mjs",
+    "name": "embed@_@astro",
+    "src": "virtual:astro:page:src/pages/embed@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/f1/[key]@_@astro": {
+    "file": "chunks/_key__qYvzFGx2.mjs",
+    "name": "_key_@_@astro",
+    "src": "virtual:astro:page:src/pages/f1/[key]@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/flashback/[id]@_@astro": {
+    "file": "chunks/_id__DA6NbGHV.mjs",
+    "name": "_id_@_@astro",
+    "src": "virtual:astro:page:src/pages/flashback/[id]@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_AdSlot_YzCgxnYl.mjs",
+      "_content_6vITlJRi.mjs",
+      "_flashbacks_C9iOEUpR.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/flashback@_@astro": {
+    "file": "chunks/flashback_BuT_LwK1.mjs",
+    "name": "flashback@_@astro",
+    "src": "virtual:astro:page:src/pages/flashback@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_content_6vITlJRi.mjs",
+      "_flashbacks_C9iOEUpR.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/ground-guesser@_@astro": {
+    "file": "chunks/ground-guesser_ByfGshbP.mjs",
+    "name": "ground-guesser@_@astro",
+    "src": "virtual:astro:page:src/pages/ground-guesser@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_AdSlot_YzCgxnYl.mjs",
+      "_venues_DA5n52Va.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/guess-the-player@_@astro": {
+    "file": "chunks/guess-the-player__cBYDTiT.mjs",
+    "name": "guess-the-player@_@astro",
+    "src": "virtual:astro:page:src/pages/guess-the-player@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/guess-the-sport@_@astro": {
+    "file": "chunks/guess-the-sport_0oBmZshB.mjs",
+    "name": "guess-the-sport@_@astro",
+    "src": "virtual:astro:page:src/pages/guess-the-sport@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/higher-or-lower@_@astro": {
+    "file": "chunks/higher-or-lower_DzLEs_Fy.mjs",
+    "name": "higher-or-lower@_@astro",
+    "src": "virtual:astro:page:src/pages/higher-or-lower@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/index@_@astro": {
+    "file": "chunks/index_CEzyycWi.mjs",
+    "name": "index@_@astro",
+    "src": "virtual:astro:page:src/pages/index@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_AdSlot_YzCgxnYl.mjs",
+      "_callit_cB5Iv1ix.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/is-it-a-foul@_@astro": {
+    "file": "chunks/is-it-a-foul_BZb3kcBi.mjs",
+    "name": "is-it-a-foul@_@astro",
+    "src": "virtual:astro:page:src/pages/is-it-a-foul@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/kids/6-8@_@astro": {
+    "file": "chunks/6-8_6Kz05vpn.mjs",
+    "name": "6-8@_@astro",
+    "src": "virtual:astro:page:src/pages/kids/6-8@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_Kids_D9Q6L2Ma.mjs",
+      "_kids_CZXCgZbO.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/kids/9-12@_@astro": {
+    "file": "chunks/9-12_dyyBuxXO.mjs",
+    "name": "9-12@_@astro",
+    "src": "virtual:astro:page:src/pages/kids/9-12@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_Kids_D9Q6L2Ma.mjs",
+      "_kids_CZXCgZbO.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/kids/academy@_@astro": {
+    "file": "chunks/academy_Ci89NvOX.mjs",
+    "name": "academy@_@astro",
+    "src": "virtual:astro:page:src/pages/kids/academy@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_Kids_D9Q6L2Ma.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/kids/guess-the-player@_@astro": {
+    "file": "chunks/guess-the-player_CyzroJrg.mjs",
+    "name": "guess-the-player@_@astro",
+    "src": "virtual:astro:page:src/pages/kids/guess-the-player@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Kids_D9Q6L2Ma.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/kids/guess-the-sport@_@astro": {
+    "file": "chunks/guess-the-sport_Bh7vZHFE.mjs",
+    "name": "guess-the-sport@_@astro",
+    "src": "virtual:astro:page:src/pages/kids/guess-the-sport@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Kids_D9Q6L2Ma.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/kids/kit@_@astro": {
+    "file": "chunks/kit_CO4dgaeZ.mjs",
+    "name": "kit@_@astro",
+    "src": "virtual:astro:page:src/pages/kids/kit@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_Kids_D9Q6L2Ma.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/kids/parents@_@astro": {
+    "file": "chunks/parents_DkCKbTJG.mjs",
+    "name": "parents@_@astro",
+    "src": "virtual:astro:page:src/pages/kids/parents@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Kids_D9Q6L2Ma.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/kids/the-grid@_@astro": {
+    "file": "chunks/the-grid_IKt8yQ2-.mjs",
+    "name": "the-grid@_@astro",
+    "src": "virtual:astro:page:src/pages/kids/the-grid@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Kids_D9Q6L2Ma.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/kids/true-or-false@_@astro": {
+    "file": "chunks/true-or-false_CDxXZYS4.mjs",
+    "name": "true-or-false@_@astro",
+    "src": "virtual:astro:page:src/pages/kids/true-or-false@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Kids_D9Q6L2Ma.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/kids/which-sport@_@astro": {
+    "file": "chunks/which-sport_1fVDdMeo.mjs",
+    "name": "which-sport@_@astro",
+    "src": "virtual:astro:page:src/pages/kids/which-sport@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_Kids_D9Q6L2Ma.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/kids@_@astro": {
+    "file": "chunks/kids_DF0C5ODt.mjs",
+    "name": "kids@_@astro",
+    "src": "virtual:astro:page:src/pages/kids@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Kids_D9Q6L2Ma.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/laughs@_@astro": {
+    "file": "chunks/laughs_CsHbRFgD.mjs",
+    "name": "laughs@_@astro",
+    "src": "virtual:astro:page:src/pages/laughs@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/legends-xi@_@astro": {
+    "file": "chunks/legends-xi_DqpNOS4h.mjs",
+    "name": "legends-xi@_@astro",
+    "src": "virtual:astro:page:src/pages/legends-xi@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/manifest.webmanifest@_@ts": {
+    "file": "chunks/manifest_CXEP15Hy.mjs",
+    "name": "manifest",
+    "src": "virtual:astro:page:src/pages/manifest.webmanifest@_@ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/name-them-all@_@astro": {
+    "file": "chunks/name-them-all_mhhQKYRs.mjs",
+    "name": "name-them-all@_@astro",
+    "src": "virtual:astro:page:src/pages/name-them-all@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_AdSlot_YzCgxnYl.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/newsletter@_@astro": {
+    "file": "chunks/newsletter_BOVIdScj.mjs",
+    "name": "newsletter@_@astro",
+    "src": "virtual:astro:page:src/pages/newsletter@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_content_6vITlJRi.mjs",
+      "_flashbacks_C9iOEUpR.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/offline@_@astro": {
+    "file": "chunks/offline_DgeHdmGv.mjs",
+    "name": "offline@_@astro",
+    "src": "virtual:astro:page:src/pages/offline@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/on-this-day@_@astro": {
+    "file": "chunks/on-this-day_rfYvAmV2.mjs",
+    "name": "on-this-day@_@astro",
+    "src": "virtual:astro:page:src/pages/on-this-day@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_content_6vITlJRi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/passport@_@astro": {
+    "file": "chunks/passport_Dm28CG65.mjs",
+    "name": "passport@_@astro",
+    "src": "virtual:astro:page:src/pages/passport@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/pick-your-xi@_@astro": {
+    "file": "chunks/pick-your-xi_DZ10doeQ.mjs",
+    "name": "pick-your-xi@_@astro",
+    "src": "virtual:astro:page:src/pages/pick-your-xi@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/play@_@astro": {
+    "file": "chunks/play_C8GsKxRg.mjs",
+    "name": "play@_@astro",
+    "src": "virtual:astro:page:src/pages/play@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/pub-quiz@_@astro": {
+    "file": "chunks/pub-quiz_B3G4FCLU.mjs",
+    "name": "pub-quiz@_@astro",
+    "src": "virtual:astro:page:src/pages/pub-quiz@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_venues_DA5n52Va.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/read@_@astro": {
+    "file": "chunks/read_CaKjtpC4.mjs",
+    "name": "read@_@astro",
+    "src": "virtual:astro:page:src/pages/read@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_week_D70pcIAI.mjs",
+      "_flashbacks_C9iOEUpR.mjs",
+      "_guides_wX4Wgl8Y.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/replays/[slug]@_@astro": {
+    "file": "chunks/_slug__BZEsxHH4.mjs",
+    "name": "_slug_@_@astro",
+    "src": "virtual:astro:page:src/pages/replays/[slug]@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_wwc-2025-final_BRNN80t-.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_replays_C2M6bPcX.mjs",
+      "_cricnames_CZwpT7iv.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/replays@_@astro": {
+    "file": "chunks/replays_DyLjHJNV.mjs",
+    "name": "replays@_@astro",
+    "src": "virtual:astro:page:src/pages/replays@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_wwc-2025-final_BRNN80t-.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_replays_C2M6bPcX.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/rewind@_@astro": {
+    "file": "chunks/rewind_B8pLBjis.mjs",
+    "name": "rewind@_@astro",
+    "src": "virtual:astro:page:src/pages/rewind@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/round-up@_@astro": {
+    "file": "chunks/round-up_CTKmeO3r.mjs",
+    "name": "round-up@_@astro",
+    "src": "virtual:astro:page:src/pages/round-up@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_content_6vITlJRi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/settings@_@astro": {
+    "file": "chunks/settings_C8cRAjP9.mjs",
+    "name": "settings@_@astro",
+    "src": "virtual:astro:page:src/pages/settings@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/speed-round@_@astro": {
+    "file": "chunks/speed-round_ITs62alP.mjs",
+    "name": "speed-round@_@astro",
+    "src": "virtual:astro:page:src/pages/speed-round@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/sports-day@_@astro": {
+    "file": "chunks/sports-day_B7K96dlV.mjs",
+    "name": "sports-day@_@astro",
+    "src": "virtual:astro:page:src/pages/sports-day@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_games_C3d5Ac21.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/sports/[id]@_@astro": {
+    "file": "chunks/_id__DualPL6y.mjs",
+    "name": "_id_@_@astro",
+    "src": "virtual:astro:page:src/pages/sports/[id]@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_AdSlot_YzCgxnYl.mjs",
+      "_guides_wX4Wgl8Y.mjs",
+      "_content_6vITlJRi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/sports@_@astro": {
+    "file": "chunks/sports_FLmhxcuZ.mjs",
+    "name": "sports@_@astro",
+    "src": "virtual:astro:page:src/pages/sports@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_guides_wX4Wgl8Y.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/stat-attack@_@astro": {
+    "file": "chunks/stat-attack_Em7FXhUv.mjs",
+    "name": "stat-attack@_@astro",
+    "src": "virtual:astro:page:src/pages/stat-attack@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/stats-detective@_@astro": {
+    "file": "chunks/stats-detective_DljVTNvl.mjs",
+    "name": "stats-detective@_@astro",
+    "src": "virtual:astro:page:src/pages/stats-detective@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_wwc-2025-final_BRNN80t-.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_replays_C2M6bPcX.mjs",
+      "_cricnames_CZwpT7iv.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/stories/[id]@_@astro": {
+    "file": "chunks/_id__CLLrJPVI.mjs",
+    "name": "_id_@_@astro",
+    "src": "virtual:astro:page:src/pages/stories/[id]@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_AdSlot_YzCgxnYl.mjs",
+      "_content_6vITlJRi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/stories@_@astro": {
+    "file": "chunks/stories_C9aIqntj.mjs",
+    "name": "stories@_@astro",
+    "src": "virtual:astro:page:src/pages/stories@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_content_6vITlJRi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/the-grid@_@astro": {
+    "file": "chunks/the-grid_CVQJ8PFo.mjs",
+    "name": "the-grid@_@astro",
+    "src": "virtual:astro:page:src/pages/the-grid@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/this-week@_@astro": {
+    "file": "chunks/this-week_R9qvrMZE.mjs",
+    "name": "this-week@_@astro",
+    "src": "virtual:astro:page:src/pages/this-week@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_week_D70pcIAI.mjs",
+      "_guides_wX4Wgl8Y.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/true-or-false@_@astro": {
+    "file": "chunks/true-or-false_CzI66wZH.mjs",
+    "name": "true-or-false@_@astro",
+    "src": "virtual:astro:page:src/pages/true-or-false@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/watch@_@astro": {
+    "file": "chunks/watch_DHc_xbvT.mjs",
+    "name": "watch@_@astro",
+    "src": "virtual:astro:page:src/pages/watch@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_replays_C2M6bPcX.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/weekly-expert@_@astro": {
+    "file": "chunks/weekly-expert_C8EhNyxi.mjs",
+    "name": "weekly-expert@_@astro",
+    "src": "virtual:astro:page:src/pages/weekly-expert@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/which-sport@_@astro": {
+    "file": "chunks/which-sport_DE-2TnfX.mjs",
+    "name": "which-sport@_@astro",
+    "src": "virtual:astro:page:src/pages/which-sport@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs"
+    ]
+  },
+  "virtual:astro:page:src/pages/who-am-i@_@astro": {
+    "file": "chunks/who-am-i_nxzW5ORV.mjs",
+    "name": "who-am-i@_@astro",
+    "src": "virtual:astro:page:src/pages/who-am-i@_@astro",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime_D8jQpDG7.mjs",
+      "_server_-BCFLE-H.mjs",
+      "_compiler_CVFqGt4m.mjs",
+      "_Base_Cqf3cu7R.mjs",
+      "_editorial_CA9FmRQi.mjs",
+      "_AdSlot_YzCgxnYl.mjs"
+    ]
+  },
+  "virtual:astro:server-island-manifest": {
+    "file": "chunks/_virtual_astro_server-island-manifest_BhTW5IeR.mjs",
+    "name": "_virtual_astro_server-island-manifest",
+    "src": "virtual:astro:server-island-manifest",
+    "isDynamicEntry": true
+  },
+  "virtual:astro:session-driver": {
+    "file": "chunks/_virtual_astro_session-driver_BWWe3pKI.mjs",
+    "name": "_virtual_astro_session-driver",
+    "src": "virtual:astro:session-driver",
+    "isDynamicEntry": true
+  }
+}

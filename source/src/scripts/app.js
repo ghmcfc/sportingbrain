@@ -9,6 +9,8 @@ import { PLAY } from '../data/playlist.js';
 import { FOULS, COUNTDOWN } from '../data/games.js';
 import VIDS from '../data/feeds/videos.json';
 import { lotdIndex, renderClip } from './laughs.js';
+import { icon } from './icons.js';
+import { photoFor, figure } from './photos.js';
 (function(){
 'use strict';
 const BASE=(document.documentElement.dataset.base||'/');
@@ -211,85 +213,58 @@ if(P==='home'){
   const more=FLASHBACKS.filter(f=>f.id!==fb.id).sort((a,b)=>((FLASHBACKS.indexOf(a)+DAY)%FLASHBACKS.length)-((FLASHBACKS.indexOf(b)+DAY)%FLASHBACKS.length)).slice(0,3);
   const yrOf=f=>(f.date||f.when).match(/\d{4}/)[0];
 
+  const POOL=['connections','who-am-i','ground-guesser','call-it','call-it-football','daily','name-them-all','weekly-expert','pub-quiz','is-it-a-foul','stat-attack','pick-your-xi','stats-detective','higher-or-lower','speed-round','true-or-false'];
+  const FIX=['connections','who-am-i','ground-guesser'];
+  const rot=shuffle(POOL.filter(x=>!FIX.includes(x)),seeded(DAY*13)).slice(0,5);
+  const dk=ukKey(), ud=Math.floor(Date.UTC(p.y,p.m-1,p.d)/86400000);
+  const doneToday={connections:store.get('cx_'+ud,null)?.done,'who-am-i':store.get('wa_'+ud,null)?.done,'ground-guesser':!!store.get('gg2_'+ud,null),'call-it':!!store.get('ci_'+DAY,null),'call-it-football':!!store.get('fc_'+ud,null),daily:!!store.get('daily_'+dk,null)};
+  const tile=sl=>{const g=PLAY.find(x=>x[0]===sl); if(!g) return ''; const d=doneToday[sl], daily=sl in doneToday;
+    return `<a class="gt" href="${BASE}${sl}.html" style="--c:${g[4]}"><span class="gt-ic">${icon(sl,40)}</span><span class="gt-tx"><b>${esc(g[1])}</b><small>${esc(g[2])}</small>${daily?`<em class="${d?'done':'new'}">${d?'Played today':'New today'}</em>`:''}</span></a>`;};
+  const W3=WEEK.stories.slice(0,4), lead=W3[0];
+  const storyCard=(x,i,cls)=>{const ph=photoFor(x.title+' '+x.body,x.sport,DAY+i,x.venue); return `<a class="story ${cls}" href="${BASE}this-week.html#stories">${figure(ph)}<span class="kick">${esc(x.sport)}</span><h3>${esc(x.title)}</h3>${cls==='lead'?`<p>${esc(x.body.slice(0,210).replace(/\s\S*$/,''))}…</p>`:''}</a>`;};
+  const fbPh=photoFor(fb.title+' '+(fb.standfirst||''),fb.sport,DAY);
+
   main.innerHTML = `
   <div class="fp">
     <section class="hook" id="hook" aria-live="polite"></section>
-    <aside>
+    <aside class="fp-side">
       ${cm?`<section class="board" aria-label="Today's Call It">
         <div class="board-top"><span>Call It #${DAY}</span><span>${ciDone?'Played':'Live'}</span></div>
         <h2>${esc(cm.team)} v ${esc(cm.opp)}</h2>
         <p class="ctx">${esc(cm.match)}, ${cm.innings?'second':'first'} innings</p>
         <div class="lamp"><b>${esc(cm.score)}</b><span>after ${esc(cm.at)} overs${cm.need?`<br>${esc(cm.need.replace(cm.team+' ',''))}`:''}</span></div>
         <p class="q">${esc(cm.q)}</p>
-        <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how you did':'Make your call'}</a><a class="ci-alt" href="${BASE}call-it-football.html">Prefer football? Today's Call It: Football</a>
+        <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how you did':'Make your call'}</a><a class="ci-alt" href="${BASE}call-it-football.html">Prefer football? Call It: Football</a>
       </section>`:''}
-      <p class="you-line">${streak?`Your streak: <b>${streak} day${streak===1?'':'s'}</b>.`:'Play a game a day to start a streak.'} ${streakSaverLine()}</p>
+      <p class="you-line">${streak?`Your streak: <b>${streak} day${streak===1?'':'s'}</b>. `:''}New games in <b class="countdown" id="cd2"></b></p>
     </aside>
   </div>
 
-  <div class="sec"><h2>Play</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></div>
-  <div class="pg-hub home-games">${['call-it-football','weekly-expert','pub-quiz','stat-attack','is-it-a-foul','stats-detective','pick-your-xi','countdown'].map(sl=>{const g=PLAY.find(x=>x[0]===sl);return `<a class="pg-tile" href="${BASE}${g[0]}.html" style="--c:${g[4]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`;}).join('')}</div>
-
-  ${VIDS.videos.length?`<div class="sec"><h2>Laugh of the Day</h2><a href="${BASE}laughs.html">This week's laughs</a></div><div class="home-lotd"><div id="homeLotd"></div><p class="teaser">One funny moment from sport every day, hand-picked by a person and always family-safe. New at midnight.</p></div>`:''}
+  <section class="blk"><header class="sh"><h2>Today's games</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></header>
+    <div class="gtiles">${[...FIX,...rot].map(tile).join('')}</div></section>
 
   ${AD1}
-  <div class="sec"><h2>This week in sport</h2><a href="${BASE}this-week.html">The full edition</a></div>
-  <div class="fp-week">
-    <div class="fp-week-stories">${WEEK.stories.slice(0,3).map(x=>`<a href="${BASE}this-week.html#stories"><span class="fp-kicker">${esc(x.sport)}</span><b>${esc(x.title)}</b></a>`).join('')}</div>
-    <div class="tw-nums mini">${WEEK.numbers.slice(0,3).map(n=>`<div><b>${esc(n[0])}</b><p>${esc(n[1])}</p></div>`).join('')}</div>
-    <div class="fp-watch"><h3>What to watch</h3><ul>${WEEK.watch.slice(0,4).map(w=>`<li><b>${esc(w.what)}</b><small>${esc(w.when)}</small></li>`).join('')}</ul><a href="${BASE}this-week.html#talking" class="btn ghost" style="font-size:1rem;padding:6px 12px">Have your say: talking points</a></div>
-  </div>
+  <section class="blk"><header class="sh"><h2>This week in sport</h2><a href="${BASE}this-week.html">The full edition</a></header>
+    <div class="read-grid">${storyCard(lead,0,'lead')}<div class="story-list">${W3.slice(1).map((x,i)=>storyCard(x,i+1,'sm')).join('')}</div></div>
+    <div class="numstrip">${WEEK.numbers.slice(0,3).map(n=>`<div><b>${esc(n[0])}</b><p>${esc(n[1])}</p></div>`).join('')}</div>
+  </section>
+
+  ${VIDS.videos.length?`<section class="blk"><header class="sh"><h2>Laugh of the Day</h2><a href="${BASE}laughs.html">This week's laughs</a></header><div class="home-lotd"><div id="homeLotd"></div></div></section>`:''}
 
   ${AD2}
-  <div class="fp-row">
-    <section class="fp-col">
-      <div class="sec"><h2>Beat the Brain</h2><a href="${BASE}daily.html">Play</a></div>
-      <p class="teaser" style="margin:0 0 10px">Five questions a day. Pick your level.</p>
-      <div class="levels">${LVL.map((l,i)=>{const d=store.get(`daily_${ukKey()}_${i+1}`,null);return `<a href="${BASE}daily.html?level=${i+1}" style="--c:${l[1]}"><b>${l[0]}</b><small>${d?`You scored ${d.marks.filter(Boolean).length}/5`:l[2]}</small></a>`;}).join('')}</div>
-    </section>
-    <section class="fp-col">
-      <div class="sec"><h2>${dlabel(mdNow)} in sport</h2><a href="${BASE}on-this-day.html">On This Day</a></div>
-      <ul class="otd-mini">${otd.map(e=>`<li><b>${e.y}</b><p>${esc(e.t)}</p></li>`).join('')}</ul>
-    </section>
-    <section class="fp-col">
-      <div class="sec"><h2>Flashback</h2><a href="${BASE}flashback.html">All</a></div>
-      <a class="fb-mini" href="${BASE}flashback/${fb.id}.html"><b>${esc(fb.title)}</b><span>${esc(fb.sport)}, ${yrOf(fb)}${fbAnn?` · ${esc(fbAnn)}`:''}. ${esc(fb.standfirst)}</span></a>
-      <div class="sec" style="margin-top:22px"><h2>The Cynical Round-Up</h2><a href="${BASE}round-up.html">Read it</a></div>
-      <a class="ru-mini" href="${BASE}round-up.html"><span class="satire">Satire. Tongue firmly in cheek.</span><h3 class="ru-h">${esc(SB_ROUNDUP.headline)}</h3><p>${esc(SB_ROUNDUP.edition)}. The real week in sport, with an eye-roll.</p></a>
-    </section>
-  </div>
-
-  <div class="fp-row">
-    <section class="fp-col">
-      <div class="sec"><h2>Hero and heroine of the week</h2></div>
-      ${H?`<div class="storylist"><a href="${BASE}stories/${H.heroine.story}.html"><span class="noimg" style="background:#5B2C83"></span><span><b>${esc(H.heroine.name)}</b><small>${esc(H.heroine.line)}</small></span></a>
-        <a href="${BASE}stories/${H.hero.story}.html"><span class="noimg" style="background:#1F5FA8"></span><span><b>${esc(H.hero.name)}</b><small>${esc(H.hero.line)}</small></span></a></div>`:`<p class="teaser">Back next week.</p>`}
-    </section>
-    <section class="fp-col">
-      <div class="sec"><h2>Replay the final</h2><a href="${BASE}replays.html">All replays</a></div>
-      <div class="storylist">${[rp].map(r=>`<a href="${BASE}replays/${r.slug}.html"><span class="noimg" style="background:#0B6E4F"></span><span><b>${esc(r.title)}</b><small>${esc(r.teaser)}</small></span></a>`).join('')}</div>
-      <p class="you-line">New Call It and Beat the Brain in <b class="countdown" id="cd2"></b></p>
-    </section>
-    <section class="fp-col">
-      <div class="sec"><h2>Your record</h2></div>
-      <div class="rec"><div><b>${streak}</b><span>day streak</span></div><div><b>${store.get('played',0)}</b><span>games played</span></div><div><b>${store.get('beaten',0)}</b><span>Brain beaten</span></div></div>
-      <div class="badges flat">${B.map(b=>`<span class="badge ${b.got?'got':''}" title="${esc(b.how)}">${esc(b.n)}</span>`).join('')}</div>
-      <p class="small" style="margin:8px 0 10px">${streakSaverLine()}. Kept on this device only.</p>
-      <div class="sharebtns"><a class="btn ghost" data-share-to="whatsapp" target="_blank" rel="noopener">WhatsApp</a><a class="btn ghost" data-share-to="x" target="_blank" rel="noopener">X</a><a class="btn ghost" data-share-to="facebook" target="_blank" rel="noopener">Facebook</a><button class="btn ghost" data-copy-link>Copy link</button></div>
-    </section>
+  <div class="three">
+    <section><header class="sh"><h2>${dlabel(mdNow)} in sport</h2><a href="${BASE}on-this-day.html">More</a></header>
+      <ul class="otd-mini">${otd.map(e=>`<li><b>${e.y}</b><p>${esc(e.t)}</p></li>`).join('')}</ul></section>
+    <section><header class="sh"><h2>Flashback</h2><a href="${BASE}flashback.html">All</a></header>
+      <a class="story" href="${BASE}flashback/${fb.id}.html">${figure(fbPh)}<span class="kick">${esc(fb.sport)}, ${yrOf(fb)}${fbAnn?` · ${esc(fbAnn)}`:''}</span><h3>${esc(fb.title)}</h3><p>${esc(fb.standfirst)}</p></a></section>
+    <section><header class="sh"><h2>The Cynical Round-Up</h2><a href="${BASE}round-up.html">Read it</a></header>
+      <a class="ru-mini" href="${BASE}round-up.html"><span class="satire">Satire. Tongue firmly in cheek.</span><h3 class="ru-h">${esc(SB_ROUNDUP.headline)}</h3><p>${esc(SB_ROUNDUP.edition)}. The real week in sport, with an eye-roll.</p></a></section>
   </div>
 
   <section class="nl-band" id="newsletter">
-    <div><h3>The Daily Brain</h3><p>Today's Call It, a Flashback, On This Day and one stat to win an argument with. Every morning, free. Your email is the only thing we ever ask for.</p></div>
+    <div><h3>The Daily Brain</h3><p>Today's games, a Flashback, On This Day and one stat to win an argument with. Every morning, free. Your email is the only thing we ever ask for.</p></div>
     <a class="btn nl-open" href="https://tally.so/r/${window.SB_NEWSLETTER_FORM}" target="_blank" rel="noopener">Get the newsletter</a>
-  </section>
-
-  <div class="sec" id="who"><h2>Who we are</h2><button class="btn ghost" data-welcome style="padding:6px 12px;font-size:1rem">What is SportingBrain?</button></div>
-  <div class="about-strip">
-    <div><b>Built on real sport</b><p>Every game uses real matches and real numbers, and every article lists its sources.</p></div>
-    <div><b>Every sport, equal billing</b><p>Men's and women's sport side by side, from football and cricket to squash and kabaddi.</p></div>
-    <div><b>Free, and no betting, ever</b><p>Paid for by adverts. No sign-up to play. Your email only if you want the newsletter.</p></div>
-  </div>`;
+  </section>`;
 
   countdown($('#cd2'));
   if(window.SB_ADS) main.querySelectorAll('ins.adsbygoogle').forEach(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}});

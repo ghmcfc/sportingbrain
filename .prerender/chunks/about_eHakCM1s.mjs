@@ -1,0 +1,21 @@
+import { t as __exportAll } from "./rolldown-runtime_D8jQpDG7.mjs";
+import { c as renderComponent, h as maybeRenderHead, m as renderTemplate } from "./server_-BCFLE-H.mjs";
+import { t as createComponent } from "./compiler_CVFqGt4m.mjs";
+import { t as $$Base } from "./Base_Cqf3cu7R.mjs";
+// src/pages/about.astro
+var about_exports = /* @__PURE__ */ __exportAll({
+	default: () => $$About,
+	file: () => $$file,
+	url: () => $$url
+});
+var $$About = createComponent(($$result, $$props, $$slots) => {
+	return renderTemplate`${renderComponent($$result, "Base", $$Base, {
+		"title": "About and privacy | SportingBrain",
+		"description": "Who we are, what we do and how we look after your privacy."
+	}, { "default": ($$result) => renderTemplate`${maybeRenderHead($$result)}<div class="article"><section class="card" style="margin-top:14px"><h1 class="title">About SportingBrain</h1><p>SportingBrain is a free daily sports hub for everyone who loves sport. A new puzzle every day, quick games, true stories, and what's happening in sport this week, across every sport, men's and women's.</p><p>The Brain is our own cartoon mascot. He sets the puzzles, plays against you, and is a terrible loser.</p><p><b>No betting. No gambling ads. Ever.</b></p></section><section class="card"><h2 class="title">Privacy, in plain English</h2><p><b>What we collect:</b> nothing, unless you sign up to The Daily Brain newsletter. That is the only time we ask for any details, and it's just your email address. You don't need an account to play anything.</p><p><b>The newsletter:</b> we use your email address only to send you the newsletter. We never sell it or share it for marketing. The sign-up form is run for us by Tally, a European form service that follows GDPR. You can unsubscribe at any time with one click, and you can ask us to delete your email address whenever you like. You must be 13 or over to sign up.</p><p><b>What stays on your device:</b> your scores, streaks, badges and settings are saved in your own browser so they're there next time. They never leave your device. Clearing your browser data removes them.</p><p><b>Cookies and adverts:</b> there are none yet. Before we add any, we'll ask your permission first, and there will never be targeted adverts aimed at children.</p><p><b>Photos:</b> our sport photos come from Pexels, licensed for free commercial use. We never use photos of children or of famous people.</p></section><section class="card"><h2 class="title">Spotted a mistake?</h2><p>We check our facts carefully. If you think we've got one wrong, tell us and we'll fix it.</p></section></div>` })}`;
+}, "/home/claude/sportingbrain/source/src/pages/about.astro", void 0);
+var $$file = "/home/claude/sportingbrain/source/src/pages/about.astro";
+var $$url = "/sportingbrain/about.html";
+// \0virtual:astro:page:src/pages/about@_@astro
+var page = () => about_exports;
+export { page };

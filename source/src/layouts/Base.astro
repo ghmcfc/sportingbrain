@@ -56,14 +56,14 @@ const ld = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sporti
 <a class="skip" href="#main">Skip to content</a>
 <header class="top"><div class="wrap">
   <a class="wordmark" href={base}><span class="mark" aria-hidden="true">SB</span><span>SportingBrain</span></a>
+  <nav class="sb-tabs" aria-label="Main">{nav.map(([t, h, k]) => <a href={h} aria-current={section === k ? "page" : undefined}>{t}</a>)}</nav>
   <div class="hdr-right">
     <button class="iconbtn" data-share-site aria-label="Share SportingBrain">Share</button>
     <button class="iconbtn" data-dark aria-label="Switch dark mode">Dark</button>
   </div>
 </div>
-<nav class="sb-tabs" aria-label="Main"><div class="wrap">{nav.map(([t, h, k]) => <a href={h} aria-current={section === k ? "page" : undefined}>{t}</a>)}</div></nav>
+
 </header>
-<div class="datebar"><div class="wrap"><span id="today-date"></span><span>Free to play. No betting, ever.</span></div></div>
 <script>document.addEventListener('click',e=>{const a=e.target.closest('[data-mistake]');if(a)a.href='https://tally.so/r/zE7LVZ?page='+encodeURIComponent(location.pathname+location.search);});</script>
 <main class:list={['wrap', { wide }]} data-page={page} id="main"><slot /></main>
 <footer class="site-foot"><div class="wrap wide foot-grid">
