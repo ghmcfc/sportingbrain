@@ -639,3 +639,4 @@ body.dark .pg-sec{border-top-color:#fff}
 .sg-ans{padding-left:1.1em}.sg-ans li{margin:0 0 6px}
 @media (max-width:520px){.sg-h small{display:none}.sg-cell{min-height:72px;font-size:.92rem}}
 body.dark .sg-cell{background:#16263f;color:#fff;border-color:#2A3A55}
+.has-gh .ci-head h1{display:none}.has-gh .ci-head{margin-top:10px}
