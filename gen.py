@@ -1,4 +1,5 @@
 """Builds the SportingBrain HTML pages from one shared template."""
+import time
 PAGES = {
   "index.html": ("home", "SportingBrain: the daily sports hub for every fan", "Daily sports puzzles, quick games, stories, stats and challenges for every fan, every sport and every age. Free."),
   "daily.html": ("daily", "Beat the Brain: today's sports puzzle | SportingBrain", "Five questions across every sport and a cheeky Brain to beat. New every day."),
@@ -23,7 +24,7 @@ T = """<!DOCTYPE html>
 <meta property="og:description" content="{desc}">
 <meta name="theme-color" content="#14254a">
 <link rel="icon" href="assets/brain.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v={v}">
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -41,12 +42,13 @@ T = """<!DOCTYPE html>
   <p>SportingBrain is free, for every fan, every sport and every age. No betting, ever.</p>
   <p><a href="./">Home</a> · <a href="./#who">Who we are</a> · <a href="./#newsletter">Newsletter</a> · <a href="about.html">About and privacy</a> · <a href="#" data-dys>Dyslexia-friendly font</a></p>
 </footer>
-<script src="assets/data.js"></script>
-<script src="assets/content.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/data.js?v={v}"></script>
+<script src="assets/content.js?v={v}"></script>
+<script src="assets/app.js?v={v}"></script>
 </body>
 </html>
 """
+V=time.strftime("%Y%m%d%H%M")
 for f,(page,title,desc) in PAGES.items():
-    open(f,"w").write(T.format(page=page,title=title,desc=desc))
+    open(f,"w").write(T.format(page=page,title=title,desc=desc,v=V))
 print("pages:", len(PAGES))
