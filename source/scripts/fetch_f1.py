@@ -21,6 +21,7 @@ drv = get(f'https://api.jolpi.ca/ergast/f1/{year}/driverstandings.json'); pause(
 if not drv: raise SystemExit('standings unavailable')
 con = get(f'https://api.jolpi.ca/ergast/f1/{year}/constructorstandings.json'); pause()
 cal = get(f'https://api.jolpi.ca/ergast/f1/{year}.json'); pause()
+calp = get(f'https://api.jolpi.ca/ergast/f1/{year - 1}.json') or {'MRData': {'RaceTable': {'Races': []}}}; pause()
 def lst(d, key):
     t = d['MRData'][key]['StandingsLists']; return t[0] if t else {}
 ds = lst(drv, 'StandingsTable'); cs = lst(con, 'StandingsTable')
@@ -29,6 +30,7 @@ season = {
   'drivers': [{'pos': int(x['position']), 'name': x['Driver']['givenName'] + ' ' + x['Driver']['familyName'], 'code': x['Driver'].get('code'), 'team': x['Constructors'][0]['name'] if x['Constructors'] else '', 'points': float(x['points']), 'wins': int(x['wins'])} for x in ds.get('DriverStandings', [])],
   'teams': [{'pos': int(x['position']), 'name': x['Constructor']['name'], 'points': float(x['points']), 'wins': int(x['wins'])} for x in cs.get('ConstructorStandings', [])],
   'calendar': [{'round': int(r['round']), 'name': r['raceName'], 'circuit': r['Circuit']['circuitName'], 'country': r['Circuit']['Location']['country'], 'date': r['date']} for r in cal['MRData']['RaceTable']['Races']],
+  'calendar_prev': [{'name': r['raceName'], 'date': r['date']} for r in calp['MRData']['RaceTable']['Races']],
   'source': 'Jolpica F1 API (Ergast-compatible)', 'fetched': time.strftime('%Y-%m-%dT%H:%MZ', time.gmtime())}
 
 # Race replays (OpenF1): every completed race this season and last, lap-by-lap positions from lap times

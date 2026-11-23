@@ -1,5 +1,7 @@
 import '../data/data.js';
 import '../data/content.js';
+import { FLASHBACKS } from '../data/flashbacks.js';
+import { REPLAYS } from '../data/replays.js';
 (function(){
 'use strict';
 const BASE=(document.documentElement.dataset.base||'/');
@@ -81,9 +83,9 @@ function badges(){
     {e:'🧩',n:'Grid cracker',got:store.get('grid_solved',0)>=1,how:'Solve The Grid'}];
 }
 const DEFAULT_USP=[['🧠','A new puzzle every day','Beat the Brain, our cheeky AI rival, and keep your streak going.'],
-  ['🌍','Every sport, every fan','Football first, then netball to darts, F1 to kabaddi. Women\'s sport front and centre.'],
-  ['👥','Play with your mates','Leagues for work, family and the group chat.'],
-  ['📖','Stories you won\'t find elsewhere','On this day in sport, heroes and heroines, unusual sports.'],
+  ['🌍','Every sport, every fan','Football first, then cricket to darts, F1 to kabaddi. Men\'s and women\'s, same billing.'],
+  ['👥','Take on your mates','Share your score to the group chat and see who beats the Brain.'],
+  ['📼','Flashback and replays','Forgotten moments told properly, and great finals replayed ball by ball.'],
   ['✅','Free and family-safe','No sign-up to play. No betting. Ever.']];
 function welcome(USP, force){ USP=USP||DEFAULT_USP;
   if(!force && (store.get('welcomed',false) || store.get('played',0)>0 || store.get('nl_done',false))) return;
@@ -141,7 +143,7 @@ if(P==='home'){
 
   // tomorrow's teaser
   const tmr=new Date(Date.now()+86400000); const tdow=tmr.toLocaleDateString('en-GB',{weekday:'long',timeZone:'Europe/London'});
-  const weekly={Monday:'the new Weekly Brain Challenge',Tuesday:"Women's Sport Weekly",Wednesday:'World Sport Wednesday',Friday:'the Friday Family Challenge',Sunday:'a fresh Cynical Round-Up'}[tdow];
+  const weekly={Monday:'the new Weekly Brain Challenge',Wednesday:'World Sport Wednesday',Friday:'the Friday Family Challenge',Sunday:'a fresh Cynical Round-Up'}[tdow];
   const tSport=pickDaily(SB_SPORTS,2);
 
   // badges
@@ -155,12 +157,18 @@ if(P==='home'){
     ['🤔','Guess the Sport','Emoji clues',BASE+'guess-the-sport.html','#EF6C00'],
     ['✅','True or False','Fact or fib?',BASE+'true-or-false.html','#2E7D32']];
   const USP=[['🧠','A new puzzle every day','Beat the Brain, our cheeky AI rival, and keep your streak going.'],
-    ['🌍','Every sport, every fan','Football first, then netball to darts, F1 to kabaddi. Women\'s sport front and centre.'],
-    ['👥','Play with your mates','Leagues for work, family and the group chat.'],
-    ['📖','Stories you won\'t find elsewhere','On this day in sport, heroes and heroines, unusual sports.'],
+    ['🌍','Every sport, every fan','Football first, then cricket to darts, F1 to kabaddi. Men\'s and women\'s, same billing.'],
+    ['👥','Take on your mates','Share your score to the group chat and see who beats the Brain.'],
+    ['📼','Flashback and replays','Forgotten moments told properly, and great finals replayed ball by ball.'],
     ['✅','Free and family-safe','No sign-up to play. No betting. Ever.']];
   window.SB_USP=USP;
   const heroBg=photo('stadium',1600);
+  const mdOf=d=>d?d.slice(5):null; const todayMd=mdNow;
+  const soon=[0,1,2,3,4,5,6].map(k=>{const t=new Date(Date.now()+k*86400000); return [k,`${String(t.getUTCMonth()+1).padStart(2,'0')}-${String(t.getUTCDate()).padStart(2,'0')}`];});
+  let fb=null, fbAnn='';
+  for(const [k,md] of soon){ const f=FLASHBACKS.find(x=>mdOf(x.date)===md); if(f){ fb=f; const yrs=new Date().getUTCFullYear()-(+f.date.slice(0,4)); fbAnn=k===0?`${yrs} years ago today`:`${yrs} years ago this week`; break; } }
+  if(!fb) fb=FLASHBACKS[DAY%FLASHBACKS.length];
+  const rp=REPLAYS[DAY%REPLAYS.length];
 
   main.innerHTML = `
   <section class="hero big" ${heroBg?`style="--bg:url('${heroBg}')"`:''}>
@@ -168,7 +176,7 @@ if(P==='home'){
       <div>
         <span class="tag" style="background:var(--gold);color:#14254a">The free daily sports hub</span>
         <h1 class="promise">Play, learn and argue about sport. Every single day.</h1>
-        <p class="sub">For everyone who loves sport. Every sport, men's and women's, every age.</p>
+        <p class="sub">For everyone who loves sport. Every sport, every level, every age.</p>
         <div class="today-box">
           <img src="assets/brain.svg" alt="The Brain" class="mini-brain">
           <div><b>Beat the Brain #${DAY}</b><br>${played?`You scored ${played.marks.filter(Boolean).length}/5 today.`:`The Brain scored ${brainScore}/5. Your turn.`}</div>
@@ -192,7 +200,7 @@ if(P==='home'){
       </div>
 
       <div class="sec"><h2>This week's challenges</h2></div>
-      <div class="g2">${['weekly','women','world','family'].map(k=>{const c=SB_CHALLENGES[k]; const done=store.get('ch_'+k,null); return `<a class="ch" href="${BASE}challenge.html?c=${k}" style="background:${c.colour}"><b>${esc(c.title)}</b><small>${done!==null?`You scored ${done}/${c.qs.length}`:'10 questions'}</small></a>`;}).join('')}</div>
+      <div class="g2">${['weekly','world','family'].map(k=>{const c=SB_CHALLENGES[k]; const done=store.get('ch_'+k,null); return `<a class="ch" href="${BASE}challenge.html?c=${k}" style="background:${c.colour}"><b>${esc(c.title)}</b><small>${done!==null?`You scored ${done}/${c.qs.length}`:'10 questions'}</small></a>`;}).join('')}</div>
 
       <div class="sec"><h2>For the family</h2></div>
       <div class="card"><div class="title" style="margin-top:0">⚽ This weekend: the Keepy-Up Ladder</div><p class="teaser">Best of three tries each. Add up the family total, then beat it next week. Under-8s can let it bounce once between touches. Play on grass, away from windows and roads.</p>
@@ -211,17 +219,18 @@ if(P==='home'){
         </div>
       </section>
 
-      <div class="sec"><h2>Story of the day</h2><a href="${BASE}stories.html">All stories</a></div>
-      <article class="card photo-card">
-        ${img(story.sport,story.sport)}
-        <div class="pc-body"><span class="tag" style="background:${colour(story.sport)}">${esc(story.sport)}</span>
-        <div class="title">${story.emoji} ${esc(story.title)}</div><p class="teaser">${esc(story.teaser)}</p></div>
-        <a class="stretch" href="${BASE}stories/${story.id}.html" aria-label="Read: ${esc(story.title)}"></a>
+      <div class="sec"><h2>Flashback</h2><a href="${BASE}flashback.html">All flashbacks</a></div>
+      <article class="card photo-card fb-card">
+        ${img(fb.sport,fb.sport)}
+        <div class="pc-body"><span class="tag" style="background:${colour(fb.sport)}">${esc(fb.sport)} · ${esc(fb.when)}</span>${fbAnn?` <span class="tag" style="background:var(--gold);color:#14254a">${fbAnn}</span>`:''}
+        <div class="title">${esc(fb.title)}</div><p class="teaser">${esc(fb.standfirst)}</p>
+        <div class="fb-nums">${fb.numbers.slice(0,3).map(n=>`<div><b>${esc(n[0])}</b><small>${esc(n[1])}</small></div>`).join('')}</div></div>
+        <a class="stretch" href="${BASE}flashback/${fb.id}.html" aria-label="Read: ${esc(fb.title)}"></a>
       </article>
 
       ${H?`<div class="sec"><h2>Hero and heroine of the week</h2></div>
       <div class="g2 stack">
-        <div class="card" style="border-top:6px solid ${colour("Women's sport")}"><span class="tag" style="background:${colour("Women's sport")}">Heroine</span>
+        <div class="card" style="border-top:6px solid var(--navy2)"><span class="tag">Heroine</span>
           <div class="title">${H.heroine.emoji} ${esc(H.heroine.name)}</div><p class="teaser">${esc(H.heroine.line)}</p>
           <a class="stretch" href="${BASE}stories/${H.heroine.story}.html" aria-label="Read about ${esc(H.heroine.name)}"></a></div>
         <div class="card" style="border-top:6px solid var(--navy2)"><span class="tag">Hero</span>
@@ -237,12 +246,12 @@ if(P==='home'){
         <a class="stretch" href="${BASE}round-up.html" aria-label="Read the Cynical Round-Up"></a>
       </div>
 
-      <div class="sec"><h2>Women's sport</h2><a href="${BASE}challenge.html?c=women">Play the weekly</a></div>
-      <article class="card photo-card">
-        ${img("Women's football","Football stadium")}
-        <div class="pc-body"><span class="tag" style="background:${colour("Women's football")}">The big story</span>
-        <div class="title">🦁 Football came home</div><p class="teaser">A sold-out Wembley, extra time, and a moment that changed the women's game.</p></div>
-        <a class="stretch" href="${BASE}stories/lionesses.html" aria-label="Read: Football came home"></a>
+      <div class="sec"><h2>Replay the final</h2><a href="${BASE}replays.html">All replays</a></div>
+      <article class="card replay-card">
+        <span class="tag" style="background:${colour('Cricket')}">Cricket · ball by ball</span>
+        <div class="title">${esc(rp.title)}</div><p class="teaser">${esc(rp.teaser)}</p>
+        <p class="small" style="margin:6px 0 0">Watch the run chase build ball by ball, scrub to any moment, see every wicket fall.</p>
+        <a class="stretch" href="${BASE}replays/${rp.slug}.html" aria-label="Replay: ${esc(rp.title)}"></a>
       </article>
 
       <div class="sec"><h2>Unusual sport of the week</h2></div>
@@ -252,7 +261,7 @@ if(P==='home'){
       </div>
 
       <div class="sec"><h2>More stories</h2></div>
-      <div class="g2 stack">${shuffle(SB_STORIES.filter(s=>![story.id,'lionesses',H&&H.hero.story,H&&H.heroine.story].includes(s.id)),seeded(DAY+7)).slice(0,4).map(s=>`<article class="card photo-card small-pc">${img(s.sport,s.sport)}<div class="pc-body"><div class="title" style="font-size:1rem">${s.emoji} ${esc(s.title)}</div><p class="teaser">${esc(s.teaser)}</p></div><a class="stretch" href="${BASE}stories/${s.id}.html" aria-label="${esc(s.title)}"></a></article>`).join('')}</div>
+      <div class="g2 stack">${shuffle(SB_STORIES.filter(s=>![story.id,H&&H.hero.story,H&&H.heroine.story].includes(s.id)),seeded(DAY+7)).slice(0,4).map(s=>`<article class="card photo-card small-pc">${img(s.sport,s.sport)}<div class="pc-body"><div class="title" style="font-size:1rem">${s.emoji} ${esc(s.title)}</div><p class="teaser">${esc(s.teaser)}</p></div><a class="stretch" href="${BASE}stories/${s.id}.html" aria-label="${esc(s.title)}"></a></article>`).join('')}</div>
     </div>
 
     <div class="col col-join">
@@ -266,7 +275,7 @@ if(P==='home'){
       <div class="sec" id="newsletter"><h2>The Daily Brain</h2></div>
       <section class="card news">
         <div class="title" style="margin-top:0">📬 The Brain in your inbox every morning</div>
-        <p class="teaser">Today's puzzle, the story of the day and one stat to win an argument with. Free. The only time we ever ask for any details, and it's just your email.</p>
+        <p class="teaser">Today's puzzle, the day's Flashback and one stat to win an argument with. Free. The only time we ever ask for any details, and it's just your email.</p>
         <a class="btn gold wide nl-open" href="https://tally.so/r/${window.SB_NEWSLETTER_FORM}" target="_blank" rel="noopener">Sign me up, it takes 10 seconds</a><p class="small" style="margin-top:8px">Email only. No spam, no selling it on, unsubscribe in one click.</p>
       </section>
 
@@ -301,7 +310,7 @@ if(P==='home'){
     <div class="values">
       <div><span>🆓</span><b>Free, always</b>No paywall, no subscriptions. Paid for by adverts and sponsors.</div>
       <div><span>🌍</span><b>Every sport</b>Football gets you in. Netball, darts, F1, kabaddi and the rest keep you here.</div>
-      <div><span>⚖️</span><b>Women's sport, front and centre</b>Equal billing everywhere, not a tab at the side.</div>
+      <div><span>📊</span><b>Real data</b>Results, replays and records from open data, credited properly.</div>
       <div><span>👨‍👩‍👧</span><b>Family-safe</b>No chat, no sign-up to play, nothing you wouldn't want the kids to see.</div>
       <div><span>🚫</span><b>No betting. Ever.</b>No betting ads, no betting links, no gambling.</div>
       <div><span>🔒</span><b>Your data stays yours</b>The only thing we ever ask for is your email, and only if you want the newsletter.</div>

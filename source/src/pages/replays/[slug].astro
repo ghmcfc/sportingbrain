@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import { REPLAYS } from '../../data/replays.js';
+const feeds = import.meta.glob('../../data/feeds/cricket/*.json', { eager: true });
+export function getStaticPaths() {
+  const feeds = import.meta.glob('../../data/feeds/cricket/*.json', { eager: true });
+  return REPLAYS.filter(r => Object.keys(feeds).some(k => k.endsWith(`/${r.slug}.json`))).map(r => ({ params: { slug: r.slug }, props: { r } }));
+}
+const { r } = Astro.props;
+const m = Object.entries(feeds).find(([k]) => k.endsWith(`/${r.slug}.json`))[1].default;
+const o = m.outcome || {};
+const result = o.winner ? `${o.winner} won${o.by ? ' by ' + Object.entries(o.by).map(([k, v]) => `${v} ${k}`).join(' ') : ''}${o.method ? ' (' + o.method + ')' : ''}${o.eliminator ? ' (' + o.eliminator + ' won the Super Over decider)' : ''}` : (o.result === 'tie' ? 'Tied' : (o.result || ''));
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<Base title={`Replay: ${r.title} | SportingBrain`} description={r.teaser} wide>
+  <article class="replay">
+    <span class="tag" style="background:#2E7D32">Cricket replay · ball by ball</span>
+    <h1>{r.title}</h1>
+    <p class="teaser" style="font-size:1.1rem">{r.teaser}</p>
+    <p class="small">{m.venue}{m.city && !(m.venue || '').includes(m.city) ? ', ' + m.city : ''} · {new Date(m.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} · {m.overs} overs a side · <b>{result}</b>{m.pom ? ` · Player of the match: ${m.pom.join(', ')}` : ''}</p>
+    <div class="rp-grid">
+      <section class="card rp-board" aria-live="polite">
+        <div class="rp-inns" id="rpInns"></div>
+        <div class="rp-score"><b id="rpScore">0/0</b><span id="rpOvers">0.0 overs</span></div>
+        <div id="rpNeed" class="rp-need"></div>
+        <div class="rp-bat" id="rpBat"></div>
+        <ol class="rp-feed" id="rpFeed"></ol>
+      </section>
+      <section class="card rp-chart">
+        <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <b>Runs, ball by ball</b>
+          <div class="row" style="gap:6px"><button class="btn" id="rpPlay">▶ Play</button><select id="rpSpeed" aria-label="Speed"><option value="140">Normal</option><option value="40">Fast</option><option value="400">Slow</option></select></div>
+        </div>
+        <svg id="rpSvg" viewBox="0 0 800 360" role="img" aria-label="Worm chart of both innings"></svg>
+        <input type="range" id="rpScrub" min="0" value="0" aria-label="Scrub through the match" style="width:100%">
+        <div class="small">Drag to any moment. Dots are wickets: tap one to jump there.</div>
+        <div class="rp-legend" id="rpLegend"></div>
+      </section>
+    </div>
+    <section class="card" style="margin-top:14px"><b>Every wicket</b><div class="rp-wkts" id="rpWkts"></div></section>
+    <p class="small" style="margin-top:12px">Data: <a href="https://cricsheet.org" rel="noopener">Cricsheet</a>, Open Data Commons Attribution License. Ball-by-ball figures may differ slightly from official scorecards.</p>
+    <div class="sec"><h2>More replays</h2></div>
+    <div class="next3">{REPLAYS.filter(x => x.slug !== r.slug).slice(0, 3).map(x => <a href={`${base}replays/${x.slug}.html`}><span>🏏</span>{x.title}</a>)}</div>
+  </article>
+  <script id="rpData" type="application/json" set:html={JSON.stringify(m)} />
+  <script>
+    import { initReplay } from '../../scripts/replay.js';
+    initReplay(JSON.parse(document.getElementById('rpData').textContent));
+  </script>
+</Base>

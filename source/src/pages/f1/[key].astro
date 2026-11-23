@@ -1,0 +1,82 @@
+---
+// F1 race replay. Hidden (noindex, not linked) until OpenF1 / Jolpica grant commercial use.
+import Base from '../../layouts/Base.astro';
+export function getStaticPaths() {
+  const feeds = import.meta.glob('../../data/feeds/f1/*.json', { eager: true });
+  return Object.values(feeds).map(f => f.default).filter(r => r.pos && r.pos.length).map(r => ({ params: { key: String(r.key) }, props: { r } }));
+}
+const { r } = Astro.props;
+import season from '../../data/feeds/f1_season.json';
+const cal = [...(season.calendar || []), ...(season.calendar_prev || [])].find(c => c.date === r.date || Math.abs(new Date(c.date) - new Date(r.date)) <= 86400000);
+const raceName = cal ? cal.name : r.name;
+// Position at the start of each lap from timed position changes
+const drivers = r.drivers.filter(d => r.laps[String(d.n)]);
+const pos = {}; for (const p of r.pos) (pos[p[0]] ||= []).push([p[2], p[1]]);
+Object.values(pos).forEach(a => a.sort((x, y) => x[0] < y[0] ? -1 : 1));
+const nLaps = Math.max(...drivers.map(d => Math.max(...Object.keys(r.laps[String(d.n)]).map(Number))));
+const leaderStarts = []; for (let k = 1; k <= nLaps + 1; k++) { let t = null; for (const d of drivers) { const L = r.laps[String(d.n)][String(k)]; if (L && L[1] && (!t || L[1] < t)) t = L[1]; } leaderStarts.push(t); }
+const series = drivers.map(d => {
+  const ps = pos[d.n] || [], laps = r.laps[String(d.n)], out = [];
+  for (let k = 1; k <= nLaps; k++) {
+    const L = laps[String(k)]; if (!L) { out.push(null); continue; }
+    const end = laps[String(k + 1)]?.[1] || leaderStarts[k] || '9999';
+    let v = null; for (const p of ps) { if (p[0] <= end) v = p[1]; else break; } out.push(v);
+  }
+  const times = []; for (let k = 1; k <= nLaps; k++) { const L = laps[String(k)]; times.push(L && L[0] ? +L[0].toFixed(3) : null); }
+  return { n: d.n, code: d.code, name: d.name, team: d.team, colour: d.colour, pos: out, times,
+    pits: r.pits.filter(p => p.n === d.n).map(p => p.lap), stints: r.stints.filter(s => s.n === d.n), result: (r.result.find(x => x.n === d.n) || {}).pos };
+}).sort((a, b) => (a.result || 99) - (b.result || 99));
+const data = { name: raceName, year: r.year, laps: nLaps, series };
+---
+<Base title={`Replay: ${r.year} ${raceName} | SportingBrain`} description={`Lap-by-lap replay of the ${r.year} ${raceName}.`} wide noindex>
+  <article class="replay">
+    <span class="tag" style="background:#C62828">F1 replay · lap by lap</span>
+    <h1>{r.year} {raceName}</h1>
+    <p class="small">{r.circuit} · {new Date(r.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} · {nLaps} laps</p>
+    <div class="rp-grid">
+      <section class="card rp-board"><b>Running order</b> <span id="f1Lap" class="tag" style="background:var(--gold);color:#14254a">Lap 1</span><ol class="f1-order" id="f1Order"></ol></section>
+      <section class="card rp-chart">
+        <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><b>Position, lap by lap</b><button class="btn" id="f1Play">▶ Play</button></div>
+        <svg id="f1Svg" viewBox="0 0 800 420" role="img" aria-label="Position chart"></svg>
+        <input type="range" id="f1Scrub" min="1" value="1" style="width:100%" aria-label="Lap">
+        <div class="small">Tap a driver in the running order to highlight them. Small circles are pit stops.</div>
+      </section>
+    </div>
+    <section class="card" style="margin-top:14px"><b>Head to head: lap times</b>
+      <div class="row" style="gap:8px;margin:8px 0"><select id="f1A" aria-label="Driver A"></select><span>v</span><select id="f1B" aria-label="Driver B"></select></div>
+      <svg id="f1Cmp" viewBox="0 0 800 260" role="img" aria-label="Lap time comparison"></svg><div id="f1CmpTxt" class="small"></div>
+    </section>
+    <p class="small" style="margin-top:12px">Data: OpenF1. Unofficial; not associated with Formula 1. F1 marks belong to Formula One Licensing B.V.</p>
+  </article>
+  <script id="f1Data" type="application/json" set:html={JSON.stringify(data)} />
+  <script>
+    const D = JSON.parse(document.getElementById('f1Data').textContent), S = D.series, N = D.laps, NP = S.length;
+    const $ = id => document.getElementById(id), esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const X = k => 40 + (k - 1) / Math.max(1, N - 1) * 700, Y = p => 20 + (p - 1) / Math.max(1, NP - 1) * 380;
+    let lap = 1, hi = null, timer = null; $('f1Scrub').max = N;
+    function draw() {
+      let o = ''; for (let p = 1; p <= NP; p++) o += `<text x="30" y="${Y(p) + 4}" font-size="11" text-anchor="end" fill="currentColor" opacity=".6">${p}</text>`;
+      S.forEach(d => { const pts = []; d.pos.forEach((p, i) => { if (p && i + 1 <= lap) pts.push(`${X(i + 1).toFixed(1)},${Y(p).toFixed(1)}`); });
+        const on = !hi || hi === d.n; o += `<polyline points="${pts.join(' ')}" fill="none" stroke="${d.colour}" stroke-width="${hi === d.n ? 4 : 2}" opacity="${on ? 1 : .15}" stroke-linejoin="round"/>`;
+        d.pits.filter(l => l <= lap && d.pos[l - 1]).forEach(l => o += `<circle cx="${X(l)}" cy="${Y(d.pos[l - 1])}" r="3.5" fill="#fff" stroke="${d.colour}" stroke-width="2" opacity="${on ? 1 : .15}"/>`);
+        const lastP = d.pos.slice(0, lap).filter(Boolean).pop(); if (lastP) o += `<text x="${X(Math.min(lap, d.pos.filter(Boolean).length)) + 6}" y="${Y(lastP) + 4}" font-size="11" font-weight="700" fill="${d.colour}" opacity="${on ? 1 : .2}">${esc(d.code)}</text>`; });
+      $('f1Svg').innerHTML = o; $('f1Lap').textContent = `Lap ${lap} of ${N}`;
+      const order = S.map(d => ({ d, p: d.pos[lap - 1] })).filter(x => x.p).sort((a, b) => a.p - b.p);
+      $('f1Order').innerHTML = order.map(x => `<li><button class="linkbtn" data-n="${x.d.n}"><i style="background:${x.d.colour}"></i><b>${esc(x.d.code)}</b> ${esc(x.d.name)} <small>${esc(x.d.team)}</small></button></li>`).join('');
+    }
+    const go = k => { lap = Math.max(1, Math.min(N, k)); $('f1Scrub').value = lap; draw(); };
+    $('f1Scrub').oninput = e => { stop(); go(+e.target.value); };
+    const stop = () => { clearInterval(timer); timer = null; $('f1Play').textContent = '▶ Play'; };
+    $('f1Play').onclick = () => { if (timer) return stop(); if (lap >= N) go(1); $('f1Play').textContent = '❚❚ Pause'; timer = setInterval(() => lap >= N ? stop() : go(lap + 1), 350); };
+    document.addEventListener('click', e => { const b = e.target.closest('[data-n]'); if (b) { hi = hi === +b.dataset.n ? null : +b.dataset.n; draw(); } });
+    // head to head
+    const opts = S.map(d => `<option value="${d.n}">${esc(d.code)} ${esc(d.name)}</option>`).join(''); $('f1A').innerHTML = opts; $('f1B').innerHTML = opts; $('f1B').selectedIndex = 1;
+    function cmp() { const a = S.find(d => d.n == $('f1A').value), b = S.find(d => d.n == $('f1B').value);
+      const all = [...a.times, ...b.times].filter(Boolean).sort((x, y) => x - y), lo = all[0], hiT = (all[Math.floor(all.length / 2)] || lo) * 1.06;
+      const XX = k => 40 + (k - 1) / Math.max(1, N - 1) * 740, YY = t => 230 - (Math.min(t, hiT) - lo) / (hiT - lo || 1) * 200;
+      let o = ''; [a, b].forEach(d => { const pts = d.times.map((t, i) => t ? `${XX(i + 1).toFixed(1)},${YY(t).toFixed(1)}` : null).filter(Boolean); o += `<polyline points="${pts.join(' ')}" fill="none" stroke="${d === b && a.colour === b.colour ? '#888' : d.colour}" stroke-width="2.5"/>`; });
+      $('f1Cmp').innerHTML = o; const best = d => Math.min(...d.times.filter(Boolean)); const fmt = t => `${Math.floor(t / 60)}:${(t % 60).toFixed(3).padStart(6, '0')}`;
+      $('f1CmpTxt').innerHTML = `Fastest lap: <b>${esc(a.code)}</b> ${fmt(best(a))} · <b>${esc(b.code)}</b> ${fmt(best(b))}. Lower is faster; pit-stop and safety-car laps are cut off at the top.`; }
+    $('f1A').onchange = cmp; $('f1B').onchange = cmp; cmp(); go(1);
+  </script>
+</Base>

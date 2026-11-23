@@ -1,14 +1,14 @@
 ---
 import '../styles/global.css';
-interface Props { title: string; description: string; page?: string; wide?: boolean; image?: string; type?: string; }
-const { title, description, page = '', wide = false, image, type = 'website' } = Astro.props;
+interface Props { title: string; description: string; page?: string; wide?: boolean; image?: string; type?: string; noindex?: boolean; }
+const { title, description, page = '', wide = false, image, type = 'website', noindex = false } = Astro.props;
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = image || 'https://images.pexels.com/photos/1657324/pexels-photo-1657324.jpeg?auto=compress&cs=tinysrgb&w=1200';
 const nav = [
   ['Play', `${base}#games`],
-  ['Stories', `${base}stories.html`],
-  ["Women's sport", `${base}challenge.html?c=women`],
+  ["Flashback", `${base}flashback.html`],
+  ["Replays", `${base}replays.html`],
   ['Family', `${base}challenge.html?c=family`],
   ['Round-Up', `${base}round-up.html`],
   ['Sport A to Z', `${base}sports.html`],
@@ -23,6 +23,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sporti
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content={description}>
+{noindex && <meta name="robots" content="noindex,nofollow">}
 <link rel="canonical" href={canonical}>
 <meta property="og:type" content={type}>
 <meta property="og:title" content={title}>

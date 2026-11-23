@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import { D } from '../../data/content.js';
+import { FLASHBACKS } from '../../data/flashbacks.js';
+export function getStaticPaths() { return FLASHBACKS.map(f => ({ params: { id: f.id }, props: { f } })); }
+const { f } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const img = D.SB_PHOTO(f.sport, 1600);
+const col = D.SB_SPORT_COLOURS[f.sport] || '#1F3864';
+const year = (f.date || '').slice(0, 4) || (f.when.match(/\d{4}/) || [''])[0];
+const others = FLASHBACKS.filter(x => x.id !== f.id).slice(0, 3);
+const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: f.title, description: f.standfirst, about: f.sport, publisher: { '@type': 'Organization', name: 'SportingBrain' } };
+---
+<Base title={`${f.title} | Flashback | SportingBrain`} description={f.standfirst} image={img} type="article" wide>
+  <article class="fb">
+    <header class="fb-hero" style={img ? `--bg:url('${img}')` : ''}>
+      <div class="fb-year" aria-hidden="true">{year}</div>
+      <span class="tag" style={`background:${col}`}>Flashback · {f.sport}</span>
+      <h1>{f.title}</h1>
+      <p class="fb-stand">{f.standfirst}</p>
+      <p class="fb-when">{f.when} · <span data-yearsago={year}></span></p>
+    </header>
+    <section class="fb-nums" aria-label="The numbers">
+      {f.numbers.map(n => <div class="fb-num"><b data-count={n[0]}>{n[0]}</b><small>{n[1]}</small></div>)}
+    </section>
+    <div class="fb-grid">
+      <div class="fb-body">
+        {f.body.map(p => <p>{p}</p>)}
+        <div class="fb-after"><b>What happened next</b><p>{f.after}</p></div>
+        <button class="btn ghost" data-share-text={`Flashback: ${f.title}. ${f.standfirst}`}>Share this Flashback</button>
+      </div>
+      <aside class="fb-time card" aria-label="Timeline">
+        <b>Timeline</b>
+        <ol class="tl">{f.timeline.map((t, k) => <li style={`--d:${k * 120}ms`}><span>{t[0]}</span>{t[1]}</li>)}</ol>
+      </aside>
+    </div>
+    <section class="fb-src"><b>Sources</b><ul>{f.sources.map(s => <li><a href={s[1]} rel="noopener" target="_blank">{s[0]}</a></li>)}</ul></section>
+    <div class="sec"><h2>More flashbacks</h2><a href={`${base}flashback.html`}>All</a></div>
+    <div class="next3">{others.map(x => <a href={`${base}flashback/${x.id}.html`}><span>📼</span>{x.title}</a>)}</div>
+  </article>
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  <script>
+    const y = new Date().getFullYear();
+    document.querySelectorAll('[data-yearsago]').forEach(el => { const v = +el.dataset.yearsago; if (v) el.textContent = `${y - v} years ago`; });
+    // Count the numbers up as they scroll into view
+    const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; io.unobserve(e.target);
+      const el = e.target, raw = el.dataset.count, mm = raw.match(/^([^\d]*)([\d,]+)(.*)$/);
+      if (!mm || /[:.]/.test(raw) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const end = +mm[2].replace(/,/g, ''), t0 = performance.now(), dur = 1200, fmt = n => mm[2].includes(',') ? n.toLocaleString('en-GB') : String(n);
+      const tick = now => { const p = Math.min(1, (now - t0) / dur), v = Math.round(end * (1 - Math.pow(1 - p, 3))); el.textContent = mm[1] + fmt(v) + mm[3]; if (p < 1) requestAnimationFrame(tick); };
+      requestAnimationFrame(tick); }), { threshold: .4 });
+    document.querySelectorAll('[data-count]').forEach(el => io.observe(el));
+    const tio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); tio.unobserve(e.target); } }), { threshold: .3 });
+    document.querySelectorAll('.tl li').forEach(li => tio.observe(li));
+  </script>
+</Base>

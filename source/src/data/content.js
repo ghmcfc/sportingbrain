@@ -327,7 +327,7 @@ globalThis.SB_STORIES.push(
 );
 
 // Stock photos: Pexels (free for commercial use, no attribution required). Equipment and venues only: no famous people, no children, no club badges.
-globalThis.SB_PHOTOS = {"Football":1657324,"Women's football":1657324,"Athletics":8533779,"Cricket":20652481,"Tennis":14288658,"Darts":8763241,"Rugby union":5116575,"Rugby":5116575,"Golf":6572955,"Swimming":19073612,"Basketball":18954454,"Formula 1":36534289,"American football":27501701,"stadium":1657324};
+globalThis.SB_PHOTOS = {"Football":1657324,"Women's football":1657324,"Athletics":8533779,"Cricket":20652481,"Tennis":14288658,"Darts":8763241,"Rugby union":5116575,"Rugby":5116575,"Golf":6572955,"Swimming":19073612,"Basketball":18954454,"Formula 1":36534289,"American football":27501701,"Squash":15390865,"Gymnastics":7187877,"Cycling":13415390,"stadium":1657324};
 globalThis.SB_PHOTO = (key,w=800) => { const id=globalThis.SB_PHOTOS[key]; return id?`https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`:null; };
 
 // The Cynical Round-Up: built on this week's real, checked news. Satire is the opinion; the facts are real.

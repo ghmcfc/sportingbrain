@@ -6,6 +6,7 @@ ROOT='/tmp/sb-serve'; shutil.rmtree(ROOT, ignore_errors=True); shutil.copytree('
 srv=subprocess.Popen([sys.executable,'-m','http.server','8799'],cwd=ROOT,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL); time.sleep(1)
 B='http://localhost:8799/sportingbrain/'
 pages=['','daily.html','higher-or-lower.html','guess-the-player.html','true-or-false.html','speed-round.html','the-grid.html','guess-the-sport.html','challenge.html?c=weekly','stories.html','sports.html','round-up.html','about.html']
+pages+=['flashback.html','replays.html']+['flashback/'+f for f in os.listdir('dist/flashback')]+['replays/'+f for f in os.listdir('dist/replays')]+['f1/'+f for f in sorted(os.listdir('dist/f1'))[-3:]]
 pages+=['stories/'+f[:-5] +'.html' for f in os.listdir('dist/stories')] if os.path.isdir('dist/stories') else []
 fail=0
 with sync_playwright() as p:
