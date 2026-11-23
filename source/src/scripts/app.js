@@ -69,7 +69,7 @@ function isoWeek(d=new Date()){ const t=new Date(Date.UTC(d.getFullYear(),d.getM
 (function(){ const v=store.get('visitdays',[]); const k=ukKey(); if(!v.includes(k)){ v.push(k); store.set('visitdays',v.slice(-60)); } })();
 window.addEventListener('message',e=>{ try{ const d=typeof e.data==='string'?JSON.parse(e.data):e.data; if(d&&d.event==='Tally.FormSubmitted'){ store.set('nl_done',true); toast("You're in! See you in the morning."); } }catch(_){} });
 function saverAvailable(){ return store.get('saver_week','')!==isoWeek(); }
-function streakSaverLine(){ return saverAvailable()?'🛟 Streak saver ready this week':'🛟 Streak saver used this week'; }
+function streakSaverLine(){ return saverAvailable()?'Streak saver ready this week':'Streak saver used this week'; }
 function markPlayed(g){ store.set('pl_'+g,true); }
 function badges(){
   const st=store.get('streak',0), beaten=store.get('beaten',0), played=store.get('played',0);
@@ -96,9 +96,9 @@ function welcome(USP, force){ USP=USP||DEFAULT_USP;
   const w=document.createElement('div'); w.className='welcome '+(mobile?'sheet':'modal'); w.setAttribute('role','dialog'); w.setAttribute('aria-modal','true'); w.setAttribute('aria-labelledby','wtitle');
   const pts=(USP||[]).slice(0, mobile?3:5);
   w.innerHTML=`<div class="w-back"></div><div class="w-box"><button class="w-x" aria-label="Close">✕</button>
-    <div class="w-head"><img src="assets/brain.svg" alt=""><div><span class="tag" style="background:var(--gold);color:#14254a">Welcome to SportingBrain</span><h2 id="wtitle">The free daily sports hub for everyone who loves sport.</h2></div></div>
+    <div class="w-head"><div><span class="mark" aria-hidden="true">SB</span><h2 id="wtitle">The smartest free sports site in the world.</h2><p class="w-sub">A daily game built on real matches, the stories nobody else tells, and data you can play with. No betting, ever.</p></div></div>
     <ul class="usp in-w">${pts.map(u=>`<li><span>${u[0]}</span><div><b>${u[1]}</b>${mobile?'':`<small>${u[2]}</small>`}</div></li>`).join('')}</ul>
-    <div class="row w-btns"><a class="btn gold" href="${BASE}daily.html">Play today's puzzle</a><button class="btn ghost w-look">Look around first</button></div></div>`;
+    <div class="row w-btns"><a class="btn gold" href="${BASE}call-it.html">Play today's Call It</a><button class="btn ghost light w-look">Look around first</button></div></div>`;
   document.body.appendChild(w); document.body.classList.add('w-open');
   const close=()=>{ w.classList.add('out'); document.body.classList.remove('w-open'); setTimeout(()=>w.remove(),250); document.removeEventListener('keydown',esc_); };
   const esc_=e=>{ if(e.key==='Escape') close(); };
@@ -159,11 +159,11 @@ if(P==='home'){
     ['⏱️','Speed Round',`Best: ${bestSp}`,BASE+'speed-round.html','#D32F2F'],
     ['🤔','Guess the Sport','Emoji clues',BASE+'guess-the-sport.html','#EF6C00'],
     ['✅','True or False','Fact or fib?',BASE+'true-or-false.html','#2E7D32']];
-  const USP=[['🎯','Call It, every day','We freeze a real moment from a real final. You call what happens next.'],
-    ['🌍','Every sport, every fan','Football first, then cricket to darts, F1 to kabaddi. Men\'s and women\'s, same billing.'],
-    ['👥','Take on your mates','Share your score to the group chat and see who beats the Brain.'],
-    ['📼','Flashback and replays','Forgotten moments told properly, and great finals replayed ball by ball.'],
-    ['✅','Free and family-safe','No sign-up to play. No betting. Ever.']];
+  const USP=[['','Call It, every day','We freeze a real moment from a real final. You call what happens next.'],
+    ['','Every sport, every fan','Football first, then cricket to darts, F1 to kabaddi. Men\'s and women\'s, same billing.'],
+    ['','Take on your mates','Share your score to the group chat and see who beats the Brain.'],
+    ['','Flashback and replays','Forgotten moments told properly, and great finals replayed ball by ball.'],
+    ['','Free and family-safe','No sign-up to play. No betting. Ever.']];
   window.SB_USP=USP;
   const heroBg=photo('stadium',1600);
   const mdOf=d=>d?d.slice(5):null; const todayMd=mdNow;
@@ -173,165 +173,87 @@ if(P==='home'){
   if(!fb) fb=FLASHBACKS[DAY%FLASHBACKS.length];
   const rp=REPLAYS[DAY%REPLAYS.length];
 
+  // today's Call It moment (same order as the Call It page)
+  const CM=JSON.parse(($('#ciHome')||{}).textContent||'[]');
+  const cOrder=CM.map((_,i)=>i).sort((a,b)=>((a*2654435761)%997)-((b*2654435761)%997));
+  const cm=CM.length?CM[cOrder[(DAY-1+CM.length*10)%CM.length]]:null;
+  const ciDone=store.get('ci_'+DAY,null);
+  const fbImg=photo(fb.sport,1400);
+  const PRI=['Football','Women\'s football','Cricket','Rugby union','Tennis','Formula 1','Athletics','Golf','Boxing','Snooker','Cycling','Netball','Rugby league'];
+  const pri=x=>{const k=PRI.indexOf(x.s);return k<0?99:k;};
+  const otdToday=SB_TODAY.filter(e=>e.md===mdNow).sort((a,b)=>pri(a)-pri(b)||a.y-b.y);
+  const otd=(otdToday.length?otdToday:tih).slice(0,4);
+  const LVL=[['Easy','#0B6E4F','Anyone who follows sport'],['Medium','#1F5FA8','Keen fans'],['Hard','#C8102E','The long-read crowd'],['Expert','#0F1E36','Pub-quiz champions']];
+  const guidesPick=[...GUIDES].sort((a,b)=>((GUIDES.indexOf(a)*31+DAY)%GUIDES.length)-((GUIDES.indexOf(b)*31+DAY)%GUIDES.length)).slice(0,8);
+  const more=FLASHBACKS.filter(f=>f.id!==fb.id).sort((a,b)=>((FLASHBACKS.indexOf(a)+DAY)%FLASHBACKS.length)-((FLASHBACKS.indexOf(b)+DAY)%FLASHBACKS.length)).slice(0,3);
+  const yrOf=f=>(f.date||f.when).match(/\d{4}/)[0];
+
   main.innerHTML = `
-  <section class="hero big" ${heroBg?`style="--bg:url('${heroBg}')"`:''}>
-    <div class="hero-grid">
-      <div>
-        <span class="tag" style="background:var(--gold);color:#14254a">The free daily sports hub</span>
-        <h1 class="promise">The smartest free sports site in the world.</h1>
-        <p class="sub">A daily game built on real matches, the stories nobody else tells, and data you can play with.</p>
-        <div class="today-box">
-          <img src="assets/brain.svg" alt="The Brain" class="mini-brain">
-          <div><b>Beat the Brain #${DAY}</b><br>${played?`You scored ${played.marks.filter(Boolean).length}/5 today.`:`The Brain scored ${brainScore}/5. Your turn.`}</div>
-        </div>
-        <div class="meta"><div><b>${streak}</b><span>day streak</span></div><div><b class="countdown" id="cd">--:--</b><span>next puzzle in</span></div></div>
-        <div class="hero-ctas"><a class="btn gold" href="${BASE}call-it.html">Play today's Call It</a><a class="btn ghost light" href="${BASE}daily.html">${played?'Your Beat the Brain score':'Beat the Brain: pick your level'}</a></div><p class="small" style="margin:8px 0 0;opacity:.85">Call It: we freeze a real match, you call what happens next.</p>
-      </div>
-      <ul class="usp">${USP.map(u=>`<li><span>${u[0]}</span><div><b>${u[1]}</b><small>${u[2]}</small></div></li>`).join('')}</ul>
-    </div>
-  </section>
-
-  <div class="home-grid">
-    <div class="col col-play">
-      <div class="sec" id="games"><h2>Play</h2><span class="small">Every game, free</span></div>
-      <div class="tiles">${tiles.map(t=>`<a class="tile" href="${t[3]}" style="background:${t[4]}"><div class="e">${t[0]}</div><b>${t[1]}</b><small>${t[2]}</small></a>`).join('')}</div>
-
-      <div class="card you" style="margin-top:12px">
-        <div class="row" style="justify-content:space-between"><b>Your stats</b><span class="small">${streakSaverLine()}</span></div>
-        <div class="stats" style="margin-top:6px"><div><b>${streak}</b>day streak</div><div><b>${store.get('played',0)}</b>played</div><div><b>${store.get('beaten',0)}</b>beat the Brain</div></div>
-        <div class="badges">${B.map(b=>`<span class="badge ${b.got?'got':''}" title="${esc(b.how)}">${b.e}<small>${esc(b.n)}</small></span>`).join('')}</div>
-      </div>
-
-      <div class="sec"><h2>This week's challenges</h2></div>
-      <div class="g2">${['weekly','world','family'].map(k=>{const c=SB_CHALLENGES[k]; const done=store.get('ch_'+k,null); return `<a class="ch" href="${BASE}challenge.html?c=${k}" style="background:${c.colour}"><b>${esc(c.title)}</b><small>${done!==null?`You scored ${done}/${c.qs.length}`:'10 questions'}</small></a>`;}).join('')}</div>
-
-      <div class="sec"><h2>For the family</h2></div>
-      <div class="card"><div class="title" style="margin-top:0">⚽ This weekend: the Keepy-Up Ladder</div><p class="teaser">Best of three tries each. Add up the family total, then beat it next week. Under-8s can let it bounce once between touches. Play on grass, away from windows and roads.</p>
-        <p style="margin:10px 0 0"><a class="btn" style="background:#F57C00;padding:9px 14px" href="${BASE}challenge.html?c=family">Play the Family Challenge</a></p></div>
-    </div>
-
-    <div class="col col-read">
-      <div class="sec"><h2>${dlabel(mdNow)} in sport</h2><a href="${BASE}on-this-day.html">On This Day</a></div>
-      <section class="card tih" id="tih" aria-roledescription="carousel" aria-label="Today in sporting history">
-        <div class="tih-track">${tih.map((e,k)=>`<div class="tih-slide" role="group" aria-label="${k+1} of ${tih.length}" ${k?'hidden':''} style="--c:${colour(e.s)}">
-          <div class="tih-year">${e.y}</div><span class="tag" style="background:${colour(e.s)}">${esc(e.s)}</span>${e.md!==mdNow?` <span class="small">${dlabel(e.md)}</span>`:''}
-          <p class="tih-text">${esc(e.t)}</p></div>`).join('')}</div>
-        <div class="row" style="justify-content:space-between;margin-top:6px">
-          <div class="tih-dots">${tih.map((_,k)=>`<button aria-label="Show ${tih[k].y}" data-k="${k}" class="${k?'':'on'}"></button>`).join('')}</div>
-          <div class="row" style="gap:6px"><button class="iconbtn dark-btn" id="tihprev" aria-label="Previous">◀</button><button class="iconbtn dark-btn" id="tihpause" aria-label="Pause">❚❚</button><button class="iconbtn dark-btn" id="tihnext" aria-label="Next">▶</button></div>
-        </div>
-      </section>
-
-      <div class="sec"><h2>Flashback</h2><a href="${BASE}flashback.html">All flashbacks</a></div>
-      <article class="card photo-card fb-card">
-        ${img(fb.sport,fb.sport)}
-        <div class="pc-body"><span class="tag" style="background:${colour(fb.sport)}">${esc(fb.sport)} · ${esc(fb.when)}</span>${fbAnn?` <span class="tag" style="background:var(--gold);color:#14254a">${fbAnn}</span>`:''}
-        <div class="title">${esc(fb.title)}</div><p class="teaser">${esc(fb.standfirst)}</p>
-        <div class="fb-nums">${fb.numbers.slice(0,3).map(n=>`<div><b>${esc(n[0])}</b><small>${esc(n[1])}</small></div>`).join('')}</div></div>
-        <a class="stretch" href="${BASE}flashback/${fb.id}.html" aria-label="Read: ${esc(fb.title)}"></a>
-      </article>
-
-      ${H?`<div class="sec"><h2>Hero and heroine of the week</h2></div>
-      <div class="g2 stack">
-        <div class="card" style="border-top:6px solid var(--navy2)"><span class="tag">Heroine</span>
-          <div class="title">${H.heroine.emoji} ${esc(H.heroine.name)}</div><p class="teaser">${esc(H.heroine.line)}</p>
-          <a class="stretch" href="${BASE}stories/${H.heroine.story}.html" aria-label="Read about ${esc(H.heroine.name)}"></a></div>
-        <div class="card" style="border-top:6px solid var(--navy2)"><span class="tag">Hero</span>
-          <div class="title">${H.hero.emoji} ${esc(H.hero.name)}</div><p class="teaser">${esc(H.hero.line)}</p>
-          <a class="stretch" href="${BASE}stories/${H.hero.story}.html" aria-label="Read about ${esc(H.hero.name)}"></a></div>
-      </div>`:''}
-
-      <div class="sec"><h2>The Cynical Round-Up</h2></div>
-      <div class="card" style="background:#263238;color:#eceff1">
-        <span class="satire">SATIRE. Tongue firmly in cheek.</span>
-        <div class="title">😎 ${esc(SB_ROUNDUP.headline)}</div>
-        <p style="margin:0;color:#b0bec5">${esc(SB_ROUNDUP.edition)}. The real week in sport, with a big eye-roll.</p>
-        <a class="stretch" href="${BASE}round-up.html" aria-label="Read the Cynical Round-Up"></a>
-      </div>
-
-      <div class="sec"><h2>Replay the final</h2><a href="${BASE}replays.html">All replays</a></div>
-      <article class="card replay-card">
-        <span class="tag" style="background:${colour('Cricket')}">Cricket · ball by ball</span>
-        <div class="title">${esc(rp.title)}</div><p class="teaser">${esc(rp.teaser)}</p>
-        <p class="small" style="margin:6px 0 0">Watch the run chase build ball by ball, scrub to any moment, see every wicket fall.</p>
-        <a class="stretch" href="${BASE}replays/${rp.slug}.html" aria-label="Replay: ${esc(rp.title)}"></a>
-      </article>
-
-      <div class="sec"><h2>Unusual sport of the week</h2></div>
-      <div class="card" style="background:linear-gradient(135deg,#8E24AA,#C2185B);color:#fff">
-        <div class="title" style="margin-top:0">🦶 Sepak takraw</div><p style="margin:0">Volleyball, but you can't use your hands. Wait till you see the overhead kicks.</p>
-        <a class="stretch" href="${BASE}sports/sepak-takraw.html" aria-label="Read about sepak takraw"></a>
-      </div>
-
-      <div class="sec"><h2>More stories</h2></div>
-      <div class="g2 stack">${shuffle(SB_STORIES.filter(s=>![story.id,H&&H.hero.story,H&&H.heroine.story].includes(s.id)),seeded(DAY+7)).slice(0,4).map(s=>`<article class="card photo-card small-pc">${img(s.sport,s.sport)}<div class="pc-body"><div class="title" style="font-size:1rem">${s.emoji} ${esc(s.title)}</div><p class="teaser">${esc(s.teaser)}</p></div><a class="stretch" href="${BASE}stories/${s.id}.html" aria-label="${esc(s.title)}"></a></article>`).join('')}</div>
-    </div>
-
-    <div class="col col-join">
-      <div class="sec"><h2>Coming tomorrow</h2></div>
-      <div class="card tomorrow">
-        <div class="title" style="margin-top:0">⏰ ${tdow}</div>
-        <ul class="tlist"><li>A brand new Beat the Brain</li><li>A new Call It moment to make your call on</li><li>Guide of the day: ${tSport.emoji} ${esc(tSport.name)}</li>${weekly?`<li>${esc(weekly)}</li>`:''}<li>New moments from ${dlabel(`${String(tmr.getUTCMonth()+1).padStart(2,'0')}-${String(tmr.getUTCDate()).padStart(2,'0')}`)} in sport</li></ul>
-        <p class="small" style="margin:6px 0 0">Starts in <span class="countdown" id="cd2"></span></p>
-      </div>
-
-      <div class="sec" id="newsletter"><h2>The Daily Brain</h2></div>
-      <section class="card news">
-        <div class="title" style="margin-top:0">📬 The Brain in your inbox every morning</div>
-        <p class="teaser">Today's puzzle, the day's Flashback and one stat to win an argument with. Free. The only time we ever ask for any details, and it's just your email.</p>
-        <a class="btn gold wide nl-open" href="https://tally.so/r/${window.SB_NEWSLETTER_FORM}" target="_blank" rel="noopener">Sign me up, it takes 10 seconds</a><p class="small" style="margin-top:8px">Email only. No spam, no selling it on, unsubscribe in one click.</p>
-      </section>
-
-      <div class="card stat" style="margin-top:12px;background:linear-gradient(135deg,#14254a,#1F3864);color:#fff">
-        <span class="tag" style="background:var(--gold);color:#14254a">Stat of the day</span>
-        <div class="n">${esc(stat.n)}</div><p style="margin:0">${esc(stat.t)}</p>
-        <p class="row" style="margin:10px 0 0"><button class="btn ghost" id="statshare" style="padding:8px 12px">Share this stat</button></p>
-      </div>
-
-      <div class="sec"><h2>Guide of the day</h2><a href="${BASE}sports.html">All guides</a></div>
-      <article class="card" style="border-left:8px solid ${colour('Unusual')}">
-        <div class="title" style="margin-top:0">${sport.emoji} ${esc(sport.name)}</div><p class="teaser">${esc(sport.line)}</p>
-        <a class="stretch" href="${BASE}sports/${sport.id}.html" aria-label="Learn about ${esc(sport.name)}"></a>
-      </article>
-
-      <div class="sec"><h2>Share SportingBrain</h2></div>
-      <section class="card share-panel">
-        <p class="teaser" style="margin-top:0">Send it to the group chat and see who can beat the Brain.</p>
-        <div class="sharebtns">
-          <a class="btn" style="background:#25D366" data-share-to="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
-          <a class="btn" style="background:#1877F2" data-share-to="facebook" target="_blank" rel="noopener">Facebook</a>
-          <a class="btn" style="background:#000" data-share-to="x" target="_blank" rel="noopener">X</a>
-          <button class="btn ghost" data-copy-link>Copy link</button>
-        </div>
-      </section>
-    </div>
+  <div class="fp">
+    <a class="fp-lead" href="${BASE}flashback/${fb.id}.html">
+      <figure style="${fbImg?`background-image:url('${fbImg}')`:''}" aria-hidden="true"><span>${yrOf(fb)}</span></figure>
+      <div class="body"><div class="fp-kicker">Flashback · ${esc(fb.sport)}${fbAnn?` · ${esc(fbAnn)}`:''}</div>
+        <h1>${esc(fb.title)}</h1><p>${esc(fb.standfirst)}</p></div>
+    </a>
+    <aside>
+      ${cm?`<section class="board" aria-label="Today's Call It">
+        <div class="board-top"><span>Call It #${DAY}</span><span>${ciDone?'Played':'Live'}</span></div>
+        <h2>${esc(cm.team)} v ${esc(cm.opp)}</h2>
+        <p class="ctx">${esc(cm.match)}, ${cm.innings?'second':'first'} innings</p>
+        <div class="lamp"><b>${esc(cm.score)}</b><span>after ${esc(cm.at)} overs${cm.need?`<br>${esc(cm.need.replace(cm.team+' ',''))}`:''}</span></div>
+        <p class="q">${esc(cm.q)}</p>
+        <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how you did':'Make your call'}</a>
+      </section>`:''}
+      <p class="you-line">${streak?`Your streak: <b>${streak} day${streak===1?'':'s'}</b>.`:'Play a game a day to start a streak.'} ${streakSaverLine()}</p>
+    </aside>
   </div>
 
-  <div class="sec" id="who"><h2>Who we are</h2><button class="iconbtn dark-btn" data-welcome>Show the welcome again</button></div>
-  <section class="card">
-    <p style="margin-top:0">SportingBrain is a free daily sports hub, built by sports fans for anyone who loves sport. Whether you know every Premier League scorer since 1992, never miss the snooker, or just want something fun to play with the kids on a Friday night, there's something here for you every single day.</p>
-    <div class="values">
-      <div><span>🆓</span><b>Free, always</b>No paywall, no subscriptions. Paid for by adverts and sponsors.</div>
-      <div><span>🌍</span><b>Every sport</b>Football gets you in. Netball, darts, F1, kabaddi and the rest keep you here.</div>
-      <div><span>📊</span><b>Real data</b>Results, replays and records from open data, credited properly.</div>
-      <div><span>👨‍👩‍👧</span><b>Family-safe</b>No chat, no sign-up to play, nothing you wouldn't want the kids to see.</div>
-      <div><span>🚫</span><b>No betting. Ever.</b>No betting ads, no betting links, no gambling.</div>
-      <div><span>🔒</span><b>Your data stays yours</b>The only thing we ever ask for is your email, and only if you want the newsletter.</div>
-    </div>
-    <p class="small">Sport photos from Pexels. The Brain is our own creation.</p>
-  </section>`;
+  <div class="fp-row">
+    <section class="fp-col">
+      <div class="sec"><h2>Beat the Brain</h2><a href="${BASE}daily.html">Play</a></div>
+      <p class="teaser" style="margin:0 0 10px">Five questions a day. Pick your level.</p>
+      <div class="levels">${LVL.map((l,i)=>{const d=store.get(`daily_${ukKey()}_${i+1}`,null);return `<a href="${BASE}daily.html?level=${i+1}" style="--c:${l[1]}"><b>${l[0]}</b><small>${d?`You scored ${d.marks.filter(Boolean).length}/5`:l[2]}</small></a>`;}).join('')}</div>
+    </section>
+    <section class="fp-col">
+      <div class="sec"><h2>${dlabel(mdNow)} in sport</h2><a href="${BASE}on-this-day.html">On This Day</a></div>
+      <ul class="otd-mini">${otd.map(e=>`<li><b>${e.y}</b><p>${esc(e.t)}</p></li>`).join('')}</ul>
+    </section>
+    <section class="fp-col">
+      <div class="sec"><h2>The Cynical Round-Up</h2><a href="${BASE}round-up.html">Read it</a></div>
+      <a class="ru-mini" href="${BASE}round-up.html"><span class="satire">Satire. Tongue firmly in cheek.</span><h4>${esc(SB_ROUNDUP.headline)}</h4><p>${esc(SB_ROUNDUP.edition)}. The real week in sport, with an eye-roll.</p></a>
+    </section>
+  </div>
 
-  countdown($('#cd')); countdown($('#cd2'));
-  $('#statshare').onclick=()=>share(`🧠 SportingBrain Stat of the Day\n${stat.n}: ${stat.t}\n${SITE}`);
-  main.querySelectorAll('[data-share-to]').forEach(a=>{ const u=encodeURIComponent(SITE), t=encodeURIComponent(PITCH);
-    a.href={whatsapp:`https://wa.me/?text=${t}%20${u}`, facebook:`https://www.facebook.com/sharer/sharer.php?u=${u}`, x:`https://twitter.com/intent/tweet?text=${t}&url=${u}`}[a.dataset.shareTo]; });
-  (function(){ const root=$('#tih'); if(!root) return; const slides=[...root.querySelectorAll('.tih-slide')], dots=[...root.querySelectorAll('.tih-dots button')]; let k=0, paused=matchMedia('(prefers-reduced-motion: reduce)').matches, t;
-    const go=n=>{ k=(n+slides.length)%slides.length; slides.forEach((sl,j)=>sl.hidden=j!==k); dots.forEach((d,j)=>d.classList.toggle('on',j===k)); const tc=$('#tihcount'); if(tc) tc.textContent=`${k+1} of ${slides.length}`; };
-    const play=()=>{ clearInterval(t); if(!paused) t=setInterval(()=>go(k+1),5000); $('#tihpause').textContent=paused?'▶︎ Play':'❚❚'; $('#tihpause').setAttribute('aria-label',paused?'Play':'Pause'); };
-    $('#tihnext').onclick=()=>{go(k+1);play();}; $('#tihprev').onclick=()=>{go(k-1);play();}; $('#tihpause').onclick=()=>{paused=!paused;play();};
-    dots.forEach(d=>d.onclick=()=>{go(+d.dataset.k);play();});
-    let x0=null; root.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true}); root.addEventListener('touchend',e=>{ if(x0===null)return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>40){go(k+(dx<0?1:-1));play();} x0=null; });
-    go(0); play(); })();
+  <div class="fp-row">
+    <section class="fp-col">
+      <div class="sec"><h2>Replay the final</h2><a href="${BASE}replays.html">All replays</a></div>
+      <div class="storylist">${[rp,...REPLAYS.filter(r=>r.slug!==rp.slug).slice(0,2)].map(r=>`<a href="${BASE}replays/${r.slug}.html"><span class="noimg" style="background:#0B6E4F url('${photo('Cricket',300)||''}') center/cover"></span><span><b>${esc(r.title)}</b><small>${esc(r.teaser)}</small></span></a>`).join('')}</div>
+    </section>
+    <section class="fp-col">
+      <div class="sec"><h2>More Flashbacks</h2><a href="${BASE}flashback.html">All</a></div>
+      <div class="storylist">${more.map(f=>`<a href="${BASE}flashback/${f.id}.html">${photo(f.sport,300)?`<img src="${photo(f.sport,300)}" alt="" loading="lazy">`:'<span class="noimg"></span>'}<span><b>${esc(f.title)}</b><small>${esc(f.sport)}, ${esc(f.when)}</small></span></a>`).join('')}</div>
+    </section>
+    <section class="fp-col">
+      <div class="sec"><h2>Sport guides</h2><a href="${BASE}sports.html">All ${GUIDES.length}</a></div>
+      <p class="teaser" style="margin:0 0 12px">How each sport really works, what the experts watch for, and the people who defined it.</p>
+      <div class="guide-links">${guidesPick.map(g=>`<a href="${BASE}sports/${g.id}.html">${esc(g.name)}</a>`).join('')}</div>
+      <div class="sec" style="margin-top:26px"><h2>Quick games</h2></div>
+      <div class="guide-links"><a href="${BASE}higher-or-lower.html">Higher or Lower</a><a href="${BASE}the-grid.html">The Grid</a><a href="${BASE}speed-round.html">Speed Round</a><a href="${BASE}true-or-false.html">True or False</a><a href="${BASE}guess-the-player.html">Guess the Player</a></div>
+    </section>
+  </div>
+
+  <section class="nl-band" id="newsletter">
+    <div><h3>The Daily Brain</h3><p>Today's Call It, a Flashback, On This Day and one stat to win an argument with. Every morning, free. Your email is the only thing we ever ask for.</p></div>
+    <a class="btn nl-open" href="https://tally.so/r/${window.SB_NEWSLETTER_FORM}" target="_blank" rel="noopener">Get the newsletter</a>
+  </section>
+
+  <div class="sec" id="who"><h2>Who we are</h2><button class="btn ghost" data-welcome style="padding:6px 12px;font-size:1rem">What is SportingBrain?</button></div>
+  <div class="about-strip">
+    <div><b>Built on real sport</b><p>Every game uses real matches and real numbers, and every article lists its sources.</p></div>
+    <div><b>Every sport, equal billing</b><p>Men's and women's sport side by side, from football and cricket to squash and kabaddi.</p></div>
+    <div><b>Free, and no betting, ever</b><p>Paid for by adverts. No sign-up to play. Your email only if you want the newsletter.</p></div>
+  </div>`;
+
   (function(){ const sc=document.createElement('script'); sc.src='https://tally.so/widgets/embed.js'; sc.async=true; document.body.appendChild(sc);
     document.addEventListener('click',e=>{ const a=e.target.closest('.nl-open'); if(!a||!window.Tally||!window.Tally.openPopup) return; e.preventDefault(); window.Tally.openPopup(window.SB_NEWSLETTER_FORM,{layout:'modal',width:520,overlay:true,emoji:{text:'🧠',animation:'wave'}}); }); })();
 
@@ -350,7 +272,7 @@ if(P==='daily'){
   const pool=l=>BANK.filter(q=>q[0]===l);
   function todays(l){ const Q=pool(l), start=((DAY-1)*N)%Q.length, r=seeded(DAY*7+l), out=[];
     for(let k=0;k<N;k++){ const q=Q[(start+k)%Q.length]; const idx=[0,1,2,3].sort(()=>r()-.5); out.push({q:q[2],o:idx.map(i=>q[3][i]),a:idx.indexOf(0),f:q[5],s:`${q[1]} · ${LV[l].n}`}); } return out; }
-  const brainFor=l=>Math.max(1,Math.min(5,[0,4,4,3,2][l]+Math.floor(seeded(DAY*3+l)()*2)));
+  const brainFor=l=>Math.max(1,Math.min(5,[0,4,3,2,2][l]+Math.floor(seeded(DAY*3+l)()*2)));
   function render(){
     const brainScore=brainFor(level), saved=store.get(`daily_${key}_${level}`,null);
     main.innerHTML=`<section class="hero"><div class="row1"><img src="${BASE}assets/brain.svg" alt="The Brain"><div><span class="tag" style="background:var(--gold);color:#14254a">Beat the Brain #${DAY}</span><h1>Five questions. Pick your level.</h1><p>The Brain scored ${brainScore}/5 on ${LV[level].n} today. Your turn.</p></div></div></section>

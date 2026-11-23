@@ -1,6 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
+import { buildMoments } from '../data/callit.js';
+const M = buildMoments().map(m => ({ match: m.match, team: m.team, opp: m.opp, score: m.score, at: m.at, need: m.need, q: m.qs[0].q, innings: m.innings }));
 ---
-<Base title="SportingBrain: the free daily sports hub for everyone who loves sport" description="A new sports puzzle every day, quick games, true stories, this week in sport and stats from every sport, men's and women's. Free, family-safe, no betting." page="home" wide>
+<Base title="SportingBrain: the smartest free sports site in the world" description="Call It, the daily game built on real matches. Flashback, On This Day, ball-by-ball replays, proper sport guides and the Cynical Round-Up. Free. No betting, ever." page="home" wide>
   <noscript><p>SportingBrain needs JavaScript switched on to play the games.</p></noscript>
+  <script id="ciHome" type="application/json" set:html={JSON.stringify(M)} />
 </Base>

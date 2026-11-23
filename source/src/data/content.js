@@ -321,6 +321,9 @@ globalThis.SB_TODAY = [
   {md:"12-07",y:2025,s:"Formula 1",t:"Lando Norris wins his first world title with McLaren, at the season finale in Abu Dhabi."},
   {md:"12-07",y:1994,s:"Figure skating",t:"Yuzuru Hanyu is born. He won Olympic gold in 2014 and 2018, the first man to retain the title in 66 years."},
   {md:"12-07",y:1997,s:"Football",t:"Billy Bremner dies. He captained Don Revie's Leeds to two league titles."},
+  {md:"11-23",y:2014,s:"Formula 1",t:"Lewis Hamilton wins the Abu Dhabi Grand Prix to clinch his second world title, his first with Mercedes."},
+  {md:"11-23",y:1976,s:"Freediving",t:"Jacques Mayol becomes the first person to reach 100 metres underwater on a single breath."},
+  {md:"11-23",y:2006,s:"Boxing",t:"Willie Pep dies. The featherweight, nicknamed Will o' the Wisp for his defence, won 229 of his 241 professional fights."}
 ];
 globalThis.SB_NEWSLETTER_FORM = "ArB4Z0";
 

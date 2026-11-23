@@ -12,7 +12,7 @@ const others = GUIDES.filter(x => x.id !== g.id).sort(() => 0).slice(0, 4);
   <article class="sg">
     <header class="fb-hero" style={img ? `--bg:url('${img}')` : ''}>
       <span class="tag" style="background:var(--gold);color:#14254a">Sport guide</span>
-      <h1>{g.emoji} {g.name}</h1><p class="fb-stand">{g.line}</p>
+      <h1>{g.name}</h1><p class="fb-stand">{g.line}</p>
     </header>
     <nav class="sg-tabs" aria-label="Sections">
       <a href="#how">How it works</a><a href="#watch">What to watch for</a><a href="#greats">The greats</a><a href="#terms">Talk like an expert</a><a href="#when">When it's on</a><a href="#play">Get involved</a>
@@ -37,6 +37,6 @@ const others = GUIDES.filter(x => x.id !== g.id).sort(() => 0).slice(0, 4);
       </aside>
     </div>
     <div class="sec"><h2>More guides</h2><a href={`${base}sports.html`}>All</a></div>
-    <div class="next3">{others.map(x => <a href={`${base}sports/${x.id}.html`}><span>{x.emoji}</span>{x.name}</a>)}</div>
+    <div class="next3">{others.map(x => <a href={`${base}sports/${x.id}.html`}>{x.name}</a>)}</div>
   </article>
 </Base>

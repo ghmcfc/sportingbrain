@@ -17,7 +17,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
         <section class="ru-item">
           <span class="ru-n">{String(k + 1).padStart(2, '0')}</span>
           <div><h2>{i[0]}</h2><p>{i[1]}</p>
-          <div class="ru-rate" data-k={k}><span>Funny?</span><button data-v="1">😂</button><button data-v="0">😐</button><small></small></div></div>
+          <div class="ru-rate" data-k={k}><span>Funny?</span><button data-v="1">Yes</button><button data-v="0">Not really</button><small></small></div></div>
         </section>
       ))}
     </div>

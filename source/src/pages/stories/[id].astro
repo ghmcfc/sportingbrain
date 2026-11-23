@@ -13,7 +13,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: s.t
   <article class="article">
     {img && <img class="lead-img" src={img} alt={s.sport} />}
     <span class="tag" style={`background:${col};margin-top:14px`}>{s.sport}</span>
-    <h1>{s.emoji} {s.title}</h1>
+    <h1>{s.title}</h1>
     <p class="teaser" style="font-size:1.15rem">{s.teaser}</p>
     {s.body.map((p) => <p>{p}</p>)}
     <button class="btn ghost" data-share-text={`${s.title}: ${s.teaser}`}>Share this story</button>
