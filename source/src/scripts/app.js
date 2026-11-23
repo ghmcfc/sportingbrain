@@ -267,7 +267,7 @@ if(P==='home'){
       <section class="card news">
         <div class="title" style="margin-top:0">📬 The Brain in your inbox every morning</div>
         <p class="teaser">Today's puzzle, the story of the day and one stat to win an argument with. Free. The only time we ever ask for any details, and it's just your email.</p>
-        <iframe data-tally-src="https://tally.so/embed/${window.SB_NEWSLETTER_FORM}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="330" frameborder="0" title="Sign up to The Daily Brain"></iframe>
+        <a class="btn gold wide nl-open" href="https://tally.so/r/${window.SB_NEWSLETTER_FORM}" target="_blank" rel="noopener">Sign me up, it takes 10 seconds</a><p class="small" style="margin-top:8px">Email only. No spam, no selling it on, unsubscribe in one click.</p>
       </section>
 
       <div class="card stat" style="margin-top:12px;background:linear-gradient(135deg,#14254a,#1F3864);color:#fff">
@@ -320,7 +320,8 @@ if(P==='home'){
     dots.forEach(d=>d.onclick=()=>{go(+d.dataset.k);play();});
     let x0=null; root.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true}); root.addEventListener('touchend',e=>{ if(x0===null)return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>40){go(k+(dx<0?1:-1));play();} x0=null; });
     go(0); play(); })();
-  (function(){ const f=main.querySelector('iframe[data-tally-src]'); if(!f) return; f.src=f.dataset.tallySrc; const sc=document.createElement('script'); sc.src='https://tally.so/widgets/embed.js'; sc.async=true; document.body.appendChild(sc); })();
+  (function(){ const sc=document.createElement('script'); sc.src='https://tally.so/widgets/embed.js'; sc.async=true; document.body.appendChild(sc);
+    document.addEventListener('click',e=>{ const a=e.target.closest('.nl-open'); if(!a||!window.Tally||!window.Tally.openPopup) return; e.preventDefault(); window.Tally.openPopup(window.SB_NEWSLETTER_FORM,{layout:'modal',width:520,overlay:true,emoji:{text:'🧠',animation:'wave'}}); }); })();
 
   // newsletter nudge from the second day of visits
   if(store.get('visitdays',[]).length>=2 && !store.get('nl_done',false) && store.get('nudge_week','')!==isoWeek()){
