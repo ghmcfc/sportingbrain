@@ -53,7 +53,7 @@ export const BANK2C = [
 [3,'Boxing','Who was the youngest heavyweight champion in history?',['Mike Tyson','Floyd Patterson','Muhammad Ali','Riddick Bowe'],0,'Tyson was 20 when he beat Trevor Berbick in 1986.'],
 [4,'Boxing','Who won Olympic lightweight gold for Ireland in 2012 and later became undisputed professional champion?',['Katie Taylor','Kellie Harrington','Michael Conlan','Paddy Barnes'],0,'Taylor beat Amanda Serrano at Madison Square Garden in 2022 in the first women\'s fight to headline there.'],
 // Snooker and darts
-[1,'Snooker','What is the maximum break in snooker?',['147','155','140','100'],0,'15 reds with 15 blacks, then all the colours.'],
+[1,'Snooker','What is the maximum break in snooker?',['147','180','140','100'],0,'15 reds with 15 blacks, then all the colours.'],
 [1,'Snooker','Where is the World Snooker Championship played?',['The Crucible, Sheffield','Alexandra Palace, London','The Barbican, York','Wembley Arena'],0,'Every year since 1977.'],
 [2,'Snooker','Who won seven world titles in the 1990s?',['Stephen Hendry','Steve Davis','John Parrott','Jimmy White'],0,'Hendry won in 1990 and every year from 1992 to 1996, then again in 1999. Jimmy White lost six finals, four of them to Hendry.'],
 [2,'Snooker','Who won the 1985 World final on the last black against Steve Davis?',['Dennis Taylor','Cliff Thorburn','Alex Higgins','Jimmy White'],0,'It finished at 12.23am, watched by 18.5 million on BBC Two.'],

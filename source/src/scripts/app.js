@@ -6,6 +6,7 @@ import { ALL as BANK } from '../data/bank_all.js';
 import { GUIDES } from '../data/guides.js';
 import { WEEK } from '../data/week.js';
 import { PLAY } from '../data/playlist.js';
+import { FOULS, COUNTDOWN } from '../data/games.js';
 (function(){
 'use strict';
 const BASE=(document.documentElement.dataset.base||'/');
@@ -194,11 +195,7 @@ if(P==='home'){
 
   main.innerHTML = `
   <div class="fp">
-    <a class="fp-lead" href="${BASE}flashback/${fb.id}.html">
-      <figure style="${fbImg?`background-image:url('${fbImg}')`:''}" aria-hidden="true"><span>${yrOf(fb)}</span></figure>
-      <div class="body"><div class="fp-kicker">Flashback · ${esc(fb.sport)}${fbAnn?` · ${esc(fbAnn)}`:''}</div>
-        <h1>${esc(fb.title)}</h1><p>${esc(fb.standfirst)}</p></div>
-    </a>
+    <section class="hook" id="hook" aria-live="polite"></section>
     <aside>
       ${cm?`<section class="board" aria-label="Today's Call It">
         <div class="board-top"><span>Call It #${DAY}</span><span>${ciDone?'Played':'Live'}</span></div>
@@ -234,7 +231,9 @@ if(P==='home'){
       <ul class="otd-mini">${otd.map(e=>`<li><b>${e.y}</b><p>${esc(e.t)}</p></li>`).join('')}</ul>
     </section>
     <section class="fp-col">
-      <div class="sec"><h2>The Cynical Round-Up</h2><a href="${BASE}round-up.html">Read it</a></div>
+      <div class="sec"><h2>Flashback</h2><a href="${BASE}flashback.html">All</a></div>
+      <a class="fb-mini" href="${BASE}flashback/${fb.id}.html"><b>${esc(fb.title)}</b><span>${esc(fb.sport)}, ${yrOf(fb)}${fbAnn?` · ${esc(fbAnn)}`:''}. ${esc(fb.standfirst)}</span></a>
+      <div class="sec" style="margin-top:22px"><h2>The Cynical Round-Up</h2><a href="${BASE}round-up.html">Read it</a></div>
       <a class="ru-mini" href="${BASE}round-up.html"><span class="satire">Satire. Tongue firmly in cheek.</span><h4>${esc(SB_ROUNDUP.headline)}</h4><p>${esc(SB_ROUNDUP.edition)}. The real week in sport, with an eye-roll.</p></a>
     </section>
   </div>
@@ -272,6 +271,50 @@ if(P==='home'){
   </div>`;
 
   countdown($('#cd2'));
+
+  // ---------- the daily hook: a different five-question challenge every day of the week ----------
+  (function(){
+    const el=$('#hook'); if(!el) return;
+    const wd=new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/London'})).getDay();
+    const WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const big=['Football','Cricket','Rugby union'];
+    const fromBank=(f,n)=>{ const pool=BANK.filter(f), r=seeded(DAY*13+wd), pick=[...pool].sort(()=>r()-.5).slice(0,n); return pick.map(q=>{ const idx=[0,1,2,3].sort(()=>r()-.5); return {s:q[1],q:q[2],o:idx.map(i=>q[3][i]),a:idx.indexOf(q[4]),f:q[5]}; }); };
+    const THEMES=[
+      ['Women\'s Sport Sunday','Five questions on the women who made sport. How many do you know?',()=>fromBank(q=>/women|Lioness|Matildas|WSL|Black Ferns|Red Roses|\bshe\b|\bher\b/i.test(q[2]+' '+q[5]),5),4],
+      ['Monday Expert','Five of the hardest questions we have. Three is good.',()=>fromBank(q=>q[0]===4,5),2],
+      ['Is It a Foul?','Five real situations. You are the referee.',()=>{ const r=seeded(DAY*7); return [...FOULS].sort(()=>r()-.5).slice(0,5).map(x=>({s:x[0],q:x[1],o:['Fair','Foul'],a:x[2]==='Foul'?1:0,f:x[3]})); },3],
+      ['World Sport Wednesday','Beyond football, cricket and rugby. Five from the rest of the sporting world.',()=>fromBank(q=>!big.includes(q[1])&&q[0]>=2,5),3],
+      ['Throwback Thursday','Five moments from the 20th century. Bring someone who was there.',()=>fromBank(q=>/\b19\d\d\b/.test(q[2]),5),3],
+      ['Friday Family Challenge','Five for the whole family. Pass the phone round.',()=>fromBank(q=>q[0]===1,5),4],
+      ['Matchday Saturday','Five football questions before kick-off.',()=>fromBank(q=>q[1]==='Football'&&q[0]>=2,5),3],
+    ];
+    const [title,sub,make,brain]=THEMES[wd], Q=make(), key='hook_'+DAY, saved=store.get(key,null);
+    const nx=COUNTDOWN.find(e=>Date.parse(e[0])>Date.now());
+    const chip=nx?`<span class="hook-chip" id="hookChip" data-t="${nx[0]}">${esc(nx[1])} in <b></b></span>`:'';
+    const head=`<div class="hook-top"><span>${WD[wd]}'s challenge · 5 questions</span>${chip}</div><h1>${esc(title)}</h1><p class="hook-sub">${esc(sub)}</p>`;
+    function tickChip(){ const c=$('#hookChip'); if(!c) return; const d=Date.parse(c.dataset.t)-Date.now(), dd=Math.floor(d/864e5), hh=Math.floor(d/36e5)%24, mm=Math.floor(d/6e4)%60; c.querySelector('b').textContent=`${dd}d ${hh}h ${mm}m`; }
+    function done(marks){
+      const sc=marks.filter(Boolean).length, line=sc>brain?'You beat the Brain.':sc===brain?'Level with the Brain.':'The Brain wins this one.';
+      const tom=THEMES[(wd+1)%7][0];
+      el.innerHTML=head+`<div class="hook-res"><div class="hook-score">${sc}<small>/5</small></div><div><p class="hook-line">${line} It scored ${brain}.</p><div class="hook-pips">${marks.map(m=>`<i class="${m?'y':'n'}"></i>`).join('')}</div></div></div>
+        <div class="hook-next"><button class="btn gold" id="hookShare">Challenge a mate</button><a class="btn ghost light" href="${BASE}call-it-football.html">Next: today's Call It: Football</a></div>
+        <p class="hook-tom">Tomorrow: <b>${esc(tom)}</b>. A new challenge every day at midnight.</p>`;
+      $('#hookShare').onclick=()=>share(`SportingBrain ${title}: ${sc}/5 ${marks.map(m=>m?'🟩':'🟥').join('')}\nThe Brain got ${brain}. Beat me:\n${SITE}`);
+      tickChip();
+    }
+    if(saved) return done(saved);
+    let i=0; const marks=[];
+    function show(){ const q=Q[i];
+      el.innerHTML=head+`<div class="hook-pips">${Q.map((_,k)=>`<i class="${k<i?(marks[k]?'y':'n'):k===i?'c':''}"></i>`).join('')}</div>
+        <p class="hook-k">${esc(q.s)}</p><p class="hook-q">${esc(q.q)}</p>
+        <div class="hook-opts ${q.o.length===2?'two':''}">${q.o.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div>`;
+      tickChip(); }
+    el.addEventListener('click',e=>{ const b=e.target.closest('.hook-opts [data-k]'); if(b&&!b.disabled){ const q=Q[i], ok=+b.dataset.k===q.a; marks.push(ok);
+        el.querySelectorAll('.hook-opts button').forEach(x=>{ x.disabled=true; if(+x.dataset.k===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+        el.insertAdjacentHTML('beforeend',`<p class="hook-fact">${ok?'Yes.':'No.'} ${esc(q.f)}</p><button class="btn gold" data-hn>${i<4?'Next question':'See your score'}</button>`); return; }
+      if(e.target.closest('[data-hn]')){ i++; if(i<Q.length) show(); else { store.set(key,marks); markPlayed('hook'); done(marks); } } });
+    show(); setInterval(tickChip,30000);
+  })();
   main.querySelectorAll('[data-share-to]').forEach(a=>{ const u=encodeURIComponent(SITE), t=encodeURIComponent(PITCH);
     a.href={whatsapp:`https://wa.me/?text=${t}%20${u}`, facebook:`https://www.facebook.com/sharer/sharer.php?u=${u}`, x:`https://twitter.com/intent/tweet?text=${t}&url=${u}`}[a.dataset.shareTo]; });
   (function(){ const sc=document.createElement('script'); sc.src='https://tally.so/widgets/embed.js'; sc.async=true; document.body.appendChild(sc);
