@@ -11,7 +11,7 @@ const others = GUIDES.filter(x => x.id !== g.id).sort(() => 0).slice(0, 4);
 ---
 <Base title={`${g.name}: how it really works | SportingBrain`} description={`${g.line} Rules, scoring, what the experts watch for, the greats and the big events.`} image={credit ? img : undefined} type="article" wide>
   <article class="sg">
-    <header class="fb-hero" style={img ? `--bg:url('${img}')` : ''}>
+    <header class="fb-hero" style={img ? `--hero:url('${img}')` : ''}>
       <span class="tag" style="background:var(--gold);color:#14254a">Sport guide</span>
       <h1>{g.name}</h1><p class="fb-stand">{g.line}</p>
     </header>

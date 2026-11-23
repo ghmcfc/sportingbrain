@@ -14,7 +14,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: f.t
 ---
 <Base title={`${f.title} | Flashback | SportingBrain`} description={f.standfirst} image={credit ? img : undefined} type="article" wide>
   <article class="fb">
-    <header class="fb-hero" style={img ? `--bg:url('${img}')` : ''}>
+    <header class="fb-hero" style={img ? `--hero:url('${img}')` : ''}>
       <div class="fb-year" aria-hidden="true">{year}</div>
       <span class="tag" style={`background:${col}`}>Flashback · {f.sport}</span>
       <h1>{f.title}</h1>
