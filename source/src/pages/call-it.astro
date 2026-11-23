@@ -8,16 +8,18 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   <section class="ci">
     <div class="ci-head"><span class="tag" style="background:var(--gold);color:#14254a">Call It #<span id="ciNum"></span></span>
       <h1>We freeze a real match. You call what happens next.</h1>
-      <p class="teaser">A real moment from a real final, stopped mid-match. Make your calls, then watch what actually happened. Even if you saw it live, you won't remember this.</p></div>
+      <p class="teaser">A real moment from a real final, stopped mid-match. Make your calls, then watch it play out ball by ball. No spoilers until it's bowled. Even if you saw it live, you won't remember this.</p></div>
     <div class="ci-grid">
       <div class="card ci-board" id="ciBoard"></div>
       <div class="card ci-calls" id="ciCalls"></div>
     </div>
+    <div class="card ci-play" id="ciPlay" hidden aria-live="polite"></div>
     <div class="card ci-result" id="ciResult" hidden></div>
     <p class="small">Matches rebuilt from Cricsheet ball-by-ball data (Open Data Commons Attribution License). A new Call It every day at midnight UK time. Want more? <a href={`${base}call-it.html?practice=1`}>Practice mode</a>.</p>
   </section>
   <script id="ciData" type="application/json" set:html={JSON.stringify(moments)} />
   <script>
+    import { endNav } from '../scripts/play.js';
     const M = JSON.parse(document.getElementById('ciData').textContent);
     const BASE = document.documentElement.dataset.base || '/';
     const S = { get(k, d) { try { const v = localStorage.getItem('sb_' + k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } }, set(k, v) { try { localStorage.setItem('sb_' + k, JSON.stringify(v)); } catch (_) {} } };
@@ -39,24 +41,50 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     let picks = saved ? saved.picks : [];
     function renderCalls() {
       document.getElementById('ciCalls').innerHTML = m.qs.map((q, qi) => `<fieldset class="ci-q"><legend>${qi + 1}. ${esc(q.q)}</legend>
-        <div class="ci-opts">${q.opts.map((o, oi) => `<button class="ci-opt ${picks[qi] === oi ? 'on' : ''} ${saved ? (oi === q.a ? 'right' : (picks[qi] === oi ? 'wrong' : '')) : ''}" data-q="${qi}" data-o="${oi}" ${saved ? 'disabled' : ''}>${esc(o)}</button>`).join('')}</div></fieldset>`).join('')
-        + (saved ? '' : `<button class="btn gold wide" id="ciLock" ${picks.filter(x => x !== undefined).length < m.qs.length ? 'disabled' : ''}>Lock in my calls</button>`);
+        <div class="ci-opts">${q.opts.map((o, oi) => `<button class="ci-opt ${picks[qi] === oi ? 'on' : ''} ${revealed ? (oi === q.a ? 'right' : (picks[qi] === oi ? 'wrong' : '')) : ''}" data-q="${qi}" data-o="${oi}" ${locked ? 'disabled' : ''}>${esc(o)}</button>`).join('')}</div></fieldset>`).join('')
+        + (locked ? '' : `<button class="btn gold wide" id="ciLock" ${picks.filter(x => x !== undefined).length < m.qs.length ? 'disabled' : ''}>Lock in my calls</button>`);
+    }
+    const say = b => { const r = b[3], x = b[5]; if (b[4]) return '<b class="w">WICKET.</b> ' + esc(b[4]);
+      if (x === 'w') return 'Wide' + (r > 1 ? ', ' + r + ' runs' : ''); if (x === 'n') return 'No ball' + (r > 1 ? ', ' + r + ' runs' : '');
+      return r === 4 ? '<b>FOUR</b>' : r === 6 ? '<b>SIX</b>' : r === 0 ? 'No run' : r + ' run' + (r === 1 ? '' : 's'); };
+    const bandOf = l => { let mm; if ((mm = l.match(/^Under (\d+)/))) return [0, +mm[1] - 1]; if ((mm = l.match(/^(\d+) to (\d+)/))) return [+mm[1], +mm[2]]; if ((mm = l.match(/^(\d+) or more/))) return [+mm[1], 1e9]; return [0, 1e9]; };
+    const status = (dr, dw, done) => { const rb = bandOf(m.qs[0].opts[picks[0]]), wp = picks[1];
+      const r = dr > rb[1] ? false : done ? dr >= rb[0] : null;
+      const w = wp < 3 && dw > wp ? false : wp === 3 && dw >= 3 ? true : done ? Math.min(3, dw) === wp : null; return [r, w]; };
+    const chip = (v, txt) => `<span class="ci-chip ${v === true ? 'ok' : v === false ? 'no' : ''}">${v === true ? '✅' : v === false ? '❌' : '⏳'} ${txt}</span>`;
+    let timer = null;
+    function playOut() {
+      const P = document.getElementById('ciPlay'); P.hidden = false; let j = 0; const feed = [];
+      const head = `<p class="pg-step">Playing out the next ${m.span} overs, ball by ball</p>`;
+      function frame(done) { const b = m.play[Math.max(0, j - 1)], runs = j ? b[6] : m.start[0], wk = j ? b[7] : m.start[1], dr = runs - m.start[0], dw = wk - m.start[1], st = status(dr, dw, done);
+        P.innerHTML = head + `<div class="ci-live"><div class="ci-score">${runs}/${wk}</div><div>${esc(m.team)} · <b>${dr}</b> run${dr === 1 ? '' : 's'} and <b>${dw}</b> wicket${dw === 1 ? '' : 's'} since you called it</div></div>
+          <div class="ci-chips">${chip(st[0], 'Your runs call: ' + esc(m.qs[0].opts[picks[0]]))}${chip(st[1], 'Your wickets call: ' + esc(m.qs[1].opts[picks[1]]))}</div>
+          <ol class="ci-feed">${feed.slice(-8).reverse().map(f => `<li><span>${f[0]}</span>${f[1]}</li>`).join('')}</ol>
+          ${done ? '' : '<div class="pg-btns"><button class="btn ghost" id="ciSkip">Skip to the end</button></div>'}`;
+        const sk = document.getElementById('ciSkip'); if (sk) sk.onclick = () => { clearInterval(timer); while (j < m.play.length) { const x = m.play[j++]; feed.push([x[0], esc(x[2]) + ' to ' + esc(x[1]) + ': ' + say(x)]); } finish(); }; }
+      function finish() { frame(true); if (!practice) S.set(key, { picks, watched: true }); setTimeout(() => { reveal(); document.getElementById('ciResult').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 700); }
+      frame(false);
+      timer = setInterval(() => { if (j >= m.play.length) { clearInterval(timer); return finish(); } const x = m.play[j++]; feed.push([x[0], esc(x[2]) + ' to ' + esc(x[1]) + ': ' + say(x)]); frame(false); }, 420);
     }
     function reveal() {
-      const marks = m.qs.map((q, i) => picks[i] === q.a);
-      const n = marks.filter(Boolean).length;
+      const last = m.play[m.play.length - 1], dr = (last ? last[6] : m.start[0]) - m.start[0], dw = (last ? last[7] : m.start[1]) - m.start[1];
+      const marks = m.qs.map((q, i) => picks[i] === q.a), n = marks.filter(Boolean).length; revealed = true; renderCalls();
       const r = document.getElementById('ciResult'); r.hidden = false;
-      r.innerHTML = `<div class="ci-verdict">${n === m.qs.length ? 'Called it.' : n ? 'Half right.' : 'Not this time.'} <span>${marks.map(x => x ? '✅' : '❌').join('')}</span></div>
-        <p>What actually happened: ${m.qs.map(q => `<b>${esc(q.reveal)}</b>`).join(' and ')}. ${esc(m.team)} were ${esc(m.after)}.</p>
-        <div class="row" style="gap:8px;flex-wrap:wrap"><a class="btn" href="${BASE}replays/${m.slug}.html?g=${m.g}">Watch it play out ▶</a>
-        <button class="btn ghost" id="ciShare">Share my result</button>${practice ? `<a class="btn ghost" href="?practice=1">Another one</a>` : ''}</div>
-        ${practice ? '' : `<p class="small" style="margin-top:10px">Call It streak: <b>${S.get('ci_streak', 0)}</b> day${S.get('ci_streak', 0) === 1 ? '' : 's'}. Next one at midnight.</p>`}`;
+      r.innerHTML = `<p class="pg-step">Your result</p><div class="ci-verdict">${n === 2 ? 'Called it. Both right.' : n === 1 ? 'One out of two.' : 'Not this time.'} <span>${marks.map(x => x ? '✅' : '❌').join('')}</span></div>
+        <table class="ci-table"><thead><tr><th>Call</th><th>You said</th><th>What happened</th><th></th></tr></thead><tbody>
+        <tr><td>Runs in ${m.span} overs</td><td>${esc(m.qs[0].opts[picks[0]])}</td><td>${dr} runs</td><td>${marks[0] ? '✅' : '❌'}</td></tr>
+        <tr><td>Wickets in ${m.span} overs</td><td>${esc(m.qs[1].opts[picks[1]])}</td><td>${dw}</td><td>${marks[1] ? '✅' : '❌'}</td></tr></tbody></table>
+        <p>${esc(m.team)} went from ${esc(m.score)} to ${esc(m.after)}.</p>
+        ${practice ? '' : `<p class="small">Call It streak: <b>${S.get('ci_streak', 0)}</b> day${S.get('ci_streak', 0) === 1 ? '' : 's'}. A new one at midnight.</p>`}
+        <div class="pg-btns"><button class="btn gold" id="ciShare">Share my result</button><a class="btn ghost" href="${BASE}replays/${m.slug}.html?g=${m.g}">Full ball-by-ball replay</a><a class="btn ghost" href="?practice=1">Practice another</a></div>`;
+      r.appendChild(endNav());
       document.getElementById('ciShare').onclick = () => { const t = `🧠 SportingBrain Call It #${DAY}\n${marks.map(x => x ? '✅' : '❌').join('')}\nCan you call it? ${location.origin + BASE}call-it.html`;
         if (navigator.share) navigator.share({ text: t }).catch(() => {}); else navigator.clipboard?.writeText(t); };
     }
-    document.addEventListener('click', e => { const b = e.target.closest('.ci-opt'); if (b && !saved) { picks[+b.dataset.q] = +b.dataset.o; renderCalls(); }
-      if (e.target.id === 'ciLock') { if (!practice) { const last = S.get('ci_last', 0); S.set('ci_streak', last === DAY ? S.get('ci_streak', 1) : last === DAY - 1 ? S.get('ci_streak', 0) + 1 : 1); S.set('ci_last', DAY); S.set(key, { picks }); }
-        renderCalls(); reveal(); document.getElementById('ciResult').scrollIntoView({ behavior: 'smooth', block: 'center' }); } });
-    renderCalls(); if (saved) reveal();
+    let revealed = false, locked = !!saved;
+    document.addEventListener('click', e => { const b = e.target.closest('.ci-opt'); if (b && !locked) { picks[+b.dataset.q] = +b.dataset.o; renderCalls(); }
+      if (e.target.id === 'ciLock') { locked = true; if (!practice) { const last = S.get('ci_last', 0); S.set('ci_streak', last === DAY ? S.get('ci_streak', 1) : last === DAY - 1 ? S.get('ci_streak', 0) + 1 : 1); S.set('ci_last', DAY); S.set(key, { picks, watched: false }); }
+        renderCalls(); playOut(); document.getElementById('ciPlay').scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
+    renderCalls(); if (saved) { if (saved.watched) reveal(); else playOut(); }
   </script>
 </Base>

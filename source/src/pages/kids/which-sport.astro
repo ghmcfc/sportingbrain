@@ -6,7 +6,7 @@ import Kids from '../../layouts/Kids.astro';
   <section class="pg-card" id="game" aria-live="polite"></section>
   <script>
     import { PERSONALITY } from '../../data/games.js';
-    import { esc, share, markPlayed, BASE } from '../../scripts/play.js';
+    import { esc, share, markPlayed, BASE, endNav } from '../../scripts/play.js';
     const g = document.getElementById('game'); let i = 0, tally = {};
     function show() { const [q, opts] = PERSONALITY.qs[i];
       g.innerHTML = `<p class="pg-step">${i + 1} of ${PERSONALITY.qs.length}</p><p class="pg-q">${esc(q)}</p><div class="pg-opts">${opts.map(o => `<button data-s="${o[1]}">${esc(o[0])}</button>`).join('')}</div>`; }
@@ -14,7 +14,7 @@ import Kids from '../../layouts/Kids.astro';
       if (e.target.closest('[data-again]')) { i = 0; tally = {}; show(); } });
     function end() { markPlayed('which-sport'); const s = Object.entries(tally).sort((a, b) => b[1] - a[1])[0][0], line = PERSONALITY.results[s];
       g.innerHTML = `<p class="pg-step">Your sport</p><p class="pg-q" style="font-size:1.5rem">${esc(line)}</p><div class="pg-btns"><button class="btn ghost" id="sh">Share</button><button class="btn ghost" data-again>Try again</button></div>`;
-      document.getElementById('sh').onclick = () => share(`SportingBrain says: ${line}`, location.origin + location.pathname); }
+      document.getElementById('sh').onclick = () => share(`SportingBrain says: ${line}`, location.origin + location.pathname); g.appendChild(endNav()); }
     show();
   </script>
 </Kids>

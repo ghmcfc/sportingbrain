@@ -38,7 +38,8 @@ export function buildMoments() {
           id: `${r.slug}-${i}-${ov}`, slug: r.slug, match: r.title, date: m.date, venue: m.venue, team: inn.team,
           opp: m.teams.find(t => t !== inn.team), innings: i, overs, score: `${s.runs}/${s.wk}`, at: `${ov}.0`, pair,
           need: i === 1 && tgt ? `${inn.team} need ${tgt - s.runs} from ${overs * 6 - s.lg} balls` : null,
-          g: g0 + k, span,
+          g: g0 + k, span, start: [s.runs, s.wk],
+          play: B.slice(k + 1, (endK >= 0 ? endK : state.length - 1) + 1).map((b, j) => { const st = state[k + 1 + j]; const bs = st.lg - (legal(b) ? 1 : 0); return [`${Math.floor(bs / 6)}.${bs % 6 + 1}`, b[2], b[3], b[6], isWkt(b) ? b[7] : '', b[8], st.runs, st.wk]; }),
           qs: [
             { q: `How many runs will ${inn.team} score in the next ${span} overs?`, opts: rb.labels, a: rb.answer, reveal: `${dr} runs` },
             { q: `How many wickets will fall in those ${span} overs?`, opts: ['None', 'One', 'Two', 'Three or more'], a: Math.min(3, dw), reveal: `${dw} wicket${dw === 1 ? '' : 's'}` }

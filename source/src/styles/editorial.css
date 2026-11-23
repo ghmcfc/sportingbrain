@@ -468,3 +468,11 @@ body.reduce-motion *{animation:none!important;transition:none!important;scroll-b
 .gg-photo{width:100%;aspect-ratio:16/9;border-radius:4px;background-color:#0F1E36;background-repeat:no-repeat;margin:6px 0 14px;transition:background-size .5s ease}
 main[data-page="home"]{min-height:110vh}
 .reset-wrap{margin:10px 0 0}.reset-btn{font-size:1rem;padding:6px 14px}
+.end-nav{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding-top:14px;border-top:1px solid rgba(15,30,54,.15)}
+/* Call It play-out and results */
+.ci-play{margin-top:16px}.ci-live{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin:4px 0 10px}.ci-live .ci-score{font-size:3.2rem;line-height:1}
+.ci-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}.ci-chip{display:inline-block;padding:6px 10px;border-radius:999px;background:#E2E6EC;color:#0F1E36;font-weight:600;font-size:.95rem}
+.ci-chip.ok{background:#CDEBD9}.ci-chip.no{background:#F6D3D6}
+.ci-feed{list-style:none;padding:0;margin:0 0 10px}.ci-feed li{padding:6px 0;border-bottom:1px solid rgba(15,30,54,.12);display:flex;gap:10px}.ci-feed li span{min-width:3.2em;font-variant-numeric:tabular-nums;opacity:.7}.ci-feed .w{color:#C8102E}
+.fc-board .ci-feed li{border-color:rgba(255,255,255,.2);color:#fff}
+.ci-table{width:100%;border-collapse:collapse;margin:10px 0 14px}.ci-table th,.ci-table td{text-align:left;padding:8px 6px;border-bottom:1px solid rgba(15,30,54,.15);vertical-align:top}.ci-table th{font-family:var(--display);font-size:1rem}

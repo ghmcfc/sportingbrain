@@ -51,6 +51,9 @@ function countdown(el){ function tick(){ const now=new Date(); const lon=new Dat
 function next3(items){ return `<div class="next3">${items.map(i=>`<a href="${i[2]}">${esc(i[1])}</a>`).join('')}</div>`; }
 const MORE = PLAY.filter(g=>!['archive','passport','sports-day','challenge','advent'].includes(g[0])).map(g=>['',g[1],BASE+g[0]+'.html']);
 const KIDZ = !!document.querySelector('.kz');
+const KIDS_GAMES=[['kids/9-12','Junior Brain quiz'],['kids/6-8','Little Legends quiz'],['kids/true-or-false','True or False'],['kids/guess-the-sport','Guess the Sport'],['kids/guess-the-player','Guess the Player'],['kids/the-grid','The Grid'],['kids/which-sport','Which Sport Are You?'],['kids/academy','Brain Academy']];
+const endNavHTML=()=>{ const here=location.pathname.replace(/\.html$/,''); const pool=(KIDZ?KIDS_GAMES:PLAY.filter(g=>!['archive','passport','sports-day','laughs'].includes(g[0])).map(g=>[g[0],g[1]])).filter(g=>!here.endsWith('/'+g[0])); const g=pool[Math.floor(Math.random()*pool.length)];
+  return `<div class="end-nav"><a class="btn gold" href="${BASE}${g[0]}.html">Next game: ${esc(g[1])}</a><a class="btn ghost" href="${BASE}${KIDZ?'kids.html':''}">${KIDZ?'Kids Zone home':'Home'}</a></div>`; };
 const moreExcept = href => KIDZ ? '' : next3(shuffle(MORE.filter(m=>!href||!m[2].endsWith(href))).slice(0,3));
 
 // theme + font
@@ -376,6 +379,7 @@ if(P==='daily'){
       g.innerHTML=`<div class="small">${LV[level].n}</div><div class="score">${score}/5</div><div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${line}</div></div>
         <div class="stats"><div><b>${store.get('streak',1)}</b>day streak</div><div><b>${store.get('played',1)}</b>played</div><div><b>${store.get('beaten',0)}</b>times you beat the Brain</div></div>
         <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn pink" id="sh">Share my score</button>${level<4?`<button class="btn ghost" data-lv="${level+1}">Try ${LV[level+1].n}</button>`:''}<a class="btn ghost" href="${BASE}call-it.html">Play Call It</a></div><p class="small">New questions in <span class="countdown" id="cd"></span></p>`;
+      g.insertAdjacentHTML('beforeend',endNavHTML());
       g.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ level=+b.dataset.lv; store.set('daily_level',level); render(); window.scrollTo({top:0,behavior:'smooth'}); });
       const card=`SportingBrain #${QD} 🧠 ${LV[level].n}\n${marks.map(m=>m?'🟩':'🟥').join('')}  ${score}/5\nThe Brain got ${brainScore}/5.\n${SITE}daily.html?level=${level}`;
       $('#sh').onclick=()=>share(card); countdown($('#cd'));
@@ -393,7 +397,7 @@ if(P==='hl'){
   <div class="stats"><div><b id="run">0</b>in a row</div><div><b id="best">0</b>your best</div></div>
   <div class="hl" style="margin-top:10px"><div class="item"><div class="lab" id="al"></div><div class="val" id="av"></div></div><div class="item"><div class="lab" id="bl"></div><div class="val" id="bv">?</div></div></div>
   <div class="row" id="btns"><button class="btn" id="hi">Higher ▲</button><button class="btn pink" id="lo">Lower ▼</button></div>
-  <div id="res" hidden><div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div id="msg"></div></div><div class="row"><button class="btn pink" id="sh">Share</button><button class="btn ghost" id="ag">Go again</button></div></div></section>
+  <div id="res" hidden><div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div id="msg"></div></div><div class="row"><button class="btn pink" id="sh">Share</button><button class="btn ghost" id="ag">Go again</button></div>${endNavHTML()}</div></section>
   <div class="sec"><h2>Keep playing</h2></div>${moreExcept(BASE+'higher-or-lower.html')}`;
   const D=SB_HL; let best=store.get('hl_best',0), run=0, a=null, b; $('#best').textContent=best;
   const pick=ex=>{let x; do{x=D[Math.random()*D.length|0];}while(ex&&(x===ex||x.v===ex.v)); return x;};
@@ -420,7 +424,7 @@ if(P==='gtp'){
   function pickP(o,btn){ markPlayed('gtp'); const p=L[idx]; const bs=$('#op').querySelectorAll('.opt'); bs.forEach(b=>{b.disabled=true; if(b.textContent===p.a)b.classList.add('right');});
     if(o===p.a){ const pts=3-clue; total+=pts; toast(`+${pts} points!`);} else btn.classList.add('wrong');
     clue=2; renderClues(); $('#tot').textContent=total; $('#more').hidden=true;
-    if(idx<L.length-1){ $('#nx').hidden=false; } else { const best=store.get('gtp_best',0); if(total>best){store.set('gtp_best',total); confetti();} $('#nx').hidden=false; $('#nx').textContent='Share my score'; $('#nx').onclick=()=>share(`SportingBrain Guess the Player 🕵️ ${total}/${L.length*3} points\nsportingbrain.com`); } }
+    if(idx<L.length-1){ $('#nx').hidden=false; } else { const best=store.get('gtp_best',0); if(total>best){store.set('gtp_best',total); confetti();} $('#nx').hidden=false; $('#nx').textContent='Share my score'; $('#nx').insertAdjacentHTML('afterend',endNavHTML()); $('#nx').onclick=()=>share(`SportingBrain Guess the Player 🕵️ ${total}/${L.length*3} points\nsportingbrain.com`); } }
   $('#nx').onclick=()=>{ idx++; show(); };
   show();
 }
@@ -435,7 +439,7 @@ if(P==='tf'){
   function show(){ bar(); $('#qt').textContent=L[i][0]; $('#btns').hidden=false; }
   function ans(v){ markPlayed('tf'); const ok=v===L[i][1]; marks.push(ok); if(ok)sc++; toast(ok?'Correct!':`It's ${L[i][1]?'true':'false'}!`); i++; if(i<L.length) show(); else { bar(); $('#btns').hidden=true; $('#qt').textContent=`You got ${sc}/10`; if(sc>=9) confetti();
       $('#res').innerHTML=`<div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${sc>=8?'Proper sports brain, that.':sc>=5?'Not bad. Not great. Go again?':'Ooh. Did you have your eyes shut?'}</div></div><div class="row"><button class="btn pink" id="sh">Share</button><a class="btn ghost" href="${BASE}true-or-false.html">Go again</a></div>`;
-      $('#sh').onclick=()=>share(`SportingBrain True or False ✅\n${marks.map(m=>m?'🟩':'🟥').join('')} ${sc}/10\nsportingbrain.com`); } }
+      $('#res').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain True or False ✅\n${marks.map(m=>m?'🟩':'🟥').join('')} ${sc}/10\nsportingbrain.com`); } }
   $('#t').onclick=()=>ans(true); $('#f').onclick=()=>ans(false); show();
 }
 
@@ -449,7 +453,7 @@ if(P==='speed'){
   function q(){ if(i>=L.length){L=shuffle(SB_TF);i=0;} $('#qt').textContent=L[i][0]; }
   function end(){ clearInterval(timer); $('#btns').hidden=true; $('#go').hidden=false; $('#go').textContent='Play again'; $('#qt').textContent=`Time! You got ${sc} right.`;
     const best=store.get('speed_best',0); if(sc>best){store.set('speed_best',sc);$('#best').textContent=sc; confetti();}
-    $('#res').innerHTML=`<button class="btn pink wide" id="sh">Share my score</button>`; $('#sh').onclick=()=>share(`SportingBrain Speed Round ⏱️ ${sc} right in 60 seconds\nsportingbrain.com`); }
+    $('#res').innerHTML=`<button class="btn pink wide" id="sh">Share my score</button>`; $('#res').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain Speed Round ⏱️ ${sc} right in 60 seconds\nsportingbrain.com`); }
   function ans(v){ if(v===L[i][1]){sc++;$('#sc').textContent=sc;} else { t=Math.max(0,t-3); toast('-3 seconds!'); } i++; q(); }
   $('#go').onclick=()=>{ markPlayed('speed'); L=shuffle(SB_TF); i=0; sc=0; t=60; $('#sc').textContent=0; $('#res').innerHTML=''; $('#go').hidden=true; $('#btns').hidden=false; q();
     timer=setInterval(()=>{ t--; $('#tm').textContent=t; if(t<=0) end(); },1000); };
@@ -468,7 +472,7 @@ if(P==='grid'){
     $('#gb').querySelectorAll('button').forEach((b,k)=>b.onclick=()=>{const w=words[k]; if(sel.includes(w)) sel=sel.filter(x=>x!==w); else if(sel.length<4) sel.push(w); draw();}); }
   function over(win){ markPlayed('grid'); if(win) store.set('grid_solved',store.get('grid_solved',0)+1); $('#ck').hidden=$('#sf').hidden=true; if(!win){ G.groups.filter(g=>!solved.includes(g)).forEach(g=>solved.push(g)); words=[]; draw(); }
     $('#res').innerHTML=`<div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${win?`Cracked it with ${lives} ${lives===1?'life':'lives'} left. Clever clogs.`:'The Grid wins today. Fresh one tomorrow.'}</div></div><button class="btn pink wide" id="sh">Share</button>`;
-    $('#sh').onclick=()=>share(`SportingBrain The Grid #${DAY} 🧩 ${win?'Solved':'Beaten'} ${'❤️'.repeat(lives)}\nsportingbrain.com`); if(win) confetti(); }
+    $('#res').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain The Grid #${DAY} 🧩 ${win?'Solved':'Beaten'} ${'❤️'.repeat(lives)}\nsportingbrain.com`); if(win) confetti(); }
   $('#ck').onclick=()=>{ if(sel.length!==4){toast('Pick four words');return;} const g=G.groups.find(g=>sel.every(w=>g.w.includes(w)));
     if(g){ solved.push(g); words=words.filter(w=>!g.w.includes(w)); sel=[]; toast('Nice one!'); draw(); if(solved.length===4) over(true); }
     else { const close=G.groups.some(g=>sel.filter(w=>g.w.includes(w)).length===3); lives--; toast(close?'One away!':'Not a group'); sel=[]; draw(); if(lives===0) over(false); } };
@@ -481,7 +485,7 @@ if(P==='emoji'){
   const qs=shuffle(SB_EMOJI).slice(0,8).map(e=>({q:'',e:e.e,o:shuffle(e.o),a:null,ans:e.a}));
   qs.forEach(q=>{q.a=q.o.indexOf(q.ans); q.q='Which sport is this?'; q.s=q.e;});
   runQuiz($('#g'), qs, {done:m=>{ markPlayed('emoji'); const sc=m.filter(Boolean).length; $('#g').innerHTML=`<div class="score">${sc}/8</div><div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${sc>=7?'Emoji master!':'Not bad. Have another go?'}</div></div><div class="row"><button class="btn pink" id="sh">Share</button><a class="btn ghost" href="${BASE}guess-the-sport.html">Go again</a></div>`;
-    $('#sh').onclick=()=>share(`SportingBrain Guess the Sport 🤔 ${sc}/8\nsportingbrain.com`); if(sc>=7) confetti(); }});
+    $('#g').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain Guess the Sport 🤔 ${sc}/8\nsportingbrain.com`); if(sc>=7) confetti(); }});
   // show emoji large
   const fix=()=>{ const s=$('#qsub'); if(s && !s.classList.contains('emoji-q')){ s.className='emoji-q'; } }; new MutationObserver(fix).observe($('#g'),{subtree:true,childList:true}); fix();
 }
@@ -494,7 +498,7 @@ if(P==='challenge'){
   <div class="sec"><h2>Other challenges</h2></div><div class="g2">${Object.entries(SB_CHALLENGES).filter(([x])=>x!==k).map(([x,o])=>`<a class="ch" href="${BASE}challenge.html?c=${x}" style="background:${o.colour}"><b>${esc(o.title)}</b><small>10 questions</small></a>`).join('')}</div>`;
   runQuiz($('#q'), c.qs, {done:m=>{ const sc=m.filter(Boolean).length; store.set('ch_'+k,sc);
     $('#q').innerHTML=`<div class="score">${sc}/${c.qs.length}</div><div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${sc>=8?'Proper sports brain. Take a bow.':sc>=5?'Solid. Not spectacular. The Brain respects it.':'Ouch. Same time next week?'}</div></div><button class="btn pink wide" id="sh">Share my score</button>`;
-    $('#sh').onclick=()=>share(`SportingBrain ${c.title} 🧠\n${m.map(x=>x?'🟩':'🟥').join('')} ${sc}/${c.qs.length}\nsportingbrain.com`); if(sc>=9) confetti(); }});
+    $('#q').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain ${c.title} 🧠\n${m.map(x=>x?'🟩':'🟥').join('')} ${sc}/${c.qs.length}\nsportingbrain.com`); if(sc>=9) confetti(); }});
 }
 
 // ================= STORY / SPORT QUIZ ISLANDS =================

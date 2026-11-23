@@ -17,7 +17,7 @@ const fmt = iso => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', m
   </div>
   <script>
     import { ALL as BANK } from '../data/bank_all.js';
-    import { shuffle, esc, markPlayed } from '../scripts/play.js';
+    import { shuffle, esc, markPlayed, endNav } from '../scripts/play.js';
     const items = [...document.querySelectorAll('.cd-item')];
     function tick() { const now = Date.now(); items.forEach(el => { const t = Date.parse(el.dataset.t), c = el.querySelector('[data-c]'), d = t - now;
       if (d <= 0) { c.textContent = 'Under way'; el.querySelector('small').textContent = 'or finished'; return; }
@@ -28,7 +28,7 @@ const fmt = iso => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', m
       const show = () => { const q = qs[i], idx = shuffle([0, 1, 2, 3]); box.innerHTML = `<p class="pg-step">${i + 1} of ${qs.length}</p><p class="pg-q">${esc(q[2])}</p><div class="pg-opts">${idx.map(k => `<button data-k="${k}">${esc(q[3][k])}</button>`).join('')}</div>`;
         box.onclick = ev => { const o = ev.target.closest('[data-k]'); if (o && !o.disabled) { const ok = +o.dataset.k === q[4]; if (ok) s++; box.querySelectorAll('[data-k]').forEach(x => { x.disabled = true; if (+x.dataset.k === q[4]) x.classList.add('ok'); else if (x === o) x.classList.add('no'); });
           box.insertAdjacentHTML('beforeend', `<p class="pg-fact">${esc(q[5])}</p><div class="pg-btns"><button class="btn" data-n>${i < qs.length - 1 ? "Next" : "Finish"}</button></div>`); }
-          if (ev.target.closest('[data-n]')) { i++; if (i < qs.length) show(); else { markPlayed('countdown'); box.innerHTML = `<p class="pg-q"><b>${s}/${qs.length}.</b> ${s === qs.length ? 'Ready for it.' : 'Good warm-up.'}</p>`; } } }; };
+          if (ev.target.closest('[data-n]')) { i++; if (i < qs.length) show(); else { markPlayed('countdown'); box.innerHTML = `<p class="pg-q"><b>${s}/${qs.length}.</b> ${s === qs.length ? 'Ready for it.' : 'Good warm-up.'}</p>`; box.appendChild(endNav()); } } }; };
       show(); });
   </script>
 </Base>

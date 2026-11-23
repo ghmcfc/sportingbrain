@@ -4,13 +4,14 @@ import { FINALS, buildFootMoments } from '../data/footcall.js';
 const M = buildFootMoments();
 ---
 <Base title="Call It: Football. Great finals, minute by minute | SportingBrain" description="A moment from a great World Cup, Euro or Champions League final, men's and women's. Call who scores next and how many more goals there will be." page="callitfoot">
-  <header class="pg-head"><h1>Call It: Football</h1><p>A real moment from a great final. You know the score and the minute, nothing else. Make two calls, then see what actually happened. A new moment every day, and practice moments whenever you want.</p></header>
+  <header class="pg-head"><h1>Call It: Football</h1><p>A real moment from a great final. You know the score and the minute, nothing else. Make two calls, lock them in, then watch the rest of the match play out. No spoilers until it happens. A new moment every day, and practice moments whenever you want.</p></header>
   <section class="card ci-board fc-board" id="board" aria-live="polite"></section>
   <div class="pg-btns"><button class="btn ghost" id="practice">Practice moment</button><a class="btn ghost" href="call-it.html">Call It: Cricket</a></div>
   <p class="pg-note">Goal times from the official match records. Extra time counts; penalty shoot-outs don't. Finals included: {FINALS.length}, from 1966 to 2025.</p>
   <script id="fcData" type="application/json" set:html={JSON.stringify({ F: FINALS, M })} />
   <script>
-    import { ukDayNo, seeded, shuffle, esc, store, markPlayed, share, SITE } from '../scripts/play.js';
+    import { ukDayNo, seeded, shuffle, esc, store, markPlayed, share, SITE, endNav } from '../scripts/play.js';
+    const mins = l => { const [a, b] = String(l).split('+'); return +a + (b ? +b / 10 : 0); };
     const { F, M } = JSON.parse(document.getElementById('fcData').textContent), board = document.getElementById('board');
     const order = shuffle(M.map((_, i) => i), seeded(20261123)), D = ukDayNo(), todayIdx = order[D % order.length];
     function render(idx, daily) {
@@ -21,15 +22,37 @@ const M = buildFootMoments();
         <div class="ci-score" style="font-size:4rem;color:#F2A900;line-height:1.1">${m.score[0]}-${m.score[1]}</div><p style="color:#fff;margin:0 0 14px"><b>${esc(m.clock)}</b></p>
         <p style="color:#fff"><b>Call 1: who scores next?</b></p><div class="pg-opts fc-o" data-q="next">${[f.teams[0], f.teams[1], 'No more goals'].map((t, k) => `<button data-v="${k}">${esc(t)}</button>`).join('')}</div>
         <p style="color:#fff;margin-top:14px"><b>Call 2: how many more goals in the match?</b></p><div class="pg-opts fc-o" data-q="more">${['None', '1', '2', '3 or more'].map((t, k) => `<button data-v="${k}">${t}</button>`).join('')}</div>
-        <div id="fcRes"></div>`;
-      const reveal = p => { board.querySelectorAll('.fc-o button').forEach(b => { b.disabled = true; const q = b.parentElement.dataset.q, right = +b.dataset.v === m[q]; if (right) b.classList.add('ok'); else if (+b.dataset.v === p[q]) b.classList.add('no'); });
-        const s = (p.next === m.next) + (p.more === m.more), after = f.goals.filter(g => { const [a, b] = String(g[0]).split('+'); return +a + (b ? +b / 10 : 0) > m.at; });
-        document.getElementById('fcRes').innerHTML = `<div class="pg-fact" style="background:#fff;color:#0F1E36"><b>${s}/2.</b> ${after.length ? 'What happened next: ' + after.map(g => `${esc(g[2])} ${g[0]}' (${esc(f.teams[g[1]])})`).join(', ') + '.' : 'No more goals.'} ${esc(f.end)}</div>
-          <div class="pg-btns"><button class="btn gold" id="fcShare">Share</button></div>`;
-        document.getElementById('fcShare').onclick = () => share(`Call It: Football. ${f.title}, ${m.score[0]}-${m.score[1]}, ${m.clock.toLowerCase()}. I got ${s}/2.`, SITE + 'call-it-football.html');
-        if (daily && !saved) { store.set(key, { p, s }); markPlayed('call-it-football'); } };
-      if (saved) return reveal(saved.p);
-      board.querySelectorAll('.fc-o').forEach(g => g.addEventListener('click', e => { const b = e.target.closest('button'); if (!b || b.disabled) return; g.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); g.querySelectorAll('button').forEach(x => x.classList.toggle('sel', x === b)); pick[g.dataset.q] = +b.dataset.v; if ('next' in pick && 'more' in pick) reveal(pick); }));
+        <div class="pg-btns"><button class="btn gold" id="fcLock" disabled>Lock in my calls and play it out</button></div>
+        <div id="fcLive" aria-live="polite"></div><div id="fcRes"></div>`;
+      const after = f.goals.filter(g => mins(g[0]) > m.at), endMin = /extra time/i.test(f.end || '') || f.goals.some(g => !String(g[0]).includes('+') && +g[0] > 90) ? 120 : 90;
+      const chip = (v, t) => `<span class="ci-chip ${v === true ? 'ok' : v === false ? 'no' : ''}">${v === true ? '✅' : v === false ? '❌' : '⏳'} ${t}</span>`;
+      const NEXT = [f.teams[0], f.teams[1], 'No more goals'], MORE = ['None', '1', '2', '3 or more'];
+      const stat = (p, n, done) => [n > 0 ? after[0][1] === p.next : done ? p.next === 2 : null, p.more < 3 && n > p.more ? false : p.more === 3 && n >= 3 ? true : done ? Math.min(3, n) === p.more : null];
+      const result = p => { const ok = [p.next === m.next, p.more === m.more], s2 = ok.filter(Boolean).length;
+        board.querySelectorAll('.fc-o button').forEach(b => { b.disabled = true; const q = b.parentElement.dataset.q, right = +b.dataset.v === m[q]; if (right) b.classList.add('ok'); else if (+b.dataset.v === p[q]) b.classList.add('no'); });
+        const R = document.getElementById('fcRes'); R.innerHTML = `<div class="ci-result card" style="color:#0F1E36"><p class="pg-step">Your result</p><div class="ci-verdict">${s2 === 2 ? 'Called it. Both right.' : s2 === 1 ? 'One out of two.' : 'Not this time.'} <span>${ok.map(x => x ? '✅' : '❌').join('')}</span></div>
+          <table class="ci-table"><thead><tr><th>Call</th><th>You said</th><th>What happened</th><th></th></tr></thead><tbody>
+          <tr><td>Who scores next</td><td>${esc(NEXT[p.next])}</td><td>${after.length ? esc(f.teams[after[0][1]]) + ' (' + esc(after[0][2]) + ', ' + after[0][0] + '\u2032)' : 'No more goals'}</td><td>${ok[0] ? '✅' : '❌'}</td></tr>
+          <tr><td>More goals</td><td>${MORE[p.more]}</td><td>${after.length}</td><td>${ok[1] ? '✅' : '❌'}</td></tr></tbody></table>
+          <p>${esc(f.end)}</p><div class="pg-btns"><button class="btn gold" id="fcShare">Share my result</button><button class="btn ghost" id="fcAgain">Practice another</button></div></div>`;
+        R.querySelector('.ci-result').appendChild(endNav());
+        document.getElementById('fcShare').onclick = () => share(`Call It: Football. ${f.title}, ${m.score[0]}-${m.score[1]}, ${m.clock.toLowerCase()}. I got ${s2}/2.`, SITE + 'call-it-football.html');
+        document.getElementById('fcAgain').onclick = () => document.getElementById('practice').click();
+        if (daily) { store.set(key, { p, s: s2, watched: true }); } };
+      const playOut = p => { board.querySelectorAll('.fc-o button').forEach(b => b.disabled = true); const L = document.getElementById('fcLive');
+        const steps = Math.max(1, endMin - Math.floor(m.at)), dt = Math.max(60, Math.min(180, 9000 / steps)); let t = Math.floor(m.at), sc = m.score.slice(), shown = 0, timer;
+        const draw = done => { const st = stat(p, shown, done); L.innerHTML = `<div class="ci-live"><div class="ci-score" style="color:#F2A900">${sc[0]}-${sc[1]}</div><div style="color:#fff">${done ? 'Full time' + (endMin === 120 ? ', after extra time' : '') : t + '\u2032'}</div></div>
+          <div class="ci-chips">${chip(st[0], 'Next goal: ' + esc(NEXT[p.next]))}${chip(st[1], 'More goals: ' + MORE[p.more])}</div>
+          <ol class="ci-feed">${after.slice(0, shown).reverse().map(g => `<li><span>${g[0]}\u2032</span><b>GOAL.</b> ${esc(g[2])} (${esc(f.teams[g[1]])})</li>`).join('')}</ol>
+          ${done ? '' : '<div class="pg-btns"><button class="btn ghost" id="fcSkip">Skip to the end</button></div>'}`;
+          const sk = document.getElementById('fcSkip'); if (sk) sk.onclick = () => { clearInterval(timer); while (shown < after.length) { sc[after[shown][1]]++; shown++; } fin(); }; };
+        const fin = () => { draw(true); setTimeout(() => result(p), 700); };
+        draw(false); timer = setInterval(() => { t++; while (shown < after.length && Math.floor(mins(after[shown][0])) <= t) { sc[after[shown][1]]++; shown++; }
+          if (t >= endMin) { while (shown < after.length) { sc[after[shown][1]]++; shown++; } clearInterval(timer); return fin(); } draw(false); }, dt); };
+      if (saved && saved.p) { if (saved.watched === false) { document.getElementById('fcLock').hidden = true; return playOut(saved.p); } return result(saved.p); }
+      board.querySelectorAll('.fc-o').forEach(g => g.addEventListener('click', e => { const b = e.target.closest('button'); if (!b || b.disabled) return; g.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); g.querySelectorAll('button').forEach(x => x.classList.toggle('sel', x === b)); pick[g.dataset.q] = +b.dataset.v;
+        const lk = document.getElementById('fcLock'); lk.disabled = !('next' in pick && 'more' in pick); }));
+      document.getElementById('fcLock').onclick = () => { if (daily) { store.set(key, { p: pick, watched: false }); markPlayed('call-it-football'); } document.getElementById('fcLock').hidden = true; playOut(pick); };
     }
     document.getElementById('practice').onclick = () => { render(Math.floor(Math.random() * M.length), false); board.scrollIntoView({ behavior: 'smooth' }); };
     render(todayIdx, true);
