@@ -45,8 +45,8 @@ function confetti(){
   let t=0; (function f(){ x.clearRect(0,0,c.width,c.height); P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=.1;x.fillStyle=p.c;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillRect(-p.r/2,-p.r/2,p.r,p.r*1.6);x.restore();}); if(++t<200) requestAnimationFrame(f); else c.remove(); })();
 }
 function countdown(el){ function tick(){ const now=new Date(); const lon=new Date(now.toLocaleString('en-US',{timeZone:'Europe/London'})); const nx=new Date(lon); nx.setHours(24,0,0,0); let s=Math.max(0,Math.floor((nx-lon)/1000)); const h=String(Math.floor(s/3600)).padStart(2,'0'); s%=3600; el.textContent=`${h}:${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; } tick(); setInterval(tick,1000); }
-function next3(items){ return `<div class="next3">${items.map(i=>`<a href="${i[2]}"><span>${i[0]}</span>${esc(i[1])}</a>`).join('')}</div>`; }
-const MORE = [['🧠','Today\'s Beat the Brain',BASE+'daily.html'],['📈','Higher or Lower',BASE+'higher-or-lower.html'],['🕵️','Guess the Player',BASE+'guess-the-player.html'],['✅','True or False',BASE+'true-or-false.html'],['⏱️','Speed Round',BASE+'speed-round.html'],['🧩','The Grid',BASE+'the-grid.html'],['🤔','Guess the Sport',BASE+'guess-the-sport.html']];
+function next3(items){ return `<div class="next3">${items.map(i=>`<a href="${i[2]}">${esc(i[1])}</a>`).join('')}</div>`; }
+const MORE = PLAY.filter(g=>!['archive','passport','sports-day','challenge','advent'].includes(g[0])).map(g=>['',g[1],BASE+g[0]+'.html']);
 const moreExcept = href => next3(shuffle(MORE.filter(m=>!href||!m[2].endsWith(href))).slice(0,3));
 
 // theme + font

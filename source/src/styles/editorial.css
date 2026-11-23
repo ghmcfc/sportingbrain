@@ -359,3 +359,6 @@ header.top .wrap{max-width:1240px;padding:10px 16px}
 .kit-wrap svg{width:100%;height:auto}
 @media(max-width:640px){.kit-wrap{grid-template-columns:1fr}}
 .lesson{border-left:6px solid var(--turf)}
+.mainnav a{white-space:nowrap}
+@media (min-width:1024px) and (max-width:1359px){ .mainnav{display:none} .menu-btn{display:inline-block} }
+@media (min-width:1360px){ .mainnav{display:flex} .menu-btn{display:none} }
