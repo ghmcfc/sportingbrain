@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Your settings | SportingBrain" description="Choose how SportingBrain looks and behaves: reminders, display, cookies and your game history." page="settings">
+  <header class="pg-head"><h1>Your settings</h1><p>Everything here is saved on this device only. We don't have accounts, and we never see your scores.</p></header>
+  <section class="pg-card set-list">
+    <h2>Reminders and tips</h2>
+    <label><input type="checkbox" data-k="tips_off"> Turn off tips and reminders (welcome message, newsletter invitation)</label>
+    <label><input type="checkbox" data-k="streak_banner_off"> Hide the "streak ends at midnight" banner</label>
+    <h2>Display</h2>
+    <label><input type="checkbox" data-k="dark" data-c="dark"> Dark mode</label>
+    <label><input type="checkbox" data-k="dys" data-c="dyslexic"> Dyslexia-friendly font</label>
+    <label><input type="checkbox" data-k="reduce_motion" data-c="reduce-motion"> Reduce motion</label>
+    <label><input type="checkbox" data-k="big_text" data-c="big-text"> Larger text</label>
+    <h2>Cookies and advertising</h2>
+    <p>We only use cookies for advertising and statistics after you agree. <button class="btn ghost" id="cookieBtn">Cookie settings</button></p>
+    <h2>Newsletter</h2>
+    <p>Every email has a one-click unsubscribe link at the bottom.</p>
+    <h2>Your game history</h2>
+    <p>Streaks, scores, badges, your XIs and your Ground Hopper stamps are kept in this browser.</p>
+    <button class="btn ghost" id="clearAll">Clear my game history</button>
+    <p class="pg-note" id="msg" aria-live="polite"></p>
+  </section>
+  <script>
+    import { store } from '../scripts/play.js';
+    document.querySelectorAll('[data-k]').forEach(c => { c.checked = !!store.get(c.dataset.k, c.dataset.k === 'dark' ? document.body.classList.contains('dark') : false);
+      c.onchange = () => { store.set(c.dataset.k, c.checked); if (c.dataset.c) document.body.classList.toggle(c.dataset.c, c.checked); document.getElementById('msg').textContent = 'Saved.'; }; });
+    document.getElementById('cookieBtn').onclick = () => { if (window.googlefc && window.googlefc.showRevocationMessage) window.googlefc.showRevocationMessage(); else document.getElementById('msg').textContent = 'No advertising or statistics cookies are in use yet.'; };
+    document.getElementById('clearAll').onclick = () => { if (!confirm('Clear all your streaks, scores and saved teams on this device?')) return; Object.keys(localStorage).filter(k => k.startsWith('sb_')).forEach(k => localStorage.removeItem(k)); document.getElementById('msg').textContent = 'Cleared.'; };
+  </script>
+</Base>

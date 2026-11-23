@@ -54,6 +54,7 @@ const moreExcept = href => next3(shuffle(MORE.filter(m=>!href||!m[2].endsWith(hr
 
 // theme + font
 if(store.get('dark', matchMedia('(prefers-color-scheme: dark)').matches)) document.body.classList.add('dark');
+if(store.get('dys',false)) document.body.classList.add('dyslexic'); if(store.get('reduce_motion',false)) document.body.classList.add('reduce-motion'); if(store.get('big_text',false)) document.body.classList.add('big-text');
 if(store.get('dys',false)) document.body.classList.add('dyslexic');
 document.addEventListener('click', e=>{
   if(e.target.closest('[data-dark]')){ const on=!document.body.classList.contains('dark'); document.body.classList.toggle('dark',on); store.set('dark',on); }
@@ -75,7 +76,15 @@ function isoWeek(d=new Date()){ const t=new Date(Date.UTC(d.getFullYear(),d.getM
 window.addEventListener('message',e=>{ try{ const d=typeof e.data==='string'?JSON.parse(e.data):e.data; if(d&&d.event==='Tally.FormSubmitted'){ store.set('nl_done',true); toast("You're in! See you in the morning."); } }catch(_){} });
 function saverAvailable(){ return store.get('saver_week','')!==isoWeek(); }
 function streakSaverLine(){ return saverAvailable()?'Streak saver ready this week':'Streak saver used this week'; }
-function markPlayed(g){ store.set('pl_'+g,true); }
+function markPlayed(g){ store.set('pl_'+g,true); const d=store.get('playdays',[]), k=ukKey(); if(!d.includes(k)){ d.push(k); store.set('playdays',d.slice(-30)); } }
+// Prompt rules (Super Prompt 5A): one interruptive prompt per visit, two a week, none if tips are switched off.
+const PROMPT={ ok(){ if(store.get('tips_off',false)) return false; try{ if(sessionStorage.getItem('sb_prompt')) return false; }catch(e){} const w=store.get('prompt_week',{w:'',n:0}); return !(w.w===isoWeek()&&w.n>=2); },
+  used(){ try{ sessionStorage.setItem('sb_prompt','1'); }catch(e){} const w=store.get('prompt_week',{w:'',n:0}); store.set('prompt_week',{w:isoWeek(),n:(w.w===isoWeek()?w.n:0)+1}); } };
+function maybeNewsletter(){ if(store.get('nl_done',false) || store.get('playdays',[]).length<2 || Date.now()-store.get('nl_no',0)<30*864e5 || !PROMPT.ok()) return;
+  PROMPT.used(); const n=document.createElement('div'); n.className='nudge'; n.setAttribute('role','dialog'); n.setAttribute('aria-label','Newsletter');
+  n.innerHTML=`<span>Get tomorrow's challenge, a Flashback and one stat worth knowing, every morning. Free.</span><a class="btn gold" href="${BASE}newsletter.html">Get the newsletter</a><button class="btn ghost" aria-label="No thanks">No thanks</button>`;
+  document.body.appendChild(n); const close=()=>{ n.remove(); store.set('nl_no',Date.now()); }; n.querySelector('button').onclick=close; document.addEventListener('keydown',function k(e){ if(e.key==='Escape'){ close(); document.removeEventListener('keydown',k); } }); }
+window.SB_maybeNewsletter=maybeNewsletter;
 function badges(){
   const st=store.get('streak',0), beaten=store.get('beaten',0), played=store.get('played',0);
   const games=['daily','hl','gtp','tf','speed','grid','emoji'].filter(g=>store.get('pl_'+g,false)).length;
@@ -97,7 +106,9 @@ const DEFAULT_USP=[['🎯','Call It, every day','We freeze a real moment from a 
 function welcome(USP, force){ USP=USP||DEFAULT_USP;
   if(new URLSearchParams(location.search).has('welcome')) force=true;
   const seen=store.get('welcomed_at',0), wk=7*86400000;
+  if(!force && !PROMPT.ok()) return;
   if(!force && (store.get('played',0)>0 || store.get('nl_done',false) || (store.get('welcomed',false) && Date.now()-seen<wk) || store.get('welcome_count',0)>=2)) return;
+  if(!force) PROMPT.used();
   store.set('welcomed',true); store.set('welcomed_at',Date.now()); store.set('welcome_count',store.get('welcome_count',0)+1);
   const mobile=matchMedia('(max-width:767px)').matches;
   const w=document.createElement('div'); w.className='welcome '+(mobile?'sheet':'modal'); w.setAttribute('role','dialog'); w.setAttribute('aria-modal','true'); w.setAttribute('aria-labelledby','wtitle');
@@ -105,7 +116,7 @@ function welcome(USP, force){ USP=USP||DEFAULT_USP;
   w.innerHTML=`<div class="w-back"></div><div class="w-box"><button class="w-x" aria-label="Close">✕</button>
     <div class="w-head"><div><span class="mark" aria-hidden="true">SB</span><h2 id="wtitle">The smartest free sports site in the world.</h2><p class="w-sub">A daily game built on real matches, the stories nobody else tells, and data you can play with. No betting, ever.</p></div></div>
     <ul class="usp in-w">${pts.map(u=>`<li><span>${u[0]}</span><div><b>${u[1]}</b>${mobile?'':`<small>${u[2]}</small>`}</div></li>`).join('')}</ul>
-    <div class="row w-btns"><a class="btn gold" href="${BASE}call-it.html">Play today's Call It</a><button class="btn ghost light w-look">Look around first</button></div></div>`;
+    <div class="row w-btns"><a class="btn gold" href="${BASE}#hook">Play today's challenge</a><button class="btn ghost light w-look">Look around first</button></div></div>`;
   document.body.appendChild(w); document.body.classList.add('w-open');
   const close=()=>{ w.classList.add('out'); document.body.classList.remove('w-open'); setTimeout(()=>w.remove(),250); document.removeEventListener('keydown',esc_); };
   const esc_=e=>{ if(e.key==='Escape') close(); };
@@ -182,6 +193,7 @@ if(P==='home'){
 
   // today's Call It moment (same order as the Call It page)
   const CM=JSON.parse(($('#ciHome')||{}).textContent||'[]');
+  const adTpl=n=>{const t=document.getElementById('ad-'+n);return t?t.innerHTML.trim():'';}, AD1=adTpl('home_leaderboard'), AD2=adTpl('home_infeed');
   const cOrder=CM.map((_,i)=>i).sort((a,b)=>((a*2654435761)%997)-((b*2654435761)%997));
   const cm=CM.length?CM[cOrder[(DAY-1+CM.length*10)%CM.length]]:null;
   const ciDone=store.get('ci_'+DAY,null);
@@ -212,10 +224,11 @@ if(P==='home'){
   </div>
 
   <div class="sec"><h2>Play</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></div>
-  <div class="pg-hub home-games">${['call-it-football','weekly-expert','pub-quiz','stat-attack','is-it-a-foul','stats-detective','legends-xi','countdown'].map(sl=>{const g=PLAY.find(x=>x[0]===sl);return `<a class="pg-tile" href="${BASE}${g[0]}.html" style="--c:${g[4]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`;}).join('')}</div>
+  <div class="pg-hub home-games">${['call-it-football','weekly-expert','pub-quiz','stat-attack','is-it-a-foul','stats-detective','pick-your-xi','countdown'].map(sl=>{const g=PLAY.find(x=>x[0]===sl);return `<a class="pg-tile" href="${BASE}${g[0]}.html" style="--c:${g[4]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`;}).join('')}</div>
 
   ${VIDS.videos.length?`<div class="sec"><h2>Laugh of the Day</h2><a href="${BASE}laughs.html">This week's laughs</a></div><div class="home-lotd"><div id="homeLotd"></div><p class="teaser">One funny moment from sport every day, hand-picked by a person and always family-safe. New at midnight.</p></div>`:''}
 
+  ${AD1}
   <div class="sec"><h2>This week in sport</h2><a href="${BASE}this-week.html">The full edition</a></div>
   <div class="fp-week">
     <div class="fp-week-stories">${WEEK.stories.slice(0,3).map(x=>`<a href="${BASE}this-week.html#stories"><span class="fp-kicker">${esc(x.sport)}</span><b>${esc(x.title)}</b></a>`).join('')}</div>
@@ -223,6 +236,7 @@ if(P==='home'){
     <div class="fp-watch"><h3>What to watch</h3><ul>${WEEK.watch.slice(0,4).map(w=>`<li><b>${esc(w.what)}</b><small>${esc(w.when)}</small></li>`).join('')}</ul><a href="${BASE}this-week.html#talking" class="btn ghost" style="font-size:1rem;padding:6px 12px">Have your say: talking points</a></div>
   </div>
 
+  ${AD2}
   <div class="fp-row">
     <section class="fp-col">
       <div class="sec"><h2>Beat the Brain</h2><a href="${BASE}daily.html">Play</a></div>
@@ -274,6 +288,7 @@ if(P==='home'){
   </div>`;
 
   countdown($('#cd2'));
+  if(window.SB_ADS) main.querySelectorAll('ins.adsbygoogle').forEach(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}});
   if(VIDS.videos.length&&$('#homeLotd')) renderClip($('#homeLotd'),VIDS.videos[lotdIndex(VIDS.videos.length)],true);
 
   // ---------- the daily hook: a different five-question challenge every day of the week ----------
@@ -320,7 +335,7 @@ if(P==='home'){
     el.addEventListener('click',e=>{ const b=e.target.closest('.hook-opts [data-k]'); if(b&&!b.disabled){ const q=Q[i], ok=+b.dataset.k===q.a; marks.push(ok);
         el.querySelectorAll('.hook-opts button').forEach(x=>{ x.disabled=true; if(+x.dataset.k===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
         el.querySelector('.hook-week').insertAdjacentHTML('beforebegin',`<p class="hook-fact">${ok?'Yes.':'No.'} ${esc(q.f)}</p><button class="btn gold" data-hn>${i<4?'Next question':'See your score'}</button>`); return; }
-      if(e.target.closest('[data-hn]')){ i++; if(i<Q.length) show(); else { store.set(key,marks); markPlayed('hook'); done(marks); } } });
+      if(e.target.closest('[data-hn]')){ i++; if(i<Q.length) show(); else { store.set(key,marks); markPlayed('hook'); done(marks); setTimeout(maybeNewsletter,1500); } } });
     show(); setInterval(tickChip,30000);
   })();
   main.querySelectorAll('[data-share-to]').forEach(a=>{ const u=encodeURIComponent(SITE), t=encodeURIComponent(PITCH);
@@ -328,12 +343,13 @@ if(P==='home'){
   (function(){ const sc=document.createElement('script'); sc.src='https://tally.so/widgets/embed.js'; sc.async=true; document.body.appendChild(sc);
     document.addEventListener('click',e=>{ const a=e.target.closest('.nl-open'); if(!a||!window.Tally||!window.Tally.openPopup) return; e.preventDefault(); window.Tally.openPopup(window.SB_NEWSLETTER_FORM,{layout:'modal',width:520,overlay:true,emoji:{text:'🧠',animation:'wave'}}); }); })();
 
-  // newsletter nudge from the second day of visits
-  if(store.get('visitdays',[]).length>=2 && !store.get('nl_done',false) && store.get('nudge_week','')!==isoWeek()){
-    setTimeout(()=>{ const n=document.createElement('div'); n.className='nudge'; n.innerHTML=`<span>📬 Want the Brain in your inbox every morning?</span><a class="btn gold" href="#newsletter" style="padding:8px 12px">Yes please</a><button class="iconbtn dark-btn" aria-label="No thanks">✕</button>`;
-      document.body.appendChild(n); const close=()=>{n.remove(); store.set('nudge_week',isoWeek());}; n.querySelector('button').onclick=close; n.querySelector('a').onclick=close; }, 6000);
-  }
-  welcome(USP, false);
+  // streak at risk: a small banner, not a pop-up (Super Prompt 5A)
+  (function(){ const y=new Date(); y.setDate(y.getDate()-1); const h=+new Date().toLocaleString('en-GB',{timeZone:'Europe/London',hour:'2-digit',hour12:false});
+    if(store.get('streak_banner_off',false) || store.get('lastday',null)!==ukKey(y) || store.get('hook_'+DAY,null) || h<18) return;
+    const b=document.createElement('p'); b.className='streak-risk'; b.innerHTML=`Your ${store.get('streak',1)}-day streak ends at midnight. <a href="#hook">Play today's challenge</a>`; main.prepend(b); })();
+  // first-visit welcome after 5 seconds or the first scroll, never before
+  { let fired=false; const go=()=>{ if(fired) return; fired=true; welcome(USP,false); }; setTimeout(go,5000); addEventListener('scroll',go,{once:true,passive:true}); }
+
 }
 
 // ================= DAILY =================

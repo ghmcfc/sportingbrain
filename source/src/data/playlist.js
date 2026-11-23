@@ -11,7 +11,7 @@ export const PLAY = [
   ['is-it-a-foul', 'Is It a Foul?', 'Eighteen real rules scenarios across eight sports. Fair or foul?', 'games', '#C8102E'],
   ['stat-attack', 'Stat Attack', 'Top trumps against the Brain with Grand Slam legends. Pick your stat.', 'games', '#0F1E36'],
   ['stats-detective', 'Stats Detective', 'A batting line from a World Cup final. Whose was it?', 'games', '#0B6E4F'],
-  ['legends-xi', 'Pick Your Legends XI', 'Build your all-time football or cricket team, men and women. Share it and start the argument.', 'games', '#0B6E4F'],
+  ['pick-your-xi', 'Pick Your XI', 'Any player, any theme: Greatest, Duffers, Daft Names, Cult Heroes. Share it and get it rated.', 'games', '#0B6E4F'],
   ['rewind', 'Grandparent Rewind', 'A round for every decade from the 1950s. Play it with someone who was there.', 'games', '#2A3A55'],
   ['which-sport', 'Which Sport Are You?', 'Six questions. One sport that fits you.', 'games', '#F2A900'],
   ['bingo', 'Matchday Bingo', 'A card for the next game you watch. Tap squares as they happen, or print it.', 'games', '#F2A900'],

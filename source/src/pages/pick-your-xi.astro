@@ -1,0 +1,136 @@
+---
+import Base from '../layouts/Base.astro';
+import { THEMES, SPORTS } from '../data/xi.js';
+---
+<Base title="Pick Your XI: greatest, duffers, daft names and more | SportingBrain" description="Pick any player for any theme: Greatest XI, Duffers XI, Daft Names XI, Cult Heroes, Funniest, Hardest. Football, cricket and both rugby codes. Share it as an image and let your mates rate it." page="pickxi" wide>
+  <header class="pg-head"><h1>Pick Your XI</h1><p>Any player, any era, any theme. Pick a side, name a captain, then share it as an image and let your mates rate it out of ten.</p></header>
+  <section id="rateBox" hidden></section>
+  <div class="xi-step"><h2><span>1</span> Choose a theme</h2>
+    <div class="xi-themes" role="radiogroup" aria-label="Theme">{THEMES.map(([id, t, d]) => <button role="radio" aria-checked="false" data-theme={id}><b>{t}</b><small>{d}</small></button>)}</div>
+    <label class="xi-custom" id="customWrap" hidden>Your title <input id="customTitle" maxlength="40" placeholder="e.g. Sunday League Legends XI"></label>
+  </div>
+  <div class="xi-step"><h2><span>2</span> Choose the sport</h2>
+    <div class="pg-tabs" role="group" aria-label="Sport">{SPORTS.map(([id, n]) => <button aria-pressed="false" data-sport={id}>{n}</button>)}</div>
+    <label class="xi-form" id="formWrap">Formation <select id="formation"><option>4-4-2</option><option>4-3-3</option><option>4-2-3-1</option><option>3-5-2</option><option>5-3-2</option><option>3-4-3</option></select></label>
+  </div>
+  <div class="xi-step"><h2><span>3</span> Pick your players</h2>
+    <p class="pg-note">Tap a position and type any name. Suggestions appear as you type, but you can pick anyone at all. Have fun, be fair: no insults about real people.</p>
+    <div class="xi-board">
+      <div id="pitch" class="xi-pitch" aria-label="Your team"></div>
+      <div class="xi-edit pg-card" id="editor" hidden>
+        <p class="pg-step" id="edPos"></p>
+        <label>Player <input id="edName" list="playerList" maxlength="40" autocomplete="off"></label>
+        <label>Why? (optional) <input id="edWhy" maxlength="80" placeholder="One line, keep it kind"></label>
+        <label class="xi-cap"><input type="checkbox" id="edCap"> Captain</label>
+        <div class="pg-btns"><button class="btn gold" id="edSave">Done</button><button class="btn ghost" id="edClear">Clear</button></div>
+        <p class="pg-note" id="edMsg" aria-live="polite"></p>
+      </div>
+    </div>
+    <datalist id="playerList"></datalist>
+    <div class="pg-form" style="margin-top:14px"><label>Manager or coach <input id="manager" maxlength="40"></label><label>Your name (shown on the card) <input id="byName" maxlength="20"></label></div>
+  </div>
+  <div class="xi-step"><h2><span>4</span> Share it</h2>
+    <p class="pg-note" id="countNote"></p>
+    <div class="pg-btns"><button class="btn gold" id="shareImg">Share as an image</button><button class="btn ghost" id="shareLink">Copy the "rate my XI" link</button><button class="btn ghost" id="resetXI">Start again</button></div>
+    <canvas id="card" width="1080" height="1350" class="xi-card" aria-label="Preview of your team card"></canvas>
+  </div>
+  <script>
+    import { THEMES, FORMATIONS, LISTS, BLOCK } from '../data/xi.js';
+    import { PLAYERS } from '../data/players.js';
+    import { store, toast, share, markPlayed, esc } from '../scripts/play.js';
+    const $ = id => document.getElementById(id);
+    const enc = o => btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const dec = s => JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g, '+').replace(/_/g, '/')))));
+    const clean = s => { const t = (s || '').trim().replace(/\s+/g, ' '); return BLOCK.some(w => t.toLowerCase().includes(w)) ? null : t; };
+    let S = store.get('xi_draft', null) || { theme: 'greatest', sport: 'football', f: '4-4-2', p: [], why: [], cap: -1, m: '', by: '', title: '' };
+    let cur = -1;
+    const slots = () => S.sport === 'football' ? FORMATIONS[S.f].map(x => x[2]) : LISTS[S.sport];
+    const themeName = () => S.theme === 'custom' ? (S.title || 'My XI') : THEMES.find(t => t[0] === S.theme)[1];
+    const save = () => { store.set('xi_draft', S); draw(); renderCard(); };
+    function draw() {
+      document.querySelectorAll('[data-theme]').forEach(b => b.setAttribute('aria-checked', b.dataset.theme === S.theme));
+      document.querySelectorAll('[data-sport]').forEach(b => b.setAttribute('aria-pressed', b.dataset.sport === S.sport));
+      $('customWrap').hidden = S.theme !== 'custom'; $('customTitle').value = S.title || '';
+      $('formWrap').hidden = S.sport !== 'football'; $('formation').value = S.f;
+      $('manager').value = S.m || ''; $('byName').value = S.by || '';
+      $('playerList').innerHTML = (PLAYERS[S.sport] || []).map(n => `<option value="${esc(n)}">`).join('');
+      const pitch = $('pitch'), sl = slots();
+      pitch.className = 'xi-pitch ' + (S.sport === 'football' ? 'is-pitch' : 'is-list');
+      pitch.innerHTML = sl.map((r, i) => { const n = S.p[i], pos = S.sport === 'football' ? FORMATIONS[S.f][i] : null;
+        return `<button class="xi-slot ${n ? 'filled' : ''} ${i === cur ? 'cur' : ''}" data-i="${i}" ${pos ? `style="left:${pos[0]}%;top:${pos[1]}%"` : ''} aria-label="${esc(r)}: ${n ? esc(n) : 'empty'}"><small>${esc(r)}</small><b>${n ? esc(n) : '+'}</b>${S.cap === i ? '<i>C</i>' : ''}</button>`; }).join('');
+      const filled = S.p.filter(Boolean).length;
+      $('countNote').textContent = filled === sl.length ? 'All picked. Share it.' : `${filled} of ${sl.length} picked.`;
+    }
+    function edit(i) { cur = i; const ed = $('editor'); ed.hidden = false; $('edPos').textContent = slots()[i]; $('edName').value = S.p[i] || ''; $('edWhy').value = S.why[i] || ''; $('edCap').checked = S.cap === i; $('edMsg').textContent = ''; draw(); $('edName').focus(); }
+    $('pitch').addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) edit(+b.dataset.i); });
+    $('edSave').onclick = () => { const n = clean($('edName').value), w = clean($('edWhy').value);
+      if (n === null || w === null) { $('edMsg').textContent = 'That word isn\'t allowed here. Keep it family-friendly.'; return; }
+      if (n && S.p.some((x, k) => k !== cur && x && x.toLowerCase() === n.toLowerCase())) { $('edMsg').textContent = `${n} is already in your side.`; return; }
+      S.p[cur] = n; S.why[cur] = w; if ($('edCap').checked) S.cap = cur; else if (S.cap === cur) S.cap = -1;
+      const next = slots().findIndex((_, k) => !S.p[k]); cur = -1; $('editor').hidden = true; save(); if (next >= 0) edit(next); };
+    $('edClear').onclick = () => { S.p[cur] = ''; S.why[cur] = ''; if (S.cap === cur) S.cap = -1; cur = -1; $('editor').hidden = true; save(); };
+    $('edName').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('edSave').click(); } });
+    document.querySelectorAll('[data-theme]').forEach(b => b.onclick = () => { S.theme = b.dataset.theme; save(); });
+    document.querySelectorAll('[data-sport]').forEach(b => b.onclick = () => { if (S.sport !== b.dataset.sport) { S.sport = b.dataset.sport; S.p = []; S.why = []; S.cap = -1; } save(); });
+    $('formation').onchange = e => { S.f = e.target.value; save(); };
+    $('customTitle').oninput = e => { const t = clean(e.target.value); if (t !== null) { S.title = t; store.set('xi_draft', S); renderCard(); } };
+    $('manager').oninput = e => { const t = clean(e.target.value); if (t !== null) { S.m = t; store.set('xi_draft', S); renderCard(); } };
+    $('byName').oninput = e => { const t = clean(e.target.value); if (t !== null) { S.by = t; store.set('xi_draft', S); renderCard(); } };
+    $('resetXI').onclick = () => { if (!confirm('Clear this team and start again?')) return; S = { ...S, p: [], why: [], cap: -1, m: '' }; save(); };
+    // ---------- the share card ----------
+    function renderCard(T = S, ratings) {
+      const c = $('card'), g = c.getContext('2d'), W = 1080, H = 1350, sl = T.sport === 'football' ? FORMATIONS[T.f].map(x => x[2]) : LISTS[T.sport];
+      const DISP = "'Big Shoulders Display', 'Arial Narrow', sans-serif", SERIF = "'Source Serif 4 Variable', Georgia, serif";
+      g.fillStyle = '#0F1E36'; g.fillRect(0, 0, W, H);
+      g.fillStyle = '#F2A900'; g.fillRect(0, 0, W, 14);
+      g.fillStyle = '#F2A900'; g.font = `800 40px ${DISP}`; g.fillText('PICK YOUR XI', 60, 86);
+      const tn = T.theme === 'custom' ? (T.title || 'My XI') : THEMES.find(t => t[0] === T.theme)[1];
+      g.fillStyle = '#fff'; g.font = `900 96px ${DISP}`; g.fillText(tn.length > 22 ? tn.slice(0, 21) + '…' : tn, 60, 180);
+      const top = 220, ph = 960;
+      if (T.sport === 'football') {
+        g.fillStyle = '#0B6E4F'; g.fillRect(60, top, W - 120, ph);
+        for (let k = 0; k < 8; k++) if (k % 2) { g.fillStyle = 'rgba(0,0,0,.07)'; g.fillRect(60, top + k * ph / 8, W - 120, ph / 8); }
+        g.strokeStyle = 'rgba(255,255,255,.55)'; g.lineWidth = 4; g.strokeRect(80, top + 20, W - 160, ph - 40);
+        g.beginPath(); g.moveTo(80, top + 20); g.lineTo(W - 80, top + 20); g.stroke();
+        g.beginPath(); g.arc(W / 2, top + 20, 110, 0, Math.PI); g.stroke();
+        g.strokeRect(W / 2 - 220, top + ph - 20 - 170, 440, 170); g.strokeRect(W / 2 - 100, top + ph - 20 - 60, 200, 60);
+        FORMATIONS[T.f].forEach(([x, y], i) => { const px = 60 + (W - 120) * x / 100, py = top + ph * y / 100, n = T.p[i] || '';
+          g.fillStyle = n ? '#F2A900' : 'rgba(255,255,255,.25)'; g.beginPath(); g.arc(px, py - 26, 22, 0, 7); g.fill();
+          if (T.cap === i) { g.fillStyle = '#0F1E36'; g.font = `900 26px ${DISP}`; g.textAlign = 'center'; g.fillText('C', px, py - 17); }
+          g.fillStyle = '#fff'; g.font = `800 34px ${DISP}`; g.textAlign = 'center';
+          const words = n.split(' '), last = words.length > 1 ? words.slice(1).join(' ') : n; g.fillText((last || '').slice(0, 18), px, py + 26); g.textAlign = 'left'; });
+      } else {
+        g.fillStyle = 'rgba(255,255,255,.06)'; g.fillRect(60, top, W - 120, ph);
+        const step = ph / sl.length; sl.forEach((r, i) => { const y = top + step * i + step * .66;
+          g.fillStyle = '#F2A900'; g.font = `800 ${Math.min(34, step * .5)}px ${DISP}`; g.fillText(r.split(' ')[0], 90, y);
+          g.fillStyle = '#fff'; g.font = `800 ${Math.min(44, step * .62)}px ${DISP}`; g.fillText(((T.p[i] || '') + (T.cap === i ? '  (C)' : '')).slice(0, 34), 170, y);
+          g.fillStyle = '#9FB0C8'; g.font = `400 ${Math.min(24, step * .36)}px ${SERIF}`; g.textAlign = 'right'; g.fillText(r.replace(/^\d+\s*/, ''), W - 90, y); g.textAlign = 'left'; });
+      }
+      g.fillStyle = '#C9D2E0'; g.font = `400 30px ${SERIF}`;
+      g.fillText(`${T.m ? 'Manager: ' + T.m + '   ' : ''}${T.by ? 'Picked by ' + T.by : ''}`.trim(), 60, H - 100);
+      if (ratings && ratings.length) { g.fillStyle = '#F2A900'; g.font = `800 40px ${DISP}`; g.textAlign = 'right'; g.fillText(`Rated ${(ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)}/10 by ${ratings.length}`, W - 60, H - 100); g.textAlign = 'left'; }
+      g.fillStyle = '#F2A900'; g.fillRect(60, H - 70, 64, 40); g.fillStyle = '#0F1E36'; g.font = `900 30px ${DISP}`; g.fillText('SB', 72, H - 39);
+      g.fillStyle = '#fff'; g.font = `800 32px ${DISP}`; g.fillText('sportingbrain.com/pick-your-xi', 140, H - 39);
+    }
+    const link = (T, r) => { const u = new URL(location.origin + location.pathname); u.searchParams.set('x', enc({ t: T.theme, s: T.sport, f: T.f, p: T.p, c: T.cap, m: T.m, b: T.by, n: T.title })); if (r && r.length) u.searchParams.set('r', r.join('.')); return u.href; };
+    $('shareImg').onclick = async () => { if (S.p.filter(Boolean).length < 3) return toast('Pick a few players first.'); markPlayed('pick-your-xi'); renderCard();
+      const blob = await new Promise(r => $('card').toBlob(r, 'image/png')); const file = new File([blob], 'my-xi.png', { type: 'image/png' });
+      const text = `My ${themeName()}. Rate it out of 10:`; const url = link(S);
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], text: text + ' ' + url }); } catch (_) {} }
+      else { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'my-xi.png'; a.click(); share(text, url); } };
+    $('shareLink').onclick = () => { if (S.p.filter(Boolean).length < 3) return toast('Pick a few players first.'); markPlayed('pick-your-xi'); share(`My ${themeName()}. Rate it out of 10:`, link(S)); };
+    // ---------- someone else's XI: view and rate ----------
+    const q = new URLSearchParams(location.search);
+    if (q.get('x')) { try { const o = dec(q.get('x')), T = { theme: o.t, sport: o.s, f: o.f, p: o.p || [], cap: o.c, m: o.m, by: o.b, title: o.n };
+        if (!THEMES.some(t => t[0] === T.theme) || !(T.sport === 'football' ? FORMATIONS[T.f] : LISTS[T.sport]) || T.p.some(x => x && clean(x) === null)) throw 0;
+        const R = (q.get('r') || '').split('.').map(Number).filter(n => n >= 1 && n <= 10).slice(-50), box = $('rateBox'), tn = T.theme === 'custom' ? (T.title || 'XI') : THEMES.find(t => t[0] === T.theme)[1];
+        box.hidden = false; box.className = 'pg-card xi-rate';
+        box.innerHTML = `<h2>${esc(T.by || 'Someone')}'s ${esc(tn)}</h2>${R.length ? `<p>Rated <b>${(R.reduce((a, b) => a + b, 0) / R.length).toFixed(1)}/10</b> by ${R.length} so far.</p>` : ''}<ol class="xi-view">${T.p.map((n, i) => n ? `<li><b>${esc(n)}</b>${T.cap === i ? ' (C)' : ''} <small>${esc((T.sport === 'football' ? FORMATIONS[T.f][i][2] : LISTS[T.sport][i]))}</small></li>` : '').join('')}</ol>
+          <p><b>Your rating:</b></p><div class="xi-score">${[...Array(10)].map((_, k) => `<button data-r="${k + 1}">${k + 1}</button>`).join('')}</div><p class="pg-note">Then send it back, or pick your own below.</p>`;
+        box.addEventListener('click', e => { const b = e.target.closest('[data-r]'); if (!b) return; const r2 = [...R, +b.dataset.r]; box.querySelectorAll('[data-r]').forEach(x => x.disabled = true); b.classList.add('on');
+          box.insertAdjacentHTML('beforeend', `<div class="pg-btns"><button class="btn gold" id="sendBack">Send my rating back</button></div>`);
+          $('sendBack').onclick = () => share(`I gave your ${tn} ${b.dataset.r}/10. Average now ${(r2.reduce((a, c) => a + c, 0) / r2.length).toFixed(1)}.`, link(T, r2)); });
+      } catch (_) { toast('That team link could not be read.'); } }
+    if (document.fonts) document.fonts.ready.then(() => renderCard()); draw(); renderCard();
+  </script>
+</Base>

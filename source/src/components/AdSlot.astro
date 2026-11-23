@@ -1,0 +1,13 @@
+---
+// Reserved, fixed-height ad space (no layout shift). Renders nothing until ads.json has a client and slot id.
+import ADS from '../data/ads.json';
+interface Props { name: keyof typeof ADS.slots }
+const { name } = Astro.props;
+const slot = ADS.slots[name], h = ADS.heights[name];
+---
+{ADS.client && slot && (
+  <aside class="ad-slot" style={`min-height:${h}px`} aria-label="Advertisement">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle" style="display:block" data-ad-client={ADS.client} data-ad-slot={slot} data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </aside>
+)}

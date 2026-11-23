@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
 import { GUIDES } from '../../data/guides.js';
 import { D } from '../../data/content.js';
 export function getStaticPaths() { return GUIDES.map(g => ({ params: { id: g.id }, props: { g } })); }
@@ -41,4 +42,5 @@ const others = GUIDES.filter(x => x.id !== g.id).sort(() => 0).slice(0, 4);
     <div class="sec"><h2>More guides</h2><a href={`${base}sports.html`}>All</a></div>
     <div class="next3">{others.map(x => <a href={`${base}sports/${x.id}.html`}>{x.name}</a>)}</div>
   </article>
+  <AdSlot name="article_end" />
 </Base>

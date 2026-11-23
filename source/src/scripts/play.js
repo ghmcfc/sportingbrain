@@ -33,4 +33,6 @@ export function challengeBox(score, out, label) {
     else share(`SportingBrain ${label}: ${score}/${out}`, location.origin + location.pathname); });
   return d;
 }
-export function markPlayed(g) { store.set('pl_' + g, true); const p = store.get('pg_played', {}); p[g] = (p[g] || 0) + 1; store.set('pg_played', p); }
+export function markPlayed(g) { store.set('pl_' + g, true); const p = store.get('pg_played', {}); p[g] = (p[g] || 0) + 1; store.set('pg_played', p);
+  const u = ukNow(), k = `${u.getFullYear()}-${String(u.getMonth() + 1).padStart(2, '0')}-${String(u.getDate()).padStart(2, '0')}`, d = store.get('playdays', []); if (!d.includes(k)) { d.push(k); store.set('playdays', d.slice(-30)); }
+  setTimeout(() => window.SB_maybeNewsletter && window.SB_maybeNewsletter(), 1500); }

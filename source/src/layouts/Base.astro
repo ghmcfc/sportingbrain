@@ -6,8 +6,10 @@ import '@fontsource-variable/source-serif-4/opsz';
 import '@fontsource-variable/source-serif-4/opsz-italic';
 import '../styles/global.css';
 import '../styles/editorial.css';
-interface Props { title: string; description: string; page?: string; wide?: boolean; image?: string; type?: string; noindex?: boolean; }
-const { title, description, page = '', wide = false, image, type = 'website', noindex = false } = Astro.props;
+interface Props { title: string; description: string; page?: string; wide?: boolean; image?: string; type?: string; noindex?: boolean; noads?: boolean; }
+const { title, description, page = '', wide = false, image, type = 'website', noindex = false, noads = false } = Astro.props;
+import ADS from '../data/ads.json';
+const adsOn = !!ADS.client && !noads;
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = image || new URL(base + 'og.png', Astro.site).href;
@@ -42,6 +44,8 @@ const ld = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sporti
 <meta name="theme-color" content="#14254a">
 <link rel="icon" href={`${base}assets/mark.svg`} type="image/svg+xml">
 <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+{adsOn && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS.client}`} crossorigin="anonymous"></script>}
+{adsOn && <script is:inline>window.SB_ADS=true;document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])').forEach(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}}),50));</script>}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -64,7 +68,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sporti
     <p>The smartest free sports site in the world. Real matches, real data, stories nobody else tells. No betting, ever.</p></div>
   <div><h3>Play</h3><a href={`${base}play.html`}>All games</a><a href={`${base}pub-quiz.html`}>Pub and Club Quiz</a><a href={`${base}weekly-expert.html`}>Weekly Expert</a><a href={`${base}call-it.html`}>Call It</a><a href={`${base}daily.html`}>Beat the Brain</a><a href={`${base}higher-or-lower.html`}>Higher or Lower</a><a href={`${base}the-grid.html`}>The Grid</a><a href={`${base}challenge.html?c=family`}>Family challenge</a><a href={`${base}kids.html`}>Kids Zone</a></div>
   <div><h3>Read</h3><a href={`${base}this-week.html`}>This Week in Sport</a><a href={`${base}flashback.html`}>Flashback</a><a href={`${base}on-this-day.html`}>On This Day</a><a href={`${base}replays.html`}>Replays</a><a href={`${base}sports.html`}>Sport guides</a><a href={`${base}round-up.html`}>The Cynical Round-Up</a></div>
-  <div><h3>SportingBrain</h3><a href={`${base}newsletter.html`}>The Daily Brain newsletter</a><a href={`${base}about.html`}>About and privacy</a><a href="#" data-welcome>What is SportingBrain?</a><a href="#" data-dys>Dyslexia-friendly font</a><a href={`${base}credits.html`}>Photo credits</a><a href="https://tally.so/r/zE7LVZ" data-mistake target="_blank" rel="noopener">Spotted a mistake? Tell us</a></div>
+  <div><h3>SportingBrain</h3><a href={`${base}newsletter.html`}>The Daily Brain newsletter</a><a href={`${base}about.html`}>About and privacy</a><a href="#" data-welcome>What is SportingBrain?</a><a href="#" data-dys>Dyslexia-friendly font</a><a href={`${base}settings.html`}>Your settings</a><a href={`${base}credits.html`}>Photo credits</a><a href="https://tally.so/r/zE7LVZ" data-mistake target="_blank" rel="noopener">Spotted a mistake? Tell us</a></div>
 </div><div class="wrap wide foot-small"><p>Photos from Pexels. Cricket data from Cricsheet (Open Data Commons Attribution License). Facts checked against the sources listed on every article.</p></div></footer>
 <script>
   import '../scripts/app.js';

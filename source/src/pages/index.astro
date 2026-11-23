@@ -1,9 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
 import { buildMoments } from '../data/callit.js';
 const M = buildMoments().map(m => ({ match: m.match, team: m.team, opp: m.opp, score: m.score, at: m.at, need: m.need, q: m.qs[0].q, innings: m.innings }));
 ---
 <Base title="SportingBrain: the smartest free sports site in the world" description="Call It, the daily game built on real matches. Flashback, On This Day, ball-by-ball replays, proper sport guides and the Cynical Round-Up. Free. No betting, ever." page="home" wide>
   <noscript><p>SportingBrain needs JavaScript switched on to play the games.</p></noscript>
+  <template id="ad-home_leaderboard"><AdSlot name="home_leaderboard" /></template>
+  <template id="ad-home_infeed"><AdSlot name="home_infeed" /></template>
   <script id="ciHome" type="application/json" set:html={JSON.stringify(M)} />
 </Base>

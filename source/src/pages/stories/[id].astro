@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
 import { D } from '../../data/content.js';
 export function getStaticPaths() { return D.SB_STORIES.map((s) => ({ params: { id: s.id }, props: { s } })); }
 const { s } = Astro.props;
@@ -23,4 +24,5 @@ const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: s.t
     <div class="next3">{others.map((x) => <a href={`${base}stories/${x.id}.html`}><span>{x.emoji}</span>{x.title}</a>)}</div>
   </article>
   <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  <AdSlot name="article_end" />
 </Base>

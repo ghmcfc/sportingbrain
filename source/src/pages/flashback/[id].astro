@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
 import { D } from '../../data/content.js';
 import { FLASHBACKS } from '../../data/flashbacks.js';
 export function getStaticPaths() { return FLASHBACKS.map(f => ({ params: { id: f.id }, props: { f } })); }
@@ -55,4 +56,5 @@ const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: f.t
     const tio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); tio.unobserve(e.target); } }), { threshold: .3 });
     document.querySelectorAll('.tl li').forEach(li => tio.observe(li));
   </script>
+  <AdSlot name="article_end" />
 </Base>
