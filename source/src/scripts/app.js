@@ -251,7 +251,7 @@ if(P==='home'){
       <div class="sec"><h2>Flashback</h2><a href="${BASE}flashback.html">All</a></div>
       <a class="fb-mini" href="${BASE}flashback/${fb.id}.html"><b>${esc(fb.title)}</b><span>${esc(fb.sport)}, ${yrOf(fb)}${fbAnn?` · ${esc(fbAnn)}`:''}. ${esc(fb.standfirst)}</span></a>
       <div class="sec" style="margin-top:22px"><h2>The Cynical Round-Up</h2><a href="${BASE}round-up.html">Read it</a></div>
-      <a class="ru-mini" href="${BASE}round-up.html"><span class="satire">Satire. Tongue firmly in cheek.</span><h4>${esc(SB_ROUNDUP.headline)}</h4><p>${esc(SB_ROUNDUP.edition)}. The real week in sport, with an eye-roll.</p></a>
+      <a class="ru-mini" href="${BASE}round-up.html"><span class="satire">Satire. Tongue firmly in cheek.</span><h3 class="ru-h">${esc(SB_ROUNDUP.headline)}</h3><p>${esc(SB_ROUNDUP.edition)}. The real week in sport, with an eye-roll.</p></a>
     </section>
   </div>
 

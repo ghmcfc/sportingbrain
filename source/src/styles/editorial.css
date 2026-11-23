@@ -100,7 +100,7 @@ header.top .wrap{max-width:1240px;padding:10px 16px}
 .otd-mini p{margin:0;font-size:.98rem;line-height:1.45}
 .ru-mini{background:#1C2430;color:#E7ECF2;padding:16px 18px;display:block;text-decoration:none;border-radius:4px}
 .ru-mini .satire{display:inline-block}
-.ru-mini h4{font-family:var(--display);font-weight:800;font-size:1.7rem;line-height:1.02;margin:8px 0 6px;color:#fff}
+.ru-mini h4,.ru-mini .ru-h{font-family:var(--display);font-weight:800;font-size:1.7rem;line-height:1.02;margin:8px 0 6px;color:#fff}
 .ru-mini p{margin:0;color:#B8C2D0;font-size:.95rem}
 .storylist{display:grid;gap:0}
 .storylist a{display:grid;grid-template-columns:96px 1fr;gap:14px;padding:12px 0;border-top:1px solid var(--rule);text-decoration:none;color:inherit}
@@ -145,7 +145,7 @@ header.top .wrap{max-width:1240px;padding:10px 16px}
 .site-foot .wrap{max-width:1240px}
 .foot-grid{display:grid;gap:24px}
 @media(min-width:768px){.foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr}}
-.foot-grid h3{color:#fff;font-size:1.3rem;margin:0 0 8px}
+.foot-grid h3,.foot-grid h2{color:#fff;font-size:1.3rem;margin:0 0 8px}
 .foot-grid a{display:block;color:#C9D3E3;text-decoration:none;padding:3px 0}
 .foot-grid a:hover{color:#fff;text-decoration:underline;text-decoration-color:var(--amber)}
 .foot-grid .wordmark{display:flex;color:#fff}
@@ -466,3 +466,4 @@ body.reduce-motion *{animation:none!important;transition:none!important;scroll-b
 .wa-ans{font-size:2.6rem;margin:8px 0}
 /* Ground Guesser */
 .gg-photo{width:100%;aspect-ratio:16/9;border-radius:4px;background-color:#0F1E36;background-repeat:no-repeat;margin:6px 0 14px;transition:background-size .5s ease}
+main[data-page="home"]{min-height:110vh}
