@@ -3,19 +3,37 @@ import Base from '../layouts/Base.astro';
 import { WEEK } from '../data/week.js';
 import { FLASHBACKS } from '../data/flashbacks.js';
 import { GUIDES } from '../data/guides.js';
+import { D } from '../data/content.js';
+import { photoFor } from '../scripts/photos.js';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const lead = WEEK.stories[0];
-const S = [
-  ['this-week', 'This Week in Sport', `${WEEK.stories.length} stories from the week, men's and women's, each with its source. New every Monday.`],
-  ['flashback', 'Flashback', `${FLASHBACKS.length} forgotten moments told properly, with photos and sources.`],
-  ['on-this-day', 'On This Day', 'What happened in sport on today\'s date, through the years.'],
-  ['sports', 'Sport guides', `${GUIDES.length} guides: how each sport works, what experts watch for, the greats and the language.`],
-  ['round-up', 'The Cynical Round-Up', 'The real week in sport, with an eye-roll. Satire, clearly labelled.'],
-  ['newsletter', 'The Daily Brain', 'Today\'s game, a Flashback and one stat to win an argument with. Free, every morning.'],
-];
+const ph = (t, s, i, v) => photoFor(t, s, i, v);
+const W = WEEK.stories.slice(0, 4).map((s, i) => ({ s, p: ph(s.title + ' ' + s.body, s.sport, i, s.venue) }));
+const F = FLASHBACKS.slice(0, 6).map((f, i) => ({ f, p: ph(f.title + ' ' + f.standfirst + ' ' + (f.body || []).join(' '), f.sport, i, f.venue) }));
+const G = ['football', 'cricket', 'rugby-union', 'tennis', 'golf', 'formula-1', 'darts', 'netball'].map(id => GUIDES.find(g => g.id === id)).filter(Boolean)
+  .map(g => ({ g, img: D.SB_PHOTO(g.name, 800), c: D.SB_CREDIT(g.name) }));
+const Fig = null;
 ---
 <Base title="Read: This Week, Flashback, On This Day and sport guides | SportingBrain" description="This Week in Sport, Flashback, On This Day, guides to every sport and the Cynical Round-Up." page="read" wide>
-  <header class="pg-head"><h1>Read</h1><p>Proper sports writing: this week's stories with sources, forgotten moments, today in history and guides to every sport.</p></header>
-  <a class="hub-lead" href={`${base}this-week.html`}><span class="pg-step">This Week · {WEEK.edition}</span><b>{lead.title}</b><span>{lead.body.slice(0, 180).replace(/\s\S*$/, '')}…</span></a>
-  <div class="hub-grid">{S.map(([h, t, d]) => <a class="hub-card" href={`${base}${h}.html`}><b>{t}</b><span>{d}</span></a>)}</div>
+  <header class="art-head"><h1>Read</h1><p class="art-stand">This week's stories with their sources, forgotten moments told properly, and guides to every sport.</p></header>
+
+  <section class="blk"><header class="sh"><h2>This Week in Sport</h2><a href={`${base}this-week.html`}>The full edition</a></header>
+    <div class="read-grid">
+      <a class="story lead" href={`${base}this-week.html#stories`}>{W[0].p && <figure class="sfig"><img src={W[0].p.src} alt={W[0].p.alt} width="800" height="450"><figcaption>{W[0].p.credit}</figcaption></figure>}<span class="kick">{W[0].s.sport}</span><h3>{W[0].s.title}</h3><p>{W[0].s.body.slice(0, 220).replace(/\s\S*$/, '')}…</p></a>
+      <div class="story-list">{W.slice(1).map(({ s, p }) => <a class="story sm" href={`${base}this-week.html#stories`}>{p && <figure class="sfig"><img src={p.src} alt={p.alt} loading="lazy" width="800" height="450"></figure>}<span class="kick">{s.sport}</span><h3>{s.title}</h3></a>)}</div>
+    </div>
+  </section>
+
+  <section class="blk"><header class="sh"><h2>Flashback</h2><a href={`${base}flashback.html`}>All {FLASHBACKS.length}</a></header>
+    <div class="three tight">{F.slice(0, 3).map(({ f, p }) => <a class="story" href={`${base}flashback/${f.id}.html`}>{p && <figure class="sfig"><img src={p.src} alt={p.alt} loading="lazy" width="800" height="450"><figcaption>{p.credit}</figcaption></figure>}<span class="kick">{f.sport}, {(f.date || f.when).match(/\d{4}/)[0]}</span><h3>{f.title}</h3><p>{f.standfirst}</p></a>)}</div>
+  </section>
+
+  <section class="blk"><header class="sh"><h2>Sport guides</h2><a href={`${base}sports.html`}>All {GUIDES.length}</a></header>
+    <div class="gtiles">{G.map(({ g, img }) => <a class="story guide-card" href={`${base}sports/${g.id}.html`}>{img && <figure class="sfig"><img src={img} alt={`${g.name}`} loading="lazy" width="800" height="450"></figure>}<h3>{g.name}</h3><p>{g.line}</p></a>)}</div>
+  </section>
+
+  <div class="three">
+    <section><header class="sh"><h2>On This Day</h2><a href={`${base}on-this-day.html`}>Today</a></header><p>What happened in sport on today's date, through the years, with a guess-the-year game.</p></section>
+    <section><header class="sh"><h2>The Cynical Round-Up</h2><a href={`${base}round-up.html`}>Read it</a></header><a class="ru-mini" href={`${base}round-up.html`}><span class="satire">Satire. Tongue firmly in cheek.</span><h3 class="ru-h">{D.SB_ROUNDUP.headline}</h3></a></section>
+    <section><header class="sh"><h2>The Daily Brain</h2><a href={`${base}newsletter.html`}>Sign up</a></header><p>Today's games, a Flashback, On This Day and one stat to win an argument with. Every morning, free.</p></section>
+  </div>
 </Base>

@@ -485,6 +485,10 @@ document.querySelectorAll('[data-quiz]').forEach(el=>{
 });
 document.querySelectorAll('[data-share-text]').forEach(b=>b.addEventListener('click',()=>share(`${b.dataset.shareText}\n${location.href}`)));
 
+// ================= GAME PAGE HEADER: the game's own icon and colour =================
+(function(){ const h=document.querySelector('main .pg-head'); if(!h||KIDZ) return; const sl=location.pathname.replace(/\.html$/,'').split('/').pop(); const g=PLAY.find(x=>x[0]===sl); if(!g) return;
+  h.classList.add('game-head'); h.style.setProperty('--c',g[4]); const s=document.createElement('span'); s.className='gh-ic'; s.innerHTML=icon(sl,52); h.prepend(s); })();
+
 // ================= START AGAIN (every game) =================
 // Clears this game's saved answers for today (or this week) on this device, then reloads. Streaks are kept.
 (function(){

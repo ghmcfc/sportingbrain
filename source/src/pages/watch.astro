@@ -1,15 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
 import { REPLAYS } from '../data/replays.js';
+import { photoFor } from '../scripts/photos.js';
+import { icon } from '../scripts/icons.js';
+const feeds = import.meta.glob('../data/feeds/cricket/*.json', { eager: true });
+const venueOf = slug => { const f = Object.entries(feeds).find(([k]) => k.endsWith(`/${slug}.json`)); return f ? f[1].default.venue || '' : ''; };
+const R = REPLAYS.map(r => ({ r, v: venueOf(r.slug), p: photoFor(venueOf(r.slug) + ' ' + r.title, 'Cricket', r.slug.length) }));
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 <Base title="Watch: ball-by-ball replays and Laugh of the Day | SportingBrain" description="Great cricket finals replayed ball by ball, Call It play-outs and a funny moment from sport every day." page="watch" wide>
-  <header class="pg-head"><h1>Watch</h1><p>Great finals replayed ball by ball, and one funny moment from sport every day.</p></header>
-  <div class="hub-grid">
-    <a class="hub-card" href={`${base}laughs.html`}><b>Laugh of the Day</b><span>One hand-picked funny moment from sport, every day.</span></a>
-    <a class="hub-card" href={`${base}call-it.html`}><b>Call It, then watch it</b><span>Call the next five overs of a real final, then watch them play out ball by ball.</span></a>
-    <a class="hub-card" href={`${base}call-it-football.html`}><b>Call It: Football</b><span>Call the rest of a great final, then watch the goals go in minute by minute.</span></a>
+  <header class="art-head"><h1>Watch</h1><p class="art-stand">Great finals replayed ball by ball, and one funny moment from sport every day.</p></header>
+  <div class="gtiles three-up">
+    <a class="gt" href={`${base}laughs.html`} style="--c:#F2A900"><span class="gt-ic" set:html={icon('laughs', 44)} /><span class="gt-tx"><b>Laugh of the Day</b><small>One hand-picked funny moment from sport, every day.</small></span></a>
+    <a class="gt" href={`${base}call-it.html`} style="--c:#0F1E36"><span class="gt-ic" set:html={icon('call-it', 44)} /><span class="gt-tx"><b>Call It, then watch it</b><small>Call the next five overs of a real final, then watch them ball by ball.</small></span></a>
+    <a class="gt" href={`${base}call-it-football.html`} style="--c:#C8102E"><span class="gt-ic" set:html={icon('call-it-football', 44)} /><span class="gt-tx"><b>Call It: Football</b><small>Call the rest of a great final, then watch the goals go in.</small></span></a>
   </div>
-  <div class="pg-sec"><h2>Ball-by-ball replays</h2></div>
-  <div class="hub-grid">{REPLAYS.map(r => <a class="hub-card" href={`${base}replays/${r.slug}.html`}><b>{r.title}</b><span>{r.teaser}</span></a>)}</div>
+  <header class="sh" style="margin-top:34px"><h2>Ball-by-ball replays</h2></header>
+  <div class="three tight">{R.map(({ r, v, p }) => <a class="story" href={`${base}replays/${r.slug}.html`}>{p && <figure class="sfig"><img src={p.src} alt={p.alt} loading="lazy" width="800" height="450"><figcaption>{p.credit}</figcaption></figure>}<span class="kick">{v}</span><h3>{r.title}</h3><p>{r.teaser}</p></a>)}</div>
 </Base>

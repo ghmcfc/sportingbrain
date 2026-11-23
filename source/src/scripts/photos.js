@@ -2,7 +2,7 @@
 // otherwise a ground from the same sport (seeded so it stays the same all day), otherwise the house sport photo.
 import { VENUES } from '../data/venues.js';
 import META from '../data/venues.json';
-const BASE = (document.documentElement.dataset.base || '/');
+const BASE = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
 const V = VENUES.map(v => ({ k: slug(v[0]), name: v[1], alt: v[2], sport: v[3], place: v[4] })).filter(v => META[v.k]).map(v => ({ ...v, m: META[v.k] }));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));

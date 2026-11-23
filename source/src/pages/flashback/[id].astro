@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import { D } from '../../data/content.js';
 import { FLASHBACKS } from '../../data/flashbacks.js';
+import { photoFor } from '../../scripts/photos.js';
 export function getStaticPaths() { return FLASHBACKS.map(f => ({ params: { id: f.id }, props: { f } })); }
 const { f } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
@@ -10,19 +11,19 @@ const credit = D.SB_CREDIT(f.sport);
 const img = D.SB_PHOTO(f.sport, 1600);
 const col = D.SB_SPORT_COLOURS[f.sport] || '#1F3864';
 const year = (f.date || '').slice(0, 4) || (f.when.match(/\d{4}/) || [''])[0];
-const others = FLASHBACKS.filter(x => x.id !== f.id).slice(0, 3);
+const others = FLASHBACKS.filter(x => x.id !== f.id).slice(0, 3).map(o => ({ o, ph: photoFor(o.title + ' ' + (o.body || []).join(' '), o.sport, 0, o.venue) }));
+const ph = photoFor(f.title + ' ' + f.standfirst + ' ' + (f.body || []).join(' '), f.sport, 0, f.venue);
 const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: f.title, description: f.standfirst, about: f.sport, publisher: { '@type': 'Organization', name: 'SportingBrain' } };
 ---
-<Base title={`${f.title} | Flashback | SportingBrain`} description={f.standfirst} image={credit ? img : undefined} type="article" wide>
+<Base title={`${f.title} | Flashback | SportingBrain`} description={f.standfirst} image={ph ? new URL(ph.src, Astro.site).href : undefined} type="article" wide>
   <article class="fb">
-    <header class="fb-hero" style={img ? `--hero:url('${img}')` : ''}>
-      <div class="fb-year" aria-hidden="true">{year}</div>
-      <span class="tag" style={`background:${col}`}>Flashback · {f.sport}</span>
+    <header class="art-head">
+      <span class="kick">Flashback · {f.sport} · {year}</span>
       <h1>{f.title}</h1>
-      <p class="fb-stand">{f.standfirst}</p>
-      <p class="fb-when">{f.when} · <span data-yearsago={year}></span></p>
+      <p class="art-stand">{f.standfirst}</p>
+      <p class="art-meta">{f.when} · <span data-yearsago={year}></span></p>
     </header>
-    {credit && <p class="photo-credit">Photo: {credit.what}. <a href={credit.url} target="_blank" rel="noopener">{credit.by} / Wikimedia Commons</a></p>}
+    {ph && <figure class="art-fig"><img src={ph.src} alt={ph.alt} width="1600" height="900"><figcaption>{ph.credit}</figcaption></figure>}
     <section class="fb-nums" aria-label="The numbers">
       {f.numbers.map(n => <div class="fb-num"><b data-count={n[0]}>{n[0]}</b><small>{n[1]}</small></div>)}
     </section>
@@ -39,7 +40,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: f.t
     </div>
     <section class="fb-src"><b>Sources</b><ul>{f.sources.map(s => <li><a href={s[1]} rel="noopener" target="_blank">{s[0]}</a></li>)}</ul></section>
     <div class="sec"><h2>More flashbacks</h2><a href={`${base}flashback.html`}>All</a></div>
-    <div class="next3">{others.map(x => <a href={`${base}flashback/${x.id}.html`}><span>📼</span>{x.title}</a>)}</div>
+    <div class="three tight">{others.map(({ o, ph }) => <a class="story" href={`${base}flashback/${o.id}.html`}>{ph && <figure class="sfig"><img src={ph.src} alt={ph.alt} loading="lazy" width="800" height="450"></figure>}<span class="kick">{o.sport}</span><h3>{o.title}</h3><p>{o.standfirst}</p></a>)}</div>
   </article>
   <script type="application/ld+json" set:html={JSON.stringify(ld)} />
   <script>

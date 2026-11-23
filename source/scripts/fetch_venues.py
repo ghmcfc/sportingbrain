@@ -58,7 +58,7 @@ for t in titles:
                 v = claims[p][0]['mainsnak'].get('datavalue', {}).get('value', {}).get('time', '')
                 m = re.match(r'\+(\d{4})', v)
                 if m: opened = int(m.group(1)); break
-        data[k] = {'title': t, 'file': k + '.jpg', 'commons': fname, 'author': strip(md.get('Artist', {}).get('value'))[:120] or 'Unknown',
+        data[k] = {'title': t, 'file': k + '.jpg', 'commons': fname, 'author': (re.split(r'\s+[—–-]\s+|This image|Attribution|\bYou must\b|\(talk\)', strip(md.get('Artist', {}).get('value')))[0].strip(' .,;:')[:60] or 'Unknown'),
                    'licence': lic, 'opened': opened, 'source': 'https://commons.wikimedia.org/wiki/File:' + urllib.parse.quote(fname.replace(' ', '_'))}
         done += 1; print('saved', t, lic, opened)
         time.sleep(0.5)

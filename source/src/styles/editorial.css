@@ -519,8 +519,6 @@ body.dark .nt-grid li{background:#16263f}body.dark .nt-grid li.got{background:#1
    game icons, photos on every story, firmer type. Later rules win.
    ===================================================================== */
 body{font-size:17px;color:#0F1E36}
-main p{color:#1E2D45}
-body.dark main p{color:#D8DFEA}
 /* One header bar */
 header.top{border-bottom:4px solid var(--amber)}
 header.top .wrap{flex-wrap:wrap;gap:0 18px;padding:8px 16px 0;align-items:center}
@@ -572,7 +570,7 @@ body.dark .gt{background:#16263f;border-color:#2A3A55;color:#fff}body.dark .gt-t
 @media (min-width:700px){.numstrip{grid-template-columns:repeat(3,1fr)}}
 .numstrip div{background:#0F1E36;color:#fff;padding:14px 16px;border-radius:4px}
 .numstrip b{display:block;font-family:var(--display);font-weight:900;font-size:2.6rem;line-height:1;color:var(--amber)}
-.numstrip p{color:#D8DFEA!important;margin:6px 0 0;font-size:.98rem}
+.numstrip p{color:#D8DFEA;margin:6px 0 0;font-size:.98rem}
 .three{display:grid;gap:30px;margin:36px 0}
 @media (min-width:900px){.three{grid-template-columns:repeat(3,1fr)}}
 body.dark .story{color:#fff}body.dark .sfig figcaption{color:#9FB0C8}
@@ -583,3 +581,39 @@ body.dark .sh h2,body.dark .story h3,body.dark main h1,body.dark main h2{color:#
 body.dark .otd-mini b{color:var(--amber)}
 body.dark .numstrip div{background:#16263f;border:1px solid #2A3A55}
 body.dark .story .kick{color:#FF6B7D}
+/* Article pages (Athletic-style): headline first, then the picture */
+.art-head{max-width:860px;margin:28px 0 18px}
+.art-head .kick{font-family:var(--display);font-weight:700;color:#C8102E;font-size:1.1rem}
+.art-head h1{font-family:var(--display);font-weight:900;font-size:clamp(2.4rem,6vw,4.4rem);line-height:.98;margin:6px 0 14px;color:#0F1E36}
+.art-stand{font-size:1.3rem;line-height:1.45;margin:0 0 10px;color:#1E2D45}
+.art-meta{font-family:var(--display);font-size:1.05rem;color:#5A6A82;margin:0}
+.art-fig{margin:0 0 22px}.art-fig img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:3px}
+.art-fig figcaption{font-size:.8rem;color:#5A6A82;margin-top:6px}
+body.dark .art-head h1{color:#fff}body.dark .art-stand{color:#D8DFEA}
+.three.tight{margin:16px 0 0}
+/* Banner heroes: text always light on the dark photo */
+.fb-hero h1,.fb-hero p,.fb-hero .fb-stand{color:#fff}
+.fb-hero .fb-stand{color:#E3E9F2;font-size:1.2rem;max-width:620px}
+.guide-hero{min-height:260px;display:flex;flex-direction:column;justify-content:flex-end}
+.prose p,.fb-body p{color:#1E2D45}body.dark .prose p,body.dark .fb-body p{color:#D8DFEA}
+.tl li{opacity:1;transform:none}
+/* Section heads everywhere match the front page */
+.sec{border-top:3px solid #0F1E36;padding-top:8px;margin:34px 0 16px;border-bottom:0}
+.sec h2{font-family:var(--display);font-weight:900;font-size:clamp(1.6rem,3.2vw,2.1rem);line-height:1;text-transform:none;letter-spacing:.005em;color:#0F1E36}
+.sec a{font-family:var(--display);font-weight:700;color:#0F1E36;text-decoration:none;border-bottom:3px solid var(--amber)}
+body.dark .sec{border-top-color:#fff}body.dark .sec h2,body.dark .sec a{color:#fff}
+.tw-lead h3{font-size:clamp(1.9rem,3.6vw,2.6rem)!important}
+.guide-card h3{margin-top:4px}.guide-card p{font-size:.95rem}
+@media (max-width:640px){.gtiles .guide-card{display:block}}
+@media (min-width:900px){.gtiles.three-up{grid-template-columns:repeat(3,1fr)}}
+/* Game page header (NYT Games style): icon block, title, one line */
+.pg-head.game-head{display:grid;grid-template-columns:auto 1fr;column-gap:18px;align-items:center;border-bottom:3px solid #0F1E36;padding-bottom:16px}
+.pg-head.game-head .gh-ic{grid-row:1 / span 3;display:grid;place-items:center;width:84px;height:84px;border-radius:10px;background:var(--c);color:#fff}
+.pg-head.game-head h1{margin:0;font-size:clamp(2.2rem,5vw,3.4rem)}
+.pg-head.game-head p{margin:4px 0 0;max-width:62ch;font-size:1.05rem}
+.pg-head.game-head .reset-wrap{grid-column:2}
+.pg-head.game-head[style*="#F2A900"] .gh-ic,.pg-head.game-head[style*="#9BB8E3"] .gh-ic{color:#0F1E36}
+@media (max-width:640px){.pg-head.game-head{grid-template-columns:1fr}.pg-head.game-head .gh-ic{grid-row:auto;width:64px;height:64px;margin-bottom:8px}.pg-head.game-head .reset-wrap{grid-column:1}}
+body.dark .pg-head.game-head{border-bottom-color:#fff}
+.pg-sec{border-top:3px solid #0F1E36;padding-top:8px;margin:30px 0 14px;border-bottom:0}.pg-sec h2{font-family:var(--display);font-weight:900;font-size:clamp(1.5rem,3vw,2rem);border:0;margin:0}
+body.dark .pg-sec{border-top-color:#fff}
