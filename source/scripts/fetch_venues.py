@@ -9,7 +9,7 @@ titles = re.findall(r"^\s*\['((?:[^'\\]|\\')+)',", src, re.M)
 titles = [t.replace("\\'", "'") for t in titles]
 OUT = ROOT / 'src/data/venues.json'; DIR = ROOT / 'public/photos/venues'; DIR.mkdir(parents=True, exist_ok=True)
 data = json.loads(OUT.read_text()) if OUT.exists() else {}
-UA = {'User-Agent': 'SportingBrainDataDesk/1.0 (https://ghmcfc.github.io/sportingbrain/; gavin@continuityprojects.com)'}
+UA = {'User-Agent': 'SportingBrainDataDesk/1.0 (https://sportingbrain.com/; gavin@continuityprojects.com)'}
 FREE = re.compile(r'^(cc[- ]by|cc0|public domain|pd)', re.I)
 def get(url, raw=False):
     with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:

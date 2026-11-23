@@ -1,7 +1,7 @@
 // Shared helpers for the games pages.
 import { PLAY } from '../data/playlist.js';
 export const BASE = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
-export const SITE = 'https://ghmcfc.github.io' + BASE;
+export const SITE = 'https://sportingbrain.com' + BASE;
 export const $ = (s, r = document) => r.querySelector(s);
 export const store = {
   get(k, d) { try { const v = localStorage.getItem('sb_' + k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } },

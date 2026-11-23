@@ -1,6 +1,6 @@
 """Checks: Start again on Call It and Connections, kids games render inside the Kids Zone, redirects."""
 from playwright.sync_api import sync_playwright
-B = 'http://localhost:8811/sportingbrain/'
+B = 'http://localhost:8811/'
 with sync_playwright() as p:
     br = p.chromium.launch(); pg = br.new_page(viewport={'width': 390, 'height': 844}); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e)))

@@ -5,7 +5,7 @@ OUT = os.path.join(os.path.dirname(__file__), '..', 'src', 'data', 'feeds')
 def get(url, tries=4):
     for i in range(tries):
         try:
-            req = urllib.request.Request(url, headers={'User-Agent': 'SportingBrain data desk (+https://ghmcfc.github.io/sportingbrain/)'})
+            req = urllib.request.Request(url, headers={'User-Agent': 'SportingBrain data desk (+https://sportingbrain.com/)'})
             with urllib.request.urlopen(req, timeout=60) as r: return json.load(r)
         except urllib.error.HTTPError as e:
             if e.code == 404: return None
