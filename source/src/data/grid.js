@@ -77,4 +77,25 @@ export const CATS = {
   'North East': ['North East club', 'Based in the North East', 'place'],
   park: ['"Park" ground', 'Home ground has "Park" in its name', 'quirk'],
   bird: ['Bird nickname', 'Main nickname is a bird: Magpies, Canaries, Owls, Swans and so on', 'quirk'],
+  founder: ['Football League founders', 'One of the 12 founder members of the Football League in 1888', 'honour'],
+  plwin: ['Premier League winners', 'Won the Premier League (from 1992-93)', 'honour'],
+  united: ['"United" in the name', 'Club name includes United', 'quirk'],
+  city: ['"City" in the name', 'Club name includes City', 'quirk'],
+  town: ['"Town" in the name', 'Club name includes Town', 'quirk'],
+  roam: ['Wanderers or Rovers', 'Club name includes Wanderers or Rovers', 'quirk'],
+  south: ['Southern club', 'Based in the South or South West of England', 'place'],
+  stadium: ['"Stadium" ground', 'Home ground (2025-26) has "Stadium" in its name', 'quirk'],
 };
+// Tags worked out from the name, the ground and the honours above, so they can't drift out of step.
+const FOUNDERS = ['Aston Villa', 'Blackburn Rovers', 'Bolton Wanderers', 'Burnley', 'Derby County', 'Everton', 'Notts County', 'Preston North End', 'Stoke City', 'West Bromwich Albion', 'Wolverhampton Wanderers'];
+const PL_WINNERS = ['Manchester United', 'Blackburn Rovers', 'Arsenal', 'Chelsea', 'Manchester City', 'Leicester City', 'Liverpool'];
+for (const c of CLUBS) {
+  if (PL_WINNERS.includes(c[0])) c[4].push('plwin');
+  if (FOUNDERS.includes(c[0])) c[4].push('founder');
+  if (/\bUnited\b/.test(c[0])) c[4].push('united');
+  if (/\bCity\b/.test(c[0])) c[4].push('city');
+  if (/\bTown\b/.test(c[0])) c[4].push('town');
+  if (/\bStadium\b/.test(c[3])) c[4].push('stadium');
+  if (/\b(Wanderers|Rovers)\b/.test(c[0])) c[4].push('roam');
+  if (c[2] === 'South' || c[2] === 'South West') c[4].push('south');
+}
