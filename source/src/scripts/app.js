@@ -272,12 +272,7 @@ if(P==='home'){
       <a class="story" href="${BASE}flashback/${fb.id}.html">${figure(fbPh)}<span class="kick">${esc(fb.sport)}, ${yrOf(fb)}${fbAnn?` · ${esc(fbAnn)}`:''}</span><h3>${esc(fb.title)}</h3><p>${esc(fb.standfirst)}</p></a></section>
     <section><header class="sh"><h2>The Cynical Round-Up</h2><a href="${BASE}round-up.html">Read it</a></header>
       <a class="ru-mini" href="${BASE}round-up.html"><span class="satire">Satire. Tongue firmly in cheek.</span><h3 class="ru-h">${esc(SB_ROUNDUP.headline)}</h3><p>${esc(SB_ROUNDUP.edition)}. The real week in sport, with an eye-roll.</p></a></section>
-  </div>
-
-  <section class="nl-band" id="newsletter">
-    <div><h3>The Daily Brain</h3><p>Today's games, a Flashback, On This Day and one stat to win an argument with. Every morning, free. Your email is the only thing we ever ask for.</p></div>
-    <a class="btn nl-open" href="${BASE}newsletter.html#signup" target="_blank" rel="noopener">Get the newsletter</a>
-  </section>`;
+  </div>`;
 
   countdown($('#cd2'));
   if(window.SB_ADS) main.querySelectorAll('ins.adsbygoogle').forEach(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}});

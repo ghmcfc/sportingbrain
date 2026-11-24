@@ -1,40 +1,33 @@
 ---
 import Base from '../layouts/Base.astro';
 import { D } from '../data/content.js';
-import { FLASHBACKS } from '../data/flashbacks.js';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const r = D.SB_ROUNDUP;
 ---
-<Base title="The Daily Brain: the smartest sports email in your inbox | SportingBrain" description="Every morning: today's Call It, a Flashback, On This Day, one stat to win an argument with, and what to watch. Free." wide>
-  <section class="nl">
-    <div class="nl-hero card">
-      <span class="tag" style="background:var(--gold);color:#14254a">The Daily Brain</span>
-      <h1>Sport, properly, before your first coffee.</h1>
-      <p class="teaser">One email, every morning, five minutes. Free. It's the only time we ask for any details, and all we ask for is your email address.</p>
-      <a class="btn gold" href="#signup">Sign me up</a>
-      <p class="small">No spam, never sold or shared, unsubscribe in one click. Under 13? Ask a parent to sign up.</p>
-    </div>
-    <div class="card nl-form" id="signup">
-      <h2>Sign up</h2>
-      <iframe src={D.SB_NEWSLETTER_FORM} title="Sign up to The Daily Brain" loading="lazy" style="width:100%;min-height:560px;border:0;display:block"></iframe>
-      <p class="small">We'll email you a link to confirm. You're only signed up once you click it. Form not showing? <a href={D.SB_NEWSLETTER_FORM} target="_blank" rel="noopener">Open it in a new tab</a>.</p>
-    </div>
+<Base title="The Weekly Brain: Free Sports Quiz Email | SportingBrain" description="Every Friday: the week's five hardest sports questions, the best Call It moment, a forgotten story and the Cynical Round-Up. Free, and unsubscribe in one click." wide>
+  <section class="nlp">
+    <header class="nlp-hero">
+      <p class="gg-kicker">Free, every Friday</p>
+      <h1>The Weekly Brain</h1>
+      <p class="nlp-stand">The five hardest sports questions of the week, in your inbox on Friday morning. Answer them before you look, then check how you did on the site.</p>
+      <form class="nlb-form big" data-nl novalidate>
+        <label class="vh" for="nlp-e">Email address</label>
+        <input id="nlp-e" type="email" name="EMAIL" autocomplete="email" placeholder="Your email address" required>
+        <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" class="vh" aria-hidden="true">
+        <button type="submit" class="btn gold">Join free</button>
+        <p class="nlb-msg" role="status"></p>
+      </form>
+      <p class="nlp-small">We'll email a link to confirm, and you're only signed up once you click it. We never sell or share your email. Unsubscribe in one click. You must be 13 or over. <a href={`${base}about.html`}>Privacy</a></p>
+    </header>
+
     <h2>What's in it</h2>
-    <div class="nl-grid">
-      <div class="card"><b>🎯 Today's Call It</b><p>The frozen moment from a real match. Make your call before you've had breakfast.</p></div>
-      <div class="card"><b>📼 Flashback</b><p>One forgotten moment, told properly.</p></div>
-      <div class="card"><b>📅 On This Day</b><p>The best of what happened in sport on today's date.</p></div>
-      <div class="card"><b>📊 One stat</b><p>A number to win an argument with.</p></div>
-      <div class="card"><b>📺 What to watch</b><p>The fixtures that matter today, men's and women's.</p></div>
-      <div class="card"><b>😏 Fridays: the Cynical Round-Up</b><p>The week in sport, with an eye-roll. Labelled satire.</p></div>
+    <div class="nlp-grid">
+      <div class="nlp-item"><h3>Five hard questions</h3><p>The week's toughest, from every sport. Answers on the site.</p></div>
+      <div class="nlp-item"><h3>The Call It moment</h3><p>The best frozen moment of the week. Would you have called it?</p></div>
+      <div class="nlp-item"><h3>Flashback</h3><p>One forgotten story from sport's past, told properly.</p></div>
+      <div class="nlp-item"><h3>The Cynical Round-Up</h3><p>The week in sport, with an eye-roll. Clearly labelled satire.</p></div>
+      <div class="nlp-item"><h3>Book of the Week</h3><p>One sports book worth your time.</p></div>
+      <div class="nlp-item"><h3>Beat this score</h3><p>A challenge to forward to the mate who thinks he knows it all.</p></div>
     </div>
-    <h2>A taste of this week's issues</h2>
-    <div class="nl-sample card">
-      <p class="small">Sample, Monday 23 November 2026</p>
-      <p><b>📼 Flashback:</b> {FLASHBACKS[0].title}. {FLASHBACKS[0].standfirst}</p>
-      <p><b>😏 The Round-Up:</b> {r.headline}.</p>
-      <p><b>📊 One stat:</b> 555. The number of consecutive matches Jahangir Khan won between 1981 and 1986.</p>
-      <p><a href={`${base}call-it.html`}>Play today's Call It →</a></p>
-    </div>
+    <p class="nlp-small">Form not working? <a href={D.SB_NEWSLETTER_FORM} target="_blank" rel="noopener">Sign up on our email provider's page instead</a>.</p>
   </section>
 </Base>
