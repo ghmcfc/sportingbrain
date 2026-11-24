@@ -92,7 +92,7 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
 <main class:list={['wrap', { wide }]} data-page={page} id="main">{S.h1 && page && <div class="crawl"><h1>{S.h1}</h1>{S.intro && <p class="teaser">{S.intro}</p>}</div>}<slot /></main>
 {shareItem && <section class="wrap share-quiz" aria-labelledby="sq-h">
   <h2 id="sq-h">Share this quiz</h2>
-  <p class="sq-what"><b>{shareItem[0]}.</b> {shareItem[1]}</p>
+  <p class="sq-what"><b>{/[?!]$/.test(shareItem[0]) ? shareItem[0] : shareItem[0] + "."}</b> {shareItem[1]}</p>
   <div class="sq-btns" data-sq-title={shareItem[0]} data-sq-text={`${shareItem[0]} on SportingBrain. ${shareItem[1]} Free to play.`} data-sq-url={canonical}>
     <button type="button" class="btn" data-sq="native">Share</button>
     <a class="btn ghost" data-sq="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
