@@ -678,3 +678,6 @@ body.dark .gift{background:#14254a;border-color:#2A3A55}body.dark .gift p{color:
 .gift-strip li a{display:flex;flex-direction:column;gap:4px;height:100%;padding:14px;border:1px solid #D8DEE8;border-radius:12px;background:#fff;text-decoration:none;color:inherit}
 .gift-strip li span{color:#33415C;font-size:.95rem}.gift-strip li em{margin-top:auto;font-style:normal;font-weight:700;color:#0F1E36;background:#F2A900;border-radius:8px;padding:6px 10px;align-self:flex-start}
 body.dark .gift-strip li a{background:#14254a;border-color:#2A3A55}body.dark .gift-strip li span{color:#C9D3E3}
+.sb-tabs a.tab-gifts{color:var(--amber)}.sb-tabs a.tab-gifts:hover,.sb-tabs a.tab-gifts[aria-current=page]{color:#fff}
+@media (max-width:420px){header.top .sb-tabs a{font-size:1.05rem;padding-left:2px;padding-right:2px}}
+.gift-strip{padding-left:16px;padding-right:16px;box-sizing:border-box}

@@ -10,7 +10,7 @@ interface Props { title: string; description: string; page?: string; wide?: bool
 const { title, description, page = '', wide = false, image, type = 'website', noindex = false, noads = false } = Astro.props;
 import ADS from '../data/ads.json';
 import AN from '../data/analytics.json';
-import { GIFTS, amz } from '../data/shop.js';
+import { amz, picksFor } from '../data/shop.js';
 import { SEO } from '../data/seo.js';
 import { SHARE } from '../data/sharetext.js';
 const adsOn = !!ADS.client && !noads;
@@ -39,15 +39,14 @@ const nav = [
   ['Read', `${base}read.html`, 'read'],
   ['Watch', `${base}watch.html`, 'watch'],
   ['Kids', `${base}kids.html`, 'kids'],
+  ['Gifts', `${base}gift-guide.html`, 'gifts'],
 ];
 const path = Astro.url.pathname.replace(base, '/').replace(/\.html$/, '');
-const section = /^\/kids/.test(path) ? 'kids' : /^\/(replays|laughs|watch)/.test(path) ? 'watch'
-  : /^\/(this-week|flashback|on-this-day|stories|sports(\/|$)|round-up|read|newsletter|gift-guide)/.test(path) ? 'read'
+const section = /^\/kids/.test(path) ? 'kids' : /^\/gift-guide/.test(path) ? 'gifts' : /^\/(replays|laughs|watch)/.test(path) ? 'watch'
+  : /^\/(this-week|flashback|on-this-day|stories|sports(\/|$)|round-up|read|newsletter)/.test(path) ? 'read'
   : (path === '/' || path === '/index') ? 'today' : /^\/(about|credits|settings|offline)/.test(path) ? '' : 'play';
 const isKids = /^\/kids/.test(path);
-const showGifts = !noads && !isKids && !/^\/(gift-guide|about|credits|settings|offline|embed)/.test(path) && !/^\/f1/.test(path);
-const giftSec = /darts/.test(path) ? 'darts' : /cricket|call-it/.test(path) ? 'cricket' : /rugby|tennis|golf/.test(path) ? 'rugby-tennis-golf' : /read|flashback|stories|this-week|on-this-day|round-up/.test(path) ? 'books' : null;
-const giftPicks = (giftSec ? GIFTS.find(g => g.id === giftSec).items.slice(0, 3) : [GIFTS[0].items[0], GIFTS[4].items[0], GIFTS[1].items[0]]);
+const giftPicks = (!noads && !isKids) ? picksFor(path) : null;
 const SOCIAL = [['X','https://x.com/_sportingbrain'],['Instagram','https://www.instagram.com/_sportingbrain/'],['TikTok','https://www.tiktok.com/@_sportingbrain']];
 const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'SportingBrain', url: new URL(base, Astro.site).href, description: 'The free daily sports hub for everyone who loves sport.' },
   { '@context': 'https://schema.org', '@type': 'Organization', name: 'SportingBrain', url: new URL(base, Astro.site).href, logo: new URL(base + 'assets/icon-512.png', Astro.site).href, sameAs: SOCIAL.map(x => x[1]) }];
@@ -85,7 +84,7 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
 <a class="skip" href="#main">Skip to content</a>
 <header class="top"><div class="wrap">
   <a class="wordmark" href={base}><span class="mark" aria-hidden="true">SB</span><span>SportingBrain</span></a>
-  <nav class="sb-tabs" aria-label="Main">{nav.map(([t, h, k]) => <a href={h} aria-current={section === k ? "page" : undefined}>{t}</a>)}</nav>
+  <nav class="sb-tabs" aria-label="Main">{nav.filter(([, , k]) => !(k === 'gifts' && (isKids || noads))).map(([t, h, k]) => <a href={h} class={k === 'gifts' ? 'tab-gifts' : undefined} aria-current={section === k ? "page" : undefined}>{t}</a>)}</nav>
   <div class="hdr-right">
     <button class="iconbtn" data-share-site aria-label="Share SportingBrain">Share</button>
     <button class="iconbtn" data-dark aria-label="Switch dark mode">Dark</button>
@@ -95,9 +94,6 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
 </header>
 <script>document.addEventListener('click',e=>{const a=e.target.closest('[data-mistake]');if(a)a.href='https://tally.so/r/zE7LVZ?page='+encodeURIComponent(location.pathname+location.search);});</script>
 <main class:list={['wrap', { wide }]} data-page={page} id="main">{S.h1 && page && <div class="crawl"><h1>{S.h1}</h1>{S.intro && <p class="teaser">{S.intro}</p>}</div>}<slot /></main>
-{showGifts && <aside class="wrap gift-strip" aria-labelledby="gs-h"><div class="gs-head"><h2 id="gs-h">Sports gift ideas</h2><a href={`${base}gift-guide.html`}>See the full gift guide</a></div>
-  <ul>{giftPicks.map(([n, q, why]) => <li><a href={amz(q)} target="_blank" rel="sponsored nofollow noopener"><b>{n}</b><span>{why}</span><em>See on Amazon</em></a></li>)}</ul>
-  <p class="aff-note">As an Amazon Associate SportingBrain earns from qualifying purchases.</p></aside>}
 {shareItem && <section class="wrap share-quiz" aria-labelledby="sq-h">
   <h2 id="sq-h">Share this quiz</h2>
   <p class="sq-what"><b>{/[?!]$/.test(shareItem[0]) ? shareItem[0] : shareItem[0] + "."}</b> {shareItem[1]}</p>
@@ -109,6 +105,9 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
     <button type="button" class="btn ghost" data-sq="copy">Copy link</button>
   </div>
 </section>}
+{giftPicks && <aside class="wrap gift-strip" aria-labelledby="gs-h"><div class="gs-head"><h2 id="gs-h">Gift ideas for sports fans</h2><a href={`${base}gift-guide.html`}>See the full gift guide</a></div>
+  <ul>{giftPicks.map(([n, q, why]) => <li><a href={amz(q)} target="_blank" rel="sponsored nofollow noopener"><b>{n}</b><span>{why}</span><em>See on Amazon</em></a></li>)}</ul>
+  <p class="aff-note">As an Amazon Associate SportingBrain earns from qualifying purchases.</p></aside>}
 <script is:inline>(function(){var b=document.querySelector('.sq-btns');if(!b)return;var t=b.dataset.sqText,u=b.dataset.sqUrl,e=encodeURIComponent;
 b.querySelector('[data-sq=whatsapp]').href='https://wa.me/?text='+e(t+' '+u);
 b.querySelector('[data-sq=x]').href='https://twitter.com/intent/tweet?text='+e(t)+'&url='+e(u)+'&via=_sportingbrain';
