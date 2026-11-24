@@ -90,9 +90,9 @@ function markPlayed(g){ store.set('pl_'+g,true); const d=store.get('playdays',[]
 // Prompt rules (Super Prompt 5A): one interruptive prompt per visit, two a week, none if tips are switched off.
 const PROMPT={ ok(){ if(store.get('tips_off',false)) return false; try{ if(sessionStorage.getItem('sb_prompt')) return false; }catch(e){} const w=store.get('prompt_week',{w:'',n:0}); return !(w.w===isoWeek()&&w.n>=2); },
   used(){ try{ sessionStorage.setItem('sb_prompt','1'); }catch(e){} const w=store.get('prompt_week',{w:'',n:0}); store.set('prompt_week',{w:isoWeek(),n:(w.w===isoWeek()?w.n:0)+1}); } };
-function maybeNewsletter(){ if(store.get('nl_done',false) || store.get('playdays',[]).length<2 || Date.now()-store.get('nl_no',0)<30*864e5 || !PROMPT.ok()) return;
+function maybeNewsletter(){ let _in=false; try{ _in=localStorage.getItem('sb_nl')==='1'; }catch(e){} if(_in || store.get('nl_done',false) || store.get('playdays',[]).length<2 || Date.now()-store.get('nl_no',0)<30*864e5 || !PROMPT.ok()) return;
   PROMPT.used(); const n=document.createElement('div'); n.className='nudge'; n.setAttribute('role','dialog'); n.setAttribute('aria-label','Newsletter');
-  n.innerHTML=`<span>Get tomorrow's challenge, a Flashback and one stat worth knowing, every morning. Free.</span><a class="btn gold" href="${BASE}newsletter.html">Get the newsletter</a><button class="btn ghost" aria-label="No thanks">No thanks</button>`;
+  n.innerHTML=`<span>The Weekly Brain: the week's five hardest questions, every Friday. Free.</span><a class="btn gold" href="${BASE}newsletter.html" data-track="nl-nudge-click">Send it to me</a><button class="btn ghost" aria-label="No thanks">No thanks</button>`;
   document.body.appendChild(n); const close=()=>{ n.remove(); store.set('nl_no',Date.now()); }; n.querySelector('button').onclick=close; document.addEventListener('keydown',function k(e){ if(e.key==='Escape'){ close(); document.removeEventListener('keydown',k); } }); }
 window.SB_maybeNewsletter=maybeNewsletter;
 function badges(){
@@ -181,7 +181,7 @@ if(P==='home'){
   // badges
   const B=badges();
   const tiles=[
-    ['🎯','Call It',store.get('ci_'+DAY,null)?'Done today':'Make your call',BASE+'call-it.html','#F9A825'],
+    ['🎯','Call It',store.get('ci_'+DAY,null)?'Done today':'Make my call',BASE+'call-it.html','#F9A825'],
     ['🧠','Beat the Brain',played?`You: ${played.marks.filter(Boolean).length}/5`:`Brain: ${brainScore}/5`,BASE+'daily.html','#C2185B'],
     ['📈','Higher or Lower',`Best: ${bestHL}`,BASE+'higher-or-lower.html','#1565C0'],
     ['🕵️','Who Am I?',store.get('wa_'+DAY,null)?'Done today':'Five clues',BASE+'who-am-i.html','#6A1B9A'],
@@ -240,7 +240,7 @@ if(P==='home'){
         <p class="ctx">${esc(cm.match)}, ${cm.innings?'second':'first'} innings</p>
         <div class="lamp"><b>${esc(cm.score)}</b><span>after ${esc(cm.at)} overs${cm.need?`<br>${esc(cm.need.replace(cm.team+' ',''))}`:''}</span></div>
         <p class="q">${esc(cm.q)}</p>
-        <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how you did':'Make your call'}</a><a class="ci-alt" href="${BASE}call-it-football.html">Prefer football? Call It: Football</a>
+        <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how I did':'Make my call'}</a><a class="ci-alt" href="${BASE}call-it-football.html">Prefer football? Call It: Football</a>
       </section>`:''}
       ${(()=>{const bk=BOOKS[((DAY-1)%BOOKS.length+BOOKS.length)%BOOKS.length];const q=encodeURIComponent(bk[0]+' '+bk[1]).replace(/%20/g,'+');return `<section class="botd" aria-label="Book of the Day">
         <div class="botd-top"><span>Book of the Day</span><span>${esc(bk[2])}</span></div>

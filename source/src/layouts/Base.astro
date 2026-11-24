@@ -48,6 +48,7 @@ const section = /^\/kids/.test(path) ? 'kids' : /^\/gift-guide/.test(path) ? 'gi
 const isKids = /^\/kids/.test(path);
 const giftPicks = (!noads && !isKids) ? picksFor(path) : null;
 const slotPage = path === '/' || /^\/(index|daily)(\.html)?$/.test(path);
+const nlBar = !isKids && !noads && /^\/(flashback\/|stories|this-week|on-this-day|round-up|gift-guide|sports\/|read)/.test(path);
 const showNl = !isKids && !noads && (!!shareItem || path === '/' || /^\/(index|read|this-week|flashback|on-this-day|round-up|tiktok)(\.html)?$/.test(path)) && !/^\/newsletter/.test(path);
 const SOCIAL = [['X','https://x.com/_sportingbrain'],['Instagram','https://www.instagram.com/_sportingbrain/'],['TikTok','https://www.tiktok.com/@_sportingbrain']];
 const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'SportingBrain', url: new URL(base, Astro.site).href, description: 'The free daily sports hub for everyone who loves sport.' },
@@ -118,7 +119,7 @@ if(a.hasAttribute('data-share-page')||a.hasAttribute('data-share-site')){sbTrack
     <label class="vh" for="nlb-e">Email address</label>
     <input id="nlb-e" type="email" name="EMAIL" autocomplete="email" placeholder="Your email address" required>
     <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" class="vh" aria-hidden="true">
-    <button type="submit" class="btn gold">Join free</button>
+    <button type="submit" class="btn gold">Send me the Weekly Brain</button>
     <p class="nlb-msg" role="status"></p>
   </form>
   <p class="nlb-small">We'll email a link to confirm. Unsubscribe in one click. 13 or over only. <a href={`${base}about.html`}>Privacy</a></p>
@@ -129,7 +130,7 @@ if(a.hasAttribute('data-share-page')||a.hasAttribute('data-share-site')){sbTrack
     <label class="vh" >Email address</label>
     <input  type="email" name="EMAIL" autocomplete="email" placeholder="Your email address" required>
     <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" class="vh" aria-hidden="true">
-    <button type="submit" class="btn gold">Join free</button>
+    <button type="submit" class="btn gold">Send me the Weekly Brain</button>
     <p class="nlb-msg" role="status"></p>
   </form>
   <p class="nlb-small">We'll email a link to confirm. Unsubscribe in one click. 13 or over only. <a href={`${base}about.html`}>Privacy</a></p>
@@ -163,7 +164,13 @@ document.addEventListener('submit',function(e){var f=e.target;if(!f.matches||!f.
 if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){m.textContent='Please enter a full email address, like name@example.com.';i.focus();return;}
 var hp=f.querySelector('[name=email_address_check]');if(hp&&hp.value)return;b.disabled=true;b.textContent='Joining';
 var d=new URLSearchParams();d.append('EMAIL',v);d.append('email_address_check','');d.append('locale','en');
-fetch(U+(U.indexOf('?')>-1?'&':'?')+'isAjax=1',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:d.toString()}).then(function(){f.classList.add('ok');m.textContent='Nearly there. Check your inbox and click the link in our email to confirm. It can take a minute, and may land in junk.';try{localStorage.setItem('sb_nl','1')}catch(e){}if(window.sbTrack)sbTrack('newsletter-signup');}).catch(function(){b.disabled=false;b.textContent='Join free';m.innerHTML='That didn\'t go through. <a href="'+U+'" target="_blank" rel="noopener">Sign up here instead</a>.';});});})();</script>
+fetch(U+(U.indexOf('?')>-1?'&':'?')+'isAjax=1',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:d.toString()}).then(function(){f.classList.add('ok');m.textContent='Nearly there. Check your inbox and click the link in our email to confirm. It can take a minute, and may land in junk.';try{localStorage.setItem('sb_nl','1')}catch(e){}if(window.sbTrack)sbTrack('newsletter-signup');}).catch(function(){b.disabled=false;b.textContent='Send me the Weekly Brain';m.innerHTML='That didn\'t go through. <a href="'+U+'" target="_blank" rel="noopener">Sign up here instead</a>.';});});})();</script>
+{nlBar && <div class="nl-bar" id="nlBar" hidden role="region" aria-label="Newsletter"><span><b>The Weekly Brain.</b> The week's five hardest questions, every Friday. Free.</span><a class="btn gold" href={`${base}newsletter.html`} data-track="nl-bar-click">Send it to me</a><button type="button" class="nl-bar-x" aria-label="Close">×</button></div>
+<script is:inline>(function(){var b=document.getElementById('nlBar');if(!b)return;try{if(localStorage.getItem('sb_nl')==='1'||sessionStorage.getItem('sb_nlbar_x'))return;}catch(e){}
+var shown=false;function pos(){var h=document.querySelector('header.top');b.style.top=(h?Math.max(0,h.getBoundingClientRect().bottom):0)+'px';}
+function chk(){var d=document.documentElement,p=(scrollY+innerHeight)/d.scrollHeight;if(!shown&&p>0.4){shown=true;b.hidden=false;pos();if(window.sbTrack)sbTrack('nl-bar-shown');}if(shown)pos();}
+addEventListener('scroll',chk,{passive:true});addEventListener('resize',function(){if(shown)pos();});
+b.querySelector('.nl-bar-x').onclick=function(){b.hidden=true;removeEventListener('scroll',chk);try{sessionStorage.setItem('sb_nlbar_x','1')}catch(e){}};})();</script>}
 <footer class="site-foot"><div class="wrap wide foot-grid">
   <div><a class="wordmark" href={base}><span class="mark" aria-hidden="true">SB</span><span>SportingBrain</span></a>
     <p>The smartest free sports site in the world. Real matches, real data, stories nobody else tells. No betting, ever.</p></div>
