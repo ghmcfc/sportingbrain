@@ -277,20 +277,22 @@ if(P==='home'){
     const wd=new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/London'})).getDay();
     const WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const big=['Football','Cricket','Rugby union'];
-    const fromBank=(f,n)=>{ const pool=BANK.filter(f), r=seeded(DAY*13+wd), pick=[...pool].sort(()=>r()-.5).slice(0,n); return pick.map(q=>{ const idx=[0,1,2,3].sort(()=>r()-.5); return {s:q[1],q:q[2],o:idx.map(i=>q[3][i]),a:idx.indexOf(q[4]),f:q[5]}; }); };
+    // Never repeat today's Beat the Brain questions (same order as the daily page uses).
+    const btb=new Set(); const _bb=(l=>{ const r=seeded(l*9973), Q=BANK.filter(q=>q[0]===l).map(q=>[r(),q]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]), st=((DAY-1)*5)%Q.length; return [0,1,2,3,4].map(k=>Q[(st+k)%Q.length][2]); }); [..._bb(3),..._bb(4)].forEach(t=>btb.add(t));
+    const fromBank=(f,n)=>{ const pool=BANK.filter(q=>f(q)&&!btb.has(q[2])), r=seeded(DAY*13+wd), pick=[...pool].sort(()=>r()-.5).slice(0,n); return pick.map(q=>{ const idx=[0,1,2,3].sort(()=>r()-.5); return {s:q[1],q:q[2],o:idx.map(i=>q[3][i]),a:idx.indexOf(q[4]),f:q[5]}; }); };
     const THEMES=[
-      ['Women\'s Sport Sunday','Five questions on the women who made sport. How many do you know?',()=>fromBank(q=>q[0]>=3&&/women|Lioness|Matildas|WSL|Black Ferns|Red Roses|\bshe\b|\bher\b/i.test(q[2]+' '+q[5]),5),2],
-      ['Monday Expert','Five of the hardest questions we have. Three is good.',()=>fromBank(q=>q[0]===4,5),2],
-      ['Is It a Foul?','Five real situations. You are the referee.',()=>{ const r=seeded(DAY*7); return [...FOULS].sort(()=>r()-.5).slice(0,5).map(x=>({s:x[0],q:x[1],o:['Fair','Foul'],a:x[2]==='Foul'?1:0,f:x[3]})); },3],
-      ['World Sport Wednesday','Beyond football, cricket and rugby. Five from the rest of the sporting world.',()=>fromBank(q=>!big.includes(q[1])&&q[0]>=3,5),2],
-      ['Throwback Thursday','Five moments from the 20th century. Bring someone who was there.',()=>fromBank(q=>q[0]>=3&&/\b19\d\d\b/.test(q[2]),5),2],
-      ['Friday Showdown','Five hard ones to settle it at the pub. Three is a good score.',()=>fromBank(q=>q[0]===3,5),3],
-      ['Matchday Saturday','Five football questions before kick-off.',()=>fromBank(q=>q[1]==='Football'&&q[0]>=3,5),2],
+      ['Women\'s Sport Sunday','Five expert questions on the women who made sport. Two is respectable.',()=>fromBank(q=>q[0]===4&&/women|Lioness|Matildas|WSL|Black Ferns|Red Roses|\bshe\b|\bher\b/i.test(q[2]+' '+q[5]),5),2],
+      ['Monday Expert','Five of the hardest questions we have. Two is good going.',()=>fromBank(q=>q[0]===4,5),2],
+      ['Record Tuesday','Five expert questions on records, firsts and numbers. Two is good going.',()=>fromBank(q=>q[0]===4&&/first|record|most|how many|\d/i.test(q[2]),5),2],
+      ['World Sport Wednesday','Beyond football, cricket and rugby. Five from the rest of the sporting world.',()=>fromBank(q=>!big.includes(q[1])&&q[0]===4,5),2],
+      ['Throwback Thursday','Five moments from the 20th century. Bring someone who was there.',()=>fromBank(q=>q[0]===4&&/\b19\d\d\b/.test(q[2]),5),2],
+      ['Friday Showdown','Five expert questions to settle it at the pub. Two is good going.',()=>fromBank(q=>q[0]===4,5),2],
+      ['Matchday Saturday','Five football questions before kick-off.',()=>fromBank(q=>q[1]==='Football'&&q[0]===4,5),2],
     ];
     const [title,sub,make,brain]=THEMES[wd], Q=make(), key='hook_'+DAY, saved=store.get(key,null);
     const PIC=['Women\'s football','Cricket','Rugby union','Golf','Tennis','Athletics','Football'][wd], pc=window.SB_CREDIT&&SB_CREDIT(PIC);
     if(pc){ el.style.setProperty('--hookbg',`url('${SB_PHOTO(PIC,1400)}')`); el.classList.add('has-photo'); }
-    const SHORT=['Women\'s Sport','Expert','Is It a Foul?','World Sport','Throwback','Showdown','Matchday'];
+    const SHORT=['Women\'s Sport','Expert','Records','World Sport','Throwback','Showdown','Matchday'];
     const week=`<div class="hook-week" aria-label="This week's challenges">${[1,2,3,4,5,6,0].map(d=>`<span class="${d===wd?'on':''}"><b>${WD[d].slice(0,3)}</b>${SHORT[d]}</span>`).join('')}</div>${pc?`<p class="hook-credit">Photo: ${esc(pc.what)}, ${esc(pc.by)} / Wikimedia Commons</p>`:''}`;
     const nx=COUNTDOWN.find(e=>Date.parse(e[0])>Date.now());
     const chip=nx?`<span class="hook-chip" id="hookChip" data-t="${nx[0]}">${esc(nx[1])} in <b></b></span>`:'';
