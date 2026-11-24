@@ -40,6 +40,7 @@ export const SEO = {
   '/watch.html': { title: 'Watch: Sports Replays and Laughs | SportingBrain', description: 'Great cricket finals replayed ball by ball, Call It play-outs and a funny moment from sport every day. Men\'s and women\'s. Free to watch, no sign-up.' },
   '/weekly-expert.html': { title: 'Weekly Expert: Hard Sports Quiz | SportingBrain', description: 'Ten expert-level sports questions, new every Monday. Type the answer for two points or take the options for one. For people who win pub quizzes. Free.' },
   '/who-am-i.html': { title: 'Who Am I? Sports Star Guessing Game | SportingBrain', description: 'Five clues, hardest first. Name the sporting great in as few as you can. Men and women, every sport. A new player every day. Free, no sign-up.' },
+  '/gift-guide.html': { title: 'Sports Christmas Gift Guide 2026 | SportingBrain', description: 'Gift ideas for every sports fan: darts, football, cricket, rugby, tennis and golf, plus the sports books worth reading and games for the whole family.' },
   '/about.html': { title: 'About SportingBrain and Your Privacy', description: 'Who runs SportingBrain, what we do and how we look after your privacy: no accounts, no tracking cookies, and your email used only for the newsletter.' },
   '/credits.html': { title: 'Photo Credits | SportingBrain', description: 'Photo credits for SportingBrain: every Wikimedia Commons photograph we use, with its photographer, licence and source, plus notes on our own artwork.' },
 };

@@ -27,6 +27,8 @@ const Fig = null;
     <div class="three tight">{F.slice(0, 3).map(({ f, p }) => <a class="story" href={`${base}flashback/${f.id}.html`}>{p && <figure class="sfig"><img src={p.src} alt={p.alt} loading="lazy" width="800" height="450"><figcaption>{p.credit}</figcaption></figure>}<span class="kick">{f.sport}, {(f.date || f.when).match(/\d{4}/)[0]}</span><h3>{f.title}</h3><p>{f.standfirst}</p></a>)}</div>
   </section>
 
+  <section class="blk"><header class="sh"><h2>Christmas gift guide</h2><a href={`${base}gift-guide.html`}>See the guide</a></header><p>Gifts for every sports fan: darts boards, books worth reading, garden games and more.</p></section>
+
   <section class="blk"><header class="sh"><h2>Sport guides</h2><a href={`${base}sports.html`}>All {GUIDES.length}</a></header>
     <div class="gtiles">{G.map(({ g, img }) => <a class="story guide-card" href={`${base}sports/${g.id}.html`}>{img && <figure class="sfig"><img src={img} alt={`${g.name}`} loading="lazy" width="800" height="450"></figure>}<h3>{g.name}</h3><p>{g.line}</p></a>)}</div>
   </section>

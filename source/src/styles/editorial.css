@@ -662,3 +662,12 @@ body.dark .ci-chart .now{stroke:#fff}body.dark .ci-chart .tl{fill:#fff}body.dark
 .ci-board .ci-chart .now{stroke:#fff}.ci-board .ci-chart .tl{fill:#fff}.ci-board .ci-chart text{fill:#B8C4D6}
 .ci-board .ci-chart .g{stroke:rgba(255,255,255,.14)}.ci-board .ci-chart .frz{stroke:#F2A900}.ci-board .ci-chart .tgt{stroke:#5FD3A5}
 .ci-board .ci-chart figcaption{color:#C9D3E3}.ci-board .ci-chart .k.now{background:#fff}.ci-board .ci-chart .oth{stroke:#9FB0C8}
+/* Gift guide */
+.aff-note{font-size:.9rem;color:#5A6B85;margin:.6em 0}
+.gift-jump{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 18px}.gift-jump a{padding:6px 12px;border:1px solid #D8DEE8;border-radius:999px;text-decoration:none;font-size:.92rem}
+.gift-sec{margin:26px 0}.gift-sec h2{font-family:var(--display);font-weight:900;font-size:1.7rem;margin:0 0 10px}
+.gift-list{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.gift{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px;border:1px solid #D8DEE8;border-radius:12px;background:#fff}
+.gift h3{margin:0 0 4px;font-size:1.1rem}.gift p{margin:0;color:#33415C}.gift .btn{white-space:nowrap}
+@media(max-width:560px){.gift{flex-direction:column;align-items:flex-start}}
+body.dark .gift{background:#14254a;border-color:#2A3A55}body.dark .gift p{color:#C9D3E3}

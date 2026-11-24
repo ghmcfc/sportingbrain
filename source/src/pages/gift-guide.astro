@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { GIFTS, amz } from '../data/shop.js';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<Base title="Sports Christmas Gift Guide 2026 | SportingBrain" description="Gift ideas for every sports fan: darts, football, cricket, rugby, tennis and golf, plus the sports books worth reading and games for the whole family." page="gifts">
+  <header class="art-head"><h1>The sports gift guide</h1><p class="art-stand">Ideas for every sports fan in your life, picked by us. The links take you to Amazon UK, where you can compare prices and reviews.</p>
+    <p class="aff-note">As an Amazon Associate SportingBrain earns from qualifying purchases. It costs you nothing extra and helps keep the site free.</p></header>
+  <nav class="gift-jump" aria-label="Jump to a section">{GIFTS.map(g => <a href={`#${g.id}`}>{g.title}</a>)}</nav>
+  {GIFTS.map(g => <section class="gift-sec" id={g.id}><h2>{g.title}</h2>
+    <ul class="gift-list">{g.items.map(([name, q, why]) => <li class="gift"><div><h3>{name}</h3><p>{why}</p></div><a class="btn gold" href={amz(q)} target="_blank" rel="sponsored nofollow noopener">See on Amazon</a></li>)}</ul></section>)}
+  <section class="gift-sec"><h2>Free ideas too</h2><p>Not everything needs buying. Our <a href={`${base}sports-day.html`}>Sports Day at Home</a> has eight events for the garden, and the <a href={`${base}pub-quiz.html`}>Pub and Club Quiz</a> makes a free Christmas quiz night.</p></section>
+  <p class="aff-note">Prices and stock are set by Amazon and can change. We never link to betting.</p>
+</Base>
