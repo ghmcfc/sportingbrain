@@ -3,6 +3,8 @@ import '../data/content.js';
 import { FLASHBACKS } from '../data/flashbacks.js';
 import { REPLAYS } from '../data/replays.js';
 import { ALL as BANK } from '../data/bank_all.js';
+import { btbTexts, weeklyExpertQs } from './qsched.js';
+import { ukDayNo } from './play.js';
 import { GUIDES } from '../data/guides.js';
 import { WEEK } from '../data/week.js';
 import { PLAY } from '../data/playlist.js';
@@ -280,10 +282,10 @@ if(P==='home'){
     const WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const big=['Football','Cricket','Rugby union'];
     // Never repeat today's Beat the Brain questions (same order as the daily page uses).
-    const btb=new Set(); const _bb=(l=>{ const r=seeded(l*9973), Q=BANK.filter(q=>q[0]===l).map(q=>[r(),q]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]), st=((DAY-1)*5)%Q.length; return [0,1,2,3,4].map(k=>Q[(st+k)%Q.length][2]); }); [..._bb(3),..._bb(4)].forEach(t=>btb.add(t));
-    const fromBank=(f,n)=>{ const pool=BANK.filter(q=>f(q)&&!btb.has(q[2])), r=seeded(DAY*13+wd), pick=[...pool].sort(()=>r()-.5).slice(0,n); return pick.map(q=>{ const idx=[0,1,2,3].sort(()=>r()-.5); return {s:q[1],q:q[2],o:idx.map(i=>q[3][i]),a:idx.indexOf(q[4]),f:q[5]}; }); };
+    const btb=btbTexts(BANK, DAY-7, DAY+7); weeklyExpertQs(BANK, Math.floor((ukDayNo()+3)/7)).forEach(q=>btb.add(q[2])); // a week either side of Beat the Brain, and this week's Weekly Expert
+    const fromBank=(f,n)=>{ let pool=BANK.filter(q=>f(q)&&!btb.has(q[2])); if(pool.length<n) pool=BANK.filter(f); const r=seeded(DAY*13+wd), pick=[...pool].sort(()=>r()-.5).slice(0,n); return pick.map(q=>{ const idx=[0,1,2,3].sort(()=>r()-.5); return {s:q[1],q:q[2],o:idx.map(i=>q[3][i]),a:idx.indexOf(q[4]),f:q[5]}; }); };
     const THEMES=[
-      ['Women\'s Sport Sunday','Five expert questions on the women who made sport. Two is respectable.',()=>fromBank(q=>q[0]===4&&/women|Lioness|Matildas|WSL|Black Ferns|Red Roses|\bshe\b|\bher\b/i.test(q[2]+' '+q[5]),5),2],
+      ['Women\'s Sport Sunday','Five hard questions on the women who made sport. Three is respectable.',()=>fromBank(q=>q[0]>=3&&/women|Lioness|Matildas|WSL|Black Ferns|Red Roses|\bshe\b|\bher\b/i.test(q[2]+' '+q[5]),5),2],
       ['Monday Expert','Five of the hardest questions we have. Two is good going.',()=>fromBank(q=>q[0]===4,5),2],
       ['Record Tuesday','Five expert questions on records, firsts and numbers. Two is good going.',()=>fromBank(q=>q[0]===4&&/first|record|most|how many|\d/i.test(q[2]),5),2],
       ['World Sport Wednesday','Beyond football, cricket and rugby. Five from the rest of the sporting world.',()=>fromBank(q=>!big.includes(q[1])&&q[0]===4,5),2],

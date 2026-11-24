@@ -7,10 +7,10 @@ import Base from '../layouts/Base.astro';
   <section class="pg-card" id="game" aria-live="polite"></section>
   <script>
     import { ALL as BANK } from '../data/bank_all.js';
+    import { weeklyExpertQs } from '../scripts/qsched.js';
     import { weekNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge } from '../scripts/play.js';
     showChallenge(document.getElementById('vs'));
-    const W = weekNo(), pool = shuffle(BANK.filter(q => q[0] === 4), seeded(99)), start = (W * 10) % pool.length;
-    const Q = Array.from({ length: 10 }, (_, k) => pool[(start + k) % pool.length]);
+    const W = weekNo(), Q = weeklyExpertQs(BANK, W); // never a question Beat the Brain uses this week
     const g = document.getElementById('game'), key = 'expert2_' + W; let i = 0, s = 0, marks = [];
     const saved = store.get(key, null);
     const norm = t => String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/&/g, 'and').replace(/[^a-z0-9 ]/g, ' ').replace(/\b(the|a|an|fc)\b/g, ' ').replace(/\s+/g, ' ').trim();
