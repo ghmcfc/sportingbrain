@@ -11,11 +11,11 @@ import AdSlot from '../components/AdSlot.astro';
   <div id="cxEnd"></div>
   <AdSlot name="game_result" />
   <script>
-    import { CONNECTIONS } from '../data/connections.js';
+    import { buildSchedule, CX_DAY0 } from '../data/cx_build.js';
     import { ukDayNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge } from '../scripts/play.js';
     showChallenge(document.getElementById('vs'));
-    const D = ukDayNo(), practice = new URLSearchParams(location.search).has('practice'), idx = practice ? Math.floor(Math.random() * CONNECTIONS.length) : D % CONNECTIONS.length;
-    const P = CONNECTIONS[idx], key = 'cx_' + D, COL = ['#F2D06B', '#8BC6A6', '#9BB8E3', '#C7A3D9'];
+    const D = ukDayNo(), practice = new URLSearchParams(location.search).has('practice'), SCHED = buildSchedule(), idx = practice ? Math.floor(Math.random() * SCHED.length) : ((D - CX_DAY0) % SCHED.length + SCHED.length) % SCHED.length;
+    const P = SCHED[idx], key = 'cx_' + D, COL = ['#F2D06B', '#8BC6A6', '#9BB8E3', '#C7A3D9'];
     const S = (!practice && store.get(key, null)) || { solved: [], miss: 0, done: false, guesses: [] };
     let tiles = shuffle(P.flatMap(g => g[2]), seeded(D)), sel = [];
     const box = document.getElementById('cx'), msg = document.getElementById('cxMsg'), go = document.getElementById('cxGo');
