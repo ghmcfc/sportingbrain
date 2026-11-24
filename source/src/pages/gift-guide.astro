@@ -1,14 +1,75 @@
 ---
 import Base from '../layouts/Base.astro';
-import { GIFTS, amz } from '../data/shop.js';
+import { CATS, TOP, SECTIONS } from '../data/giftguide.js';
+import { amz } from '../data/shop.js';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const ICON = {
+  dartboard: '<circle cx="24" cy="24" r="18"/><circle cx="24" cy="24" r="12"/><circle cx="24" cy="24" r="6"/><circle cx="24" cy="24" r="1.6" fill="currentColor"/><path d="M24 6v36M6 24h36M11.3 11.3l25.4 25.4M36.7 11.3 11.3 36.7"/>',
+  board: '<circle cx="24" cy="24" r="17"/><circle cx="24" cy="24" r="8"/><path d="M34 8 26 22"/><path d="M33 5l5 1-1 5"/>',
+  pitch: '<rect x="5" y="10" width="38" height="28" rx="2"/><path d="M24 10v28"/><circle cx="24" cy="24" r="5"/><path d="M5 18h6v12H5M43 18h-6v12h6"/>',
+  book: '<path d="M8 9h13a5 5 0 0 1 5 5v26a4 4 0 0 0-4-4H8z"/><path d="M40 9H29a5 5 0 0 0-5 5v26a4 4 0 0 1 4-4h12z"/>',
+  buzzer: '<path d="M10 36h28v5H10z"/><path d="M14 36a10 10 0 0 1 20 0"/><path d="M24 14v6M14 18l3 4M34 18l-3 4M24 8v2"/>',
+  ball: '<circle cx="24" cy="24" r="17"/><path d="M24 15l7 5-3 8h-8l-3-8z"/><path d="M24 7v8M31 20l9-3M28 28l5 8M20 28l-5 8M17 20l-9-3"/>',
+  bat: '<path d="M30 6l6 6-17 17-6-6z"/><path d="M13 23l-6 6 6 6 6-6"/><circle cx="36" cy="36" r="5"/>',
+  grass: '<path d="M4 40h40"/><path d="M10 40c0-8 2-14 6-18M18 40c0-10 1-18 4-24M26 40c0-9 3-16 8-20M34 40c0-6 2-10 5-13"/>',
+  gift: '<rect x="7" y="18" width="34" height="22" rx="2"/><path d="M5 12h38v6H5zM24 12v28"/><path d="M24 12c-4-6-11-6-11-1s7 1 11 1c4 0 11 4 11-1s-7-5-11 1z"/>',
+};
+const svg = k => `<svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k] || ICON.gift}</svg>`;
+const all = [...TOP.map(t => t[0]), ...SECTIONS.flatMap(s => s.items.map(i => i[0]))];
+const ld = { '@context': 'https://schema.org', '@type': 'ItemList', name: 'Gifts for sports fans', itemListElement: all.map((n, i) => ({ '@type': 'ListItem', position: i + 1, name: n })) };
 ---
-<Base title="Sports Christmas Gift Guide 2026 | SportingBrain" description="Gift ideas for every sports fan: darts, football, cricket, rugby, tennis and golf, plus the sports books worth reading and games for the whole family." page="gifts">
-  <header class="art-head"><h1>The sports gift guide</h1><p class="art-stand">Ideas for every sports fan in your life, picked by us. The links take you to Amazon UK, where you can compare prices and reviews.</p>
-    <p class="aff-note">As an Amazon Associate SportingBrain earns from qualifying purchases. It costs you nothing extra and helps keep the site free.</p></header>
-  <nav class="gift-jump" aria-label="Jump to a section">{GIFTS.map(g => <a href={`#${g.id}`}>{g.title}</a>)}</nav>
-  {GIFTS.map(g => <section class="gift-sec" id={g.id}><h2>{g.title}</h2>
-    <ul class="gift-list">{g.items.map(([name, q, why]) => <li class="gift"><div><h3>{name}</h3><p>{why}</p></div><a class="btn gold" href={amz(q)} target="_blank" rel="sponsored nofollow noopener">See on Amazon</a></li>)}</ul></section>)}
-  <section class="gift-sec"><h2>Free ideas too</h2><p>Not everything needs buying. Our <a href={`${base}sports-day.html`}>Sports Day at Home</a> has eight events for the garden, and the <a href={`${base}pub-quiz.html`}>Pub and Club Quiz</a> makes a free Christmas quiz night.</p></section>
-  <p class="aff-note">Prices and stock are set by Amazon and can change. We never link to betting.</p>
+<Base title="Gifts for Sports Fans 2026: The Christmas Gift Guide | SportingBrain" description="The best Christmas gifts for sports fans in 2026: darts boards, Subbuteo, Wisden, quiz buzzers, sports books and stocking fillers, picked by SportingBrain." page="gifts" wide>
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  <header class="gg-hero">
+    <p class="gg-kicker">Christmas 2026</p>
+    <h1>Gifts for sports fans</h1>
+    <p class="gg-stand">{all.length} presents we'd be happy to unwrap, from the dartboard they'll use every week to the book they'll still be talking about in March. Pick the fan, then pick the gift.</p>
+    <p class="gg-aff">As an Amazon Associate SportingBrain earns from qualifying purchases. It costs you nothing extra and keeps the games free. Prices change daily, so we show Amazon's live price, not ours.</p>
+  </header>
+
+  <nav class="gg-filter" aria-label="Show gifts for">
+    {CATS.map(([k, t], i) => <button type="button" data-f={k} aria-pressed={i === 0 ? 'true' : 'false'}>{t}</button>)}
+  </nav>
+
+  <section class="gg-top" aria-labelledby="gg-top-h">
+    <h2 id="gg-top-h">Our five favourites</h2>
+    <div class="gg-top-grid">
+      {TOP.map(([n, q, best, why, tags, ic]) => <article class="gg-card big" data-tags={tags}>
+        <div class={`gg-ic c-${tags.split(' ')[0]}`} set:html={svg(ic)} />
+        <div class="gg-body"><p class="gg-best">Best for {best}</p><h3>{n}</h3><p>{why}</p>
+        <a class="gg-buy" href={amz(q)} target="_blank" rel="sponsored nofollow noopener">See it on Amazon</a></div>
+      </article>)}
+    </div>
+  </section>
+
+  {SECTIONS.map(s => <section class="gg-sec" id={s.id} aria-labelledby={`h-${s.id}`}>
+    <h2 id={`h-${s.id}`}>{s.title}</h2>
+    <div class="gg-grid">
+      {s.items.map(([n, q, best, why, tags]) => <article class="gg-card" data-tags={tags}>
+        <div class={`gg-ic sm c-${s.id}`} set:html={svg(s.icon)} />
+        <div class="gg-body"><p class="gg-best">Best for {best}</p><h3>{n}</h3><p>{why}</p>
+        <a class="gg-buy" href={amz(q)} target="_blank" rel="sponsored nofollow noopener">See it on Amazon</a></div>
+      </article>)}
+    </div>
+  </section>)}
+
+  <section class="gg-free" aria-labelledby="gg-free-h">
+    <h2 id="gg-free-h">The free gift</h2>
+    <p>Send them today's five hardest questions and see who wins. Or host Christmas Day with our printable <a href={`${base}pub-quiz.html`}>Pub and Club Quiz</a> and <a href={`${base}sports-day.html`}>Sports Day at Home</a>.</p>
+    <a class="gg-buy alt" href={`${base}daily.html`}>Play Beat the Brain</a>
+  </section>
+
+  <section class="gg-faq" aria-labelledby="gg-faq-h">
+    <h2 id="gg-faq-h">Good to know</h2>
+    <details><summary>How did we choose these?</summary><p>We picked things sports fans actually use or read: the kit that gets played with all year, the books that changed how people watch the game, and games the whole family can join in. Nobody paid to be on this list.</p></details>
+    <details><summary>Why don't you show prices?</summary><p>Amazon prices change every day, especially before Christmas. Each button opens Amazon with the live price and the latest reviews, so you can compare before you buy.</p></details>
+    <details><summary>Do you make money from this page?</summary><p>Yes, a small commission from Amazon if you buy, at no extra cost to you. It helps keep SportingBrain free. We never link to betting, and there are no shop links in the Kids Zone.</p></details>
+  </section>
+
+  <script is:inline>
+  (()=>{const bs=[...document.querySelectorAll('.gg-filter button')],cards=[...document.querySelectorAll('.gg-card')],secs=[...document.querySelectorAll('.gg-top,.gg-sec')];
+  bs.forEach(b=>b.addEventListener('click',()=>{const f=b.dataset.f;bs.forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
+  cards.forEach(c=>c.hidden=f!=='all'&&!c.dataset.tags.split(' ').includes(f));
+  secs.forEach(s=>s.hidden=![...s.querySelectorAll('.gg-card')].some(c=>!c.hidden));}));})();
+  </script>
 </Base>
