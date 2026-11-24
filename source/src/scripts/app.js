@@ -34,6 +34,18 @@ function ukKey(d=new Date()){ const p=ukParts(d); return `${p.y}-${String(p.m).p
 const LAUNCH = Date.UTC(2026,10,23);
 function dayNo(){ const p=ukParts(); return Math.floor((Date.UTC(p.y,p.m-1,p.d)-LAUNCH)/86400000)+1; }
 const DAY = Math.max(1, dayNo());
+// "Keep playing" block for result screens: today's other daily games, unplayed first, with today's progress.
+function keepPlaying(except){
+  const p=ukParts(), ud=Math.floor(Date.UTC(p.y,p.m-1,p.d)/86400000), dk=ukKey();
+  const done={connections:store.get('cx_'+ud,null)?.done,'who-am-i':store.get('wa_'+ud,null)?.done,'ground-guesser':!!store.get('gg3_'+ud,null),'call-it':!!store.get('ci_'+DAY,null),'call-it-football':!!store.get('fc_'+ud,null),daily:!!store.get('daily_'+dk,null)};
+  const ids=Object.keys(done), n=ids.filter(k=>done[k]).length;
+  const list=ids.filter(k=>k!==except).map(k=>PLAY.find(g=>g[0]===k)).filter(Boolean).sort((a,b)=>(done[a[0]]?1:0)-(done[b[0]]?1:0)).slice(0,4);
+  return `<section class="kp" aria-label="Keep playing"><div class="kp-head"><h3>Keep playing</h3><span>${n} of ${ids.length} daily games done today</span></div>
+    <div class="kp-bar"><i style="width:${Math.round(n/ids.length*100)}%"></i></div>
+    ${list.map(g=>`<a class="kp-row" href="${BASE}${g[0]}.html" style="--c:${g[4]}" data-track="keepplaying-${g[0]}"><span class="kp-ic">${icon(g[0],26)}</span><span class="kp-tx"><b>${esc(g[1])}</b><small>${esc(g[2])}</small></span><em class="${done[g[0]]?'done':'new'}">${done[g[0]]?'Played':'Play'}</em></a>`).join('')}
+    <a class="kp-all" href="${BASE}play.html" data-track="keepplaying-all">See all ${PLAY.length} games</a></section>`;
+}
+
 const pickDaily = (arr, offset=0) => arr[((DAY-1)+offset) % arr.length];
 function seeded(n){ let x=n*9301+49297; return ()=> (x=(x*9301+49297)%233280)/233280; }
 function shuffle(a, rnd=Math.random){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
@@ -307,7 +319,7 @@ if(P==='home'){
       const sc=marks.filter(Boolean).length, line=sc>brain?'You beat the Brain.':sc===brain?'Level with the Brain.':'The Brain wins this one.';
       const tom=THEMES[(wd+1)%7][0];
       el.innerHTML=head+`<div class="hook-res"><div class="hook-score">${sc}<small>/5</small></div><div><p class="hook-line">${line} It scored ${brain}.</p><div class="hook-pips">${marks.map(m=>`<i class="${m?'y':'n'}"></i>`).join('')}</div></div></div>
-        <div class="hook-next"><button class="btn gold" id="hookShare">Challenge a mate</button><a class="btn ghost light" href="${BASE}call-it-football.html">Next: today's Call It: Football</a></div>
+        <div class="hook-next"><button class="btn gold" id="hookShare">Challenge a mate</button><a class="btn ghost light" href="${BASE}call-it-football.html">Next: today's Call It: Football</a></div><div data-app-card></div>
         <p class="hook-tom">Tomorrow: <b>${esc(tom)}</b>. A new challenge every day at midnight.</p>`+week;
       $('#hookShare').onclick=()=>share(`SportingBrain ${title}: ${sc}/5 ${marks.map(m=>m?'🟩':'🟥').join('')}\nThe Brain got ${brain}. Beat me:\n${SITE}`);
       tickChip();
@@ -349,7 +361,7 @@ if(P==='daily'){
     const brainScore=brainFor(level), saved=store.get(`daily_${key}_${level}`,null);
     main.innerHTML=`<section class="hero"><div class="row1"><img src="${BASE}assets/brain.svg" alt="The Brain"><div><span class="tag" style="background:var(--gold);color:#14254a">Beat the Brain #${QD}</span><h1>Five hard questions. Every day.</h1><p>The Brain scored ${brainScore}/5 on ${LV[level].n} today. Your turn.</p></div></div></section>
       <div class="lv-pick" role="tablist" aria-label="Difficulty">${LEVELS.map(l=>{const done=store.get(`daily_${key}_${l}`,null);return `<button role="tab" aria-selected="${l===level}" class="lv ${l===level?'on':''}" data-lv="${l}" style="--c:${LV[l].c}"><b>${LV[l].n}</b><small>${done?`Done: ${done.marks.filter(Boolean).length}/5`:LV[l].d}</small></button>`;}).join('')}</div>
-      <section class="card" style="margin-top:12px" id="game" aria-live="polite"></section><div data-nl-slot class="nl-slot"></div><div class="sec"><h2>Keep playing</h2></div>${moreExcept(BASE+'daily.html')}`;
+      <section class="card" style="margin-top:12px" id="game" aria-live="polite"></section><div data-nl-slot class="nl-slot"></div><div class="daily-more"><div class="sec"><h2>Keep playing</h2></div>${moreExcept(BASE+'daily.html')}</div>`;
     main.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ level=+b.dataset.lv; store.set('daily_level',level); history.replaceState(null,'',`?level=${level}`); render(); });
     const g=$('#game');
     function finish(marks,save){
@@ -359,14 +371,14 @@ if(P==='daily'){
       const line=score>brainScore?(level<4?"You beat the Brain. Try Expert.":"You beat the Brain on Expert. Take a bow."):score===brainScore?"Level with the Brain. Rematch tomorrow.":"The Brain wins this one. Same time tomorrow?";
       const grid=marks.map(m=>m?'🟩':'🟥').join('');
       const card=`SportingBrain #${QD} 🧠 ${LV[level].n}\n${grid}  ${score}/5\nThe Brain got ${brainScore}/5. Beat that.\n${SITE}daily.html?level=${level}`;
-      const next=(score>brainScore&&level<4)?`<button class="btn ghost" data-lv="${level+1}">Try ${LV[level+1].n} next</button>`:`<a class="btn ghost" href="${BASE}call-it.html" data-track="daily-next-callit">Play Call It next</a>`;
+      const next=(score>brainScore&&level<4)?`<button class="btn ghost" data-lv="${level+1}">Too easy? Try ${LV[level+1].n}</button>`:'';
       g.innerHTML=`<div class="res-top"><div><div class="small">${LV[level].n} · Beat the Brain #${QD}</div><div class="score">${score}/5</div></div><div class="res-grid" aria-label="${score} right out of 5">${grid}</div></div>
         <div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${line} The Brain got ${brainScore}/5.</div></div>
         <div class="res-cta"><p class="res-ask">${score>=brainScore?'Think your mates can match that?':'Bet your mates do worse.'} Send them your score.</p>
           <a class="btn gold res-main" id="shWa" target="_blank" rel="noopener" data-track="daily-result-whatsapp">Challenge my mates on WhatsApp</a>
           <p class="res-more"><button type="button" class="linkbtn" id="sh" data-track="daily-result-share">More ways to share</button> · <button type="button" class="linkbtn" id="shCopy" data-track="daily-result-copy">Copy my score</button></p></div>
-        <div class="stats"><div><b>${store.get('streak',1)}</b>day streak</div><div><b>${store.get('played',1)}</b>played</div><div><b>${store.get('beaten',0)}</b>times you beat the Brain</div></div>
-        <div class="row res-next">${next}</div><p class="small">New questions in <span class="countdown" id="cd"></span></p>`;
+        ${keepPlaying('daily')}<div class="stats"><div><b>${store.get('streak',1)}</b>day streak</div><div><b>${store.get('played',1)}</b>played</div><div><b>${store.get('beaten',0)}</b>times you beat the Brain</div></div>
+        ${next?`<div class="row res-next">${next}</div>`:''}<p class="small">New questions in <span class="countdown" id="cd"></span></p><div data-app-card></div>`;
       g.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ level=+b.dataset.lv; store.set('daily_level',level); render(); window.scrollTo({top:0,behavior:'smooth'}); });
       $('#shWa').href='https://wa.me/?text='+encodeURIComponent(card);
       $('#sh').onclick=()=>share(card);

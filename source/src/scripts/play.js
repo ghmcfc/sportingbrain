@@ -46,6 +46,6 @@ export function endNav() {
   const pool = kids ? KIDS_GAMES : PLAY.filter(g => !['archive', 'passport', 'sports-day', 'laughs'].includes(g[0])).map(g => [g[0], g[1]]);
   const opts = pool.filter(g => !here.endsWith('/' + g[0])), g = opts[Math.floor(Math.random() * opts.length)];
   const d = document.createElement('div'); d.className = 'end-nav';
-  d.innerHTML = `<a class="btn gold" href="${BASE}${g[0]}.html">Next game: ${esc(g[1])}</a><a class="btn ghost" href="${BASE}${kids ? 'kids.html' : ''}">${kids ? 'Kids Zone home' : 'Home'}</a>`;
+  d.innerHTML = `<a class="btn gold" href="${BASE}${g[0]}.html">Next game: ${esc(g[1])}</a><a class="btn ghost" href="${BASE}${kids ? 'kids.html' : ''}">${kids ? 'Kids Zone home' : 'Home'}</a>${kids ? '' : '<div data-app-card></div>'}`;
   return d;
 }

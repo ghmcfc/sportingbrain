@@ -96,6 +96,29 @@ document.addEventListener('click',function(e){var a=e.target.closest('a,button')
 var h=a.getAttribute('href')||'';if(/amazon\.co\.uk/.test(h)){sbTrack('amazon-click'+location.pathname.replace(/\.html$/,'').replace(/\//g,'-'));return;}
 var q=a.getAttribute('data-sq');if(q){sbTrack('share-'+q+location.pathname.replace(/\.html$/,'').replace(/\//g,'-'));return;}
 if(a.hasAttribute('data-share-page')||a.hasAttribute('data-share-site')){sbTrack('share-header');}},true);})();</script>
+<script is:inline>(function(){var H=document.documentElement,B=H.dataset.base||'/',dp=null,K='sb_appx',T=function(n){window.sbTrack&&sbTrack(n)};
+var ua=navigator.userAgent,ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1),sa=H.classList.contains('is-app');
+function kids(){return !!document.querySelector('.kz')||/\/kids/.test(location.pathname)}
+function off(){try{return Date.now()<(+localStorage.getItem(K)||0)||localStorage.getItem('sb_appdone')==='1'}catch(e){return false}}
+function snooze(d){try{localStorage.setItem(K,String(Date.now()+d*864e5))}catch(e){}}
+function can(){return !sa&&!kids()&&!off()&&(dp||ios)}
+function done(){try{localStorage.setItem('sb_appdone','1')}catch(e){}document.querySelectorAll('.appc,.appbar').forEach(function(x){x.remove()})}
+function go(src){T('app-click-'+src);if(dp){var p=dp;dp=null;p.prompt();p.userChoice.then(function(r){T('app-'+r.outcome+'-'+src);if(r.outcome==='accepted')done();}).catch(function(){});return true;}if(ios){showIos();return true;}return false;}
+function showIos(){var c=document.querySelector('.appc');if(c){c.querySelector('.appc-ios').hidden=false;var gb=c.querySelector('[data-app-go]');if(gb)gb.hidden=true;c.scrollIntoView({block:'center',behavior:'smooth'});return;}location.href=B+'app.html';}
+var IOS='<p class="appc-ios" hidden>In Safari, tap the <b>Share</b> button <span aria-hidden="true">(the square with the arrow)</span>, scroll down and tap <b>Add to Home Screen</b>. Done.</p>';
+function card(){return '<div class="appc" role="region" aria-label="Get the app"><img src="'+B+'assets/icon-192.png" alt="" width="52" height="52"><div class="appc-tx"><b>Tomorrow\'s games, one tap away</b><p>Put SportingBrain on your home screen. Free, no sign-up, nothing to download.</p>'+IOS+'<div class="appc-btns"><button type="button" class="btn gold" data-app-go="after-game">'+(dp?'Add it to my home screen':'Show me how')+'</button><button type="button" class="linkbtn" data-app-x>Not now</button></div></div></div>';}
+function fill(){if(!can())return;document.querySelectorAll('[data-app-card]').forEach(function(h){if(h.firstChild||document.querySelector('.appc'))return;h.innerHTML=card();T('app-card-shown');});}
+function bar(){if(!can()||document.getElementById('appBar')||/\/app(\.html)?$/.test(location.pathname))return;var days=[];try{days=JSON.parse(localStorage.getItem('sb_days')||'[]');if(sessionStorage.getItem('sb_appbar'))return;}catch(e){}if(days.length<2)return;
+var n=0,t=setTimeout(show,20000);function act(){if(++n>=3){clearTimeout(t);show();}}addEventListener('scroll',act,{passive:true});addEventListener('click',act);
+function show(){removeEventListener('scroll',act);removeEventListener('click',act);if(!can()||document.querySelector('.appc')||document.querySelector('.welcome:not([hidden])'))return;try{sessionStorage.setItem('sb_appbar','1')}catch(e){}
+var d=document.createElement('div');d.id='appBar';d.className='appbar';d.setAttribute('role','region');d.setAttribute('aria-label','Get the app');d.innerHTML='<img src="'+B+'assets/icon-192.png" alt="" width="36" height="36"><span><b>SportingBrain on your home screen</b><small>Free. One tap to today\'s games.</small></span><button type="button" class="btn gold" data-app-go="bar">'+(dp?'Add it':'Show me')+'</button><button type="button" class="appbar-x" data-app-x aria-label="Close">×</button>';document.body.appendChild(d);T('app-bar-shown');}}
+try{var dk=new Date().toISOString().slice(0,10),ds=JSON.parse(localStorage.getItem('sb_days')||'[]');if(ds[ds.length-1]!==dk){ds.push(dk);localStorage.setItem('sb_days',JSON.stringify(ds.slice(-10)));}}catch(e){}
+addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;H.classList.add('can-install');fill();bar();});
+addEventListener('appinstalled',done);
+document.addEventListener('click',function(e){var g=e.target.closest('[data-app-go],[data-app-install]');if(g){if(go(g.dataset.appGo||g.dataset.appInstall))e.preventDefault();if(g.dataset.appGo==='bar'&&ios){var b=document.getElementById('appBar');b&&b.remove();location.href=B+'app.html';}return;}
+var x=e.target.closest('[data-app-x]');if(x){snooze(30);T('app-dismiss');(x.closest('.appc')||x.closest('.appbar')).remove();}});
+new MutationObserver(function(){if(document.querySelector('[data-app-card]:empty'))fill();}).observe(document.body||H,{childList:true,subtree:true});
+if(ios){document.addEventListener('DOMContentLoaded',function(){fill();bar();});}})();</script>
 <script is:inline>if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register(document.documentElement.dataset.base+'sw.js').catch(()=>{}));</script>
 </head>
 <body>
@@ -105,7 +128,7 @@ if(a.hasAttribute('data-share-page')||a.hasAttribute('data-share-site')){sbTrack
   <nav class="sb-tabs" aria-label="Main">{nav.filter(([, , k]) => !(k === 'gifts' && (isKids || noads))).map(([t, h, k]) => <a href={h} class={k === 'gifts' ? 'tab-gifts' : undefined} aria-current={section === k ? "page" : undefined}>{t}</a>)}</nav>
   <div class="hdr-right">
     {shareItem ? <button class="iconbtn hdr-share" data-share-page aria-label="Share this page">Share</button> : <button class="iconbtn hdr-share" data-share-site aria-label="Share SportingBrain">Share</button>}
-    {!isKids && <a class="iconbtn hdr-app" href={`${base}app.html`} data-track="app-header-click">App</a>}<button class="iconbtn" data-dark aria-label="Switch dark mode">Dark</button>
+    {!isKids && <a class="iconbtn hdr-app" href={`${base}app.html`} data-app-install="header">App</a>}<button class="iconbtn" data-dark aria-label="Switch dark mode">Dark</button>
   </div>
 </div>
 
