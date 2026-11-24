@@ -154,8 +154,8 @@ fill();new MutationObserver(fill).observe(document.getElementById('main')||docum
 document.addEventListener('submit',function(e){var f=e.target;if(!f.matches||!f.matches('form[data-nl]'))return;e.preventDefault();var m=f.querySelector('.nlb-msg'),i=f.querySelector('input[type=email]'),b=f.querySelector('button');var v=(i.value||'').trim();
 if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){m.textContent='Please enter a full email address, like name@example.com.';i.focus();return;}
 var hp=f.querySelector('[name=email_address_check]');if(hp&&hp.value)return;b.disabled=true;b.textContent='Joining';
-var d=new FormData();d.append('EMAIL',v);d.append('email_address_check','');d.append('locale','en');
-fetch(U,{method:'POST',mode:'no-cors',body:d}).then(function(){f.classList.add('ok');m.textContent='Nearly there. Check your inbox and click the link in our email to confirm. It can take a minute, and may land in junk.';try{localStorage.setItem('sb_nl','1')}catch(e){}}).catch(function(){b.disabled=false;b.textContent='Join free';m.innerHTML='That didn\'t go through. <a href="'+U+'" target="_blank" rel="noopener">Sign up here instead</a>.';});});})();</script>
+var d=new URLSearchParams();d.append('EMAIL',v);d.append('email_address_check','');d.append('locale','en');
+fetch(U+(U.indexOf('?')>-1?'&':'?')+'isAjax=1',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:d.toString()}).then(function(){f.classList.add('ok');m.textContent='Nearly there. Check your inbox and click the link in our email to confirm. It can take a minute, and may land in junk.';try{localStorage.setItem('sb_nl','1')}catch(e){}}).catch(function(){b.disabled=false;b.textContent='Join free';m.innerHTML='That didn\'t go through. <a href="'+U+'" target="_blank" rel="noopener">Sign up here instead</a>.';});});})();</script>
 <footer class="site-foot"><div class="wrap wide foot-grid">
   <div><a class="wordmark" href={base}><span class="mark" aria-hidden="true">SB</span><span>SportingBrain</span></a>
     <p>The smartest free sports site in the world. Real matches, real data, stories nobody else tells. No betting, ever.</p></div>
