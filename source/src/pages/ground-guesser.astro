@@ -3,9 +3,10 @@ import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
 import { VENUES } from '../data/venues.js';
 import META from '../data/venues.json';
+import FOCUS from '../data/venue_focus.json';
 const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
 const G = VENUES.map(v => ({ k: slug(v[0]), v })).filter(x => META[x.k]).map(({ k, v }) => ({
-  k, name: v[1], alt: v[2], sport: v[3], place: v[4], known: v[5], file: META[k].file, opened: META[k].opened, by: META[k].author, lic: META[k].licence, src: META[k].source,
+  k, name: v[1], alt: v[2], sport: v[3], place: v[4], known: v[5], file: META[k].file, opened: META[k].opened, by: META[k].author, lic: META[k].licence, src: META[k].source, f: FOCUS[k] || [50, 50],
 }));
 const sports = [...new Set(G.map(g => g.sport))];
 ---
@@ -27,16 +28,18 @@ const sports = [...new Set(G.map(g => g.sport))];
     import { ukDayNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share, SITE, BASE } from '../scripts/play.js';
     const G = JSON.parse(document.getElementById('ggData').textContent), box = document.getElementById('gg');
     showChallenge(document.getElementById('vs'));
-    const ZOOM = [420, 290, 200, 140, 100], D = ukDayNo(), KEY = 'gg2_' + D;
+    const ZOOM = [450, 300, 200, 140, 100], D = ukDayNo(), KEY = 'gg3_' + D;
     const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/&/g, 'and').replace(/[^a-z0-9 ]/g, ' ').replace(/\b(the|stadium|ground|park|arena|racecourse|circuit|golf|club|links)\b/g, ' ').replace(/\s+/g, ' ').trim();
     const isRight = (g, t) => { const n = norm(t); if (!n) return false; return [g.name, ...g.alt].some(a => norm(a) === n); };
     const found = () => store.get('gg_found', []);
     if (!G.length) { box.innerHTML = '<p class="pg-q">The grounds are being loaded tonight. Come back tomorrow.</p>'; }
     // Today's five: three football grounds and two from other sports, the same for everyone today.
-    function todays() { const r = seeded(D * 97 + 5), fb = shuffle(G.filter(g => g.sport === 'Football'), r), ot = shuffle(G.filter(g => g.sport !== 'Football'), r);
-      return shuffle([...fb.slice(0, 3), ...ot.slice(0, 2)], r).map(g => g.k); }
+    // Today's five step through a fixed order, so no ground comes back until every one has been used.
+    function todays() { const fb = shuffle(G.filter(g => g.sport === 'Football'), seeded(7001)), ot = shuffle(G.filter(g => g.sport !== 'Football'), seeded(7002));
+      const pick = (a, n, per) => Array.from({ length: n }, (_, j) => a[(D * per + j) % a.length]);
+      return shuffle([...pick(fb, 3, 3), ...pick(ot, 2, 2)], seeded(D * 97 + 5)).map(g => g.k); }
     let mode = 'daily', state = null;
-    function newRound(k, i) { const r = seeded(D * 31 + i * 7 + k.length); return { k, step: 0, wrong: [], done: false, won: false, fx: 20 + Math.floor(r() * 60), fy: 12 + Math.floor(r() * 30) }; }
+    function newRound(k, i) { const r = seeded(D * 31 + i * 7 + k.length); const f = (G.find(g => g.k === k) || {}).f || [50, 50]; const j = () => Math.floor(r() * 9) - 4; return { k, step: 0, wrong: [], done: false, won: false, fx: Math.max(0, Math.min(100, f[0] + j())), fy: Math.max(0, Math.min(100, f[1] + j())) }; }
     function load() {
       if (mode === 'daily') { state = store.get(KEY, null); if (!state || !state.rounds) state = { rounds: todays().map((k, i) => newRound(k, i)), i: 0 }; }
       else if (mode === 'endless') { state = { rounds: [], i: 0, lives: 3, score: 0 }; addEndless(); }
@@ -44,7 +47,7 @@ const sports = [...new Set(G.map(g => g.sport))];
     }
     function addEndless() { const s = document.getElementById('ggSel').value, pool = G.filter(g => !s || g.sport === s), seen = state.rounds.map(r => r.k);
       const left = pool.filter(g => !seen.includes(g.k)), g = (left.length ? left : pool)[Math.floor(Math.random() * (left.length ? left : pool).length)];
-      const r = newRound(g.k, Math.floor(Math.random() * 9999)); r.fx = 20 + Math.floor(Math.random() * 60); r.fy = 12 + Math.floor(Math.random() * 30); state.rounds.push(r); }
+      const r = newRound(g.k, Math.floor(Math.random() * 9999)); state.rounds.push(r); }
     const save = () => { if (mode === 'daily') store.set(KEY, state); };
     const pts = r => r.won ? 5 - r.step : 0;
     function clues(g, step, done) { const c = [];

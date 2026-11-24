@@ -220,7 +220,7 @@ if(P==='home'){
   const FIX=['connections','who-am-i','ground-guesser'];
   const rot=shuffle(POOL.filter(x=>!FIX.includes(x)),seeded(DAY*13)).slice(0,5);
   const dk=ukKey(), ud=Math.floor(Date.UTC(p.y,p.m-1,p.d)/86400000);
-  const doneToday={connections:store.get('cx_'+ud,null)?.done,'who-am-i':store.get('wa_'+ud,null)?.done,'ground-guesser':!!store.get('gg2_'+ud,null),'call-it':!!store.get('ci_'+DAY,null),'call-it-football':!!store.get('fc_'+ud,null),daily:!!store.get('daily_'+dk,null)};
+  const doneToday={connections:store.get('cx_'+ud,null)?.done,'who-am-i':store.get('wa_'+ud,null)?.done,'ground-guesser':!!store.get('gg3_'+ud,null),'call-it':!!store.get('ci_'+DAY,null),'call-it-football':!!store.get('fc_'+ud,null),daily:!!store.get('daily_'+dk,null)};
   const tile=sl=>{const g=PLAY.find(x=>x[0]===sl); if(!g) return ''; const d=doneToday[sl], daily=sl in doneToday;
     return `<a class="gt" href="${BASE}${sl}.html" style="--c:${g[4]}"><span class="gt-ic">${icon(sl,40)}</span><span class="gt-tx"><b>${esc(g[1])}</b><small>${esc(g[2])}</small>${daily?`<em class="${d?'done':'new'}">${d?'Played today':'New today'}</em>`:''}</span></a>`;};
   const W3=WEEK.stories.slice(0,4), lead=W3[0];
@@ -500,7 +500,7 @@ document.querySelectorAll('[data-share-text]').forEach(b=>b.addEventListener('cl
 (function(){
   const slug=location.pathname.replace(/\.html$/,'').split('/').filter(Boolean).slice(-2).join('/').replace(/^sportingbrain\//,'');
   const name=slug.split('/').pop();
-  const GAMES={'call-it':['ci_'],'call-it-football':['fc_'],'connections':['cx_'],'who-am-i':['wa_'],'ground-guesser':['gg2_'],'daily':['daily_'],'weekly-expert':['expert2_'],
+  const GAMES={'call-it':['ci_'],'call-it-football':['fc_'],'connections':['cx_'],'who-am-i':['wa_'],'ground-guesser':['gg3_','gg2_'],'daily':['daily_'],'weekly-expert':['expert2_'],
     'pub-quiz':[],'countdown':[],'is-it-a-foul':[],'stat-attack':[],'stats-detective':[],'rewind':[],'advent':[],'bingo':['bingo'],'higher-or-lower':[],'true-or-false':[],'speed-round':[],'name-them-all':[],'sports-grid':['sg_'],
     'challenge':[],'pick-your-xi':['xi_draft'],'guess-the-sport':[],'the-grid':[],'guess-the-player':[],'which-sport':[],'6-8':[],'9-12':[],'archive':[]};
   if(!(name in GAMES)) return;
