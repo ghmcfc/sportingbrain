@@ -129,6 +129,8 @@ function welcome(USP, force){ USP=USP||DEFAULT_USP;
   const esc_=e=>{ if(e.key==='Escape') close(); };
   document.addEventListener('keydown',esc_);
   w.querySelector('.w-x').onclick=close; w.querySelector('.w-look').onclick=close; w.querySelector('.w-back').onclick=close;
+  // On the home page the challenge is on this page: close the pop-up and scroll to it. Elsewhere the link goes home.
+  w.querySelector('.btn.gold').onclick=e=>{ const h=document.getElementById('hook'); if(h){ e.preventDefault(); close(); setTimeout(()=>h.scrollIntoView({behavior:'smooth',block:'start'}),260); } };
   let y0=null; w.querySelector('.w-box').addEventListener('touchstart',e=>y0=e.touches[0].clientY,{passive:true}); w.querySelector('.w-box').addEventListener('touchend',e=>{ if(y0!==null && e.changedTouches[0].clientY-y0>60) close(); y0=null; });
   setTimeout(()=>w.querySelector('.btn.gold').focus(),50);
 }
