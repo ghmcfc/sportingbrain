@@ -266,7 +266,7 @@ if(P==='home'){
 
   ${AD2}
   <div class="three">
-    <section><header class="sh"><h2>${dlabel(mdNow)} in sport</h2><a href="${BASE}on-this-day.html">More</a></header>
+    <section><header class="sh"><h2>${dlabel(mdNow)} in sport</h2><a href="${BASE}on-this-day.html">More from On This Day</a></header>
       <ul class="otd-mini">${otd.map(e=>`<li><b>${e.y}</b><p>${esc(e.t)}</p></li>`).join('')}</ul></section>
     <section><header class="sh"><h2>Flashback</h2><a href="${BASE}flashback.html">All</a></header>
       <a class="story" href="${BASE}flashback/${fb.id}.html">${figure(fbPh)}<span class="kick">${esc(fb.sport)}, ${yrOf(fb)}${fbAnn?` · ${esc(fbAnn)}`:''}</span><h3>${esc(fb.title)}</h3><p>${esc(fb.standfirst)}</p></a></section>
@@ -359,13 +359,21 @@ if(P==='daily'){
       markPlayed('daily'); if(save){ store.set(`daily_${key}_${level}`,{marks}); store.set('daily_'+key,{marks}); if(QD===DAY){ const y=new Date(); y.setDate(y.getDate()-1); const last=store.get('lastday',null); let st=store.get('streak',0); const y2=new Date(); y2.setDate(y2.getDate()-2);
         if(last===ukKey(y)) st=st+1; else if(last===key) st=st; else if(last===ukKey(y2) && st>0 && saverAvailable()){ st=st+1; store.set('saver_week',isoWeek()); setTimeout(()=>toast('Streak saver used. Your streak lives on.'),800); } else st=1; store.set('streak',st); store.set('lastday',key); store.set('played',store.get('played',0)+1); if(score>brainScore) store.set('beaten',store.get('beaten',0)+1); } }
       const line=score>brainScore?(level<4?"You beat the Brain. Try Expert.":"You beat the Brain on Expert. Take a bow."):score===brainScore?"Level with the Brain. Rematch tomorrow.":"The Brain wins this one. Same time tomorrow?";
-      g.innerHTML=`<div class="small">${LV[level].n}</div><div class="score">${score}/5</div><div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${line}</div></div>
+      const grid=marks.map(m=>m?'🟩':'🟥').join('');
+      const card=`SportingBrain #${QD} 🧠 ${LV[level].n}\n${grid}  ${score}/5\nThe Brain got ${brainScore}/5. Beat that.\n${SITE}daily.html?level=${level}`;
+      const next=(score>brainScore&&level<4)?`<button class="btn ghost" data-lv="${level+1}">Try ${LV[level+1].n} next</button>`:`<a class="btn ghost" href="${BASE}call-it.html" data-track="daily-next-callit">Play Call It next</a>`;
+      g.innerHTML=`<div class="res-top"><div><div class="small">${LV[level].n} · Beat the Brain #${QD}</div><div class="score">${score}/5</div></div><div class="res-grid" aria-label="${score} right out of 5">${grid}</div></div>
+        <div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${line} The Brain got ${brainScore}/5.</div></div>
+        <div class="res-cta"><p class="res-ask">${score>=brainScore?'Think your mates can match that?':'Bet your mates do worse.'} Send them your score.</p>
+          <a class="btn gold res-main" id="shWa" target="_blank" rel="noopener" data-track="daily-result-whatsapp">Challenge my mates on WhatsApp</a>
+          <p class="res-more"><button type="button" class="linkbtn" id="sh" data-track="daily-result-share">More ways to share</button> · <button type="button" class="linkbtn" id="shCopy" data-track="daily-result-copy">Copy my score</button></p></div>
         <div class="stats"><div><b>${store.get('streak',1)}</b>day streak</div><div><b>${store.get('played',1)}</b>played</div><div><b>${store.get('beaten',0)}</b>times you beat the Brain</div></div>
-        <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn pink" id="sh">Share my score</button>${level<4?`<button class="btn ghost" data-lv="${level+1}">Try ${LV[level+1].n}</button>`:''}<a class="btn ghost" href="${BASE}call-it.html">Play Call It</a></div><p class="small">New questions in <span class="countdown" id="cd"></span></p>`;
-      g.insertAdjacentHTML('beforeend',endNavHTML());
+        <div class="row res-next">${next}</div><p class="small">New questions in <span class="countdown" id="cd"></span></p>`;
       g.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ level=+b.dataset.lv; store.set('daily_level',level); render(); window.scrollTo({top:0,behavior:'smooth'}); });
-      const card=`SportingBrain #${QD} 🧠 ${LV[level].n}\n${marks.map(m=>m?'🟩':'🟥').join('')}  ${score}/5\nThe Brain got ${brainScore}/5.\n${SITE}daily.html?level=${level}`;
-      $('#sh').onclick=()=>share(card); countdown($('#cd'));
+      $('#shWa').href='https://wa.me/?text='+encodeURIComponent(card);
+      $('#sh').onclick=()=>share(card);
+      $('#shCopy').onclick=()=>{ (navigator.clipboard?navigator.clipboard.writeText(card):Promise.reject()).then(()=>{ $('#shCopy').textContent='Copied'; setTimeout(()=>$('#shCopy').textContent='Copy my score',2000); }).catch(()=>prompt('Copy your score',card)); };
+      countdown($('#cd'));
       if(save && score>brainScore) confetti();
     }
     if(saved&&saved.marks&&saved.marks.length===N) finish(saved.marks,false);
@@ -496,7 +504,7 @@ document.querySelectorAll('[data-share-text]').forEach(b=>b.addEventListener('cl
 // ================= GAME PAGE HEADER: the game's own icon and colour =================
 (function(){ if(KIDZ) return; const sl=location.pathname.replace(/\.html$/,'').split('/').pop(); const g=PLAY.find(x=>x[0]===sl); if(!g) return;
   let h=document.querySelector('main .pg-head');
-  if(!h && sl!=='daily' && sl!=='challenge'){ h=document.createElement('header'); h.className='pg-head'; h.innerHTML=`<h1>${esc(g[1])}</h1><p>${esc(g[2])}</p>`; main.prepend(h); main.classList.add('has-gh'); }
+  if(!h && sl!=='daily' && sl!=='challenge' && !main.querySelector('h1')){ h=document.createElement('header'); h.className='pg-head'; h.innerHTML=`<h1>${esc(g[1])}</h1><p>${esc(g[2])}</p>`; main.prepend(h); main.classList.add('has-gh'); }
   if(!h) return;
   h.classList.add('game-head'); h.style.setProperty('--c',g[4]); const s=document.createElement('span'); s.className='gh-ic'; s.innerHTML=icon(sl,52); h.prepend(s); })();
 
@@ -512,15 +520,15 @@ document.querySelectorAll('[data-share-text]').forEach(b=>b.addEventListener('cl
   const pre=GAMES[name], up=ukParts(), abs=Math.floor(Date.UTC(up.y,up.m-1,up.d)/86400000), dkey=ukKey();
   const ends=[DAY, abs, Math.floor((abs+3)/7)].map(n=>'_'+n);
   const keys=()=>Object.keys(localStorage).filter(k=>pre.some(p=>k.startsWith('sb_'+p)) && (name==='bingo'||name==='pick-your-xi'||ends.some(e=>k.endsWith(e))||k.includes(dkey)));
-  const host=document.querySelector('.pg-head')||document.querySelector('.kz-hero')||main; if(!host) return;
+  const host=main; if(!host) return;
   const b=document.createElement('button'); b.type='button'; b.className='btn ghost reset-btn'; b.textContent='Start again';
-  b.setAttribute('aria-label','Start this game again from the beginning');
+  b.setAttribute('aria-label','Start again: clear this game and play it from the beginning');
   let armed=false;
   b.onclick=()=>{ const k=keys();
     if(k.length && !armed){ armed=true; b.textContent='Tap again to clear today\'s answers'; setTimeout(()=>{armed=false; b.textContent='Start again';},4000); return; }
     k.forEach(x=>localStorage.removeItem(x)); const u=new URL(location.href); ['vs','s','x','r'].forEach(p=>u.searchParams.delete(p)); location.replace(u.href); };
   const wrap=document.createElement('div'); wrap.className='reset-wrap'; wrap.appendChild(b);
-  if(host===main) main.prepend(wrap); else host.appendChild(wrap);
+  if(host===main) main.appendChild(wrap); else host.appendChild(wrap);
 })();
 })();
 

@@ -4,7 +4,7 @@ globalThis.SB_SPORT_COLOURS = {
   "Football":"#1E8E3E","Women's football":"#1E8E3E","Cricket":"#B08D3C","Formula 1":"#D32F2F","Rugby union":"#1F3864",
   "Rugby":"#1F3864","Darts":"#212121","Tennis":"#7CB342","Golf":"#2E7D32","Athletics":"#EF6C00","Olympics":"#1565C0",
   "Snooker":"#00695C","Netball":"#AD1457","Cycling":"#F9A825","Boxing":"#B71C1C","Basketball":"#E65100","Ice hockey":"#0277BD",
-  "Badminton":"#6A1B9A","Horse racing":"#5D4037","Swimming":"#0097A7","Unusual":"#8E24AA","Satire":"#455A64","Family":"#F57C00","Women's sport":"#C2185B"
+  "Badminton":"#6A1B9A","Horse racing":"#5D4037","Swimming":"#0097A7","Unusual":"#8E24AA","Satire":"#455A64","Family":"#B45309","Women's sport":"#C2185B"
 };
 
 globalThis.SB_STORIES = [
@@ -170,7 +170,7 @@ globalThis.SB_CHALLENGES = {
     {q:"What is hurling's All-Ireland trophy called?",o:["Sam Maguire Cup","Liam MacCarthy Cup","Christy Ring Cup","Brendan Martin Cup"],a:1},
     {q:"Which country has won the most Olympic gold medals in table tennis?",o:["Japan","South Korea","Sweden","China"],a:3},
     {q:"In which city is the Australian Football League Grand Final traditionally played?",o:["Sydney","Melbourne","Adelaide","Perth"],a:1}]},
-  family:{title:"The Friday Family Challenge", sub:"Kids' questions and grown-ups' questions. Add up a family score!", colour:"#F57C00", qs:[
+  family:{title:"The Friday Family Challenge", sub:"Kids' questions and grown-ups' questions. Add up a family score!", colour:"#B45309", qs:[
     {q:"KIDS: What shape is a football pitch?",o:["Circle","Rectangle","Triangle","Star"],a:1},
     {q:"GROWN-UPS: What was the score in the 1966 World Cup final after 90 minutes?",o:["1-1","2-2","3-2","2-1"],a:1},
     {q:"KIDS: Which sport uses a racket and a fuzzy yellow ball?",o:["Tennis","Golf","Cricket","Rugby"],a:0},

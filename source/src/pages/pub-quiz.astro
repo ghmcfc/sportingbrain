@@ -41,7 +41,7 @@ const PICS = VENUES.map(v => [slug(v[0]), v]).filter(([k]) => META[k]).map(([k, 
       if (view === 'teams') out.innerHTML = `<h2>Team answer sheet</h2><p>Team name: ______________________________</p>` + Q.map(([n], r) => `<div class="pq-round"><h3>${n}</h3><ol class="pq-sheet">${'<li></li>'.repeat(10)}</ol><p><b>Round total: ____ / 10</b></p></div>`).join('') + `<div class="pq-round"><h3>Picture round</h3><ol class="pq-sheet">${'<li></li>'.repeat(10)}</ol><p><b>Round total: ____ / 10</b></p></div>` + '<p><b>Grand total: ____ / 50</b></p>';
       if (view === 'pics') { const P = pics(wk);
         out.innerHTML = `<h2>Picture round: name the ground</h2><p class="pg-note">Week of ${mondayOf(wk)}. Print this page for each team. Answers and photo credits are on the host sheet.</p>
-          <div class="pq-pics">${P.map((p, k) => `<figure><img src="${BASEP}photos/venues/${p[3]}" alt="Ground ${k + 1}" loading="lazy"><figcaption><b>${k + 1}.</b> ____________________</figcaption></figure>`).join('')}</div>`; }
+          <div class="pq-pics">${P.map((p, k) => `<figure><img src="${BASEP}photos/venues-sm/${p[3]}" alt="Ground ${k + 1}" loading="lazy"><figcaption><b>${k + 1}.</b> ____________________</figcaption></figure>`).join('')}</div>`; }
       if (view === 'notes') out.innerHTML = `<h2>Host notes</h2><ol>
         <li>Print the host sheet for yourself and one team answer sheet per team. Teams of up to six work best.</li>
         <li>Read each question twice. Allow about a minute per question and five minutes at the end of each round for teams to finish.</li>

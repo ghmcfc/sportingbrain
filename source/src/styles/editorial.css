@@ -721,7 +721,7 @@ header.top .hdr-share{border-color:#F2A900;color:#F2A900}
 .sq-top{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:14px;margin-bottom:4px;padding:10px 12px;background:#fff;border:1px solid #D8DEE8;border-radius:12px}
 .sq-top-l{font-family:var(--display);font-weight:800;font-size:1.05rem;margin-right:4px}
 .sqt{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:6px 12px;border-radius:999px;border:1.5px solid #0F1E36;background:#fff;color:#0F1E36;font:inherit;font-size:.92rem;font-weight:700;text-decoration:none;cursor:pointer}
-.sqt.wa{background:#1F8B4C;border-color:#1F8B4C;color:#fff}
+.sqt.wa{background:#157A3E;border-color:#157A3E;color:#fff}
 .sqt:hover{background:#0F1E36;color:#fff}.sqt.wa:hover{background:#176B3A}
 .sqt:focus-visible{outline:3px solid #F2A900;outline-offset:2px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
@@ -825,3 +825,42 @@ header.top .hdr-app{border-color:#F2A900;color:#0F1E36;background:#F2A900}
 @media(max-width:480px){.nl-bar span b+*{display:none}.nl-bar{font-size:.9rem}}
 body.dark .nl-bar{background:#2a2410;color:#fff}body.dark .nl-bar-x{color:#fff}
 .app-doubt{color:#AAB6C9;font-size:.9rem;margin:8px 0 0}
+/* Beat the Brain result: one main action */
+.res-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.res-grid{font-size:1.9rem;letter-spacing:2px;line-height:1}
+.res-cta{margin:16px 0 14px;padding:16px;border:2px solid #F2A900;border-radius:12px;background:#FFF9E8}
+.res-ask{margin:0 0 10px;font-weight:700;color:#0F1E36}
+.res-main{display:flex!important;justify-content:center;align-items:center;width:100%;min-height:52px;font-size:1.15rem;text-align:center;box-sizing:border-box}
+.res-more{margin:10px 0 0;text-align:center;font-size:.95rem;color:#5A6B85}
+.linkbtn{background:none;border:0;padding:10px 4px;min-height:44px;font:inherit;color:#0F1E36;text-decoration:underline;cursor:pointer}
+.res-next{margin:6px 0 4px}
+body.dark .res-cta{background:#2a2410}body.dark .res-ask,body.dark .linkbtn{color:#fff}
+/* Audit fixes: tap targets, CTA hierarchy, contrast */
+header.top .iconbtn{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
+header.top .hdr-app{background:transparent;color:#F2A900;border-color:#F2A900}
+.sqt{min-height:44px;min-width:44px;justify-content:center}
+.sqt.wa{background:#157A3E;border-color:#157A3E}
+.botd-spine b{color:#fff}
+.reset-btn,.chip{min-height:44px}
+.xi-pitch.is-pitch{max-width:100%;width:100%;box-sizing:border-box}
+@media(max-width:560px){.xi-pitch.is-pitch{min-height:0}.is-pitch .xi-slot{font-size:.72rem;min-height:48px}}
+.bingo{grid-template-columns:repeat(5,minmax(0,1fr))}.bingo button{overflow-wrap:anywhere;hyphens:auto;min-width:0}
+@media(max-width:420px){.bingo button{font-size:.68rem;padding:3px}}
+/* Home: one gold action per view. Secondary actions on the board and the book card are outlines. */
+.fp-side .board .btn.gold{background:transparent;color:#F2A900;border:2px solid #F2A900}
+.botd .btn.gold{background:transparent;color:#0F1E36;border:2px solid #0F1E36}
+body.dark .botd .btn.gold{color:#fff;border-color:#fff}
+/* Layout stability: reserve space for script-drawn games, stop header reflow while fonts load */
+main.jsdraw{min-height:calc(100vh - 110px)}
+header.top .wordmark{white-space:nowrap;min-width:0;flex-shrink:1;overflow:hidden}
+header.top .hdr-right{flex-shrink:0;flex-wrap:nowrap}
+header.top .wrap{row-gap:0}
+header.top .wordmark{flex:1 1 0}
+@media (min-width:900px){header.top .wordmark{flex:0 0 auto}}
+/* Reserve room for the game icon before the script adds it (no layout shift) */
+main.is-game > .pg-head:not(.game-head){padding-top:72px}
+@media (min-width:641px){main.is-game > .pg-head:not(.game-head){padding-top:0;padding-left:102px;min-height:84px}}
+main > .reset-wrap{margin:18px 0 4px}
+main.is-game{min-height:calc(100vh - 110px)}
+.otd-y small{opacity:1;color:#4A5568}
+body.dark .otd-y small{color:#C9D3E3}

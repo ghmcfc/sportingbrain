@@ -13,7 +13,7 @@ export function photoFor(text, sport, seed = 0, venue = '') {
   let v = venue ? V.find(x => x.name === venue || x.alt.includes(venue.toLowerCase())) : null;
   if (!v) v = V.find(x => [x.name, ...x.alt].some(n => hit(t, n)));
   if (!v) { const pool = V.filter(x => x.sport === SPORT(sport)); if (pool.length) { v = pool[Math.abs(seed) % pool.length]; file = true; } }
-  if (v) return { src: `${BASE}photos/venues/${v.m.file}`, alt: `${file ? 'File photo of ' : ''}${v.name}, ${v.place}`, credit: `${file ? 'File photo: ' : ''}${v.name}. Photo: ${v.m.author}, ${v.m.licence}, Wikimedia Commons` };
+  if (v) return { src: `${BASE}photos/venues-sm/${v.m.file}`, alt: `${file ? 'File photo of ' : ''}${v.name}, ${v.place}`, credit: `${file ? 'File photo: ' : ''}${v.name}. Photo: ${v.m.author}, ${v.m.licence}, Wikimedia Commons` };
   const u = globalThis.SB_PHOTO ? globalThis.SB_PHOTO(sport, 800) : null, c = globalThis.SB_CREDIT ? globalThis.SB_CREDIT(sport) : null;
   if (u && c) return { src: u, alt: `File photo: ${c.what}`, credit: `File photo: ${c.what}. Photo: ${c.by}, Wikimedia Commons` };
   return u ? { src: u, alt: `${sport} artwork`, credit: 'SportingBrain artwork' } : null;

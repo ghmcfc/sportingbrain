@@ -42,6 +42,8 @@ export const SEO = {
   '/who-am-i.html': { title: 'Who Am I? Sports Star Guessing Game | SportingBrain', description: 'Five clues, hardest first. Name the sporting great in as few as you can. Men and women, every sport. A new player every day. Free, no sign-up.' },
   '/gift-guide.html': { title: 'Gifts for Sports Fans: Christmas 2026 Guide | SportingBrain', description: 'The best Christmas gifts for sports fans: darts boards, Subbuteo, Wisden, quiz buzzers, sports books and stocking fillers, picked by SportingBrain.' },
   '/app.html': { title: 'Get the SportingBrain App, Free | SportingBrain', description: 'Put SportingBrain on your phone or computer in ten seconds. Free, no app store, no sign-up. One tap from your home screen to today\'s games.' },
+  '/kids.html': { title: 'Kids Zone: Free Sports Games for Kids | SportingBrain', description: 'Free, ad-free sports games and quizzes for children aged 6 to 12. No sign-up, no data collected, no adverts. Safe sport fun for the whole family.' },
+  '/settings.html': { title: 'Your Settings and Saved Progress | SportingBrain', description: 'Change your SportingBrain settings: dark mode, dyslexia-friendly font, saved scores and streaks. Everything stays on your own device.' },
   '/about.html': { title: 'About SportingBrain and Your Privacy', description: 'Who runs SportingBrain, what we do and how we look after your privacy: no accounts, no tracking cookies, and your email used only for the newsletter.' },
-  '/credits.html': { title: 'Photo Credits | SportingBrain', description: 'Photo credits for SportingBrain: every Wikimedia Commons photograph we use, with its photographer, licence and source, plus notes on our own artwork.' },
+  '/credits.html': { title: 'Photo Credits and Image Licences | SportingBrain', description: 'Photo credits for SportingBrain: every Wikimedia Commons photograph we use, with its photographer, licence and source, plus notes on our own artwork.' },
 };

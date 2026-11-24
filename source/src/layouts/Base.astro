@@ -6,6 +6,9 @@ import '@fontsource-variable/source-serif-4/opsz';
 import '@fontsource-variable/source-serif-4/opsz-italic';
 import '../styles/global.css';
 import '../styles/editorial.css';
+import fBS900 from '@fontsource/big-shoulders-display/files/big-shoulders-display-latin-900-normal.woff2?url';
+import fBS800 from '@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2?url';
+import fSS from '@fontsource-variable/source-serif-4/files/source-serif-4-latin-opsz-normal.woff2?url';
 interface Props { title: string; description: string; page?: string; wide?: boolean; image?: string; type?: string; noindex?: boolean; noads?: boolean; }
 const { title, description, page = '', wide = false, image, type = 'website', noindex = false, noads = false } = Astro.props;
 import ADS from '../data/ads.json';
@@ -13,6 +16,7 @@ import AN from '../data/analytics.json';
 import { amz, picksFor } from '../data/shop.js';
 import { SEO } from '../data/seo.js';
 import { SHARE } from '../data/sharetext.js';
+import { PLAY as PLAYLIST } from '../data/playlist.js';
 const adsOn = !!ADS.client && !noads && !/^\/kids/.test(Astro.url.pathname);
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
 const pathKey = '/' + Astro.url.pathname.replace(/^\//, '').replace(base.replace(/^\//, ''), '');
@@ -74,6 +78,9 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@_sportingbrain">
 <meta name="theme-color" content="#0F1E36">
+<link rel="preload" href={fBS900} as="font" type="font/woff2" crossorigin>
+<link rel="preload" href={fBS800} as="font" type="font/woff2" crossorigin>
+<link rel="preload" href={fSS} as="font" type="font/woff2" crossorigin>
 <link rel="manifest" href={`${base}manifest.webmanifest`}>
 <link rel="apple-touch-icon" href={`${base}assets/apple-touch-icon.png`}>
 <link rel="icon" href={`${base}assets/mark.svg`} type="image/svg+xml">
@@ -112,7 +119,7 @@ if(a.hasAttribute('data-share-page')||a.hasAttribute('data-share-site')){sbTrack
   <button type="button" class="sqt" data-sq="copy">Copy link</button>
   <button type="button" class="sqt nat" data-sq="native" hidden>More</button>
 </div>}
-<main class:list={['wrap', { wide }]} data-page={page} id="main">{S.h1 && page && <div class="crawl"><h1>{S.h1}</h1>{S.intro && <p class="teaser">{S.intro}</p>}</div>}<slot /></main>
+<main class:list={['wrap', { wide, jsdraw: !!(S.h1 && page), 'is-game': PLAYLIST.some(x => '/' + x[0] === path.replace(/\.html$/, '')) }]} data-page={page} id="main">{S.h1 && page && <div class="crawl"><h1>{S.h1}</h1>{S.intro && <p class="teaser">{S.intro}</p>}</div>}<slot /></main>
 {showNl && !slotPage && <aside class:list={["wrap nl-box", { wide }]} aria-labelledby="nlb-h">
   <div class="nlb-copy"><h2 id="nlb-h">The Weekly Brain</h2><p>The week's five hardest questions, the best Call It moment and a forgotten story. Every Friday. Free.</p></div>
   <form class="nlb-form" data-nl novalidate>

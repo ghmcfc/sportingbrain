@@ -1,6 +1,6 @@
 // Ball-by-ball cricket replay: scoreboard, worm chart, scrubber, wickets. Data from Cricsheet.
 // ball = [over, n, batter, bowler, batRuns, extras, total, wicket|null, extraType 'w'|'n'|'']
-const COL = ['#1F3864', '#E0A800'];
+const COL = ['#1F3864', '#8A6100'];
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 import { withFullNames } from '../data/cricnames.js';
 export function initReplay(m0) {
