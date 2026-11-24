@@ -17,7 +17,7 @@ const _feedsAll = import.meta.glob('../../data/feeds/cricket/*.json', { eager: t
 const _venue = sl => { const f = Object.entries(_feedsAll).find(([k]) => k.endsWith(`/${sl}.json`)); return f ? f[1].default.venue || '' : ''; };
 const MORE = REPLAYS.filter(x => x.slug !== r.slug).slice(0, 3).map(x => ({ x, v: _venue(x.slug), p: _pf(_venue(x.slug) + ' ' + x.title, 'Cricket', x.slug.length) }));
 ---
-<Base title={`Replay: ${r.title} | SportingBrain`} description={r.teaser} wide>
+<Base title={(r.title + ' | Replay').length <= 60 ? `${r.title} | Replay` : r.title} description={`${r.teaser} Replay every ball, with the live scoreboard, worm chart and every wicket.`} wide>
   <article class="replay">
     <span class="tag" style="background:#2E7D32">Cricket replay · ball by ball</span>
     <h1>{r.title}</h1>

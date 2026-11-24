@@ -6,7 +6,7 @@ const have = REPLAYS.filter(r => Object.keys(feeds).some(k => k.endsWith(`/${r.s
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 <Base title="Replays: great finals, ball by ball | SportingBrain" description="Replay the greatest cricket finals ball by ball: women's and men's, with worm charts, every wicket and a live scoreboard." wide>
-  <div class="sec"><h2>Replays</h2></div>
+  <div class="sec"><h1>Replays</h1></div>
   <p class="teaser">The great finals, rebuilt from real ball-by-ball data. Press play, or drag to any moment.</p>
   <div class="listgrid">{have.map(r => (
     <article class="card replay-card"><span class="tag" style="background:#2E7D32">Cricket</span><div class="title">{r.title}</div><p class="teaser">{r.teaser}</p><a class="stretch" href={`${base}replays/${r.slug}.html`} aria-label={`Replay: ${r.title}`}></a></article>

@@ -10,9 +10,25 @@ interface Props { title: string; description: string; page?: string; wide?: bool
 const { title, description, page = '', wide = false, image, type = 'website', noindex = false, noads = false } = Astro.props;
 import ADS from '../data/ads.json';
 import AN from '../data/analytics.json';
+import { SEO } from '../data/seo.js';
 const adsOn = !!ADS.client && !noads;
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const pathKey = '/' + Astro.url.pathname.replace(/^\//, '').replace(base.replace(/^\//, ''), '');
+const S = SEO[pathKey] || SEO[pathKey + '.html'] || {};
+// Titles over 60 characters get cut off in search results: drop the section, then the brand, before that happens.
+let pageTitle = S.title || title;
+if (pageTitle.length > 60) pageTitle = pageTitle.replace(' | Flashback | SportingBrain', ' | SportingBrain');
+if (pageTitle.length > 60) pageTitle = pageTitle.replace(/ \| SportingBrain( Kids Zone)?$/, '');
+let pageDesc = S.description || description || '';
+if (pageDesc.length > 160) { pageDesc = pageDesc.slice(0, 157).replace(/[\s,;:.]+\S*$/, '') + '…'; }
+const canonical = new URL(/\/index(\.html)?$/.test(Astro.url.pathname) ? base : Astro.url.pathname, Astro.site).href;
+const crumbs = (() => { const parts = pathKey.replace(/\.html$/, '').split('/').filter(Boolean); if (parts.length < 2) return null;
+  const SEC = { flashback: ['Flashback', 'flashback.html'], stories: ['True stories', 'stories.html'], replays: ['Replays', 'replays.html'], sports: ['Sport guides', 'sports.html'], kids: ['Kids Zone', 'kids.html'] };
+  const sec = SEC[parts[0]]; if (!sec) return null;
+  return { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'SportingBrain', item: new URL(base, Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: sec[0], item: new URL(base + sec[1], Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: pageTitle.replace(/ \|.*$/, ''), item: canonical } ] }; })();
 const ogImage = image || new URL(base + 'og.png', Astro.site).href;
 const nav = [
   ['Today', base, 'today'],
@@ -34,13 +50,16 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title}</title>
-<meta name="description" content={description}>
+<title>{pageTitle}</title>
+<meta name="description" content={pageDesc}>
 {noindex && <meta name="robots" content="noindex,nofollow">}
 <link rel="canonical" href={canonical}>
 <meta property="og:type" content={type}>
-<meta property="og:title" content={title}>
-<meta property="og:description" content={description}>
+<meta property="og:site_name" content="SportingBrain">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content={pageTitle.replace(/ \| SportingBrain$/, '')}>
+<meta property="og:description" content={pageDesc}>
+<meta property="og:image:alt" content={pageTitle.replace(/ \| SportingBrain$/, '')}>
 <meta property="og:url" content={canonical}>
 <meta property="og:image" content={ogImage}>
 <meta name="twitter:card" content="summary_large_image">
@@ -49,7 +68,7 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
 <link rel="manifest" href={`${base}manifest.webmanifest`}>
 <link rel="apple-touch-icon" href={`${base}assets/apple-touch-icon.png`}>
 <link rel="icon" href={`${base}assets/mark.svg`} type="image/svg+xml">
-<script type="application/ld+json" set:html={JSON.stringify(ld)} />
+<script type="application/ld+json" set:html={JSON.stringify(crumbs ? [...ld, crumbs] : ld)} />
 {adsOn && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS.client}`} crossorigin="anonymous"></script>}
 {adsOn && <script is:inline>window.SB_ADS=true;document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])').forEach(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}}),50));</script>}
 {AN.goatcounter && !noads && <script is:inline data-goatcounter={`https://${AN.goatcounter}.goatcounter.com/count`} async src="https://gc.zgo.at/count.js"></script>}
@@ -68,7 +87,7 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
 
 </header>
 <script>document.addEventListener('click',e=>{const a=e.target.closest('[data-mistake]');if(a)a.href='https://tally.so/r/zE7LVZ?page='+encodeURIComponent(location.pathname+location.search);});</script>
-<main class:list={['wrap', { wide }]} data-page={page} id="main"><slot /></main>
+<main class:list={['wrap', { wide }]} data-page={page} id="main">{S.h1 && page && <div class="crawl"><h1>{S.h1}</h1>{S.intro && <p class="teaser">{S.intro}</p>}</div>}<slot /></main>
 <footer class="site-foot"><div class="wrap wide foot-grid">
   <div><a class="wordmark" href={base}><span class="mark" aria-hidden="true">SB</span><span>SportingBrain</span></a>
     <p>The smartest free sports site in the world. Real matches, real data, stories nobody else tells. No betting, ever.</p></div>

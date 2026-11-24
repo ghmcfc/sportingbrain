@@ -290,7 +290,7 @@ if(P==='home'){
     const [title,sub,make,brain]=THEMES[wd], Q=make(), key='hook_'+DAY, saved=store.get(key,null);
     const PIC=['Women\'s football','Cricket','Rugby union','Golf','Tennis','Athletics','Football'][wd], pc=window.SB_CREDIT&&SB_CREDIT(PIC);
     if(pc){ el.style.setProperty('--hookbg',`url('${SB_PHOTO(PIC,1400)}')`); el.classList.add('has-photo'); }
-    const SHORT=['Women\'s Sport','Expert','Is It a Foul?','World Sport','Throwback','Family','Matchday'];
+    const SHORT=['Women\'s Sport','Expert','Is It a Foul?','World Sport','Throwback','Showdown','Matchday'];
     const week=`<div class="hook-week" aria-label="This week's challenges">${[1,2,3,4,5,6,0].map(d=>`<span class="${d===wd?'on':''}"><b>${WD[d].slice(0,3)}</b>${SHORT[d]}</span>`).join('')}</div>${pc?`<p class="hook-credit">Photo: ${esc(pc.what)}, ${esc(pc.by)} / Wikimedia Commons</p>`:''}`;
     const nx=COUNTDOWN.find(e=>Date.parse(e[0])>Date.now());
     const chip=nx?`<span class="hook-chip" id="hookChip" data-t="${nx[0]}">${esc(nx[1])} in <b></b></span>`:'';
@@ -468,7 +468,7 @@ if(P==='emoji'){
 if(P==='challenge'){
   const k=params.get('c')||'weekly'; const c=SB_CHALLENGES[k]||SB_CHALLENGES.weekly;
   document.title=`${c.title} | SportingBrain`;
-  main.innerHTML=`<section class="card" style="margin-top:14px;border-top:8px solid ${c.colour}"><span class="tag" style="background:${c.colour}">${esc(c.title)}</span><p class="small">${esc(c.sub)}</p><div id="q" aria-live="polite"></div></section>
+  main.innerHTML=`<section class="card" style="margin-top:14px;border-top:8px solid ${c.colour}"><h1 style="margin:.2em 0 .1em">${esc(c.title)}</h1><p class="small">${esc(c.sub)}</p><div id="q" aria-live="polite"></div></section>
   <div class="sec"><h2>Other challenges</h2></div><div class="g2">${Object.entries(SB_CHALLENGES).filter(([x])=>x!==k).map(([x,o])=>`<a class="ch" href="${BASE}challenge.html?c=${x}" style="background:${o.colour}"><b>${esc(o.title)}</b><small>10 questions</small></a>`).join('')}</div>`;
   runQuiz($('#q'), c.qs, {done:m=>{ const sc=m.filter(Boolean).length; store.set('ch_'+k,sc);
     $('#q').innerHTML=`<div class="score">${sc}/${c.qs.length}</div><div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${sc>=8?'Proper sports brain. Take a bow.':sc>=5?'Solid. Not spectacular. The Brain respects it.':'Ouch. Same time next week?'}</div></div><button class="btn pink wide" id="sh">Share my score</button>`;

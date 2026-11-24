@@ -641,3 +641,4 @@ body.dark .pg-sec{border-top-color:#fff}
 body.dark .sg-cell{background:#16263f;color:#fff;border-color:#2A3A55}
 .has-gh .ci-head h1{display:none}.has-gh .ci-head{margin-top:10px}
 @media(min-width:768px){.foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr 1fr}}
+.crawl ul{padding-left:1.2em}.crawl li{margin:.3em 0}
