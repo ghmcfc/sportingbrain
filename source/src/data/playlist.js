@@ -9,7 +9,7 @@ export const PLAY = [
   ['ground-guesser', 'Ground Guesser', 'A real venue, zoomed right in. Name it in as few steps as you can.', 'daily', '#0B6E4F'],
   ['sports-grid', 'Sports Grid', 'Nine squares, nine guesses. Name the club that fits the row and the column.', 'daily', '#0B6E4F'],
   ['name-them-all', 'Name Them All', 'Every Ballon d\'Or winner, every PDC champion. Type them all before the clock stops.', 'quiz', '#C8102E'],
-  ['daily', 'Beat the Brain', 'Five questions a day at four levels. The Brain has already had a go.', 'daily', '#0B6E4F'],
+  ['daily', 'Beat the Brain', 'Five hard questions a day, Hard or Expert. The Brain has already had a go.', 'daily', '#0B6E4F'],
   ['weekly-expert', 'Weekly Expert', 'Ten expert questions. New every Monday. For people who win pub quizzes.', 'quiz', '#C8102E'],
   ['pub-quiz', 'Pub and Club Quiz', 'Four rounds of ten, answer sheet and host notes. Free to print and run.', 'quiz', '#0F1E36'],
   ['countdown', 'Countdown Clock', 'The big events coming up, ticking down, with a quick quiz for each.', 'quiz', '#2A3A55'],
