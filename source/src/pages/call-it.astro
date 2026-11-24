@@ -37,7 +37,8 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       <div class="ci-team">${esc(m.team)} <span>${m.innings ? 'second innings' : 'first innings'}, v ${esc(m.opp)}</span></div>
       <div class="ci-score">${esc(m.score)} <small>after ${esc(m.at)} overs</small></div>
       ${m.need ? `<div class="ci-need">${esc(m.need)}</div>` : ''}
-      <div class="ci-bat">${m.pair.map(p => `<div><b>${esc(p[0])}</b> ${p[1]}${p === m.pair[0] ? ' <small>on strike</small>' : ''}</div>`).join('')}</div>`;
+      <div class="ci-bat">${m.pair.map(p => `<div><b>${esc(p[0])}</b> ${p[1]}${p === m.pair[0] ? ' <small>on strike</small>' : ''}</div>`).join('')}</div>
+      <div id="ciChart"></div>`;
     let picks = saved ? saved.picks : [];
     function renderCalls() {
       document.getElementById('ciCalls').innerHTML = m.qs.map((q, qi) => `<fieldset class="ci-q"><legend>${qi + 1}. ${esc(q.q)}</legend>
@@ -52,6 +53,33 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       const r = dr > rb[1] ? false : done ? dr >= rb[0] : null;
       const w = wp < 3 && dw > wp ? false : wp === 3 && dw >= 3 ? true : done ? Math.min(3, dw) === wp : null; return [r, w]; };
     const chip = (v, txt) => `<span class="ci-chip ${v === true ? 'ok' : v === false ? 'no' : ''}">${v === true ? '✅' : v === false ? '❌' : '⏳'} ${txt}</span>`;
+    // Run chart: the innings so far, the other side's innings when chasing, then the play-out drawn ball by ball.
+    function chartSVG(liveBalls, done) {
+      const c = m.chart, sm = innerWidth < 600, W = sm ? 360 : 640, H = sm ? 250 : 260, L = 34, R = 10, T = 14, Bm = 30, ov0 = parseFloat(m.at);
+      const live = liveBalls.map((b, k) => [ov0 + (k + 1) * (m.span / Math.max(1, m.play.length)), b[6], b[4]]);
+      const ymaxRaw = Math.max(c.target || 0, ...(c.other || []).map(p => p[1]), ...c.upto.map(p => p[1]), ...m.play.map(b => b[6]));
+      const ymax = Math.ceil(ymaxRaw * 1.08 / 25) * 25, X = o => L + o / m.overs * (W - L - R), Y = r => H - Bm - r / ymax * (H - T - Bm);
+      const line = pts => pts.map((p, i) => (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join(' ');
+      const step = m.overs <= 20 ? 5 : 10, grid = [];
+      for (let o = 0; o <= m.overs; o += step) grid.push(`<line x1="${X(o)}" y1="${T}" x2="${X(o)}" y2="${H - Bm}" class="g"/><text x="${X(o)}" y="${H - Bm + 16}" text-anchor="middle">${o}</text>`);
+      for (let r = 0; r <= ymax; r += ymax / 5) grid.push(`<line x1="${L}" y1="${Y(r)}" x2="${W - R}" y2="${Y(r)}" class="g"/><text x="${L - 6}" y="${Y(r) + 4}" text-anchor="end">${Math.round(r)}</text>`);
+      let band = '';
+      if (picks[0] !== undefined && locked) { const bb = bandOf(m.qs[0].opts[picks[0]]), hi = Math.min(bb[1], ymax - m.start[0]);
+        band = `<rect x="${X(ov0 + m.span) - 6}" y="${Y(m.start[0] + hi)}" width="12" height="${Math.max(2, Y(m.start[0] + bb[0]) - Y(m.start[0] + hi))}" class="band"><title>Your runs call</title></rect>`; }
+      const liveLine = live.length ? line([[ov0, m.start[0]], ...live.map(p => [p[0], p[1]])]) : '';
+      return `<figure class="ci-chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Run chart for ${esc(m.team)}${c.other ? ' against ' + esc(c.otherTeam) + '\'s innings' : ''}">
+        <g class="axis">${grid.join('')}</g>
+        ${c.target ? `<line x1="${L}" y1="${Y(c.target)}" x2="${W - R}" y2="${Y(c.target)}" class="tgt"/><text x="${W - R}" y="${Y(c.target) - 5}" text-anchor="end" class="tl">Target ${c.target}</text>` : ''}
+        ${c.other ? `<path d="${line(c.other)}" class="oth"/>` : ''}
+        <path d="${line(c.upto)}" class="now"/>
+        ${c.wk.map(w => `<circle cx="${X(w[0])}" cy="${Y(w[1])}" r="4" class="wk"/>`).join('')}
+        <line x1="${X(ov0)}" y1="${T}" x2="${X(ov0)}" y2="${H - Bm}" class="frz"/><text x="${X(ov0) + 4}" y="${T + 10}" class="tl">Frozen here</text>
+        ${band}
+        ${liveLine ? `<path d="${liveLine}" class="live"/>` : ''}
+        ${live.filter(p => p[2]).map(p => `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="5" class="wk live-wk"/>`).join('')}
+        <text x="${(L + W - R) / 2}" y="${H - 2}" text-anchor="middle">Overs</text>
+      </svg><figcaption><span class="k now"></span>${esc(m.team)}${c.other ? ` <span class="k oth"></span>${esc(c.otherTeam)}` : ''} ${locked ? '<span class="k live"></span>Play-out ' : ''}<span class="k wk"></span>Wicket${locked ? ' <span class="k band"></span>Your runs call' : ''}</figcaption></figure>`;
+    }
     let timer = null;
     function playOut() {
       const P = document.getElementById('ciPlay'); P.hidden = false; let j = 0; const feed = [];
@@ -59,6 +87,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       function frame(done) { const b = m.play[Math.max(0, j - 1)], runs = j ? b[6] : m.start[0], wk = j ? b[7] : m.start[1], dr = runs - m.start[0], dw = wk - m.start[1], st = status(dr, dw, done);
         P.innerHTML = head + `<div class="ci-live"><div class="ci-score">${runs}/${wk}</div><div>${esc(m.team)} · <b>${dr}</b> run${dr === 1 ? '' : 's'} and <b>${dw}</b> wicket${dw === 1 ? '' : 's'} since you called it</div></div>
           <div class="ci-chips">${chip(st[0], 'Your runs call: ' + esc(m.qs[0].opts[picks[0]]))}${chip(st[1], 'Your wickets call: ' + esc(m.qs[1].opts[picks[1]]))}</div>
+          ${chartSVG(m.play.slice(0, j), done)}
           <ol class="ci-feed">${feed.slice(-8).reverse().map(f => `<li><span>${f[0]}</span>${f[1]}</li>`).join('')}</ol>
           ${done ? '' : '<div class="pg-btns"><button class="btn ghost" id="ciSkip">Skip to the end</button></div>'}`;
         const sk = document.getElementById('ciSkip'); if (sk) sk.onclick = () => { clearInterval(timer); while (j < m.play.length) { const x = m.play[j++]; feed.push([x[0], esc(x[2]) + ' to ' + esc(x[1]) + ': ' + say(x)]); } finish(); }; }
@@ -75,6 +104,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
         <tr><td>Runs in ${m.span} overs</td><td>${esc(m.qs[0].opts[picks[0]])}</td><td>${dr} runs</td><td>${marks[0] ? '✅' : '❌'}</td></tr>
         <tr><td>Wickets in ${m.span} overs</td><td>${esc(m.qs[1].opts[picks[1]])}</td><td>${dw}</td><td>${marks[1] ? '✅' : '❌'}</td></tr></tbody></table>
         <p>${esc(m.team)} went from ${esc(m.score)} to ${esc(m.after)}.</p>
+        ${chartSVG(m.play, true)}
         ${practice ? '' : `<p class="small">Call It streak: <b>${S.get('ci_streak', 0)}</b> day${S.get('ci_streak', 0) === 1 ? '' : 's'}. A new one at midnight.</p>`}
         <div class="pg-btns"><button class="btn gold" id="ciShare">Share my result</button><a class="btn ghost" href="${BASE}replays/${m.slug}.html?g=${m.g}">Full ball-by-ball replay</a><a class="btn ghost" href="?practice=1">Practice another</a></div>`;
       r.appendChild(endNav());
@@ -85,6 +115,6 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     document.addEventListener('click', e => { const b = e.target.closest('.ci-opt'); if (b && !locked) { picks[+b.dataset.q] = +b.dataset.o; renderCalls(); }
       if (e.target.id === 'ciLock') { locked = true; if (!practice) { const last = S.get('ci_last', 0); S.set('ci_streak', last === DAY ? S.get('ci_streak', 1) : last === DAY - 1 ? S.get('ci_streak', 0) + 1 : 1); S.set('ci_last', DAY); S.set(key, { picks, watched: false }); }
         renderCalls(); playOut(); document.getElementById('ciPlay').scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
-    renderCalls(); if (saved) { if (saved.watched) reveal(); else playOut(); }
+    renderCalls(); document.getElementById('ciChart').innerHTML = chartSVG([], false); if (saved) { if (saved.watched) { document.getElementById('ciChart').innerHTML = chartSVG(m.play, true); reveal(); } else playOut(); }
   </script>
 </Base>

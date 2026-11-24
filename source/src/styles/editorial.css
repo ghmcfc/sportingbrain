@@ -647,3 +647,18 @@ body.dark .sg-cell{background:#16263f;color:#fff;border-color:#2A3A55}
 .share-quiz .sq-what{margin:0 0 14px;max-width:68ch;line-height:1.5}
 .share-quiz .sq-btns{display:flex;flex-wrap:wrap;gap:8px}
 body.dark .share-quiz{background:#14254a;border-color:#F2A900}body.dark .share-quiz h2{color:#fff}
+/* Call It run chart */
+.ci-chart{margin:12px 0 4px}.ci-chart svg{width:100%;height:auto;display:block;font:11px var(--display),sans-serif}
+.ci-chart .g{stroke:#D8DEE8;stroke-width:1}.ci-chart text{fill:#5A6B85}.ci-chart .tl{fill:#0F1E36;font-weight:700}
+.ci-chart path{fill:none;stroke-linejoin:round;stroke-linecap:round}
+.ci-chart .now{stroke:#0F1E36;stroke-width:3}.ci-chart .oth{stroke:#8A97AD;stroke-width:2;stroke-dasharray:5 4}
+.ci-chart .live{stroke:#F2A900;stroke-width:3.5}.ci-chart .wk{fill:#C8102E;stroke:#fff;stroke-width:1.5}
+.ci-chart .tgt{stroke:#0B6E4F;stroke-width:1.5;stroke-dasharray:2 3}.ci-chart .frz{stroke:#0F1E36;stroke-width:1;stroke-dasharray:3 3}
+.ci-chart .band{fill:rgba(11,110,79,.35);stroke:#0B6E4F}
+.ci-chart figcaption{font-size:.85rem;color:#5A6B85;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;margin-top:4px}
+.ci-chart .k{display:inline-block;width:16px;height:4px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.ci-chart .k.now{background:#0F1E36}.ci-chart .k.oth{background:#8A97AD}.ci-chart .k.live{background:#F2A900}.ci-chart .k.wk{width:9px;height:9px;border-radius:50%;background:#C8102E}.ci-chart .k.band{background:rgba(11,110,79,.5)}
+body.dark .ci-chart .now{stroke:#fff}body.dark .ci-chart .tl{fill:#fff}body.dark .ci-chart .g{stroke:#2A3A55}body.dark .ci-chart .frz{stroke:#fff}body.dark .ci-chart .k.now{background:#fff}
+.ci-board .ci-chart .now{stroke:#fff}.ci-board .ci-chart .tl{fill:#fff}.ci-board .ci-chart text{fill:#B8C4D6}
+.ci-board .ci-chart .g{stroke:rgba(255,255,255,.14)}.ci-board .ci-chart .frz{stroke:#F2A900}.ci-board .ci-chart .tgt{stroke:#5FD3A5}
+.ci-board .ci-chart figcaption{color:#C9D3E3}.ci-board .ci-chart .k.now{background:#fff}.ci-board .ci-chart .oth{stroke:#9FB0C8}

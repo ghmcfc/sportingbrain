@@ -14,6 +14,10 @@ export function buildMoments() {
     const f = Object.entries(feeds).find(([k]) => k.endsWith(`/${r.slug}.json`)); if (!f) continue;
     const m = withFullNames(f[1].default), overs = m.overs || 50, t20 = overs <= 20, span = t20 ? 3 : 5;
     let g0 = 0;
+    // Run charts: cumulative runs at the end of each over, and where wickets fell, for both innings.
+    const worms = m.innings.slice(0, 2).map(inn => { let r_ = 0, l_ = 0; const pts = [[0, 0]], wk_ = [];
+      inn.balls.forEach(b => { r_ += b[6]; if (legal(b)) { l_++; if (l_ % 6 === 0) pts.push([l_ / 6, r_]); } if (isWkt(b)) wk_.push([+(l_ / 6).toFixed(2), r_]); });
+      if (l_ % 6) pts.push([+(l_ / 6).toFixed(2), r_]); return { pts, wk: wk_ }; });
     m.innings.slice(0, 2).forEach((inn, i) => {
       const B = inn.balls; let runs = 0, wk = 0, lg = 0; const state = [];
       const bat = {}; const out_ = new Set();
@@ -39,6 +43,7 @@ export function buildMoments() {
           opp: m.teams.find(t => t !== inn.team), innings: i, overs, score: `${s.runs}/${s.wk}`, at: `${ov}.0`, pair,
           need: i === 1 && tgt ? `${inn.team} need ${tgt - s.runs} from ${overs * 6 - s.lg} balls` : null,
           g: g0 + k, span, start: [s.runs, s.wk],
+          chart: { upto: worms[i].pts.filter(p => p[0] <= ov), wk: worms[i].wk.filter(w => w[0] <= ov), other: i === 1 ? worms[0].pts : null, target: i === 1 && tgt ? tgt : null, otherTeam: m.teams.find(t => t !== inn.team) },
           play: B.slice(k + 1, (endK >= 0 ? endK : state.length - 1) + 1).map((b, j) => { const st = state[k + 1 + j]; const bs = st.lg - (legal(b) ? 1 : 0); return [`${Math.floor(bs / 6)}.${bs % 6 + 1}`, b[2], b[3], b[6], isWkt(b) ? b[7] : '', b[8], st.runs, st.wk]; }),
           qs: [
             { q: `How many runs will ${inn.team} score in the next ${span} overs?`, opts: rb.labels, a: rb.answer, reveal: `${dr} runs` },
