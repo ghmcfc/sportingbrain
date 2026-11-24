@@ -13,10 +13,10 @@ const G = ['football', 'cricket', 'rugby-union', 'tennis', 'golf', 'formula-1', 
   .map(g => ({ g, img: D.SB_PHOTO(g.name, 800), c: D.SB_CREDIT(g.name) }));
 const Fig = null;
 ---
-<Base title="Read: This Week, Flashback, On This Day and sport guides | SportingBrain" description="This Week in Sport, Flashback, On This Day, guides to every sport and the Cynical Round-Up." page="read" wide>
+<Base title="Read: This Week, Flashback, On This Day and sport guides | SportingBrain" description="This Week's Quiz, Flashback, On This Day, guides to every sport and the Cynical Round-Up." page="read" wide>
   <header class="art-head"><h1>Read</h1><p class="art-stand">This week's stories with their sources, forgotten moments told properly, and guides to every sport.</p></header>
 
-  <section class="blk"><header class="sh"><h2>This Week in Sport</h2><a href={`${base}this-week.html`}>The full edition</a></header>
+  <section class="blk"><header class="sh"><h2>This Week's Quiz</h2><a href={`${base}this-week.html`}>Play this week's five</a></header>
     <div class="read-grid">
       <a class="story lead" href={`${base}this-week.html#stories`}>{W[0].p && <figure class="sfig"><img src={W[0].p.src} alt={W[0].p.alt} width="800" height="450"><figcaption>{W[0].p.credit}</figcaption></figure>}<span class="kick">{W[0].s.sport}</span><h3>{W[0].s.title}</h3><p>{W[0].s.body.slice(0, 220).replace(/\s\S*$/, '')}…</p></a>
       <div class="story-list">{W.slice(1).map(({ s, p }) => <a class="story sm" href={`${base}this-week.html#stories`}>{p && <figure class="sfig"><img src={p.src} alt={p.alt} loading="lazy" width="800" height="450"></figure>}<span class="kick">{s.sport}</span><h3>{s.title}</h3></a>)}</div>

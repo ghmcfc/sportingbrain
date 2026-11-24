@@ -2,6 +2,14 @@
 // Every fact below comes from the listed sources.
 export const WEEK = {
   edition: 'Monday 23 November 2026',
+  // This Week's Quiz: five questions on the week's stories. ans = index of the right option. story = index in stories.
+  quiz: [
+    { q: "How many minutes did Leny Yoro last at Anfield before he was sent off?", opts: ['8', '18', '38', '58'], ans: 0, story: 1 },
+    { q: "Who scored twice as Ireland beat South Africa 20-17 in Dublin?", opts: ['James Lowe', 'Robert Baloucoune', 'Mack Hansen', 'Dan Sheehan'], ans: 1, story: 2 },
+    { q: "Which team beat Manchester City 3-1 at City's home ground in the WSL?", opts: ['Arsenal', 'Chelsea', 'Tottenham', 'Aston Villa'], ans: 2, story: 0 },
+    { q: "Who won the Las Vegas Grand Prix on Saturday night?", opts: ['Kimi Antonelli', 'Lando Norris', 'Charles Leclerc', 'Max Verstappen'], ans: 3, story: 3 },
+    { q: "How old was Kimi Antonelli when he became the youngest Formula 1 world champion?", opts: ['19', '20', '21', '22'], ans: 1, story: 3 },
+  ],
   stories: [
     { sport: 'Football', venue: 'Joie Stadium', title: 'Spurs win 3-1 at Manchester City in the WSL',
       body: 'Tottenham beat Manchester City 3-1 on Sunday at City\'s home ground. A day earlier, London City Lionesses beat Crystal Palace 6-2, equalling Chelsea\'s 6-2 win over Spurs in October as the highest-scoring WSL game of the season.',

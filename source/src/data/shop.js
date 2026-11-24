@@ -121,7 +121,7 @@ export const PAGE_PICKS = {
   'is-it-a-foul': 'referee', 'call-it': 'cricket',
   'higher-or-lower': 'stats', 'stat-attack': 'stats', 'stats-detective': 'stats',
   'sports-day': 'family', advent: 'advent',
-  read: 'books', flashback: 'books', stories: 'books', 'on-this-day': 'books', 'this-week': 'books', 'round-up': 'books', rewind: 'books', archive: 'books', sports: 'allsports', watch: 'books', replays: 'books', laughs: 'books',
+  read: 'books', flashback: 'books', stories: 'books', 'on-this-day': 'books', 'this-week': 'quiz', 'round-up': 'books', rewind: 'books', archive: 'books', sports: 'allsports', watch: 'books', replays: 'books', laughs: 'books',
 };
 export const picksFor = path => {
   const slug = path.replace(/^\//, '').replace(/\.html$/, '').replace(/\/index$/, '');

@@ -13,7 +13,7 @@ const M = buildMoments().map(m => ({ match: m.match, team: m.team, opp: m.opp, s
     <p class="teaser">SportingBrain is a free sports site for people who know their sport. Daily games built on real matches, hard quiz questions, and true stories from every sport, men's and women's. No sign-up, no betting, ever.</p>
     {GROUPS.map(([g, label]) => <section><h2>{label}</h2><ul>{PLAY.filter(x => x[3] === g).map(x => <li><a href={`${base}${x[0]}.html`}>{x[1]}</a>: {x[2]}</li>)}</ul></section>)}
     <section><h2>Read</h2><ul>
-      <li><a href={`${base}this-week.html`}>This Week in Sport</a>: what happened, the numbers and the talking points.</li>
+      <li><a href={`${base}this-week.html`}>This Week's Quiz</a>: five questions on the past week in sport, with the stories behind them.</li>
       <li><a href={`${base}on-this-day.html`}>On This Day</a>: what happened in sport on today's date.</li>
       <li><a href={`${base}stories.html`}>True sports stories</a>: comebacks, firsts, underdogs and heroes.</li>
       <li><a href={`${base}sports.html`}>Sport guides</a>: how every sport really works.</li>
