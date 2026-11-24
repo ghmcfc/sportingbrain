@@ -11,6 +11,7 @@ const { title, description, page = '', wide = false, image, type = 'website', no
 import ADS from '../data/ads.json';
 import AN from '../data/analytics.json';
 import { SEO } from '../data/seo.js';
+import { SHARE } from '../data/sharetext.js';
 const adsOn = !!ADS.client && !noads;
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
 const pathKey = '/' + Astro.url.pathname.replace(/^\//, '').replace(base.replace(/^\//, ''), '');
@@ -21,6 +22,7 @@ if (pageTitle.length > 60) pageTitle = pageTitle.replace(' | Flashback | Sportin
 if (pageTitle.length > 60) pageTitle = pageTitle.replace(/ \| SportingBrain( Kids Zone)?$/, '');
 let pageDesc = S.description || description || '';
 if (pageDesc.length > 160) { pageDesc = pageDesc.slice(0, 157).replace(/[\s,;:.]+\S*$/, '') + '…'; }
+const shareItem = SHARE[pathKey.replace(/^\//, '').replace(/\.html$/, '')];
 const canonical = new URL(/\/index(\.html)?$/.test(Astro.url.pathname) ? base : Astro.url.pathname, Astro.site).href;
 const crumbs = (() => { const parts = pathKey.replace(/\.html$/, '').split('/').filter(Boolean); if (parts.length < 2) return null;
   const SEC = { flashback: ['Flashback', 'flashback.html'], stories: ['True stories', 'stories.html'], replays: ['Replays', 'replays.html'], sports: ['Sport guides', 'sports.html'], kids: ['Kids Zone', 'kids.html'] };
@@ -88,6 +90,24 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
 </header>
 <script>document.addEventListener('click',e=>{const a=e.target.closest('[data-mistake]');if(a)a.href='https://tally.so/r/zE7LVZ?page='+encodeURIComponent(location.pathname+location.search);});</script>
 <main class:list={['wrap', { wide }]} data-page={page} id="main">{S.h1 && page && <div class="crawl"><h1>{S.h1}</h1>{S.intro && <p class="teaser">{S.intro}</p>}</div>}<slot /></main>
+{shareItem && <section class="wrap share-quiz" aria-labelledby="sq-h">
+  <h2 id="sq-h">Share this quiz</h2>
+  <p class="sq-what"><b>{shareItem[0]}.</b> {shareItem[1]}</p>
+  <div class="sq-btns" data-sq-title={shareItem[0]} data-sq-text={`${shareItem[0]} on SportingBrain. ${shareItem[1]} Free to play.`} data-sq-url={canonical}>
+    <button type="button" class="btn" data-sq="native">Share</button>
+    <a class="btn ghost" data-sq="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+    <a class="btn ghost" data-sq="x" target="_blank" rel="noopener">X</a>
+    <a class="btn ghost" data-sq="facebook" target="_blank" rel="noopener">Facebook</a>
+    <button type="button" class="btn ghost" data-sq="copy">Copy link</button>
+  </div>
+</section>}
+<script is:inline>(function(){var b=document.querySelector('.sq-btns');if(!b)return;var t=b.dataset.sqText,u=b.dataset.sqUrl,e=encodeURIComponent;
+b.querySelector('[data-sq=whatsapp]').href='https://wa.me/?text='+e(t+' '+u);
+b.querySelector('[data-sq=x]').href='https://twitter.com/intent/tweet?text='+e(t)+'&url='+e(u)+'&via=_sportingbrain';
+b.querySelector('[data-sq=facebook]').href='https://www.facebook.com/sharer/sharer.php?u='+e(u);
+var n=b.querySelector('[data-sq=native]');if(!navigator.share)n.hidden=true;n.onclick=function(){navigator.share({title:b.dataset.sqTitle,text:t,url:u}).catch(function(){});};
+var c=b.querySelector('[data-sq=copy]');c.onclick=function(){(navigator.clipboard?navigator.clipboard.writeText(t+' '+u):Promise.reject()).then(function(){c.textContent='Link copied';setTimeout(function(){c.textContent='Copy link'},2000);}).catch(function(){prompt('Copy this link',u);});};})();</script>
+
 <footer class="site-foot"><div class="wrap wide foot-grid">
   <div><a class="wordmark" href={base}><span class="mark" aria-hidden="true">SB</span><span>SportingBrain</span></a>
     <p>The smartest free sports site in the world. Real matches, real data, stories nobody else tells. No betting, ever.</p></div>

@@ -642,3 +642,8 @@ body.dark .sg-cell{background:#16263f;color:#fff;border-color:#2A3A55}
 .has-gh .ci-head h1{display:none}.has-gh .ci-head{margin-top:10px}
 @media(min-width:768px){.foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr 1fr}}
 .crawl ul{padding-left:1.2em}.crawl li{margin:.3em 0}
+.share-quiz{margin:28px auto 8px;padding:20px 22px;border:2px solid #0F1E36;border-radius:14px;background:#fff}
+.share-quiz h2{font-family:var(--display);font-weight:900;font-size:1.6rem;margin:0 0 6px;color:#0F1E36}
+.share-quiz .sq-what{margin:0 0 14px;max-width:68ch;line-height:1.5}
+.share-quiz .sq-btns{display:flex;flex-wrap:wrap;gap:8px}
+body.dark .share-quiz{background:#14254a;border-color:#F2A900}body.dark .share-quiz h2{color:#fff}
