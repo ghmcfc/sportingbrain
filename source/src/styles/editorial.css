@@ -864,3 +864,4 @@ main > .reset-wrap{margin:18px 0 4px}
 main.is-game{min-height:calc(100vh - 110px)}
 .otd-y small{opacity:1;color:#4A5568}
 body.dark .otd-y small{color:#C9D3E3}
+.res-grid{font-size:1.35rem;white-space:nowrap;letter-spacing:1px}
