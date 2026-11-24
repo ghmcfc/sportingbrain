@@ -4,11 +4,11 @@ export const WEEK = {
   edition: 'Monday 23 November 2026',
   // This Week's Quiz: five questions on the week's stories. ans = index of the right option. story = index in stories.
   quiz: [
-    { q: "How many minutes did Leny Yoro last at Anfield before he was sent off?", opts: ['8', '18', '38', '58'], ans: 0, story: 1 },
-    { q: "Who scored twice as Ireland beat South Africa 20-17 in Dublin?", opts: ['James Lowe', 'Robert Baloucoune', 'Mack Hansen', 'Dan Sheehan'], ans: 1, story: 2 },
-    { q: "Which team beat Manchester City 3-1 at City's home ground in the WSL?", opts: ['Arsenal', 'Chelsea', 'Tottenham', 'Aston Villa'], ans: 2, story: 0 },
-    { q: "Who won the Las Vegas Grand Prix on Saturday night?", opts: ['Kimi Antonelli', 'Lando Norris', 'Charles Leclerc', 'Max Verstappen'], ans: 3, story: 3 },
-    { q: "How old was Kimi Antonelli when he became the youngest Formula 1 world champion?", opts: ['19', '20', '21', '22'], ans: 1, story: 3 },
+    { q: "How many minutes did Leny Yoro last at Anfield before he was sent off?", opts: ['8', '18', '38', '58'], ans: 0, story: 1, fact: "Leny Yoro was sent off for a professional foul after eight minutes of Pochettino's first game, which United lost 4-0 at Anfield." },
+    { q: "Who scored twice as Ireland beat South Africa 20-17 in Dublin?", opts: ['James Lowe', 'Robert Baloucoune', 'Mack Hansen', 'Dan Sheehan'], ans: 1, story: 2, fact: "Robert Baloucoune scored twice as Ireland beat the world champions 20-17 in Dublin." },
+    { q: "Which team beat Manchester City 3-1 at City's home ground in the WSL?", opts: ['Arsenal', 'Chelsea', 'Tottenham', 'Aston Villa'], ans: 2, story: 0, fact: "Tottenham won 3-1 at Manchester City's home ground on Sunday." },
+    { q: "Who won the Las Vegas Grand Prix on Saturday night?", opts: ['Kimi Antonelli', 'Lando Norris', 'Charles Leclerc', 'Max Verstappen'], ans: 3, story: 3, fact: "Max Verstappen won in Las Vegas on Saturday night, three weeks after the title had been settled." },
+    { q: "How old was Kimi Antonelli when he became the youngest Formula 1 world champion?", opts: ['19', '20', '21', '22'], ans: 1, story: 3, fact: "Antonelli was 20 years and 68 days old when he clinched the title in Mexico City on 1 November, the youngest champion in F1 history." },
   ],
   stories: [
     { sport: 'Football', venue: 'Joie Stadium', title: 'Spurs win 3-1 at Manchester City in the WSL',

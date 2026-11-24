@@ -14,13 +14,10 @@ const G = ['football', 'cricket', 'rugby-union', 'tennis', 'golf', 'formula-1', 
 const Fig = null;
 ---
 <Base title="Read: This Week, Flashback, On This Day and sport guides | SportingBrain" description="This Week's Quiz, Flashback, On This Day, guides to every sport and the Cynical Round-Up." page="read" wide>
-  <header class="art-head"><h1>Read</h1><p class="art-stand">This week's stories with their sources, forgotten moments told properly, and guides to every sport.</p></header>
+  <header class="art-head"><h1>Read</h1><p class="art-stand">This week's quiz, forgotten moments told properly, and guides to every sport.</p></header>
 
   <section class="blk"><header class="sh"><h2>This Week's Quiz</h2><a href={`${base}this-week.html`}>Play this week's five</a></header>
-    <div class="read-grid">
-      <a class="story lead" href={`${base}this-week.html#stories`}>{W[0].p && <figure class="sfig"><img src={W[0].p.src} alt={W[0].p.alt} width="800" height="450"><figcaption>{W[0].p.credit}</figcaption></figure>}<span class="kick">{W[0].s.sport}</span><h3>{W[0].s.title}</h3><p>{W[0].s.body.slice(0, 220).replace(/\s\S*$/, '')}…</p></a>
-      <div class="story-list">{W.slice(1).map(({ s, p }) => <a class="story sm" href={`${base}this-week.html#stories`}>{p && <figure class="sfig"><img src={p.src} alt={p.alt} loading="lazy" width="800" height="450"></figure>}<span class="kick">{s.sport}</span><h3>{s.title}</h3></a>)}</div>
-    </div>
+    <div class="wq-teaser"><p class="wq-k">Question 1 of {WEEK.quiz.length} · {WEEK.stories[WEEK.quiz[0].story].sport}</p><h3>{WEEK.quiz[0].q}</h3><div class="wq-opts">{WEEK.quiz[0].opts.map((o, j) => <a href={`${base}this-week.html?a=${j}#q1`} data-track="weekquiz-read">{'ABCD'[j]}. {o}</a>)}</div><p class="wq-foot">Five questions on the past week in sport. Were you paying attention?</p></div>
   </section>
 
   <section class="blk"><header class="sh"><h2>Flashback</h2><a href={`${base}flashback.html`}>All {FLASHBACKS.length}</a></header>

@@ -257,10 +257,8 @@ if(P==='home'){
     <div class="gtiles">${[...FIX,...rot].map(tile).join('')}</div></section>
 
   ${AD1}
-  <section class="blk"><header class="sh"><h2>This week in sport</h2><a href="${BASE}this-week.html">The full edition</a></header>
-    <div class="read-grid">${storyCard(lead,0,'lead')}<div class="story-list">${W3.slice(1).map((x,i)=>storyCard(x,i+1,'sm')).join('')}</div></div>
-    <div class="numstrip">${WEEK.numbers.slice(0,3).map(n=>`<div><b>${esc(n[0])}</b><p>${esc(n[1])}</p></div>`).join('')}</div>
-  </section>
+  ${(()=>{const q=WEEK.quiz[0],st=WEEK.stories[q.story];return `<section class="blk"><header class="sh"><h2>This Week's Quiz</h2><a href="${BASE}this-week.html">All five questions</a></header>
+    <div class="wq-teaser"><p class="wq-k">Question 1 of ${WEEK.quiz.length} · ${esc(st.sport)}</p><h3>${esc(q.q)}</h3><div class="wq-opts">${q.opts.map((o,j)=>`<a href="${BASE}this-week.html?a=${j}#q1" data-track="weekquiz-home">${'ABCD'[j]}. ${esc(o)}</a>`).join('')}</div><p class="wq-foot">Five questions on the past week in sport. Were you paying attention?</p></div></section>`;})()}
 
   ${VIDS.videos.length?`<section class="blk"><header class="sh"><h2>Laugh of the Day</h2><a href="${BASE}laughs.html">This week's laughs</a></header><div class="home-lotd"><div id="homeLotd"></div></div></section>`:''}
 

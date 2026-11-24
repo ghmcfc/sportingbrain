@@ -1,23 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
 import { WEEK } from '../data/week.js';
-import { GUIDES } from '../data/guides.js';
 import '../data/content.js';
 import { photoFor } from '../scripts/photos.js';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const spot = GUIDES.find(g => g.id === WEEK.spotlight.id);
 ---
 <Base title="This Week's Sports Quiz: Five on the Week | SportingBrain" description="Five questions on the past week in sport. Football, rugby, Formula 1 and more. Play, see your score, read the stories behind each answer, then challenge a mate." wide>
   <section class="tw">
     <header class="tw-head"><p class="fp-kicker">Edition: {WEEK.edition}</p><h1>This Week's Quiz</h1>
-      <p class="teaser">Five questions on the past week in sport. Were you paying attention?</p>
-      <nav class="sg-tabs" aria-label="Sections"><a href="#quiz">The quiz</a><a href="#stories">The stories</a><a href="#talking">Talking points</a><a href="#watch">What to watch</a></nav></header>
+      <p class="teaser">Five questions on the past week in sport. Were you paying attention?</p></header>
 
     <ol class="wb-list tw-quiz" id="quiz" data-key={`twq_${WEEK.edition}`}>
       {WEEK.quiz.map((q, i) => { const st = WEEK.stories[q.story]; return <li class="wb-q" id={`q${i+1}`} data-ans={q.ans}>
         <p class="wb-sport">Question {i+1} of {WEEK.quiz.length} · {st.sport}</p><h2>{q.q}</h2>
         <div class="wb-opts">{q.opts.map((o, j) => <button type="button" data-j={j}><b>{'ABCD'[j]}</b> {o}</button>)}</div>
-        <div class="wb-ex" hidden><p><span class="wb-verdict"></span> <b>{st.title}.</b> {st.body}</p><p class="small">Source: <a href={st.src[1]} target="_blank" rel="noopener">{st.src[0]}</a></p></div>
+        <div class="wb-ex" hidden><p><span class="wb-verdict"></span> {q.fact}</p><p class="small">Source: <a href={st.src[1]} target="_blank" rel="noopener">{st.src[0]}</a></p></div>
       </li>; })}
     </ol>
     <section class="wb-score" hidden aria-live="polite"><h2>You scored <span id="wbS">0</span> out of {WEEK.quiz.length}</h2><p id="wbLine"></p>
@@ -26,36 +23,10 @@ const spot = GUIDES.find(g => g.id === WEEK.spotlight.id);
     <script is:inline>(function(){var L=document.querySelector('.tw-quiz');if(!L)return;var K=L.dataset.key,S={};try{S=JSON.parse(localStorage.getItem(K)||'{}')}catch(e){}
     function mark(li,j,save){var a=+li.dataset.ans;li.querySelectorAll('.wb-opts button').forEach(function(b,k){b.disabled=true;if(k===a)b.classList.add('ok');else if(k===j)b.classList.add('no');});var ex=li.querySelector('.wb-ex');ex.hidden=false;ex.querySelector('.wb-verdict').textContent=j===a?'Right.':'Not this time.';if(save){S[li.id]=j;try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}if(window.sbTrack&&Object.keys(S).length===1)sbTrack('weekquiz-start');}tally();}
     function tally(){var qs=L.querySelectorAll('.wb-q'),done=0,sc=0;qs.forEach(function(li){if(li.id in S){done++;if(S[li.id]===+li.dataset.ans)sc++;}});if(done===qs.length){var box=document.querySelector('.wb-score');box.hidden=false;document.getElementById('wbS').textContent=sc;document.getElementById('wbLine').textContent=sc===qs.length?'Full marks. You were paying attention.':sc>=3?'Not bad at all.':'Time to watch more sport.';var t='I got '+sc+'/'+qs.length+' on This Week\'s Quiz at SportingBrain. Your turn: '+location.origin+location.pathname;document.getElementById('wbWa').href='https://wa.me/?text='+encodeURIComponent(t);}}
-    L.querySelectorAll('.wb-q').forEach(function(li){if(li.id in S)mark(li,S[li.id],false);li.querySelectorAll('.wb-opts button').forEach(function(b){b.onclick=function(){mark(li,+b.dataset.j,true);};});});})();</script>
-
-    <div class="sec" id="stories"><h2>The stories behind the questions</h2></div>
-    <div class="tw-stories">{WEEK.stories.map((s, i) => (
-      <article class={i === 0 ? 'tw-lead' : 'tw-item'}>{(() => { const ph = photoFor(s.title + ' ' + s.body, s.sport, i, s.venue); return ph && <figure class="sfig"><img src={ph.src} alt={ph.alt} loading={i ? 'lazy' : 'eager'} width="800" height="450"><figcaption>{ph.credit}</figcaption></figure>; })()}<p class="fp-kicker">{s.sport}</p><h3>{s.title}</h3><p>{s.body}</p><p class="small">Source: <a href={s.src[1]} target="_blank" rel="noopener">{s.src[0]}</a></p></article>
-    ))}</div>
-
-    <div class="sec" id="numbers"><h2>The numbers behind the weekend</h2></div>
-    <div class="tw-nums">{WEEK.numbers.map(n => <div><b>{n[0]}</b><p>{n[1]}</p></div>)}</div>
-
-    <div class="sec" id="talking"><h2>Talking points</h2></div>
-    <p class="teaser">Have your say. Your vote is kept on this device.</p>
-    <div class="tw-polls">{WEEK.talking.map(t => (
-      <div class="tw-poll" data-poll={t.id}><h3>{t.q}</h3><p class="small">{t.why}</p>
-        <div class="tw-opts">{t.opts.map((o, k) => <button data-k={k}>{o}</button>)}</div><p class="tw-done small" hidden></p></div>
-    ))}</div>
+    var pa=new URLSearchParams(location.search).get('a');L.querySelectorAll('.wb-q').forEach(function(li){if(li.id in S)mark(li,S[li.id],false);else if(li.id==='q1'&&pa!==null&&/^[0-3]$/.test(pa))mark(li,+pa,true);li.querySelectorAll('.wb-opts button').forEach(function(b){b.onclick=function(){mark(li,+b.dataset.j,true);};});});})();</script>
 
     <div class="sec" id="watch"><h2>What to watch</h2></div>
     <ol class="tw-watch">{WEEK.watch.map(w => <li><span class="tw-when">{w.when}</span><div><p class="fp-kicker">{w.sport}</p><b>{w.what}</b><p>{w.why}</p></div></li>)}</ol>
 
-    <div class="sec" id="spotlight"><h2>Sport spotlight: {spot.name}</h2><a href={`${base}sports/${spot.id}.html`}>Read the guide</a></div>
-    <p class="teaser">{WEEK.spotlight.why}</p>
-    <ol class="sg-watch">{spot.watch.map(w => <li>{w}</li>)}</ol>
-
-    <section class="fb-src"><b>Sources</b><ul>{[...WEEK.stories.map(s => s.src), ...WEEK.numbersSrc, ...WEEK.watchSrc].map(s => <li><a href={s[1]} target="_blank" rel="noopener">{s[0]}</a></li>)}</ul></section>
   </section>
-  <script>
-    document.querySelectorAll('[data-poll]').forEach(p => { const key = 'sb_poll_' + p.dataset.poll; let v = null; try { v = localStorage.getItem(key); } catch (_) {}
-      const show = k => { p.querySelectorAll('[data-k]').forEach(b => { b.disabled = true; b.classList.toggle('on', b.dataset.k === String(k)); }); const d = p.querySelector('.tw-done'); d.hidden = false; d.textContent = 'Vote saved. We publish the results in next week\'s edition.'; };
-      if (v !== null) show(v);
-      p.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { try { localStorage.setItem(key, b.dataset.k); } catch (_) {} show(b.dataset.k); }); });
-  </script>
 </Base>
