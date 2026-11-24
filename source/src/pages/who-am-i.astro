@@ -9,9 +9,9 @@ import AdSlot from '../components/AdSlot.astro';
   <AdSlot name="game_result" />
   <script>
     import { WHOAMI } from '../data/whoami.js';
-    import { ukDayNo, esc, store, markPlayed, challengeBox, showChallenge, shuffle } from '../scripts/play.js';
+    import { ukDayNo, seeded, esc, store, markPlayed, challengeBox, showChallenge, shuffle } from '../scripts/play.js';
     showChallenge(document.getElementById('vs'));
-    const practice = new URLSearchParams(location.search).has('practice'), D = ukDayNo(), P = practice ? shuffle(WHOAMI)[0] : WHOAMI[D % WHOAMI.length], key = 'wa_' + D;
+    const practice = new URLSearchParams(location.search).has('practice'), D = ukDayNo(), ORD = shuffle(WHOAMI.map((_, i) => i), seeded(777)), P0 = ORD.indexOf(24), P = practice ? shuffle(WHOAMI)[0] : WHOAMI[ORD[((P0 + D - 20781) % ORD.length + ORD.length) % ORD.length]] /* every player once, in a mixed order, from 24 Nov 2026 */, key = 'wa_' + D;
     const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim();
     const S = (!practice && store.get(key, null)) || { shown: 1, done: false, won: false, tries: [] }, box = document.getElementById('wa');
     function render() { const pts = S.won ? 6 - S.shown : 0;
