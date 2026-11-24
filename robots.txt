@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /f1/
+Disallow: /email/
 Sitemap: https://sportingbrain.com/sitemap-index.xml
