@@ -232,7 +232,7 @@ if(P==='home'){
 
   main.innerHTML = `
   <div class="fp">
-    <section class="hook" id="hook" aria-live="polite"></section>
+    <div class="fp-main"><section class="hook" id="hook" aria-live="polite"></section><div data-nl-slot class="nl-slot"></div></div>
     <aside class="fp-side">
       ${cm?`<section class="board" aria-label="Today's Call It">
         <div class="board-top"><span>Call It #${DAY}</span><span>${ciDone?'Played':'Live'}</span></div>
@@ -351,7 +351,7 @@ if(P==='daily'){
     const brainScore=brainFor(level), saved=store.get(`daily_${key}_${level}`,null);
     main.innerHTML=`<section class="hero"><div class="row1"><img src="${BASE}assets/brain.svg" alt="The Brain"><div><span class="tag" style="background:var(--gold);color:#14254a">Beat the Brain #${QD}</span><h1>Five hard questions. Every day.</h1><p>The Brain scored ${brainScore}/5 on ${LV[level].n} today. Your turn.</p></div></div></section>
       <div class="lv-pick" role="tablist" aria-label="Difficulty">${LEVELS.map(l=>{const done=store.get(`daily_${key}_${l}`,null);return `<button role="tab" aria-selected="${l===level}" class="lv ${l===level?'on':''}" data-lv="${l}" style="--c:${LV[l].c}"><b>${LV[l].n}</b><small>${done?`Done: ${done.marks.filter(Boolean).length}/5`:LV[l].d}</small></button>`;}).join('')}</div>
-      <section class="card" style="margin-top:12px" id="game" aria-live="polite"></section><div class="sec"><h2>Keep playing</h2></div>${moreExcept(BASE+'daily.html')}`;
+      <section class="card" style="margin-top:12px" id="game" aria-live="polite"></section><div data-nl-slot class="nl-slot"></div><div class="sec"><h2>Keep playing</h2></div>${moreExcept(BASE+'daily.html')}`;
     main.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ level=+b.dataset.lv; store.set('daily_level',level); history.replaceState(null,'',`?level=${level}`); render(); });
     const g=$('#game');
     function finish(marks,save){
