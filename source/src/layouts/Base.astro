@@ -80,6 +80,14 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
 {adsOn && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS.client}`} crossorigin="anonymous"></script>}
 {adsOn && <script is:inline>window.SB_ADS=true;document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])').forEach(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}}),50));</script>}
 {AN.goatcounter && !noads && <script is:inline data-goatcounter={`https://${AN.goatcounter}.goatcounter.com/count`} async src="https://gc.zgo.at/count.js"></script>}
+<script is:inline>(function(){var Q=[];window.sbTrack=function(n){if(window.goatcounter&&window.goatcounter.count){window.goatcounter.count({path:'event/'+n,title:n,event:true});}else{Q.push(n);}};
+var t=setInterval(function(){if(window.goatcounter&&window.goatcounter.count){clearInterval(t);Q.splice(0).forEach(sbTrack);}},700);setTimeout(function(){clearInterval(t)},15000);
+var sa=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;if(sa){document.documentElement.classList.add('is-app');try{if(!sessionStorage.getItem('sb_appopen')){sessionStorage.setItem('sb_appopen','1');sbTrack('app-open');}}catch(e){}}
+addEventListener('appinstalled',function(){sbTrack('app-installed');});
+document.addEventListener('click',function(e){var a=e.target.closest('a,button');if(!a)return;var n=a.getAttribute('data-track');if(n){sbTrack(n);return;}
+var h=a.getAttribute('href')||'';if(/amazon\.co\.uk/.test(h)){sbTrack('amazon-click'+location.pathname.replace(/\.html$/,'').replace(/\//g,'-'));return;}
+var q=a.getAttribute('data-sq');if(q){sbTrack('share-'+q+location.pathname.replace(/\.html$/,'').replace(/\//g,'-'));return;}
+if(a.hasAttribute('data-share-page')||a.hasAttribute('data-share-site')){sbTrack('share-header');}},true);})();</script>
 <script is:inline>if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register(document.documentElement.dataset.base+'sw.js').catch(()=>{}));</script>
 </head>
 <body>
@@ -89,7 +97,7 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
   <nav class="sb-tabs" aria-label="Main">{nav.filter(([, , k]) => !(k === 'gifts' && (isKids || noads))).map(([t, h, k]) => <a href={h} class={k === 'gifts' ? 'tab-gifts' : undefined} aria-current={section === k ? "page" : undefined}>{t}</a>)}</nav>
   <div class="hdr-right">
     {shareItem ? <button class="iconbtn hdr-share" data-share-page aria-label="Share this page">Share</button> : <button class="iconbtn hdr-share" data-share-site aria-label="Share SportingBrain">Share</button>}
-    <button class="iconbtn" data-dark aria-label="Switch dark mode">Dark</button>
+    {!isKids && <a class="iconbtn hdr-app" href={`${base}app.html`} data-track="app-header-click">App</a>}<button class="iconbtn" data-dark aria-label="Switch dark mode">Dark</button>
   </div>
 </div>
 
@@ -155,13 +163,13 @@ document.addEventListener('submit',function(e){var f=e.target;if(!f.matches||!f.
 if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){m.textContent='Please enter a full email address, like name@example.com.';i.focus();return;}
 var hp=f.querySelector('[name=email_address_check]');if(hp&&hp.value)return;b.disabled=true;b.textContent='Joining';
 var d=new URLSearchParams();d.append('EMAIL',v);d.append('email_address_check','');d.append('locale','en');
-fetch(U+(U.indexOf('?')>-1?'&':'?')+'isAjax=1',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:d.toString()}).then(function(){f.classList.add('ok');m.textContent='Nearly there. Check your inbox and click the link in our email to confirm. It can take a minute, and may land in junk.';try{localStorage.setItem('sb_nl','1')}catch(e){}}).catch(function(){b.disabled=false;b.textContent='Join free';m.innerHTML='That didn\'t go through. <a href="'+U+'" target="_blank" rel="noopener">Sign up here instead</a>.';});});})();</script>
+fetch(U+(U.indexOf('?')>-1?'&':'?')+'isAjax=1',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:d.toString()}).then(function(){f.classList.add('ok');m.textContent='Nearly there. Check your inbox and click the link in our email to confirm. It can take a minute, and may land in junk.';try{localStorage.setItem('sb_nl','1')}catch(e){}if(window.sbTrack)sbTrack('newsletter-signup');}).catch(function(){b.disabled=false;b.textContent='Join free';m.innerHTML='That didn\'t go through. <a href="'+U+'" target="_blank" rel="noopener">Sign up here instead</a>.';});});})();</script>
 <footer class="site-foot"><div class="wrap wide foot-grid">
   <div><a class="wordmark" href={base}><span class="mark" aria-hidden="true">SB</span><span>SportingBrain</span></a>
     <p>The smartest free sports site in the world. Real matches, real data, stories nobody else tells. No betting, ever.</p></div>
   <div><h2>Play</h2><a href={`${base}play.html`}>All games</a><a href={`${base}pub-quiz.html`}>Pub and Club Quiz</a><a href={`${base}weekly-expert.html`}>Weekly Expert</a><a href={`${base}call-it.html`}>Call It</a><a href={`${base}daily.html`}>Beat the Brain</a><a href={`${base}higher-or-lower.html`}>Higher or Lower</a><a href={`${base}connections.html`}>Connections</a><a href={`${base}challenge.html?c=family`}>Family challenge</a><a href={`${base}kids.html`}>Kids Zone</a></div>
   <div><h2>Read</h2><a href={`${base}this-week.html`}>This Week in Sport</a><a href={`${base}flashback.html`}>Flashback</a><a href={`${base}on-this-day.html`}>On This Day</a><a href={`${base}replays.html`}>Replays</a><a href={`${base}sports.html`}>Sport guides</a><a href={`${base}round-up.html`}>The Cynical Round-Up</a>{!noads && <a href={`${base}gift-guide.html`}>Sports gift guide</a>}</div>
-  <div><h2>SportingBrain</h2><a href={`${base}newsletter.html`}>The Weekly Brain newsletter</a><a href={`${base}about.html`}>About and privacy</a><a href="#" data-welcome>What is SportingBrain?</a><a href="#" data-dys>Dyslexia-friendly font</a><a href={`${base}settings.html`}>Your settings</a><a href={`${base}credits.html`}>Photo credits</a><a href="https://tally.so/r/zE7LVZ" data-mistake target="_blank" rel="noopener">Spotted a mistake? Tell us</a></div>
+  <div><h2>SportingBrain</h2><a href={`${base}newsletter.html`}>The Weekly Brain newsletter</a><a href={`${base}app.html`}>Get the app</a><a href={`${base}about.html`}>About and privacy</a><a href="#" data-welcome>What is SportingBrain?</a><a href="#" data-dys>Dyslexia-friendly font</a><a href={`${base}settings.html`}>Your settings</a><a href={`${base}credits.html`}>Photo credits</a><a href="https://tally.so/r/zE7LVZ" data-mistake target="_blank" rel="noopener">Spotted a mistake? Tell us</a></div>
   <div><h2>Follow</h2>{SOCIAL.map(([n,u]) => <a href={u} target="_blank" rel="noopener me">{n} @_sportingbrain</a>)}</div>
 </div><div class="wrap wide foot-small"><p>Photos from Wikimedia Commons, credited on each page and on the Photo credits page. Cricket data from Cricsheet (Open Data Commons Attribution License). Facts checked against the sources listed on every article.</p></div></footer>
 <script>
