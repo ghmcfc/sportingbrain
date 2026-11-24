@@ -165,7 +165,7 @@ header.top .wrap{max-width:1240px;padding:10px 16px}
 .welcome h2,.welcome .w-title{font-family:var(--display);font-weight:900}
 .usp li{border-radius:3px!important;background:rgba(255,255,255,.06)!important}
 .usp li span:empty{display:none}
-@media(max-width:600px){header.top [data-share-site]{display:none}.wordmark span{font-size:1.45rem}}
+@media(max-width:600px){.wordmark span{font-size:1.45rem}}
 .welcome .w-box{background:#0F1E36!important;border-radius:4px!important;border-top:5px solid var(--amber);box-shadow:0 24px 60px rgba(0,0,0,.45)}
 .welcome .w-head h2{font-family:var(--display);font-weight:900;font-size:clamp(2rem,4vw,3rem);line-height:1;margin:12px 0 8px;color:#fff}
 .w-sub{color:#C9D3E3;margin:0 0 14px;font-size:1.05rem}
@@ -715,3 +715,19 @@ body.dark .gg-free{background:#2a2410}
 @media(min-width:1100px){.gg-top-grid{grid-template-columns:repeat(5,1fr)}.gg-card.big .gg-ic{height:96px}.gg-card.big h3{font-size:1.25rem}}
 .gg-buy{white-space:nowrap}
 @media(max-width:759px){.gg-card.big{flex-direction:row;padding:16px;border-width:2px}.gg-card.big .gg-ic{width:56px;height:56px;border-radius:12px}.gg-card.big .gg-ic svg{width:40px;height:40px}.gg-card.big .gg-body{padding:0}}
+
+/* Share near the top */
+header.top .hdr-share{border-color:#F2A900;color:#F2A900}
+.sq-top{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:14px;margin-bottom:4px;padding:10px 12px;background:#fff;border:1px solid #D8DEE8;border-radius:12px}
+.sq-top-l{font-family:var(--display);font-weight:800;font-size:1.05rem;margin-right:4px}
+.sqt{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:6px 12px;border-radius:999px;border:1.5px solid #0F1E36;background:#fff;color:#0F1E36;font:inherit;font-size:.92rem;font-weight:700;text-decoration:none;cursor:pointer}
+.sqt.wa{background:#1F8B4C;border-color:#1F8B4C;color:#fff}
+.sqt:hover{background:#0F1E36;color:#fff}.sqt.wa:hover{background:#176B3A}
+.sqt:focus-visible{outline:3px solid #F2A900;outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.sq-btns.flash{box-shadow:0 0 0 4px #F2A900}
+body.dark .sq-top{background:#14254a;border-color:#2A3A55}body.dark .sqt:not(.wa){background:#14254a;color:#fff;border-color:#C9D3E3}
+@media(max-width:420px){.sq-top-l{width:100%}}
+.sq-top{max-width:752px;margin-left:auto;margin-right:auto;box-sizing:border-box}
+.sq-top.wide{max-width:none;margin-left:14px;margin-right:14px}
+@media(max-width:780px){.sq-top{margin-left:14px;margin-right:14px}}

@@ -1,5 +1,6 @@
 // What each game is, in a line or two, for the "Share this quiz" box and the message people send.
 export const SHARE = {
+  'gift-guide': ['Gifts for sports fans', '41 Christmas presents for every kind of sports fan, from darts boards and Subbuteo to the best sports books and stocking fillers.'],
   'call-it': ['Call It: Cricket', 'A real moment from a great cricket final, frozen mid-over. You call the runs and the wickets, then watch the real thing play out ball by ball. New every day.'],
   'call-it-football': ['Call It: Football', 'A moment from a great World Cup, Euro or Champions League final, men\'s or women\'s. Call who scores next and how it ends, then watch it unfold minute by minute.'],
   'connections': ['Connections: Sport', 'Sixteen sporting names hiding four groups of four. Spot the links before you make four mistakes. One new puzzle a day.'],

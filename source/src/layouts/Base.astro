@@ -86,16 +86,24 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
   <a class="wordmark" href={base}><span class="mark" aria-hidden="true">SB</span><span>SportingBrain</span></a>
   <nav class="sb-tabs" aria-label="Main">{nav.filter(([, , k]) => !(k === 'gifts' && (isKids || noads))).map(([t, h, k]) => <a href={h} class={k === 'gifts' ? 'tab-gifts' : undefined} aria-current={section === k ? "page" : undefined}>{t}</a>)}</nav>
   <div class="hdr-right">
-    <button class="iconbtn" data-share-site aria-label="Share SportingBrain">Share</button>
+    {shareItem ? <button class="iconbtn hdr-share" data-share-page aria-label="Share this page">Share</button> : <button class="iconbtn hdr-share" data-share-site aria-label="Share SportingBrain">Share</button>}
     <button class="iconbtn" data-dark aria-label="Switch dark mode">Dark</button>
   </div>
 </div>
 
 </header>
 <script>document.addEventListener('click',e=>{const a=e.target.closest('[data-mistake]');if(a)a.href='https://tally.so/r/zE7LVZ?page='+encodeURIComponent(location.pathname+location.search);});</script>
+{shareItem && <div class:list={["wrap sq-top sq-btns", { wide }]} data-sq-title={shareItem[0]} data-sq-text={`${shareItem[0]} on SportingBrain. ${shareItem[1]} Free to play.`} data-sq-url={canonical}>
+  <span class="sq-top-l">{/gift-guide/.test(path) ? 'Share this guide' : 'Share this game'}</span>
+  <a class="sqt wa" data-sq="whatsapp" target="_blank" rel="noopener" aria-label="Share on WhatsApp"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2s.2-1.1.1-1.2l-.4-.2z"/></svg><span>WhatsApp</span></a>
+  <a class="sqt" data-sq="x" target="_blank" rel="noopener" aria-label="Share on X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.2-8.3L1.8 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5z"/></svg><span class="vh">X</span></a>
+  <a class="sqt" data-sq="facebook" target="_blank" rel="noopener" aria-label="Share on Facebook"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M14 8V6.3c0-.8.2-1.3 1.4-1.3H17V2h-2.6C11.3 2 10 3.7 10 6.2V8H8v3h2v11h4V11h2.7l.4-3H14z"/></svg><span class="vh">Facebook</span></a>
+  <button type="button" class="sqt" data-sq="copy">Copy link</button>
+  <button type="button" class="sqt nat" data-sq="native" hidden>More</button>
+</div>}
 <main class:list={['wrap', { wide }]} data-page={page} id="main">{S.h1 && page && <div class="crawl"><h1>{S.h1}</h1>{S.intro && <p class="teaser">{S.intro}</p>}</div>}<slot /></main>
 {shareItem && <section class="wrap share-quiz" aria-labelledby="sq-h">
-  <h2 id="sq-h">Share this quiz</h2>
+  <h2 id="sq-h">{/^\/gift-guide/.test(path) ? "Share this guide" : "Share this quiz"}</h2>
   <p class="sq-what"><b>{/[?!]$/.test(shareItem[0]) ? shareItem[0] : shareItem[0] + "."}</b> {shareItem[1]}</p>
   <div class="sq-btns" data-sq-title={shareItem[0]} data-sq-text={`${shareItem[0]} on SportingBrain. ${shareItem[1]} Free to play.`} data-sq-url={canonical}>
     <button type="button" class="btn" data-sq="native">Share</button>
@@ -108,12 +116,13 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
 {giftPicks && <aside class="wrap gift-strip" aria-labelledby="gs-h"><div class="gs-head"><h2 id="gs-h">Gift ideas for sports fans</h2><a href={`${base}gift-guide.html`}>See the full gift guide</a></div>
   <ul>{giftPicks.map(([n, q, why]) => <li><a href={amz(q)} target="_blank" rel="sponsored nofollow noopener"><b>{n}</b><span>{why}</span><em>See on Amazon</em></a></li>)}</ul>
   <p class="aff-note">As an Amazon Associate SportingBrain earns from qualifying purchases.</p></aside>}
-<script is:inline>(function(){var b=document.querySelector('.sq-btns');if(!b)return;var t=b.dataset.sqText,u=b.dataset.sqUrl,e=encodeURIComponent;
+<script is:inline>document.querySelectorAll('.sq-btns').forEach(function(b){var t=b.dataset.sqText,u=b.dataset.sqUrl,e=encodeURIComponent;
 b.querySelector('[data-sq=whatsapp]').href='https://wa.me/?text='+e(t+' '+u);
 b.querySelector('[data-sq=x]').href='https://twitter.com/intent/tweet?text='+e(t)+'&url='+e(u)+'&via=_sportingbrain';
 b.querySelector('[data-sq=facebook]').href='https://www.facebook.com/sharer/sharer.php?u='+e(u);
-var n=b.querySelector('[data-sq=native]');if(!navigator.share)n.hidden=true;n.onclick=function(){navigator.share({title:b.dataset.sqTitle,text:t,url:u}).catch(function(){});};
-var c=b.querySelector('[data-sq=copy]');c.onclick=function(){(navigator.clipboard?navigator.clipboard.writeText(t+' '+u):Promise.reject()).then(function(){c.textContent='Link copied';setTimeout(function(){c.textContent='Copy link'},2000);}).catch(function(){prompt('Copy this link',u);});};})();</script>
+var n=b.querySelector('[data-sq=native]');n.hidden=!navigator.share;n.onclick=function(){navigator.share({title:b.dataset.sqTitle,text:t,url:u}).catch(function(){});};
+var c=b.querySelector('[data-sq=copy]');c.onclick=function(){(navigator.clipboard?navigator.clipboard.writeText(t+' '+u):Promise.reject()).then(function(){c.textContent='Link copied';setTimeout(function(){c.textContent='Copy link'},2000);}).catch(function(){prompt('Copy this link',u);});};});</script>
+<script is:inline>document.addEventListener('click',function(e){var h=e.target.closest('[data-share-page]');if(!h)return;var b=document.querySelector('.sq-btns');if(!b)return;var t=b.dataset.sqText,u=b.dataset.sqUrl;if(navigator.share){navigator.share({title:b.dataset.sqTitle,text:t,url:u}).catch(function(){});}else{b.scrollIntoView({behavior:'smooth',block:'center'});b.classList.add('flash');setTimeout(function(){b.classList.remove('flash')},1200);}});</script>
 
 <footer class="site-foot"><div class="wrap wide foot-grid">
   <div><a class="wordmark" href={base}><span class="mark" aria-hidden="true">SB</span><span>SportingBrain</span></a>
