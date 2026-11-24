@@ -12,6 +12,7 @@ import { FOULS, COUNTDOWN } from '../data/games.js';
 import VIDS from '../data/feeds/videos.json';
 import { lotdIndex, renderClip } from './laughs.js';
 import { icon } from './icons.js';
+import { BOOKS } from '../data/books.js';
 import { photoFor, figure } from './photos.js';
 (function(){
 'use strict';
@@ -241,6 +242,13 @@ if(P==='home'){
         <p class="q">${esc(cm.q)}</p>
         <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how you did':'Make your call'}</a><a class="ci-alt" href="${BASE}call-it-football.html">Prefer football? Call It: Football</a>
       </section>`:''}
+      ${(()=>{const bk=BOOKS[((DAY-1)%BOOKS.length+BOOKS.length)%BOOKS.length];const q=encodeURIComponent(bk[0]+' '+bk[1]).replace(/%20/g,'+');return `<section class="botd" aria-label="Book of the Day">
+        <div class="botd-top"><span>Book of the Day</span><span>${esc(bk[2])}</span></div>
+        <div class="botd-row"><div class="botd-spine" aria-hidden="true"><b>${esc(bk[0])}</b></div>
+        <div><h2>${esc(bk[0])}</h2><p class="botd-by">${esc(bk[1])}</p><p>${esc(bk[3])}</p>
+        <a class="btn gold sm" href="https://www.amazon.co.uk/s?k=${q}&tag=gmh710f-21" target="_blank" rel="sponsored nofollow noopener">See it on Amazon</a></div></div>
+        <p class="botd-aff">Amazon affiliate link. <a href="${BASE}gift-guide.html">More gift ideas</a></p>
+      </section>`;})()}
       <p class="you-line">${streak?`Your streak: <b>${streak} day${streak===1?'':'s'}</b>. `:''}New games in <b class="countdown" id="cd2"></b></p>
     </aside>
   </div>
