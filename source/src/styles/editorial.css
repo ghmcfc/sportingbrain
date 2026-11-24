@@ -775,3 +775,16 @@ body.dark .nlp-item{background:#14254a;border-color:#2A3A55}body.dark .nlp-item 
 .fp-main{min-width:0}
 .nl-slot .nl-box{margin:14px 0 0;max-width:none}
 .nl-slot .nl-box.is-in{display:none}
+/* TikTok landing */
+.tt-hero{background:#0F1E36;color:#fff;border-radius:0 0 18px 18px;padding:34px 22px 30px;border-bottom:6px solid #F2A900;text-align:left}
+.tt-hero h1{font-family:var(--display);font-weight:900;font-size:clamp(2.4rem,9vw,4.2rem);line-height:.95;margin:0 0 14px;color:#fff}
+.tt-stand{font-size:1.2rem;line-height:1.5;color:#E6ECF5;max-width:34em;margin:0 0 22px}
+.tt-go{display:block;text-align:center;background:#F2A900;color:#0F1E36;font-family:var(--display);font-weight:900;font-size:1.8rem;text-decoration:none;padding:18px 20px;border-radius:14px;max-width:460px}
+.tt-go:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.tt-note{color:#AAB6C9;font-size:.95rem;margin:12px 0 0}
+.tt-more h2{font-family:var(--display);font-weight:900;font-size:1.8rem;margin:28px 0 12px}
+.tt-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.tt-grid a{display:flex;flex-direction:column;gap:4px;padding:16px;border:1px solid #D8DEE8;border-radius:12px;background:#fff;text-decoration:none;color:inherit}
+.tt-grid b{font-family:var(--display);font-weight:800;font-size:1.3rem}.tt-grid span{color:#33415C}
+body.dark .tt-grid a{background:#14254a;border-color:#2A3A55}body.dark .tt-grid span{color:#C9D3E3}
+@media(min-width:760px){.tt-hero{padding:48px 44px 40px}}

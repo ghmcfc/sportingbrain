@@ -48,7 +48,7 @@ const section = /^\/kids/.test(path) ? 'kids' : /^\/gift-guide/.test(path) ? 'gi
 const isKids = /^\/kids/.test(path);
 const giftPicks = (!noads && !isKids) ? picksFor(path) : null;
 const slotPage = path === '/' || /^\/(index|daily)(\.html)?$/.test(path);
-const showNl = !isKids && !noads && (!!shareItem || path === '/' || /^\/(index|read|this-week|flashback|on-this-day|round-up)(\.html)?$/.test(path)) && !/^\/newsletter/.test(path);
+const showNl = !isKids && !noads && (!!shareItem || path === '/' || /^\/(index|read|this-week|flashback|on-this-day|round-up|tiktok)(\.html)?$/.test(path)) && !/^\/newsletter/.test(path);
 const SOCIAL = [['X','https://x.com/_sportingbrain'],['Instagram','https://www.instagram.com/_sportingbrain/'],['TikTok','https://www.tiktok.com/@_sportingbrain']];
 const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'SportingBrain', url: new URL(base, Astro.site).href, description: 'The free daily sports hub for everyone who loves sport.' },
   { '@context': 'https://schema.org', '@type': 'Organization', name: 'SportingBrain', url: new URL(base, Astro.site).href, logo: new URL(base + 'assets/icon-512.png', Astro.site).href, sameAs: SOCIAL.map(x => x[1]) }];

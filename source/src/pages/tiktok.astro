@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<Base title="Welcome from TikTok | SportingBrain" description="You've watched the quiz. Now play today's five hard sports questions, free. No sign-up, no betting." page="tiktok" noindex>
+  <section class="tt-hero">
+    <p class="gg-kicker">Hello from TikTok</p>
+    <h1>You've watched the quiz. Now beat the Brain.</h1>
+    <p class="tt-stand">Five hard sports questions, new every day. The Brain has already set a score. Free, no sign-up, no app to download.</p>
+    <a class="tt-go" href={`${base}daily.html`}>Play today's five</a>
+    <p class="tt-note">Takes about two minutes. Then come back to TikTok and comment your score.</p>
+  </section>
+  <section class="tt-more" aria-labelledby="tt-more-h">
+    <h2 id="tt-more-h">If you like that, try these</h2>
+    <div class="tt-grid">
+      <a href={`${base}call-it.html`}><b>Call It</b><span>A real cricket final, frozen. Call what happens next.</span></a>
+      <a href={`${base}sports-grid.html`}><b>Sports Grid</b><span>Fill the grid with players who fit both clues.</span></a>
+      <a href={`${base}connections.html`}><b>Connections</b><span>Sixteen sporting names, four hidden groups.</span></a>
+      <a href={`${base}ground-guesser.html`}><b>Ground Guesser</b><span>Name the stadium from a close-up.</span></a>
+    </div>
+  </section>
+</Base>

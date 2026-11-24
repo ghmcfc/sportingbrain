@@ -117,7 +117,7 @@ function welcome(USP, force){ USP=USP||DEFAULT_USP;
   if(new URLSearchParams(location.search).has('welcome')) force=true;
   const seen=store.get('welcomed_at',0), wk=7*86400000;
   if(!force && !PROMPT.ok()) return;
-  if(!force && (store.get('played',0)>0 || store.get('nl_done',false) || (store.get('welcomed',false) && Date.now()-seen<wk) || store.get('welcome_count',0)>=2)) return;
+  if(!force && ((document.getElementById('main')||{dataset:{}}).dataset.page==='tiktok' || store.get('played',0)>0 || store.get('nl_done',false) || (store.get('welcomed',false) && Date.now()-seen<wk) || store.get('welcome_count',0)>=2)) return;
   if(!force) PROMPT.used();
   store.set('welcomed',true); store.set('welcomed_at',Date.now()); store.set('welcome_count',store.get('welcome_count',0)+1);
   const mobile=matchMedia('(max-width:767px)').matches;
