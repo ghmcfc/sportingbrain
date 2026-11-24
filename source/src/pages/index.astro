@@ -8,6 +8,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const M = buildMoments().map(m => ({ match: m.match, team: m.team, opp: m.opp, score: m.score, at: m.at, need: m.need, q: m.qs[0].q, innings: m.innings }));
 ---
 <Base title="SportingBrain: the smartest free sports site in the world" description="Call It, the daily game built on real matches. Flashback, On This Day, ball-by-ball replays, proper sport guides and the Cynical Round-Up. Free. No betting, ever." page="home" wide>
+  <script is:inline>(function(){try{var d=new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/London'})).getDay();var f=['329300362865','03839c401997','fa48a10aa76d','03722f0fe294','6eec06d35c25','40d56c180e9c','329300362865'][d];var l=document.createElement('link');l.rel='preload';l.as='image';l.setAttribute('fetchpriority','high');l.href=(document.documentElement.dataset.base||'/')+'photos/hook/'+f+'.jpg';document.head.appendChild(l);}catch(e){}})();</script>
   <div class="crawl">
     <h1>Free daily sports quizzes, games and stories</h1>
     <p class="teaser">SportingBrain is a free sports site for people who know their sport. Daily games built on real matches, hard quiz questions, and true stories from every sport, men's and women's. No sign-up, no betting, ever.</p>

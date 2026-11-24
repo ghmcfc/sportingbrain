@@ -298,7 +298,7 @@ if(P==='home'){
     ];
     const [title,sub,make,brain]=THEMES[wd], Q=make(), key='hook_'+DAY, saved=store.get(key,null);
     const PIC=['Women\'s football','Cricket','Rugby union','Golf','Tennis','Athletics','Football'][wd], pc=window.SB_CREDIT&&SB_CREDIT(PIC);
-    if(pc){ el.style.setProperty('--hookbg',`url('${SB_PHOTO(PIC,1400)}')`); el.classList.add('has-photo'); }
+    if(pc){ el.style.setProperty('--hookbg',`url('${SB_PHOTO(PIC,1400).replace(/\/photos\/(?!hook\/)/,'/photos/hook/')}')`); el.classList.add('has-photo'); }
     const SHORT=['Women\'s Sport','Expert','Records','World Sport','Throwback','Showdown','Matchday'];
     const week=`<div class="hook-week" aria-label="This week's challenges">${[1,2,3,4,5,6,0].map(d=>`<span class="${d===wd?'on':''}"><b>${WD[d].slice(0,3)}</b>${SHORT[d]}</span>`).join('')}</div>${pc?`<p class="hook-credit">Photo: ${esc(pc.what)}, ${esc(pc.by)} / Wikimedia Commons</p>`:''}`;
     const nx=COUNTDOWN.find(e=>Date.parse(e[0])>Date.now());
