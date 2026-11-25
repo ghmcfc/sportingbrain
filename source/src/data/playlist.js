@@ -20,6 +20,7 @@ export const PLAY = [
   ['rewind', 'Grandparent Rewind', 'A round for every decade from the 1950s. Play it with someone who was there.', 'quiz', '#2A3A55'],
   ['bingo', 'Matchday Bingo', 'A card for the next game you watch. Tap squares as they happen, or print it.', 'games', '#F2A900'],
   ['advent', 'Sporting Advent Calendar', 'A door a day from 1 December, each with a question and a story.', 'family', '#0B6E4F'],
+  ['pick-a-sport', 'Pick a Sport', 'Ten questions on the sport you know best. A fresh set every time.', 'quiz', '#0F1E36'],
   ['higher-or-lower', 'Higher or Lower', 'Which number is bigger? Keep the run going.', 'quiz', '#2A3A55'],
   ['true-or-false', 'True or False', 'Sporting facts and fibs.', 'quiz', '#2A3A55'],
   ['speed-round', 'Speed Round', 'Sixty seconds. As many as you can.', 'quiz', '#2A3A55'],

@@ -8,6 +8,7 @@ import { ukDayNo, badgeLineHTML } from './play.js';
 import { GUIDES } from '../data/guides.js';
 import { WEEK } from '../data/week.js';
 import { PLAY } from '../data/playlist.js';
+import { SB_GROUPS } from '../data/sportgroups.js';
 import { FOULS, COUNTDOWN } from '../data/games.js';
 import VIDS from '../data/feeds/videos.json';
 import { lotdIndex, renderClip } from './laughs.js';
@@ -263,7 +264,7 @@ if(P==='home'){
 
   main.innerHTML = `
   <div class="fp">
-    <div class="fp-main"><section class="hook" id="hook" aria-live="polite"></section><section class="yc-home" id="ycHome" aria-live="polite"></section><div data-nl-slot class="nl-slot"></div></div>
+    <div class="fp-main">${(store.get('played',0)>0||Object.keys(store.get('pg_played',{})).length||store.get('playdays',[]).length)?'':`<p class="sb-first"><b>New here?</b>Free daily sports games built on real matches. No sign-up, no betting. Start with today's puzzle below.</p>`}<section class="hook" id="hook" aria-live="polite"></section><section class="yc-home" id="ycHome" aria-live="polite"></section><div data-nl-slot class="nl-slot"></div></div>
     <aside class="fp-side">
       ${cm?`<section class="board" aria-label="Today's Call It">
         <div class="board-top"><span>Call It #${DAY}</span><span>${ciDone?'Played':'Live'}</span></div>
@@ -286,6 +287,8 @@ if(P==='home'){
 
   <section class="blk"><header class="sh"><h2>Today's games</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></header>
     <div class="gtiles">${[...FIX,...rot].map(tile).join('')}</div></section>
+  <section class="blk"><header class="sh"><h2>Pick a sport</h2><a href="${BASE}pick-a-sport.html">Ten questions, as often as you like</a></header>
+    <div class="ps-groups">${SB_GROUPS.map(g=>`<a href="${BASE}pick-a-sport.html?s=${g[0]}" data-track="ps-home-${g[0]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`).join('')}</div></section>
   <a class="ie-promo" href="${BASE}ireland.html" data-track="ie-promo-home"><span class="ie-promo-k" lang="ga">Fáilte</span><b>SportingBrain Ireland</b><span>Three daily games on Irish sport: the Irish Brain, Name the County and Irish Legends. GAA, rugby, racing, boxing and more.</span><em>Play the Irish edition</em></a>
 
   ${AD1}

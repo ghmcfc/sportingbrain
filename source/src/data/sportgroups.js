@@ -1,0 +1,12 @@
+// Pick a Sport (UK): which bank sports make up each ten-question quiz.
+export const SB_GROUPS = [
+  ['football', 'Football', 'Men\'s and women\'s, from 1930 to now', ['Football']],
+  ['cricket', 'Cricket', 'Tests, World Cups and the Ashes', ['Cricket']],
+  ['rugby', 'Rugby', 'Union and league, club and country', ['Rugby union', 'Rugby league']],
+  ['tennis', 'Tennis', 'Grand Slams, greats and Wimbledon', ['Tennis']],
+  ['golf', 'Golf', 'Majors, Ryder Cups and the Open', ['Golf']],
+  ['olympic', 'Athletics and Olympic sports', 'Track, field, pool, gym and bike', ['Athletics', 'Swimming', 'Gymnastics', 'Olympics', 'Cycling']],
+  ['f1', 'Formula 1', 'Champions, circuits and records', ['Formula 1']],
+  ['ring', 'Boxing, snooker and darts', 'The ring, the table and the oche', ['Boxing', 'Snooker', 'Darts']],
+  ['more', 'Everything else', 'Racing, netball, basketball, NFL, ice hockey and more', ['Horse racing', 'Netball', 'Basketball', 'American football', 'Ice hockey', 'Squash', 'Hockey']],
+];

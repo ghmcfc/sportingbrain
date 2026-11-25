@@ -927,3 +927,18 @@ header.top .hdr-team.has-team{border-color:#F2A900}
 .yc-home select{font:inherit;padding:10px 12px;border:2px solid var(--ink);border-radius:3px;background:var(--paper);color:var(--ink);flex:1 1 220px;max-width:360px}
 .yc-home a{font-family:var(--display);font-weight:700}
 .yc-home .yc-big{font-size:1.9rem;margin:0;flex:1 1 220px}
+
+/* Pick a Sport (UK) */
+.ie-pips{display:flex;gap:6px;margin:4px 0 12px}.ie-pips i{flex:1;height:8px;border-radius:2px;background:var(--rule)}
+.ie-pips i.ok{background:var(--turf)}.ie-pips i.no{background:var(--signal)}.ie-pips i.cur{background:var(--amber)}
+.ps-groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:0 0 22px}
+.ps-groups a{display:block;padding:14px 16px;background:var(--paper);border:1px solid var(--rule);border-left:6px solid var(--amber);border-radius:3px;text-decoration:none;color:var(--ink)}
+.ps-groups a:hover{border-color:var(--ink);border-left-color:var(--amber)}
+.ps-groups a b{display:block;font-family:var(--display);font-size:1.5rem;line-height:1.05}
+.ps-groups a span{font-size:.92rem;color:var(--ink-2)}
+.ps-groups a small{display:block;margin-top:6px;font-family:var(--display);font-weight:700;color:var(--mute)}
+.ps-groups a.ps-ie{border-left-color:#0E6B45}
+/* First visit: one line above the puzzle */
+.sb-first{margin:0 0 10px;padding:10px 14px;background:#0F1E36;color:#fff;border-left:5px solid var(--amber);border-radius:3px;font-size:1rem}
+.sb-first b{font-family:var(--display);font-size:1.15rem;color:#F2A900;margin-right:6px}
+@media(max-width:560px){.blk .ps-groups{grid-template-columns:1fr 1fr;gap:8px}.blk .ps-groups a{padding:10px 12px}.blk .ps-groups a b{font-size:1.2rem}.blk .ps-groups a span{display:none}}

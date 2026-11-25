@@ -11,6 +11,7 @@ export const SHARE = {
   'ireland/legends': ['Irish Legends', 'Five clues to one of Ireland\'s sporting greats, hardest first. A new legend every day.'],
   'colours': ['Your Colours', 'Pick your football club, rugby team, cricket county or GAA county, and it goes on every SportingBrain score you share.'],
   'ireland/quiz': ['Pick a Sport: Ireland', 'Ten questions on the Irish sport you know best: GAA, rugby, soccer, racing, boxing and more.'],
+  'pick-a-sport': ['Pick a Sport', 'Ten questions on the sport you know best: football, cricket, rugby, tennis, golf, F1 and more. A fresh set every time.'],
   'who-am-i': ['Who Am I?', 'Five clues to one sporting great, hardest clue first. The fewer clues you need, the higher you score. A new player every day.'],
   'ground-guesser': ['Ground Guesser', 'A real stadium, zoomed right in. Name the ground in as few steps as you can, from football and cricket to tennis, golf and F1.'],
   'sports-grid': ['Sports Grid', 'Nine squares. Name a club that fits both the row and the column, with no repeats. Harder than it looks.'],
