@@ -51,7 +51,10 @@ function btbSave(day,l,marks,brain){ const key=day===DAY?ukKey():'arch'+day, sco
   if(day!==DAY) return; const y=new Date(); y.setDate(y.getDate()-1); const last=store.get('lastday',null); let st=store.get('streak',0); const y2=new Date(); y2.setDate(y2.getDate()-2);
   if(last===key) return; if(last===ukKey(y)) st=st+1; else if(last===ukKey(y2) && st>0 && saverAvailable()){ st=st+1; store.set('saver_week',isoWeek()); setTimeout(()=>toast('Streak saver used. Your streak lives on.'),800); } else st=1;
   store.set('streak',st); store.set('lastday',key); store.set('played',store.get('played',0)+1); if(score>brain) store.set('beaten',store.get('beaten',0)+1); }
-const btbCard=(day,l,marks,brain)=>{ const sc=marks.filter(Boolean).length; return `SportingBrain #${day} 🧠 ${LVNAME[l]}\n${marks.map(m=>m?'🟩':'🟥').join('')}  ${sc}/5\n${sc>brain?'I beat the Brain':'The Brain got '+brain+'/5'}. Beat that.\n${SITE}daily.html?level=${l}`; };
+const btbBadge=()=>{ if(KIDZ) return ''; const c=store.get('colours',null), n=c&&c.badge&&c.picks&&c.picks[c.badge]; return n&&n!=='Somewhere else'?n:''; };
+const btbCard=(day,l,marks,brain)=>{ const sc=marks.filter(Boolean).length, st=store.get('streak',0), b=btbBadge(), me=(store.get('ch_name','')||'').slice(0,20);
+  const u=new URL(SITE+'daily.html'); u.searchParams.set('level',l); u.searchParams.set('vs',me||(b?b+' fan':'A mate')); u.searchParams.set('s',sc+'/5'); u.searchParams.set('ref','share');
+  return `SportingBrain #${day} 🧠 ${LVNAME[l]}${b?' · Playing for '+b:''}\n${marks.map(m=>m?'🟩':'🟥').join('')}  ${sc}/5 · ${sc>brain?'beat the Brain ('+brain+')':sc===brain?'level with the Brain ('+brain+')':'the Brain got '+brain}${st>1?'\n🔥 '+st+'-day streak':''}\nCan you beat ${sc}/5? ${u.href}`; };
 
 // "Keep playing" block for result screens: today's other daily games, unplayed first, with today's progress.
 function keepPlaying(except){
@@ -118,7 +121,7 @@ function isoWeek(d=new Date()){ const t=new Date(Date.UTC(d.getFullYear(),d.getM
 window.addEventListener('message',e=>{ try{ const d=typeof e.data==='string'?JSON.parse(e.data):e.data; if(d&&d.event==='Tally.FormSubmitted'){ store.set('nl_done',true); toast("You're in! See you in the morning."); } }catch(_){} });
 function saverAvailable(){ return store.get('saver_week','')!==isoWeek(); }
 function streakSaverLine(){ return saverAvailable()?'Streak saver ready this week':'Streak saver used this week'; }
-function markPlayed(g){ store.set('pl_'+g,true); const d=store.get('playdays',[]), k=ukKey(); if(!d.includes(k)){ d.push(k); store.set('playdays',d.slice(-30)); } }
+function markPlayed(g){ window.SB_loadAds&&window.SB_loadAds(); store.set('pl_'+g,true); const d=store.get('playdays',[]), k=ukKey(); if(!d.includes(k)){ d.push(k); store.set('playdays',d.slice(-30)); } }
 // Prompt rules (Super Prompt 5A): one interruptive prompt per visit, two a week, none if tips are switched off.
 const PROMPT={ ok(){ if(store.get('tips_off',false)) return false; try{ if(sessionStorage.getItem('sb_prompt')) return false; }catch(e){} const w=store.get('prompt_week',{w:'',n:0}); return !(w.w===isoWeek()&&w.n>=2); },
   used(){ try{ sessionStorage.setItem('sb_prompt','1'); }catch(e){} const w=store.get('prompt_week',{w:'',n:0}); store.set('prompt_week',{w:isoWeek(),n:(w.w===isoWeek()?w.n:0)+1}); } };
@@ -429,7 +432,7 @@ if(P==='hl'){
     if(ok){ run++; $('#run').textContent=run; toast('Correct!'); setTimeout(()=>{a=b;round();},1000); }
     else { const pb=run>best; if(pb){best=run;store.set('hl_best',best);$('#best').textContent=best; if(run>=5) confetti();}
       $('#res').hidden=false; $('#msg').textContent=run===0?"First one! The Brain is trying not to laugh.":`${run} in a row. ${pb?'New personal best!':'Your best is '+best+'.'}`;
-      $('#sh').onclick=()=>share(`SportingBrain Higher or Lower 🧠\n${'🟩'.repeat(Math.min(run,15))}🟥 ${run} in a row\nsportingbrain.com`); } }
+      $('#sh').onclick=()=>share(`SportingBrain Higher or Lower 🧠\n${'🟩'.repeat(Math.min(run,15))}🟥 ${run} in a row\n${SITE}${location.pathname.replace(BASE,'').replace(/^\//,'')}?ref=share`); } }
   $('#hi').onclick=()=>guess(true); $('#lo').onclick=()=>guess(false); $('#ag').onclick=()=>{run=0;a=null;round();}; round();
 }
 
@@ -447,7 +450,7 @@ if(P==='gtp'){
   function pickP(o,btn){ markPlayed('gtp'); const p=L[idx]; const bs=$('#op').querySelectorAll('.opt'); bs.forEach(b=>{b.disabled=true; if(b.textContent===p.a)b.classList.add('right');});
     if(o===p.a){ const pts=3-clue; total+=pts; toast(`+${pts} points!`);} else btn.classList.add('wrong');
     clue=2; renderClues(); $('#tot').textContent=total; $('#more').hidden=true;
-    if(idx<L.length-1){ $('#nx').hidden=false; } else { const best=store.get('gtp_best',0); if(total>best){store.set('gtp_best',total); confetti();} $('#nx').hidden=false; $('#nx').textContent='Share my score'; $('#nx').insertAdjacentHTML('afterend',endNavHTML()); $('#nx').onclick=()=>share(`SportingBrain Guess the Player 🕵️ ${total}/${L.length*3} points\nsportingbrain.com`); } }
+    if(idx<L.length-1){ $('#nx').hidden=false; } else { const best=store.get('gtp_best',0); if(total>best){store.set('gtp_best',total); confetti();} $('#nx').hidden=false; $('#nx').textContent='Share my score'; $('#nx').insertAdjacentHTML('afterend',endNavHTML()); $('#nx').onclick=()=>share(`SportingBrain Guess the Player 🕵️ ${total}/${L.length*3} points\n${SITE}${location.pathname.replace(BASE,'').replace(/^\//,'')}?ref=share`); } }
   $('#nx').onclick=()=>{ idx++; show(); };
   show();
 }
@@ -462,7 +465,7 @@ if(P==='tf'){
   function show(){ bar(); $('#qt').textContent=L[i][0]; $('#btns').hidden=false; }
   function ans(v){ markPlayed('tf'); const ok=v===L[i][1]; marks.push(ok); if(ok)sc++; toast(ok?'Correct!':`It's ${L[i][1]?'true':'false'}!`); i++; if(i<L.length) show(); else { bar(); $('#btns').hidden=true; $('#qt').textContent=`You got ${sc}/10`; if(sc>=9) confetti();
       $('#res').innerHTML=`<div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${sc>=8?'Proper sports brain, that.':sc>=5?'Not bad. Not great. Go again?':'Ooh. Did you have your eyes shut?'}</div></div><div class="row"><button class="btn pink" id="sh">Share</button><a class="btn ghost" href="${BASE}true-or-false.html">Go again</a></div>`;
-      $('#res').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain True or False ✅\n${marks.map(m=>m?'🟩':'🟥').join('')} ${sc}/10\nsportingbrain.com`); } }
+      $('#res').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain True or False ✅\n${marks.map(m=>m?'🟩':'🟥').join('')} ${sc}/10\n${SITE}${location.pathname.replace(BASE,'').replace(/^\//,'')}?ref=share`); } }
   $('#t').onclick=()=>ans(true); $('#f').onclick=()=>ans(false); show();
 }
 
@@ -476,7 +479,7 @@ if(P==='speed'){
   function q(){ if(i>=L.length){L=shuffle(SB_TF);i=0;} $('#qt').textContent=L[i][0]; }
   function end(){ clearInterval(timer); $('#btns').hidden=true; $('#go').hidden=false; $('#go').textContent='Play again'; $('#qt').textContent=`Time! You got ${sc} right.`;
     const best=store.get('speed_best',0); if(sc>best){store.set('speed_best',sc);$('#best').textContent=sc; confetti();}
-    $('#res').innerHTML=`<button class="btn pink wide" id="sh">Share my score</button>`; $('#res').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain Speed Round ⏱️ ${sc} right in 60 seconds\nsportingbrain.com`); }
+    $('#res').innerHTML=`<button class="btn pink wide" id="sh">Share my score</button>`; $('#res').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain Speed Round ⏱️ ${sc} right in 60 seconds\n${SITE}${location.pathname.replace(BASE,'').replace(/^\//,'')}?ref=share`); }
   function ans(v){ if(v===L[i][1]){sc++;$('#sc').textContent=sc;} else { t=Math.max(0,t-3); toast('-3 seconds!'); } i++; q(); }
   $('#go').onclick=()=>{ markPlayed('speed'); L=shuffle(SB_TF); i=0; sc=0; t=60; $('#sc').textContent=0; $('#res').innerHTML=''; $('#go').hidden=true; $('#btns').hidden=false; q();
     timer=setInterval(()=>{ t--; $('#tm').textContent=t; if(t<=0) end(); },1000); };
@@ -495,7 +498,7 @@ if(P==='grid'){
     $('#gb').querySelectorAll('button').forEach((b,k)=>b.onclick=()=>{const w=words[k]; if(sel.includes(w)) sel=sel.filter(x=>x!==w); else if(sel.length<4) sel.push(w); draw();}); }
   function over(win){ markPlayed('grid'); if(win) store.set('grid_solved',store.get('grid_solved',0)+1); $('#ck').hidden=$('#sf').hidden=true; if(!win){ G.groups.filter(g=>!solved.includes(g)).forEach(g=>solved.push(g)); words=[]; draw(); }
     $('#res').innerHTML=`<div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${win?`Cracked it with ${lives} ${lives===1?'life':'lives'} left. Clever clogs.`:'The Grid wins today. Fresh one tomorrow.'}</div></div><button class="btn pink wide" id="sh">Share</button>`;
-    $('#res').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain The Grid #${DAY} 🧩 ${win?'Solved':'Beaten'} ${'❤️'.repeat(lives)}\nsportingbrain.com`); if(win) confetti(); }
+    $('#res').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain The Grid #${DAY} 🧩 ${win?'Solved':'Beaten'} ${'❤️'.repeat(lives)}\n${SITE}${location.pathname.replace(BASE,'').replace(/^\//,'')}?ref=share`); if(win) confetti(); }
   $('#ck').onclick=()=>{ if(sel.length!==4){toast('Pick four words');return;} const g=G.groups.find(g=>sel.every(w=>g.w.includes(w)));
     if(g){ solved.push(g); words=words.filter(w=>!g.w.includes(w)); sel=[]; toast('Nice one!'); draw(); if(solved.length===4) over(true); }
     else { const close=G.groups.some(g=>sel.filter(w=>g.w.includes(w)).length===3); lives--; toast(close?'One away!':'Not a group'); sel=[]; draw(); if(lives===0) over(false); } };
@@ -508,7 +511,7 @@ if(P==='emoji'){
   const qs=shuffle(SB_EMOJI).slice(0,8).map(e=>({q:'',e:e.e,o:shuffle(e.o),a:null,ans:e.a}));
   qs.forEach(q=>{q.a=q.o.indexOf(q.ans); q.q='Which sport is this?'; q.s=q.e;});
   runQuiz($('#g'), qs, {done:m=>{ markPlayed('emoji'); const sc=m.filter(Boolean).length; $('#g').innerHTML=`<div class="score">${sc}/8</div><div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${sc>=7?'Emoji master!':'Not bad. Have another go?'}</div></div><div class="row"><button class="btn pink" id="sh">Share</button><a class="btn ghost" href="${BASE}guess-the-sport.html">Go again</a></div>`;
-    $('#g').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain Guess the Sport 🤔 ${sc}/8\nsportingbrain.com`); if(sc>=7) confetti(); }});
+    $('#g').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain Guess the Sport 🤔 ${sc}/8\n${SITE}${location.pathname.replace(BASE,'').replace(/^\//,'')}?ref=share`); if(sc>=7) confetti(); }});
   // show emoji large
   const fix=()=>{ const s=$('#qsub'); if(s && !s.classList.contains('emoji-q')){ s.className='emoji-q'; } }; new MutationObserver(fix).observe($('#g'),{subtree:true,childList:true}); fix();
 }
@@ -521,7 +524,7 @@ if(P==='challenge'){
   <div class="sec"><h2>Other challenges</h2></div><div class="g2">${Object.entries(SB_CHALLENGES).filter(([x])=>x!==k).map(([x,o])=>`<a class="ch" href="${BASE}challenge.html?c=${x}" style="background:${o.colour}"><b>${esc(o.title)}</b><small>10 questions</small></a>`).join('')}</div>`;
   runQuiz($('#q'), c.qs, {done:m=>{ const sc=m.filter(Boolean).length; store.set('ch_'+k,sc);
     $('#q').innerHTML=`<div class="score">${sc}/${c.qs.length}</div><div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${sc>=8?'Proper sports brain. Take a bow.':sc>=5?'Solid. Not spectacular. The Brain respects it.':'Ouch. Same time next week?'}</div></div><button class="btn pink wide" id="sh">Share my score</button>`;
-    $('#q').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain ${c.title} 🧠\n${m.map(x=>x?'🟩':'🟥').join('')} ${sc}/${c.qs.length}\nsportingbrain.com`); if(sc>=9) confetti(); }});
+    $('#q').insertAdjacentHTML('beforeend',endNavHTML()); $('#sh').onclick=()=>share(`SportingBrain ${c.title} 🧠\n${m.map(x=>x?'🟩':'🟥').join('')} ${sc}/${c.qs.length}\n${SITE}${location.pathname.replace(BASE,'').replace(/^\//,'')}?ref=share`); if(sc>=9) confetti(); }});
 }
 
 // ================= STORY / SPORT QUIZ ISLANDS =================
@@ -563,4 +566,7 @@ document.querySelectorAll('[data-share-text]').forEach(b=>b.addEventListener('cl
   if(host===main) main.appendChild(wrap); else host.appendChild(wrap);
 })();
 })();
-
+// Challenge links: anyone arriving from a mate's score sees who to beat before anything else.
+(function(){ try{ const p=new URLSearchParams(location.search), vs=p.get('vs'), sc=p.get('s'); if(!vs||!sc||!/^\d{1,3}\/\d{1,3}$/.test(sc)) return;
+  window.sbTrack&&sbTrack('challenge-landing'); setTimeout(()=>{ if(document.querySelector('.pg-vs')) return; const m=document.getElementById('main'); if(!m) return;
+    const d=document.createElement('div'); d.className='pg-vs'; const E=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); d.innerHTML=`<b>${E(vs)} scored ${E(sc)} on today's SportingBrain.</b> Your turn. Same questions, no sign-up.`; m.before(d); },60); }catch(e){} })();

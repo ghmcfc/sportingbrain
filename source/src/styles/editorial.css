@@ -946,3 +946,4 @@ header.top .hdr-team.has-team{border-color:#F2A900}
 .ps-book{margin:16px 0 0;padding:14px 16px;border:1px solid var(--rule);border-left:5px solid var(--amber);border-radius:3px;background:var(--page)}
 .ps-book b{font-family:var(--display);font-size:1.35rem}.ps-book span{color:var(--ink-2);font-style:italic}
 .ps-book p:not(.pg-step){margin:6px 0 10px}.ps-book small{display:block;margin-top:6px;color:var(--mute);font-size:.82rem}
+body > .pg-vs, .pg-vs:not(main *){max-width:1100px;margin:12px auto 0;padding:12px 16px;width:calc(100% - 28px);box-sizing:border-box}

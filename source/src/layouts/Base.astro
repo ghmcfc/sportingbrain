@@ -18,6 +18,8 @@ import { SEO } from '../data/seo.js';
 import { SHARE } from '../data/sharetext.js';
 import { PLAY as PLAYLIST } from '../data/playlist.js';
 const adsOn = !!ADS.client && !noads && !/^\/kids/.test(Astro.url.pathname);
+// Game pages: no ads while people play. AdSense loads once a game is finished (markPlayed calls SB_loadAds).
+const isGamePage = PLAYLIST.some(x => '/' + x[0] === Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '')) || /^\/(daily|ireland\/(brain|county|legends|quiz)|pick-a-sport)/.test(Astro.url.pathname);
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
 const pathKey = '/' + Astro.url.pathname.replace(/^\//, '').replace(base.replace(/^\//, ''), '');
 const S = SEO[pathKey] || SEO[pathKey + '.html'] || {};
@@ -86,7 +88,8 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Sport
 <link rel="apple-touch-icon" href={`${base}assets/apple-touch-icon.png`}>
 <link rel="icon" href={`${base}assets/mark.svg`} type="image/svg+xml">
 <script type="application/ld+json" set:html={JSON.stringify(crumbs ? [...ld, crumbs] : ld)} />
-{adsOn && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS.client}`} crossorigin="anonymous"></script>}
+{adsOn && !isGamePage && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS.client}`} crossorigin="anonymous"></script>}
+{adsOn && isGamePage && <script is:inline define:vars={{ adClient: ADS.client }}>window.SB_loadAds=function(){if(window.__sbAds)return;window.__sbAds=1;var s=document.createElement('script');s.async=true;s.crossOrigin='anonymous';s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+adClient;document.head.appendChild(s);};</script>}
 {adsOn && <script is:inline>window.SB_ADS=true;document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])').forEach(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}}),50));</script>}
 {AN.goatcounter && !noads && <script is:inline data-goatcounter={`https://${AN.goatcounter}.goatcounter.com/count`} async src="https://gc.zgo.at/count.js"></script>}
 <script is:inline>(function(){var Q=[];window.sbTrack=function(n){if(window.goatcounter&&window.goatcounter.count){window.goatcounter.count({path:'event/'+n,title:n,event:true});}else{Q.push(n);}};

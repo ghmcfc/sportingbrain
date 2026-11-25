@@ -44,12 +44,12 @@ export function challengeBox(score, out, label) {
   const d = document.createElement('div'); d.className = 'pg-chal';
   d.innerHTML = `<label>Your name for the challenge link <input maxlength="20" placeholder="First name"></label><div class="pg-btns"><button class="btn gold" data-a="ch">Challenge a mate</button><button class="btn ghost" data-a="sh">Share score</button></div>`;
   d.addEventListener('click', e => { const a = e.target.closest('[data-a]'); if (!a) return; const n = d.querySelector('input').value.trim();
-    if (a.dataset.a === 'ch') share(`I scored ${score}/${out} on ${label} at SportingBrain. Beat that.`, challengeUrl(n, score, out));
+    if (a.dataset.a === 'ch') { if (n) store.set('ch_name', n); } if (a.dataset.a === 'ch') share(`I scored ${score}/${out} on ${label} at SportingBrain. Beat that.`, challengeUrl(n, score, out));
     else share(`SportingBrain ${label}: ${score}/${out}`, location.origin + location.pathname); });
   d.appendChild(endNav());
   return d;
 }
-export function markPlayed(g) { store.set('pl_' + g, true); const p = store.get('pg_played', {}); p[g] = (p[g] || 0) + 1; store.set('pg_played', p);
+export function markPlayed(g) { window.SB_loadAds && window.SB_loadAds(); store.set('pl_' + g, true); const p = store.get('pg_played', {}); p[g] = (p[g] || 0) + 1; store.set('pg_played', p);
   const u = ukNow(), k = `${u.getFullYear()}-${String(u.getMonth() + 1).padStart(2, '0')}-${String(u.getDate()).padStart(2, '0')}`, d = store.get('playdays', []); if (!d.includes(k)) { d.push(k); store.set('playdays', d.slice(-30)); }
   setTimeout(() => window.SB_maybeNewsletter && window.SB_maybeNewsletter(), 1500); }
 
