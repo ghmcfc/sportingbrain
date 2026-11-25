@@ -286,6 +286,7 @@ if(P==='home'){
 
   <section class="blk"><header class="sh"><h2>Today's games</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></header>
     <div class="gtiles">${[...FIX,...rot].map(tile).join('')}</div></section>
+  <section class="yc-home" id="ycHome" aria-live="polite"></section>
   <a class="ie-promo" href="${BASE}ireland.html" data-track="ie-promo-home"><span class="ie-promo-k" lang="ga">Fáilte</span><b>SportingBrain Ireland</b><span>Three daily games on Irish sport: the Irish Brain, Name the County and Irish Legends. GAA, rugby, racing, boxing and more.</span><em>Play the Irish edition</em></a>
 
   ${AD1}
@@ -303,6 +304,21 @@ if(P==='home'){
     <section><header class="sh"><h2>The Cynical Round-Up</h2><a href="${BASE}round-up.html">Read it</a></header>
       <a class="ru-mini" href="${BASE}round-up.html"><span class="satire">Satire. Tongue firmly in cheek.</span><h3 class="ru-h">${esc(SB_ROUNDUP.headline)}</h3><p>${esc(SB_ROUNDUP.edition)}. The real week in sport, with an eye-roll.</p></a></section>
   </div>`;
+  // Pick your team, right on the home page: football first, the other sports one tap away.
+  (function(){ const box=document.getElementById('ycHome'); if(!box) return;
+    import('../data/teams.js').then(({TEAMS,SPORTS})=>{
+      const bar=cols=>cols&&cols.length?`<span class="yc-cols" aria-hidden="true">${cols.map(h=>`<i style="background:${h}"></i>`).join('')}</span>`:'';
+      function draw(){ const c=store.get('colours',{picks:{},badge:'',cols:[]}), n=c.badge&&c.picks[c.badge];
+        if(n){ box.innerHTML=`<p class="pg-step" style="flex-basis:100%">Your team</p><p class="yc-big">${bar(c.cols)} ${esc(n)}</p><a href="${BASE}colours.html">Change, or add your rugby, cricket or GAA team</a>`; return; }
+        box.innerHTML=`<h2>Pick your team</h2><label class="vh" for="ycQuick">Your football club</label><select id="ycQuick"><option value="">Your football club</option>${TEAMS.football.map(t=>`<option value="${esc(t[0])}">${esc(t[0])}</option>`).join('')}</select><p>Your club goes on every score you share, in its colours. Rugby, cricket or GAA instead? <a href="${BASE}colours.html">Pick any sport</a>. Saved on this device only.</p>`;
+        box.querySelector('#ycQuick').onchange=e=>{ const t=TEAMS.football.find(x=>x[0]===e.target.value); if(!t) return;
+          const c=store.get('colours',{picks:{},badge:'',cols:[]}); c.colmap=c.colmap||{}; c.picks.football=t[0]; c.colmap.football=t[1]; c.badge='football'; c.cols=t[1]; store.set('colours',c);
+          window.sbTrack&&sbTrack('colours-home-football'); const s=document.getElementById('ycStrip'); if(s){ s.style.background='linear-gradient(90deg,'+t[1].map((h,i)=>`${h} ${i*100/t[1].length}% ${(i+1)*100/t[1].length}%`).join(',')+')'; s.hidden=false; }
+          const g=document.getElementById('ycShirtFill'); if(g){ g.innerHTML=t[1].map((h,i)=>`<rect x="${i*24/t[1].length}" y="0" width="${24/t[1].length+.2}" height="24" fill="${h}"/>`).join(''); g.closest('a').classList.add('has-team'); }
+          toast(`Playing for ${t[0]}. It goes on every score you share.`); draw(); };
+      }
+      draw(); }).catch(()=>{});
+  })();
 
   countdown($('#cd2'));
   if(window.SB_ADS) main.querySelectorAll('ins.adsbygoogle').forEach(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}});

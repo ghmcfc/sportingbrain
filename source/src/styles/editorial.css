@@ -915,3 +915,15 @@ main:has(.kp) .daily-more{display:none}
 .yc-sample{background:var(--page);padding:12px 14px;border-radius:3px;white-space:pre-wrap;font-size:1rem;margin:0}
 .yc-card{border-top:6px solid var(--amber)}
 @media(max-width:560px){.yc-row{grid-template-columns:1fr auto auto}.yc-row>label:first-child{grid-column:1/-1}}
+
+/* Header: your team */
+header.top .hdr-team{gap:6px;color:#fff;text-decoration:none}
+header.top .hdr-team.has-team{border-color:#F2A900}
+@media(max-width:480px){header.top .hdr-team-t{display:none}header.top .hdr-dark{display:none}}
+/* Home: pick your team */
+.yc-home{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:18px 0 6px;padding:16px 20px;background:var(--paper);border:1px solid var(--rule);border-left:6px solid var(--amber);border-radius:3px}
+.yc-home h2{margin:0;font-size:1.7rem;flex:1 1 220px}
+.yc-home p{margin:0;flex-basis:100%;color:var(--ink-2)}
+.yc-home select{font:inherit;padding:10px 12px;border:2px solid var(--ink);border-radius:3px;background:var(--paper);color:var(--ink);flex:1 1 220px;max-width:360px}
+.yc-home a{font-family:var(--display);font-weight:700}
+.yc-home .yc-big{font-size:1.9rem;margin:0;flex:1 1 220px}

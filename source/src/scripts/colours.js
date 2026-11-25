@@ -21,4 +21,5 @@ export function badgeLine() { const c = getC(), n = badgeName();
   return n ? `<p class="yc-line">${bar(c.cols)} Playing for <b>${esc(n)}</b> · <a href="${BASE}colours.html">Change</a></p>`
     : `<p class="yc-line"><a href="${BASE}colours.html" data-track="colours-invite"><b>Pick your team</b></a> and it goes on every score you share, in its colours.</p>`; }
 export function paintStrip() { const s = document.getElementById('ycStrip'); if (!s) return; const cols = getC().cols || [];
-  s.style.background = cols.length ? `linear-gradient(90deg,${cols.map((h, i) => `${h} ${i * 100 / cols.length}% ${(i + 1) * 100 / cols.length}%`).join(',')})` : ''; s.hidden = !cols.length; }
+  s.style.background = cols.length ? `linear-gradient(90deg,${cols.map((h, i) => `${h} ${i * 100 / cols.length}% ${(i + 1) * 100 / cols.length}%`).join(',')})` : ''; s.hidden = !cols.length;
+  const g = document.getElementById('ycShirtFill'); if (g) { g.innerHTML = cols.map((h, i) => `<rect x="${i * 24 / cols.length}" y="0" width="${24 / cols.length + .2}" height="24" fill="${h}"/>`).join(''); g.closest('a').classList.toggle('has-team', !!cols.length); } }
