@@ -34,6 +34,24 @@ function ukKey(d=new Date()){ const p=ukParts(d); return `${p.y}-${String(p.m).p
 const LAUNCH = Date.UTC(2026,10,23);
 function dayNo(){ const p=ukParts(); return Math.floor((Date.UTC(p.y,p.m-1,p.d)-LAUNCH)/86400000)+1; }
 const DAY = Math.max(1, dayNo());
+// ---------- Beat the Brain: one daily game, shared by the home page and the Daily page ----------
+// From day CURVE_FROM the Hard level climbs from fair to brutal: one medium, three hard, then Expert's first question.
+const CURVE_FROM=4, LVNAME=['','Easy','Medium','Hard','Expert'];
+const btbPool=l=>{ const r=seeded(l*9973); return BANK.filter(q=>q[0]===l).map(q=>[r(),q]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]); };
+function btbQs(day,l){ const r=seeded(day*7+l), pick=(lv,k,per)=>{ const Q=btbPool(lv); return Q[((day-1)*per+k)%Q.length]; };
+  const curve=l===3&&day>=CURVE_FROM, raw=curve?[pick(2,0,1),pick(3,0,5),pick(3,1,5),pick(3,2,5),pick(4,0,5)]:[0,1,2,3,4].map(k=>pick(l,k,5));
+  return raw.map(q=>{ const idx=[0,1,2,3].sort(()=>r()-.5); return {q:q[2],o:idx.map(i=>q[3][i]),a:idx.indexOf(0),f:q[5],s:`${q[1]} · ${curve?LVNAME[q[0]]:LVNAME[l]}`}; }); }
+const btbBrain=(day,l)=>Math.max(1,Math.min(5,[0,4,3,2,2][l]+Math.floor(seeded(day*3+l)()*2)));
+const BRAIN_LINES=['It has done its homework.','It reckons you will fold on question five.','It has never watched a ball kicked and still fancies itself.','It says this is the easiest set all week. It would.','It thinks your group chat will crumble.','It does not sleep, so it had time to revise.','It is quietly confident. Prove it wrong.','It says nobody in your family will beat it.','It got question five. Will you?','It says you only know one sport. Go on.'];
+const brainLine=day=>BRAIN_LINES[(day*7)%BRAIN_LINES.length];
+// Records a finished Beat the Brain: result, streak, played and beaten counts.
+function btbSave(day,l,marks,brain){ const key=day===DAY?ukKey():'arch'+day, score=marks.filter(Boolean).length;
+  store.set(`daily_${key}_${l}`,{marks}); store.set('daily_'+key,{marks}); if(day===DAY&&l===3) store.set('hook_'+DAY,marks);
+  if(day!==DAY) return; const y=new Date(); y.setDate(y.getDate()-1); const last=store.get('lastday',null); let st=store.get('streak',0); const y2=new Date(); y2.setDate(y2.getDate()-2);
+  if(last===key) return; if(last===ukKey(y)) st=st+1; else if(last===ukKey(y2) && st>0 && saverAvailable()){ st=st+1; store.set('saver_week',isoWeek()); setTimeout(()=>toast('Streak saver used. Your streak lives on.'),800); } else st=1;
+  store.set('streak',st); store.set('lastday',key); store.set('played',store.get('played',0)+1); if(score>brain) store.set('beaten',store.get('beaten',0)+1); }
+const btbCard=(day,l,marks,brain)=>{ const sc=marks.filter(Boolean).length; return `SportingBrain #${day} 🧠 ${LVNAME[l]}\n${marks.map(m=>m?'🟩':'🟥').join('')}  ${sc}/5\n${sc>brain?'I beat the Brain':'The Brain got '+brain+'/5'}. Beat that.\n${SITE}daily.html?level=${l}`; };
+
 // "Keep playing" block for result screens: today's other daily games, unplayed first, with today's progress.
 function keepPlaying(except){
   const p=ukParts(), ud=Math.floor(Date.UTC(p.y,p.m-1,p.d)/86400000), dk=ukKey();
@@ -288,53 +306,41 @@ if(P==='home'){
   if(window.SB_ADS) main.querySelectorAll('ins.adsbygoogle').forEach(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}});
   if(VIDS.videos.length&&$('#homeLotd')) renderClip($('#homeLotd'),VIDS.videos[lotdIndex(VIDS.videos.length)],true);
 
-  // ---------- the daily hook: a different five-question challenge every day of the week ----------
+  // ---------- the home hook IS today's Beat the Brain (Hard), so the site has one daily game ----------
   (function(){
     const el=$('#hook'); if(!el) return;
     const wd=new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/London'})).getDay();
     const WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const big=['Football','Cricket','Rugby union'];
-    // Never repeat today's Beat the Brain questions (same order as the daily page uses).
-    const btb=btbTexts(BANK, DAY-7, DAY+7); weeklyExpertQs(BANK, Math.floor((ukDayNo()+3)/7)).forEach(q=>btb.add(q[2])); // a week either side of Beat the Brain, and this week's Weekly Expert
-    const fromBank=(f,n)=>{ let pool=BANK.filter(q=>f(q)&&!btb.has(q[2])); if(pool.length<n) pool=BANK.filter(f); const r=seeded(DAY*13+wd), pick=[...pool].sort(()=>r()-.5).slice(0,n); return pick.map(q=>{ const idx=[0,1,2,3].sort(()=>r()-.5); return {s:q[1],q:q[2],o:idx.map(i=>q[3][i]),a:idx.indexOf(q[4]),f:q[5]}; }); };
-    const THEMES=[
-      ['Women\'s Sport Sunday','Five hard questions on the women who made sport. Three is respectable.',()=>fromBank(q=>q[0]>=3&&/women|Lioness|Matildas|WSL|Black Ferns|Red Roses|\bshe\b|\bher\b/i.test(q[2]+' '+q[5]),5),2],
-      ['Monday Expert','Five of the hardest questions we have. Two is good going.',()=>fromBank(q=>q[0]===4,5),2],
-      ['Record Tuesday','Five expert questions on records, firsts and numbers. Two is good going.',()=>fromBank(q=>q[0]===4&&/first|record|most|how many|\d/i.test(q[2]),5),2],
-      ['World Sport Wednesday','Beyond football, cricket and rugby. Five from the rest of the sporting world.',()=>fromBank(q=>!big.includes(q[1])&&q[0]===4,5),2],
-      ['Throwback Thursday','Five moments from the 20th century. Bring someone who was there.',()=>fromBank(q=>q[0]===4&&/\b19\d\d\b/.test(q[2]),5),2],
-      ['Friday Showdown','Five expert questions to settle it at the pub. Two is good going.',()=>fromBank(q=>q[0]===4,5),2],
-      ['Matchday Saturday','Five football questions before kick-off.',()=>fromBank(q=>q[1]==='Football'&&q[0]===4,5),2],
-    ];
-    const [title,sub,make,brain]=THEMES[wd], Q=make(), key='hook_'+DAY, saved=store.get(key,null);
+    const L=3, Q=btbQs(DAY,L), brain=btbBrain(DAY,L), dk=ukKey(), sv=store.get(`daily_${dk}_${L}`,null), saved=sv&&sv.marks&&sv.marks.length===5?sv.marks:null;
     const PIC=['Women\'s football','Cricket','Rugby union','Golf','Tennis','Athletics','Football'][wd], pc=window.SB_CREDIT&&SB_CREDIT(PIC);
     if(pc){ el.style.setProperty('--hookbg',`url('${SB_PHOTO(PIC,1400).replace(/\/photos\/(?!hook\/)/,'/photos/hook/')}')`); el.classList.add('has-photo'); }
-    const SHORT=['Women\'s Sport','Expert','Records','World Sport','Throwback','Showdown','Matchday'];
-    const week=`<div class="hook-week" aria-label="This week's challenges">${[1,2,3,4,5,6,0].map(d=>`<span class="${d===wd?'on':''}"><b>${WD[d].slice(0,3)}</b>${SHORT[d]}</span>`).join('')}</div>${pc?`<p class="hook-credit">Photo: ${esc(pc.what)}, ${esc(pc.by)} / Wikimedia Commons</p>`:''}`;
+    const week=`<div class="hook-week" hidden></div>${pc?`<p class="hook-credit">Photo: ${esc(pc.what)}, ${esc(pc.by)} / Wikimedia Commons</p>`:''}`;
     const nx=COUNTDOWN.find(e=>Date.parse(e[0])>Date.now());
     const chip=nx?`<span class="hook-chip" id="hookChip" data-t="${nx[0]}">${esc(nx[1])} in <b></b></span>`:'';
-    const head=`<div class="hook-top"><span>${WD[wd]}'s challenge · 5 questions</span>${chip}</div><h1>${esc(title)}</h1><p class="hook-sub">${esc(sub)}</p>`;
+    const head=`<div class="hook-top"><span>${WD[wd]} · Beat the Brain #${DAY} · Hard</span>${chip}</div><h1>Beat the Brain</h1><p class="hook-sub">The Brain got <b>${brain}/5</b> today. ${esc(brainLine(DAY))}</p>`;
     function tickChip(){ const c=$('#hookChip'); if(!c) return; const d=Date.parse(c.dataset.t)-Date.now(), dd=Math.floor(d/864e5), hh=Math.floor(d/36e5)%24, mm=Math.floor(d/6e4)%60; c.querySelector('b').textContent=`${dd}d ${hh}h ${mm}m`; }
     function done(marks){
-      const sc=marks.filter(Boolean).length, line=sc>brain?'You beat the Brain.':sc===brain?'Level with the Brain.':'The Brain wins this one.';
-      const tom=THEMES[(wd+1)%7][0];
+      const sc=marks.filter(Boolean).length, line=sc>brain?'You beat the Brain.':sc===brain?'Level with the Brain.':'The Brain wins this one.', card=btbCard(DAY,L,marks,brain);
       el.innerHTML=head+`<div class="hook-res"><div class="hook-score">${sc}<small>/5</small></div><div><p class="hook-line">${line} It scored ${brain}.</p><div class="hook-pips">${marks.map(m=>`<i class="${m?'y':'n'}"></i>`).join('')}</div></div></div>
-        <div class="hook-next"><button class="btn gold" id="hookShare">Challenge a mate</button><a class="btn ghost light" href="${BASE}call-it-football.html">Next: today's Call It: Football</a></div><div data-app-card></div>
-        <p class="hook-tom">Tomorrow: <b>${esc(tom)}</b>. A new challenge every day at midnight.</p>`+week;
-      $('#hookShare').onclick=()=>share(`SportingBrain ${title}: ${sc}/5 ${marks.map(m=>m?'🟩':'🟥').join('')}\nThe Brain got ${brain}. Beat me:\n${SITE}`);
+        <p class="hook-ask">${sc>=brain?'Think your mates can match that?':'Bet your mates do worse.'}</p>
+        <div class="hook-next"><a class="btn gold" id="hookWa" target="_blank" rel="noopener" data-track="hook-result-whatsapp">Challenge my mates on WhatsApp</a></div>
+        <p class="hook-more"><button type="button" class="linkbtn" id="hookShare" data-track="hook-result-share">More ways to share</button> · <a href="${BASE}daily.html?level=4" data-track="hook-try-expert">${sc>brain?'Too easy? Try Expert':'Try the Expert five'}</a></p>
+        <div class="hook-kp">${keepPlaying('daily')}</div><div data-app-card></div>
+        <p class="hook-tom">New questions at midnight.</p>`+week;
+      $('#hookWa').href='https://wa.me/?text='+encodeURIComponent(card); $('#hookShare').onclick=()=>share(card);
       tickChip();
     }
     if(saved) return done(saved);
     let i=0; const marks=[];
     function show(){ const q=Q[i];
       el.innerHTML=head+`<div class="hook-pips">${Q.map((_,k)=>`<i class="${k<i?(marks[k]?'y':'n'):k===i?'c':''}"></i>`).join('')}</div>
-        <p class="hook-k">${esc(q.s)}</p><p class="hook-q">${esc(q.q)}</p>
+        <p class="hook-k">Question ${i+1} of 5 · ${esc(q.s)}</p><p class="hook-q">${esc(q.q)}</p>
         <div class="hook-opts ${q.o.length===2?'two':''}">${q.o.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div>`+week;
       tickChip(); }
     el.addEventListener('click',e=>{ const b=e.target.closest('.hook-opts [data-k]'); if(b&&!b.disabled){ const q=Q[i], ok=+b.dataset.k===q.a; marks.push(ok);
         el.querySelectorAll('.hook-opts button').forEach(x=>{ x.disabled=true; if(+x.dataset.k===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
         el.querySelector('.hook-week').insertAdjacentHTML('beforebegin',`<p class="hook-fact">${ok?'Yes.':'No.'} ${esc(q.f)}</p><button class="btn gold" data-hn>${i<4?'Next question':'See your score'}</button>`); return; }
-      if(e.target.closest('[data-hn]')){ i++; if(i<Q.length) show(); else { store.set(key,marks); markPlayed('hook'); done(marks); setTimeout(maybeNewsletter,1500); } } });
+      if(e.target.closest('[data-hn]')){ i++; if(i<Q.length) show(); else { btbSave(DAY,L,marks,brain); markPlayed('hook'); markPlayed('daily'); done(marks); if(window.sbTrack) sbTrack('btb-finish-home'); setTimeout(maybeNewsletter,1500); } } });
     show(); setInterval(tickChip,30000);
   })();
   main.querySelectorAll('[data-share-to]').forEach(a=>{ const u=encodeURIComponent(SITE), t=encodeURIComponent(PITCH);
@@ -353,24 +359,20 @@ if(P==='home'){
 if(P==='daily'){
   const LV=[null,null,null,{n:'Hard',c:'#C62828',d:'Proper sport knowledge. No gimmes.'},{n:'Expert',c:'#14254a',d:'History, records and the small print.'}], LEVELS=[3,4];
   const ARCH=+new URLSearchParams(location.search).get('day'), QD=(ARCH>0&&ARCH<DAY)?ARCH:DAY, N=5, key=QD===DAY?ukKey():'arch'+QD; let level=+new URLSearchParams(location.search).get('level')||store.get('daily_level',3); if(!LV[level]) level=3;
-  const pool=l=>{ const r=seeded(l*9973); return BANK.filter(q=>q[0]===l).map(q=>[r(),q]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]); }; // fixed mixed order, stepped through 5 a day, so no repeats until the pool is used up
-  function todays(l){ const Q=pool(l), start=((QD-1)*N)%Q.length, r=seeded(QD*7+l), out=[];
-    for(let k=0;k<N;k++){ const q=Q[(start+k)%Q.length]; const idx=[0,1,2,3].sort(()=>r()-.5); out.push({q:q[2],o:idx.map(i=>q[3][i]),a:idx.indexOf(0),f:q[5],s:`${q[1]} · ${LV[l].n}`}); } return out; }
-  const brainFor=l=>Math.max(1,Math.min(5,[0,4,3,2,2][l]+Math.floor(seeded(QD*3+l)()*2)));
+  const todays=l=>btbQs(QD,l), brainFor=l=>btbBrain(QD,l);
   function render(){
     const brainScore=brainFor(level), saved=store.get(`daily_${key}_${level}`,null);
-    main.innerHTML=`<section class="hero"><div class="row1"><img src="${BASE}assets/brain.svg" alt="The Brain"><div><span class="tag" style="background:var(--gold);color:#14254a">Beat the Brain #${QD}</span><h1>Five hard questions. Every day.</h1><p>The Brain scored ${brainScore}/5 on ${LV[level].n} today. Your turn.</p></div></div></section>
+    main.innerHTML=`<section class="hero"><div class="row1"><img src="${BASE}assets/brain.svg" alt="The Brain"><div><span class="tag" style="background:var(--gold);color:#14254a">Beat the Brain #${QD}</span><h1>Five hard questions. Every day.</h1><p>The Brain scored ${brainScore}/5 on ${LV[level].n} today. ${esc(brainLine(QD))} Your turn.</p></div></div></section>
       <div class="lv-pick" role="tablist" aria-label="Difficulty">${LEVELS.map(l=>{const done=store.get(`daily_${key}_${l}`,null);return `<button role="tab" aria-selected="${l===level}" class="lv ${l===level?'on':''}" data-lv="${l}" style="--c:${LV[l].c}"><b>${LV[l].n}</b><small>${done?`Done: ${done.marks.filter(Boolean).length}/5`:LV[l].d}</small></button>`;}).join('')}</div>
       <section class="card" style="margin-top:12px" id="game" aria-live="polite"></section><div data-nl-slot class="nl-slot"></div><div class="daily-more"><div class="sec"><h2>Keep playing</h2></div>${moreExcept(BASE+'daily.html')}</div>`;
     main.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ level=+b.dataset.lv; store.set('daily_level',level); history.replaceState(null,'',`?level=${level}`); render(); });
     const g=$('#game');
     function finish(marks,save){
       const score=marks.filter(Boolean).length;
-      markPlayed('daily'); if(save){ store.set(`daily_${key}_${level}`,{marks}); store.set('daily_'+key,{marks}); if(QD===DAY){ const y=new Date(); y.setDate(y.getDate()-1); const last=store.get('lastday',null); let st=store.get('streak',0); const y2=new Date(); y2.setDate(y2.getDate()-2);
-        if(last===ukKey(y)) st=st+1; else if(last===key) st=st; else if(last===ukKey(y2) && st>0 && saverAvailable()){ st=st+1; store.set('saver_week',isoWeek()); setTimeout(()=>toast('Streak saver used. Your streak lives on.'),800); } else st=1; store.set('streak',st); store.set('lastday',key); store.set('played',store.get('played',0)+1); if(score>brainScore) store.set('beaten',store.get('beaten',0)+1); } }
+      markPlayed('daily'); if(save) btbSave(QD,level,marks,brainScore);
       const line=score>brainScore?(level<4?"You beat the Brain. Try Expert.":"You beat the Brain on Expert. Take a bow."):score===brainScore?"Level with the Brain. Rematch tomorrow.":"The Brain wins this one. Same time tomorrow?";
       const grid=marks.map(m=>m?'🟩':'🟥').join('');
-      const card=`SportingBrain #${QD} 🧠 ${LV[level].n}\n${grid}  ${score}/5\nThe Brain got ${brainScore}/5. Beat that.\n${SITE}daily.html?level=${level}`;
+      const card=btbCard(QD,level,marks,brainScore);
       const next=(score>brainScore&&level<4)?`<button class="btn ghost" data-lv="${level+1}">Too easy? Try ${LV[level+1].n}</button>`:'';
       g.innerHTML=`<div class="res-top"><div><div class="small">${LV[level].n} · Beat the Brain #${QD}</div><div class="score">${score}/5</div></div><div class="res-grid" aria-label="${score} right out of 5">${grid}</div></div>
         <div class="brain-says"><img src="${BASE}assets/brain.svg" alt=""><div>${line} The Brain got ${brainScore}/5.</div></div>

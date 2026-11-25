@@ -886,3 +886,6 @@ html.is-app .hdr-app{display:none}
 .kp-all{display:inline-block;margin-top:4px;font-weight:600;min-height:44px;line-height:44px}
 main:has(.kp) .daily-more{display:none}
 .appc-ios b{font-weight:700}
+.hook-ask{color:#fff;margin:14px 0 8px;font-size:1.05rem}.hook-more{margin:10px 0 0;color:#C9D2E0}.hook-more .linkbtn,.hook-more a{color:#fff}
+.hook .kp{margin-top:18px}.hook .kp-head h3,.hook .kp-head span{color:#fff}.hook .kp-bar{background:rgba(255,255,255,.25)}.hook .kp-all{color:#F2A900}
+.hook-sub b{color:#F2A900}
