@@ -80,3 +80,20 @@ body.dark .ie-clues li::before{color:var(--ie-gold)}
 .ie-more a{display:block;padding:12px 14px;border:1px solid var(--rule);border-left:5px solid var(--ie-g2);border-radius:3px;text-decoration:none;color:var(--ink);background:var(--paper)}
 .ie-more a b{font-family:var(--display);font-size:1.3rem;display:block;line-height:1.1}
 .ie-note{font-size:.92rem;color:var(--mute)}
+.ie-band .ie-uk{margin-left:auto;color:#fff;opacity:.85}
+.ie-groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:0 0 22px}
+.ie-groups a{display:block;padding:14px 16px;background:var(--paper);border:1px solid var(--rule);border-left:6px solid var(--ie-g2);border-radius:3px;text-decoration:none;color:var(--ink)}
+.ie-groups a b{display:block;font-family:var(--display);font-size:1.5rem;line-height:1.05}
+.ie-groups a span{font-size:.92rem;color:var(--ink-2)}
+.ie-groups a small{display:block;margin-top:6px;font-family:var(--display);font-weight:700;color:var(--mute)}
+.ie-book{display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:start;background:var(--paper);border:1px solid var(--rule);border-top:6px solid var(--ie-gold);border-radius:3px;padding:18px}
+.ie-spine{height:140px;background:linear-gradient(160deg,var(--ie-g2),var(--ie-g));color:#fff;border-radius:2px 6px 6px 2px;padding:10px 8px;display:flex;align-items:flex-end;font-family:var(--display);font-weight:800;line-height:1.05;box-shadow:inset 6px 0 0 rgba(0,0,0,.18)}
+.ie-book h3{margin:2px 0 2px;font-size:1.8rem}
+.ie-book .by{font-style:italic;color:var(--ink-2);margin:0 0 8px}
+.ie-book p{margin:0 0 10px}
+.ie-book .aff{font-size:.85rem;color:var(--mute);margin:8px 0 0}
+.ie-shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:12px}
+.ie-shelf a{display:block;padding:10px 12px;border:1px solid var(--rule);border-radius:3px;text-decoration:none;color:var(--ink);background:var(--paper)}
+.ie-shelf a b{display:block;font-family:var(--display);font-size:1.15rem;line-height:1.1}
+.ie-shelf a span{font-size:.88rem;color:var(--mute)}
+@media(max-width:520px){.ie-book{grid-template-columns:70px 1fr}.ie-spine{height:104px;font-size:.85rem}}

@@ -2,7 +2,8 @@
 import Base from '../layouts/Base.astro';
 import IeBand from '../components/IeBand.astro';
 import '../styles/ireland.css';
-import { MOMENTS, IE_BANK, COUNTIES, LEGENDS } from '../data/ireland.js';
+import { MOMENTS, IE_BANK, COUNTIES, LEGENDS, IE_GROUPS, IE_BOOKS } from '../data/ireland.js';
+const amz = b => 'https://www.amazon.co.uk/s?k=' + encodeURIComponent(b[0] + ' ' + b[1].replace(/ with .*/, '')).replace(/%20/g, '+') + '&tag=gmh710f-21';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const MON = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const when = m => `${+m[0].slice(3)} ${MON[+m[0].slice(0, 2) - 1]} ${m[1]}`;
@@ -27,6 +28,27 @@ const sorted = MOMENTS.slice().sort((a, b) => a[0].localeCompare(b[0]));
       <a class="ie-tile" href={`${base}ireland/legends.html`} data-g="iel"><span class="ga" lang="ga">Cé Mise?</span><b>Irish Legends</b><span>Five clues to one of Ireland's sporting greats. Hardest clue first.</span><small data-st>Not played yet today</small></a>
     </div>
 
+    <div class="ie-sec"><h2>Pick a sport</h2><span lang="ga">Rogha Spóirt</span></div>
+    <div class="ie-groups">
+      {IE_GROUPS.map(g => <a href={`${base}ireland/quiz.html?s=${g[0]}`}><b>{g[1]}</b><span>{g[2]}</span><small>Ten questions, play as often as you like</small></a>)}
+    </div>
+
+    <div class="ie-sec"><h2>Irish Sports Book of the Week</h2><span lang="ga">Leabhar na Seachtaine</span></div>
+    <div id="ieBook">
+      <article class="ie-book"><div class="ie-spine" aria-hidden="true">{IE_BOOKS[0][0]}</div><div><p class="pg-step">{IE_BOOKS[0][2]}</p><h3>{IE_BOOKS[0][0]}</h3><p class="by">{IE_BOOKS[0][1]}</p><p>{IE_BOOKS[0][3]}</p><a class="btn gold" href={amz(IE_BOOKS[0])} target="_blank" rel="sponsored nofollow noopener" data-track="ie-book">See it on Amazon</a><p class="aff">Amazon affiliate link: we may earn a small commission, at no cost to you.</p></div></article>
+    </div>
+    <details class="pg-card" style="margin-top:12px"><summary><b>The Irish sports bookshelf: all {IE_BOOKS.length} books</b></summary>
+      <div class="ie-shelf">{IE_BOOKS.map(b => <a href={amz(b)} target="_blank" rel="sponsored nofollow noopener" data-track="ie-shelf"><b>{b[0]}</b><span>{b[1]} · {b[2]}</span></a>)}</div>
+    </details>
+
+    <div class="ie-sec"><h2>How the games work</h2><span lang="ga">Na Cluichí</span></div>
+    <div class="ie-more">
+      <a href={`${base}sports/gaelic-football.html`}><b>Gaelic football</b>The rules, the new two-point arc and the greats.</a>
+      <a href={`${base}sports/hurling.html`}><b>Hurling and camogie</b>The fastest field game in the world, explained.</a>
+      <a href={`${base}sports/rugby-union.html`}><b>Rugby union</b>How it works, from scrums to the breakdown.</a>
+      <a href={`${base}sports/horse-racing.html`}><b>Horse racing</b>Jumps, the Flat and how a race card works.</a>
+    </div>
+
     <div class="ie-sec" id="moments"><h2>Irish sporting moments</h2><span lang="ga">Ar an Lá Seo</span></div>
     <div id="ieToday"></div>
     <div class="ie-moments">
@@ -35,13 +57,14 @@ const sorted = MOMENTS.slice().sort((a, b) => a[0].localeCompare(b[0]));
 
     <div class="ie-sec"><h2>What's in the Irish edition</h2><span lang="ga">Faoi</span></div>
     <div class="pg-card">
-      <p>SportingBrain Ireland is the Irish edition of <a href={base}>SportingBrain</a>, the free daily sports site. It has {IE_BANK.length} hand-written questions on Irish sport, all {COUNTIES.length} counties of the island and {LEGENDS.length} Irish sporting greats, and it grows every week. The games change at midnight, every day.</p>
+      <p>SportingBrain Ireland is the Irish edition of <a href={base}>SportingBrain</a>, the free daily sports site. It has {IE_BANK.length} hand-written questions on Irish sport across {IE_GROUPS.length} sports, all {COUNTIES.length} counties of the island, {LEGENDS.length} Irish sporting greats, a weekly Irish sports book and plain-English guides to Gaelic football and hurling, and it grows every week. The games change at midnight, every day.</p>
       <p>We cover the island as a whole, the way most of its sports are run: GAA, rugby, hockey and boxing all play as one Ireland. So Joey Dunlop and Mary Peters sit alongside Katie Taylor and Henry Shefflin. Women's sport gets the same space as men's: camogie, ladies' football, the Irish women's rugby and football teams, and Rachael Blackmore, Kellie Harrington and Cora Staunton.</p>
       <p class="ie-note">Facts are checked when we write them and settled ones only: nothing that changes week to week. If you spot something wrong, <a data-mistake href="#">tell us</a> and we will fix it.</p>
     </div>
 
     <div class="ie-sec"><h2>More from SportingBrain</h2></div>
     <div class="ie-more">
+      <a href={base}><b>SportingBrain UK</b>Back to the main site: every sport, every day.</a>
       <a href={`${base}daily.html`}><b>Beat the Brain</b>The main daily quiz, every sport.</a>
       <a href={`${base}connections.html`}><b>Connections: Sport</b>Sixteen names, four groups.</a>
       <a href={`${base}pub-quiz.html`}><b>Pub and Club Quiz</b>Four rounds, free to print for your club night.</a>
@@ -49,10 +72,14 @@ const sorted = MOMENTS.slice().sort((a, b) => a[0].localeCompare(b[0]));
     </div>
   </div>
   <script>
-    import { store } from '../scripts/play.js';
+    import { store, weekNo } from '../scripts/play.js';
     import { ieDay, countyPicker } from '../scripts/ireland.js';
     import { MOMENTS } from '../data/ireland.js';
     countyPicker(document.getElementById('ieCounty'));
+    // Book of the Week: changes every Monday.
+    import('../data/ireland.js').then(({ IE_BOOKS }) => { const w = weekNo(), b = IE_BOOKS[((w % IE_BOOKS.length) + IE_BOOKS.length) % IE_BOOKS.length], el = document.getElementById('ieBook'), a = el.querySelector('a.btn');
+      el.querySelector('.ie-spine').textContent = b[0]; el.querySelector('.pg-step').textContent = b[2]; el.querySelector('h3').textContent = b[0]; el.querySelector('.by').textContent = b[1]; el.querySelector('.by + p').textContent = b[3];
+      a.href = 'https://www.amazon.co.uk/s?k=' + encodeURIComponent(b[0] + ' ' + b[1].replace(/ with .*/, '')).replace(/%20/g, '+') + '&tag=gmh710f-21'; });
     const D = ieDay();
     document.querySelectorAll('.ie-tile[data-g]').forEach(a => { const s = store.get(a.dataset.g + '_' + D, null), el = a.querySelector('[data-st]');
       if (!s) return; if (a.dataset.g === 'ieb') { if (s.done) { el.textContent = `Played: ${s.ans.filter(Boolean).length}/5`; el.classList.add('done'); } else el.textContent = `Question ${s.i + 1} of 5: carry on`; }

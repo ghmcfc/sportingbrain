@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import IeBand from '../../components/IeBand.astro';
+import '../../styles/ireland.css';
+import { IE_GROUPS, IE_BANK } from '../../data/ireland.js';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const count = g => IE_BANK.filter(q => g[3].includes(q[1])).length;
+---
+<Base image="https://sportingbrain.com/og-ireland.png" title="Pick a Sport: Irish sports quizzes | SportingBrain" description="Ten-question quizzes on Irish sport, one sport at a time: GAA, rugby, soccer, racing, boxing, Olympic sports, golf and more. Play as often as you like." page="iequiz">
+  <IeBand current="quiz" />
+  <div class="ie">
+    <header class="ie-head"><p class="ga" lang="ga">Rogha Spóirt</p><h1>Pick a Sport</h1><p>Ten questions on the sport you know best. Hard and Expert questions mixed, a fresh set every time you play. No limit, no waiting for tomorrow.</p></header>
+    <div id="vs"></div>
+    <div class="ie-groups" id="groups">
+      {IE_GROUPS.map(g => <a href={`${base}ireland/quiz.html?s=${g[0]}`}><b>{g[1]}</b><span>{g[2]}</span><small>{count(g)} questions</small></a>)}
+    </div>
+    <section class="pg-card ie-game" id="iq" aria-live="polite" hidden></section>
+    <AdSlot name="game_result" />
+  </div>
+  <script>
+    import { IE_GROUPS, IE_BANK } from '../../data/ireland.js';
+    import { shuffle, esc, markPlayed, challengeBox, showChallenge, share, store } from '../../scripts/play.js';
+    import { countyTag } from '../../scripts/ireland.js';
+    showChallenge(document.getElementById('vs'));
+    const s = new URLSearchParams(location.search).get('s'), G = IE_GROUPS.find(g => g[0] === s), box = document.getElementById('iq');
+    if (G) {
+      document.getElementById('groups').hidden = true; box.hidden = false;
+      // Avoid repeating the last set where the pool allows it.
+      const seenKey = 'ieq_seen_' + G[0], seen = new Set(store.get(seenKey, []));
+      const pool = IE_BANK.filter(q => G[3].includes(q[1])), fresh = shuffle(pool.filter(q => !seen.has(q[2]))), QS = fresh.concat(shuffle(pool.filter(q => seen.has(q[2])))).slice(0, Math.min(10, pool.length));
+      store.set(seenKey, [...seen, ...QS.map(q => q[2])].slice(-Math.max(0, pool.length - 10)));
+      const OPTS = QS.map(x => shuffle(x[3].map((t, j) => [t, j === 0])));
+      let i = 0; const ans = [];
+      const pips = () => `<div class="ie-pips">${QS.map((_, k) => `<i class="${k < ans.length ? (ans[k] ? 'ok' : 'no') : k === i ? 'cur' : ''}"></i>`).join('')}</div>`;
+      function q() { const x = QS[i];
+        box.innerHTML = `<p class="pg-step">${esc(G[1])} · Question ${i + 1} of ${QS.length}</p>${pips()}<p><span class="ie-lvl${x[0] === 4 ? ' x' : ''}">${x[0] === 4 ? 'Expert' : 'Hard'}</span><span class="pg-step" style="display:inline">${esc(x[1])}</span></p><p class="pg-q">${esc(x[2])}</p><div class="pg-opts">${OPTS[i].map((o, k) => `<button data-k="${k}">${esc(o[0])}</button>`).join('')}</div><div id="after"></div>`; }
+      box.addEventListener('click', e => { const b = e.target.closest('.pg-opts button'); if (!b || b.disabled) return;
+        const ok = OPTS[i][+b.dataset.k][1]; ans.push(ok); const bs = box.querySelectorAll('.pg-opts button'); bs.forEach((z, k) => { z.disabled = true; if (OPTS[i][k][1]) z.classList.add('ok'); }); if (!ok) b.classList.add('no');
+        box.querySelector('#after').innerHTML = `<p class="pg-fact"><b>${ok ? 'Right.' : 'No. It was ' + esc(QS[i][3][0]) + '.'}</b> ${esc(QS[i][5])}</p><div class="pg-btns"><button class="btn gold" id="nx">${i < QS.length - 1 ? 'Next question' : 'See your score'}</button></div>`;
+        box.querySelector('#nx').onclick = () => { if (i < QS.length - 1) { i++; q(); } else end(); box.scrollIntoView({ block: 'start', behavior: 'smooth' }); }; });
+      function end() { const sc = ans.filter(Boolean).length, grid = ans.map(a => a ? '🟩' : '🟥').join(''); markPlayed('ireland/quiz');
+        box.innerHTML = `<p class="pg-step">${esc(G[1])} quiz</p><p class="pg-score">${sc}/${QS.length}</p><p class="ie-grid">${grid}</p><p class="ie-brain">${sc >= 9 ? 'Maith thú. You know your stuff.' : sc >= 6 ? 'Solid. Go again for a new set.' : 'Tough one. Go again for a new set.'}</p>
+          <div class="pg-btns"><button class="btn gold" id="shr">Share my score</button><a class="btn ghost" href="?s=${G[0]}">New ${esc(G[1])} quiz</a><a class="btn ghost" href="quiz.html">Pick another sport</a></div>`;
+        box.querySelector('#shr').onclick = () => share(`SportingBrain Ireland · ${G[1]} quiz\n${grid} ${sc}/${QS.length}${countyTag()}`, location.href);
+        box.appendChild(challengeBox(sc, QS.length, `the ${G[1]} quiz`)); }
+      q();
+    }
+  </script>
+</Base>

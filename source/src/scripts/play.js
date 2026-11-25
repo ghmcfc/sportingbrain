@@ -50,7 +50,11 @@ export function markPlayed(g) { store.set('pl_' + g, true); const p = store.get(
 // End-of-game navigation: a random next game, or home. Kids Zone pages stay inside the Kids Zone.
 export const KIDS_GAMES = [['kids/9-12', 'Junior Brain quiz'], ['kids/6-8', 'Little Legends quiz'], ['kids/true-or-false', 'True or False'], ['kids/guess-the-sport', 'Guess the Sport'], ['kids/guess-the-player', 'Guess the Player'], ['kids/the-grid', 'The Grid'], ['kids/which-sport', 'Which Sport Are You?'], ['kids/academy', 'Brain Academy']];
 export function endNav() {
-  const kids = !!document.querySelector('.kz'), here = location.pathname.replace(/\.html$/, '');
+  const kids = !!document.querySelector('.kz'), here = location.pathname.replace(/\.html$/, ''), irish = /\/ireland\//.test(location.pathname);
+  if (irish) { const IE = [['ireland/brain', 'The Irish Brain'], ['ireland/county', 'Name the County'], ['ireland/legends', 'Irish Legends'], ['ireland/quiz', 'Pick a Sport quiz']].filter(g => !here.endsWith('/' + g[0].split('/')[1])), g = IE[Math.floor(Math.random() * IE.length)];
+    const d = document.createElement('div'); d.className = 'end-nav';
+    d.innerHTML = badgeLineHTML() + `<a class="btn gold" href="${BASE}${g[0]}.html">Next: ${esc(g[1])}</a><a class="btn ghost" href="${BASE}ireland.html">SportingBrain Ireland home</a><a class="btn ghost" href="${BASE}">SportingBrain UK</a><div data-app-card></div>`;
+    return d; }
   const pool = kids ? KIDS_GAMES : PLAY.filter(g => !['archive', 'passport', 'sports-day', 'laughs'].includes(g[0])).map(g => [g[0], g[1]]);
   const opts = pool.filter(g => !here.endsWith('/' + g[0])), g = opts[Math.floor(Math.random() * opts.length)];
   const d = document.createElement('div'); d.className = 'end-nav';
