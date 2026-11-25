@@ -28,8 +28,12 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     const DAY = Math.floor((Date.UTC(uk.getFullYear(), uk.getMonth(), uk.getDate()) - Date.UTC(2026, 10, 23)) / 86400000) + 1;
     // fixed shuffle so the order isn't match by match
     const order = M.map((_, i) => i).sort((a, b) => ((a * 2654435761) % 997) - ((b * 2654435761) % 997));
-    const practice = new URLSearchParams(location.search).has('practice');
-    const idx = practice ? Math.floor(Math.random() * M.length) : order[(DAY - 1 + M.length * 10) % M.length];
+    // Direct link to one final: ?final=cwc-2019-final (its latest moment) or ?m=<moment id>. Played as practice, so the daily streak is untouched.
+    const qp = new URLSearchParams(location.search), qm = qp.get('m'), qf = qp.get('final');
+    let linked = qm ? M.findIndex(x => x.id === qm) : -1;
+    if (linked < 0 && qf) M.forEach((x, i) => { if (x.slug === qf) linked = i; });
+    const practice = qp.has('practice') || linked >= 0;
+    const idx = linked >= 0 ? linked : practice ? Math.floor(Math.random() * M.length) : order[(DAY - 1 + M.length * 10) % M.length];
     const m = M[idx]; document.getElementById('ciNum').textContent = practice ? 'practice' : DAY;
     const key = 'ci_' + DAY, saved = practice ? null : S.get(key, null);
     document.getElementById('ciBoard').innerHTML = `

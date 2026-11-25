@@ -55,6 +55,11 @@ const M = buildFootMoments();
       document.getElementById('fcLock').onclick = () => { if (daily) { store.set(key, { p: pick, watched: false }); markPlayed('call-it-football'); } document.getElementById('fcLock').hidden = true; playOut(pick); };
     }
     document.getElementById('practice').onclick = () => { render(Math.floor(Math.random() * M.length), false); board.scrollIntoView({ behavior: 'smooth' }); };
-    render(todayIdx, true);
+    // Direct link to one final: ?final=ucl2005 (its latest moment) or ?m=ucl2005-44 (the moment straight after that minute's goal; 0 = kick-off). Played as practice, so the daily streak is untouched.
+    const qp = new URLSearchParams(location.search), qm = (qp.get('m') || '').toLowerCase(), qf = (qp.get('final') || qm.replace(/-[\d.]+$/, '')).toLowerCase();
+    let linked = -1;
+    if (qm) linked = M.findIndex(x => `${x.f}-${x.at}` === qm);
+    if (linked < 0 && qf) M.forEach((x, i) => { if (x.f === qf) linked = i; });
+    render(linked >= 0 ? linked : todayIdx, linked < 0);
   </script>
 </Base>
