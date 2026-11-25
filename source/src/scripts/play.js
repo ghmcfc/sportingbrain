@@ -15,10 +15,18 @@ export function shuffle(a, r = Math.random) { a = a.slice(); for (let i = a.leng
 export const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 export function toast(msg) { let t = document.getElementById('pg-toast'); if (!t) { t = document.createElement('div'); t.id = 'pg-toast'; t.className = 'pg-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); } t.textContent = msg; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2600); }
 export async function share(text, url) {
+  text = withBadgeLazy(text);
   const full = url ? text + '\n' + url : text;
   if (navigator.share) { try { await navigator.share({ text: full }); return; } catch (_) { return; } }
   try { await navigator.clipboard.writeText(full); toast('Copied. Paste it anywhere.'); } catch (_) { prompt('Copy this:', full); }
 }
+// Your Colours badge, read straight from storage so this file has no extra imports.
+function withBadgeLazy(text) { const c = store.get('colours', null), n = c && c.badge && c.picks && c.picks[c.badge];
+  if (!n || n === 'Somewhere else' || /Playing for/.test(text)) return text; const i = text.indexOf('\n'); return i < 0 ? text + ' · Playing for ' + n : text.slice(0, i) + ' · Playing for ' + n + text.slice(i); }
+export function badgeLineHTML() { const c = store.get('colours', null), n = c && c.badge && c.picks && c.picks[c.badge];
+  const cols = (c && c.cols) || [], bar = cols.length ? `<span class="yc-cols" aria-hidden="true">${cols.map(h => `<i style="background:${h}"></i>`).join('')}</span>` : '';
+  return n ? `<p class="yc-line">${bar} Playing for <b>${esc(n)}</b> · <a href="${BASE}colours.html">Change</a></p>`
+    : `<p class="yc-line"><a href="${BASE}colours.html" data-track="colours-invite"><b>Pick your team</b></a> and it goes on every score you share, in its colours.</p>`; }
 // Challenge-your-mates links: the score travels in the link, nothing is stored on a server.
 export function challengeUrl(name, score, out) { const u = new URL(location.href); u.search = ''; u.searchParams.set('vs', (name || 'A mate').slice(0, 20)); u.searchParams.set('s', score + '/' + out); return u.href; }
 export function showChallenge(el) {
@@ -46,6 +54,6 @@ export function endNav() {
   const pool = kids ? KIDS_GAMES : PLAY.filter(g => !['archive', 'passport', 'sports-day', 'laughs'].includes(g[0])).map(g => [g[0], g[1]]);
   const opts = pool.filter(g => !here.endsWith('/' + g[0])), g = opts[Math.floor(Math.random() * opts.length)];
   const d = document.createElement('div'); d.className = 'end-nav';
-  d.innerHTML = `<a class="btn gold" href="${BASE}${g[0]}.html">Next game: ${esc(g[1])}</a><a class="btn ghost" href="${BASE}${kids ? 'kids.html' : ''}">${kids ? 'Kids Zone home' : 'Home'}</a>${kids ? '' : '<div data-app-card></div>'}`;
+  d.innerHTML = (kids ? '' : badgeLineHTML()) + `<a class="btn gold" href="${BASE}${g[0]}.html">Next game: ${esc(g[1])}</a><a class="btn ghost" href="${BASE}${kids ? 'kids.html' : ''}">${kids ? 'Kids Zone home' : 'Home'}</a>${kids ? '' : '<div data-app-card></div>'}`;
   return d;
 }

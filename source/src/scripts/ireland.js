@@ -4,7 +4,10 @@ import { store, ukDayNo, esc } from './play.js';
 export const IE_DAY0 = 20781; // Irish Brain #1 was Wednesday 25 November 2026 (UK day 20782)
 export const ieDay = () => Math.max(1, ukDayNo() - IE_DAY0);
 export const getCounty = () => store.get('ie_county', '');
-export const setCounty = c => store.set('ie_county', c);
+export const setCounty = c => { store.set('ie_county', c);
+  const y = store.get('colours', { picks: {}, badge: '', cols: [] }); y.colmap = y.colmap || {};
+  if (c && c !== 'Abroad') { y.picks.gaa = c; y.colmap.gaa = countyColours(c); if (!y.badge || !y.picks[y.badge]) y.badge = 'gaa'; } else { delete y.picks.gaa; delete y.colmap.gaa; if (y.badge === 'gaa') y.badge = Object.keys(y.picks)[0] || ''; }
+  y.cols = (y.badge && y.colmap[y.badge]) || []; store.set('colours', y); };
 const HEX = { 'sky blue': '#6CACE4', navy: '#13294B', saffron: '#F4C430', orange: '#F47B20', primrose: '#F3E37C', maroon: '#7A1E2C', purple: '#5B2C83', amber: '#F2A900', gold: '#E3B341', yellow: '#FFD100', green: '#0E6B3A', red: '#C8102E', blue: '#1F5AA6', black: '#111111', white: '#FFFFFF' };
 // Read a county's colours from its colours clue, in the order they are written.
 export function countyColours(name) {

@@ -4,7 +4,7 @@ import { FLASHBACKS } from '../data/flashbacks.js';
 import { REPLAYS } from '../data/replays.js';
 import { ALL as BANK } from '../data/bank_all.js';
 import { btbTexts, weeklyExpertQs } from './qsched.js';
-import { ukDayNo } from './play.js';
+import { ukDayNo, badgeLineHTML } from './play.js';
 import { GUIDES } from '../data/guides.js';
 import { WEEK } from '../data/week.js';
 import { PLAY } from '../data/playlist.js';
@@ -70,7 +70,8 @@ function shuffle(a, rnd=Math.random){ a=a.slice(); for(let i=a.length-1;i>0;i--)
 
 // ---------- ui helpers ----------
 function toast(msg){ let t=$('.toast'); if(!t){t=document.createElement('div');t.className='toast';t.setAttribute('role','status');document.body.appendChild(t);} t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
-async function share(text){
+async function share(text, raw){
+  if(!raw && !KIDZ){ const c=store.get('colours',null), n=c&&c.badge&&c.picks&&c.picks[c.badge]; if(n && n!=='Somewhere else' && !/Playing for/.test(text)){ const i=text.indexOf('\n'); text = i<0 ? text+' · Playing for '+n : text.slice(0,i)+' · Playing for '+n+text.slice(i); } }
   try{ if(navigator.share){ await navigator.share({text}); return; } }catch(e){ return; }
   try{ await navigator.clipboard.writeText(text); toast('Copied! Paste it in the group chat'); }catch(e){ prompt('Copy your score card:', text); }
 }
@@ -89,7 +90,7 @@ const MORE = PLAY.filter(g=>!['archive','passport','sports-day','challenge','adv
 const KIDZ = !!document.querySelector('.kz');
 const KIDS_GAMES=[['kids/9-12','Junior Brain quiz'],['kids/6-8','Little Legends quiz'],['kids/true-or-false','True or False'],['kids/guess-the-sport','Guess the Sport'],['kids/guess-the-player','Guess the Player'],['kids/the-grid','The Grid'],['kids/which-sport','Which Sport Are You?'],['kids/academy','Brain Academy']];
 const endNavHTML=()=>{ const here=location.pathname.replace(/\.html$/,''); const pool=(KIDZ?KIDS_GAMES:PLAY.filter(g=>!['archive','passport','sports-day','laughs'].includes(g[0])).map(g=>[g[0],g[1]])).filter(g=>!here.endsWith('/'+g[0])); const g=pool[Math.floor(Math.random()*pool.length)];
-  return `<div class="end-nav"><a class="btn gold" href="${BASE}${g[0]}.html">Next game: ${esc(g[1])}</a><a class="btn ghost" href="${BASE}${KIDZ?'kids.html':''}">${KIDZ?'Kids Zone home':'Home'}</a></div>`; };
+  return `<div class="end-nav">${KIDZ?'':badgeLineHTML()}<a class="btn gold" href="${BASE}${g[0]}.html">Next game: ${esc(g[1])}</a><a class="btn ghost" href="${BASE}${KIDZ?'kids.html':''}">${KIDZ?'Kids Zone home':'Home'}</a></div>`; };
 const moreExcept = href => KIDZ ? '' : next3(shuffle(MORE.filter(m=>!href||!m[2].endsWith(href))).slice(0,3));
 
 // theme + font
@@ -103,7 +104,7 @@ document.addEventListener('click', e=>{
 const SITE=location.origin+BASE;
 const PITCH='SportingBrain: the free daily sports hub. Puzzles, games and stories from every sport. Can you beat the Brain?';
 document.addEventListener('click', e=>{
-  if(e.target.closest('[data-share-site]')){ share(`${PITCH}\n${SITE}`); }
+  if(e.target.closest('[data-share-site]')){ share(`${PITCH}\n${SITE}`, true); }
   if(e.target.closest('[data-copy-link]')){ navigator.clipboard.writeText(SITE).then(()=>toast('Link copied!'),()=>prompt('Copy this link:',SITE)); }
 });
 document.querySelectorAll('[data-share-to]').forEach(a=>{});
@@ -512,7 +513,7 @@ document.querySelectorAll('[data-quiz]').forEach(el=>{
   if(!item) return;
   runQuiz(el, item.quiz, {done:m=>{ el.innerHTML=`<div class="score">${m.filter(Boolean).length}/${m.length}</div><p class="small">${kind==='sport'?'Every sport counts. Even this one.':'Fancy another?'}</p>${moreExcept('')}`; }});
 });
-document.querySelectorAll('[data-share-text]').forEach(b=>b.addEventListener('click',()=>share(`${b.dataset.shareText}\n${location.href}`)));
+document.querySelectorAll('[data-share-text]').forEach(b=>b.addEventListener('click',()=>share(`${b.dataset.shareText}\n${location.href}`, true)));
 
 // ================= GAME PAGE HEADER: the game's own icon and colour =================
 (function(){ if(KIDZ) return; const sl=location.pathname.replace(/\.html$/,'').split('/').pop(); const g=PLAY.find(x=>x[0]===sl); if(!g) return;

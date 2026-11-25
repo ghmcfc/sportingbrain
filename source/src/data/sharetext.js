@@ -9,6 +9,7 @@ export const SHARE = {
   'ireland/brain': ['The Irish Brain', 'Five hard questions on Irish sport every day: GAA, rugby, football, racing, boxing and more. Can you beat the Brain?'],
   'ireland/county': ['Name the County', 'Five clues to one of Ireland\'s 32 counties: the history, the ground, the nickname, the colours. How few do you need?'],
   'ireland/legends': ['Irish Legends', 'Five clues to one of Ireland\'s sporting greats, hardest first. A new legend every day.'],
+  'colours': ['Your Colours', 'Pick your football club, rugby team, cricket county or GAA county, and it goes on every SportingBrain score you share.'],
   'who-am-i': ['Who Am I?', 'Five clues to one sporting great, hardest clue first. The fewer clues you need, the higher you score. A new player every day.'],
   'ground-guesser': ['Ground Guesser', 'A real stadium, zoomed right in. Name the ground in as few steps as you can, from football and cricket to tennis, golf and F1.'],
   'sports-grid': ['Sports Grid', 'Nine squares. Name a club that fits both the row and the column, with no repeats. Harder than it looks.'],

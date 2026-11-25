@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import { SPORTS, TEAMS } from '../data/teams.js';
+---
+<Base title="Your Colours: pick your team | SportingBrain" description="Pick your football club, rugby team, cricket county, GAA county or region. Your team goes on every score you share, in its colours. Saved on your device only." page="colours">
+  <header class="pg-head"><h1>Your Colours</h1><p>Pick the teams you follow. Choose one as your badge and it goes on every score you share, in its colours: "Playing for Wrexham". Saved on this device only. No sign-up, and we never see it.</p></header>
+  <section class="pg-card yc-card" id="ycPreview" aria-live="polite"></section>
+  <section class="pg-card">
+    <div class="yc-rows">
+      {SPORTS.map(([k, label, prompt]) => (
+        <div class="yc-row" data-s={k}>
+          <label for={`yc-${k}`}>{label}</label>
+          <select id={`yc-${k}`} data-s={k}>
+            <option value="">{prompt}</option>
+            {TEAMS[k].map(([n, c]) => <option value={n} data-c={c.join(',')}>{n}</option>)}
+          </select>
+          <span class="yc-sw" data-sw></span>
+          <label class="yc-badge"><input type="radio" name="badge" value={k} /> Badge</label>
+        </div>
+      ))}
+    </div>
+    <p class="pg-note">Clubs are listed A to Z, not by division, so nobody gets relegated off the list. Your club missing? <a data-mistake href="#">Tell us</a> and we will add it.</p>
+  </section>
+  <script>
+    import { getC, setPick, setBadge, bar, withBadge, badgeName } from '../scripts/colours.js';
+    import { esc } from '../scripts/play.js';
+    const prev = document.getElementById('ycPreview');
+    function draw() { const c = getC();
+      document.querySelectorAll('.yc-row').forEach(r => { const s = r.dataset.s, sel = r.querySelector('select'), rb = r.querySelector('input[type=radio]');
+        sel.value = c.picks[s] || ''; const o = sel.selectedOptions[0]; r.querySelector('[data-sw]').innerHTML = o && o.value ? bar(o.dataset.c.split(',')) : '';
+        rb.disabled = !c.picks[s]; rb.checked = c.badge === s && !!c.picks[s]; });
+      const n = badgeName();
+      prev.innerHTML = n ? `<p class="pg-step">Your badge</p><p class="yc-big">${bar(c.cols)} ${esc(n)}</p><p class="pg-note">How your scores will look when you share them:</p><pre class="yc-sample">${esc(withBadge('SportingBrain Beat the Brain\n🟩🟩🟥🟩🟩 4/5'))}</pre>`
+        : `<p class="pg-step">No team picked yet</p><p>Choose a team below. The first one you pick becomes your badge; you can switch it any time.</p>`; }
+    document.querySelectorAll('.yc-row select').forEach(sel => sel.onchange = () => { const o = sel.selectedOptions[0]; setPick(sel.dataset.s, sel.value, sel.value ? o.dataset.c.split(',') : []); draw(); });
+    document.querySelectorAll('.yc-row input[type=radio]').forEach(rb => rb.onchange = () => { setBadge(rb.value); draw(); });
+    draw();
+  </script>
+</Base>
