@@ -1,0 +1,16 @@
+---
+// The green Irish edition bar that sits at the top of every /ireland page.
+interface Props { current?: string }
+const { current = '' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const L = [
+  ['hub', 'SportingBrain Ireland', 'Fáilte', 'ireland.html'],
+  ['brain', 'The Irish Brain', 'Dúshlán an Lae', 'ireland/brain.html'],
+  ['county', 'Name the County', 'Cén Contae?', 'ireland/county.html'],
+  ['legends', 'Irish Legends', 'Cé Mise?', 'ireland/legends.html'],
+];
+---
+<div class="ie ie-band">
+  <div class="ie-knot" aria-hidden="true"></div>
+  <nav aria-label="SportingBrain Ireland">{L.map(([k, t, ga, h]) => <a href={base + h} class={k === 'hub' ? 'ie-home' : undefined} aria-current={current === k ? 'page' : undefined}><small lang="ga">{ga}</small>{t}</a>)}</nav>
+</div>

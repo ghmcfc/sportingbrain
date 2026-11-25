@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import IeBand from '../components/IeBand.astro';
+import '../styles/ireland.css';
+import { MOMENTS, IE_BANK, COUNTIES, LEGENDS } from '../data/ireland.js';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const MON = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const when = m => `${+m[0].slice(3)} ${MON[+m[0].slice(0, 2) - 1]} ${m[1]}`;
+const sorted = MOMENTS.slice().sort((a, b) => a[0].localeCompare(b[0]));
+---
+<Base image="https://sportingbrain.com/og-ireland.png" title="SportingBrain Ireland: daily Irish sports quizzes and games" description="Free daily games on Irish sport: the Irish Brain quiz, Name the County and Irish Legends. GAA, rugby, football, racing, boxing and more. Pick your county and play." page="ireland" wide>
+  <IeBand current="hub" />
+  <div class="ie">
+    <section class="ie-hero">
+      <p class="ga" lang="ga">Fáilte</p>
+      <h1>Ireland's daily sports games</h1>
+      <p>Three new games every day on Irish sport, from Croke Park to Cheltenham, Thomond Park to Tallaght. Hurling and football, camogie and ladies' football, rugby, the League of Ireland, boxing, racing, golf and more. Hard questions, all 32 counties, men's and women's sport. Free, no sign-up, no betting.</p>
+      <div class="row"><a class="btn gold" href={`${base}ireland/brain.html`} data-track="ie-hero-play">Play today's Irish Brain</a><a class="btn ghost" href="#moments">Irish sporting moments</a></div>
+    </section>
+
+    <div class="ie-county" id="ieCounty"></div>
+
+    <div class="ie-sec"><h2>Today's games</h2><span lang="ga">Cluichí an Lae</span></div>
+    <div class="ie-tiles">
+      <a class="ie-tile" href={`${base}ireland/brain.html`} data-g="ieb"><span class="ga" lang="ga">Dúshlán an Lae</span><b>The Irish Brain</b><span>Five hard questions on Irish sport. Three Hard, two Expert. The Brain has already had a go.</span><small data-st>Not played yet today</small></a>
+      <a class="ie-tile" href={`${base}ireland/county.html`} data-g="iec"><span class="ga" lang="ga">Cén Contae?</span><b>Name the County</b><span>Five clues to one of the 32 counties. History, ground, nickname, colours.</span><small data-st>Not played yet today</small></a>
+      <a class="ie-tile" href={`${base}ireland/legends.html`} data-g="iel"><span class="ga" lang="ga">Cé Mise?</span><b>Irish Legends</b><span>Five clues to one of Ireland's sporting greats. Hardest clue first.</span><small data-st>Not played yet today</small></a>
+    </div>
+
+    <div class="ie-sec" id="moments"><h2>Irish sporting moments</h2><span lang="ga">Ar an Lá Seo</span></div>
+    <div id="ieToday"></div>
+    <div class="ie-moments">
+      {sorted.map(m => <article class="ie-moment" data-d={m[0]}><p class="when">{when(m)}</p><h3>{m[2]}</h3><p>{m[3]}</p></article>)}
+    </div>
+
+    <div class="ie-sec"><h2>What's in the Irish edition</h2><span lang="ga">Faoi</span></div>
+    <div class="pg-card">
+      <p>SportingBrain Ireland is the Irish edition of <a href={base}>SportingBrain</a>, the free daily sports site. It has {IE_BANK.length} hand-written questions on Irish sport, all {COUNTIES.length} counties of the island and {LEGENDS.length} Irish sporting greats, and it grows every week. The games change at midnight, every day.</p>
+      <p>We cover the island as a whole, the way most of its sports are run: GAA, rugby, hockey and boxing all play as one Ireland. So Joey Dunlop and Mary Peters sit alongside Katie Taylor and Henry Shefflin. Women's sport gets the same space as men's: camogie, ladies' football, the Irish women's rugby and football teams, and Rachael Blackmore, Kellie Harrington and Cora Staunton.</p>
+      <p class="ie-note">Facts are checked when we write them and settled ones only: nothing that changes week to week. If you spot something wrong, <a data-mistake href="#">tell us</a> and we will fix it.</p>
+    </div>
+
+    <div class="ie-sec"><h2>More from SportingBrain</h2></div>
+    <div class="ie-more">
+      <a href={`${base}daily.html`}><b>Beat the Brain</b>The main daily quiz, every sport.</a>
+      <a href={`${base}connections.html`}><b>Connections: Sport</b>Sixteen names, four groups.</a>
+      <a href={`${base}pub-quiz.html`}><b>Pub and Club Quiz</b>Four rounds, free to print for your club night.</a>
+      <a href={`${base}newsletter.html`}><b>The Weekly Brain</b>The best of the week, every Friday. Free.</a>
+    </div>
+  </div>
+  <script>
+    import { store } from '../scripts/play.js';
+    import { ieDay, countyPicker } from '../scripts/ireland.js';
+    import { MOMENTS } from '../data/ireland.js';
+    countyPicker(document.getElementById('ieCounty'));
+    const D = ieDay();
+    document.querySelectorAll('.ie-tile[data-g]').forEach(a => { const s = store.get(a.dataset.g + '_' + D, null), el = a.querySelector('[data-st]');
+      if (!s) return; if (a.dataset.g === 'ieb') { if (s.done) { el.textContent = `Played: ${s.ans.filter(Boolean).length}/5`; el.classList.add('done'); } else el.textContent = `Question ${s.i + 1} of 5: carry on`; }
+      else if (s.done) { el.textContent = s.won ? `Got it in ${s.shown}` : 'Played: beaten today'; el.classList.add('done'); } });
+    // Moment of the day: today's date if there is one, otherwise the next one coming up.
+    const u = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' })), md = String(u.getMonth() + 1).padStart(2, '0') + '-' + String(u.getDate()).padStart(2, '0');
+    const all = MOMENTS.slice().sort((a, b) => a[0].localeCompare(b[0])), hit = all.find(m => m[0] === md), next = all.find(m => m[0] > md) || all[0];
+    const m = hit || next, card = document.querySelector(`.ie-moment[data-d="${m[0]}"]`);
+    if (card) { card.classList.add('today'); card.querySelector('.when').textContent = (hit ? 'On this day · ' : 'Coming up · ') + card.querySelector('.when').textContent; card.parentNode.prepend(card); }
+  </script>
+</Base>

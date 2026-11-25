@@ -1,0 +1,66 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import IeBand from '../../components/IeBand.astro';
+import '../../styles/ireland.css';
+---
+<Base image="https://sportingbrain.com/og-ireland.png" title="The Irish Brain: hard daily Irish sports quiz | SportingBrain" description="Five hard questions on Irish sport every day: GAA, rugby, football, racing, boxing, golf and more. Pick your county and share your score." page="iebrain">
+  <IeBand current="brain" />
+  <div class="ie">
+    <header class="ie-head"><p class="ga" lang="ga">Dúshlán an Lae</p><h1>The Irish Brain</h1><p>Five hard questions on Irish sport, new every day. Three Hard, then two Expert. Hurling and football, rugby, racing, boxing, the League of Ireland and the rest. No easy ones.</p></header>
+    <div id="vs"></div>
+    <section class="pg-card ie-game" id="ib" aria-live="polite"></section>
+    <AdSlot name="game_result" />
+    <p class="ie-note">Spotted a mistake? <a data-mistake href="#">Tell us</a> and we will fix it.</p>
+  </div>
+  <script>
+    import { IE_BANK } from '../../data/ireland.js';
+    import { seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share } from '../../scripts/play.js';
+    import { ieDay, countyTag, getCounty, colourBar } from '../../scripts/ireland.js';
+    showChallenge(document.getElementById('vs'));
+    const q = new URLSearchParams(location.search), today = ieDay(), practice = q.has('practice');
+    const day = Math.min(today, Math.max(1, parseInt(q.get('day') || today, 10) || today));
+    const H = shuffle(IE_BANK.filter(x => x[0] === 3), seeded(3533)), X = shuffle(IE_BANK.filter(x => x[0] === 4), seeded(8821));
+    const pick = d => [0, 1, 2].map(k => H[((d - 1) * 3 + k) % H.length]).concat([0, 1].map(k => X[((d - 1) * 2 + k) % X.length]));
+    const QS = practice ? shuffle(IE_BANK.filter(x => x[0] === 3)).slice(0, 3).concat(shuffle(IE_BANK.filter(x => x[0] === 4)).slice(0, 2)) : pick(day);
+    const OPTS = QS.map((x, i) => shuffle(x[3].map((t, j) => [t, j === 0]), seeded(day * 31 + i * 7 + 1)));
+    const brain = 2 + Math.floor(seeded(day * 977)() * 3); // the Brain scores 2, 3 or 4
+    const key = 'ieb_' + day, S = (!practice && store.get(key, null)) || { i: 0, ans: [], done: false }, box = document.getElementById('ib');
+    const save = () => { if (!practice) store.set(key, S); };
+    const pips = () => `<div class="ie-pips">${QS.map((_, k) => `<i class="${k < S.ans.length ? (S.ans[k] ? 'ok' : 'no') : k === S.i ? 'cur' : ''}"></i>`).join('')}</div>`;
+    function render() {
+      if (S.done) return result();
+      const x = QS[S.i], answered = S.ans.length > S.i;
+      box.innerHTML = `<p class="pg-step">${practice ? 'Practice round' : 'Irish Brain #' + day} · Question ${S.i + 1} of 5</p>${pips()}
+        <p><span class="ie-lvl${x[0] === 4 ? ' x' : ''}">${x[0] === 4 ? 'Expert' : 'Hard'}</span><span class="pg-step" style="display:inline">${esc(x[1])}</span></p>
+        <p class="pg-q">${esc(x[2])}</p>
+        <div class="pg-opts">${OPTS[S.i].map((o, k) => `<button data-k="${k}"${answered ? ' disabled' : ''}>${esc(o[0])}</button>`).join('')}</div>
+        <div id="after"></div>`;
+      if (answered) after();
+    }
+    function after() {
+      const x = QS[S.i], b = box.querySelectorAll('.pg-opts button');
+      OPTS[S.i].forEach((o, k) => { if (o[1]) b[k].classList.add('ok'); });
+      box.querySelector('#after').innerHTML = `<p class="pg-fact"><b>${S.ans[S.i] ? 'Right.' : 'No. It was ' + esc(x[3][0]) + '.'}</b> ${esc(x[5])}</p><div class="pg-btns"><button class="btn gold" id="nx">${S.i < 4 ? 'Next question' : 'See your score'}</button></div>`;
+      box.querySelector('#nx').onclick = () => { if (S.i < 4) S.i++; else S.done = true; save(); render(); box.scrollIntoView({ block: 'start', behavior: 'smooth' }); };
+      box.querySelector('#nx').focus({ preventScroll: true });
+    }
+    box.addEventListener('click', e => { const b = e.target.closest('.pg-opts button'); if (!b || b.disabled || S.ans.length > S.i) return;
+      const ok = OPTS[S.i][+b.dataset.k][1]; S.ans.push(ok); if (!ok) b.classList.add('no'); box.querySelectorAll('.pg-opts button').forEach(z => z.disabled = true); save(); after(); });
+    function result() {
+      const sc = S.ans.filter(Boolean).length, grid = S.ans.map(a => a ? '🟩' : '🟥').join(''), c = getCounty();
+      const verdict = sc === 5 ? 'Maith thú! A perfect five.' : sc > brain ? 'You beat the Brain.' : sc === brain ? 'Level with the Brain.' : 'The Brain wins today.';
+      if (!practice) { markPlayed('ireland/brain'); const st = store.get('ieb_streak', { last: 0, n: 0, best: 0 }); if (st.last !== day && day === today) { st.n = st.last === day - 1 ? st.n + 1 : 1; st.last = day; st.best = Math.max(st.best, st.n); store.set('ieb_streak', st); } }
+      const st = store.get('ieb_streak', { n: 0, best: 0 });
+      box.innerHTML = `<div class="ie-result"><p class="pg-step">${practice ? 'Practice round' : 'Irish Brain #' + day}</p><p class="pg-score">${sc}/5</p><p class="ie-grid" aria-label="${sc} right out of 5">${grid}</p>
+        <p class="ie-brain">The Brain scored ${brain}. ${verdict}</p>
+        ${c ? `<p class="ie-chip">${colourBar(c)} ${esc(c === 'Abroad' ? 'Playing for the diaspora' : 'Playing for ' + c)}</p>` : `<p class="ie-note">Pick your county on the <a href="../ireland.html">Ireland page</a> and it goes on your score.</p>`}
+        ${!practice && st.n ? `<p class="ie-note">Streak: ${st.n} day${st.n === 1 ? '' : 's'} · Best: ${st.best}</p>` : ''}
+        <div class="pg-btns"><button class="btn gold" id="shr">Share my score</button><a class="btn ghost" href="?practice=1">Practice round</a><a class="btn ghost" href="county.html">Next: Name the County</a></div>
+        ${day > 1 && !practice ? `<p class="pg-step" style="margin-top:16px">Missed one? Play an earlier day</p><div class="ie-arch">${Array.from({ length: Math.min(14, today - 1) }, (_, k) => today - 1 - k).filter(d => d !== day).map(d => `<a href="?day=${d}">#${d}</a>`).join('')}</div>` : ''}</div>`;
+      box.querySelector('#shr').onclick = () => share(`SportingBrain Ireland · The Irish Brain #${day}\n${grid} ${sc}/5 (the Brain got ${brain})${countyTag()}`, location.origin + location.pathname);
+      box.appendChild(challengeBox(sc, 5, 'The Irish Brain'));
+    }
+    render();
+  </script>
+</Base>

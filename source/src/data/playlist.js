@@ -26,6 +26,9 @@ export const PLAY = [
   ['archive', 'Puzzle archive', 'Missed a day? Every Beat the Brain is here.', 'quiz', '#2A3A55'],
   ['passport', 'Ground Hopper Passport', 'Stamp every ground and venue you visit. Kept on your device only.', 'family', '#C8102E'],
   ['sports-day', 'Sports Day at Home', 'Eight events for the garden or the park, a scorecard and a 30-day challenge.', 'family', '#0B6E4F'],
+  ['ireland/brain', 'The Irish Brain', 'Five hard questions on Irish sport every day. GAA, rugby, racing, boxing and more.', 'ireland', '#0E6B45'],
+  ['ireland/county', 'Name the County', 'Five clues to one of Ireland\'s 32 counties. Name it in as few as you can.', 'ireland', '#0B4D32'],
+  ['ireland/legends', 'Irish Legends', 'Five clues to one of Ireland\'s sporting greats, hardest first.', 'ireland', '#D9A72B'],
   ['challenge', 'Family challenge', 'Pass the phone round. Who knows the most?', 'quiz', '#0B6E4F'],
 ];
-export const GROUPS = [['daily', 'Today\'s games'], ['quiz', 'Quizzes'], ['games', 'Games'], ['family', 'Family and seasonal']];
+export const GROUPS = [['daily', 'Today\'s games'], ['quiz', 'Quizzes'], ['games', 'Games'], ['family', 'Family and seasonal'], ['ireland', 'SportingBrain Ireland']];

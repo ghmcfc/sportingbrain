@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import IeBand from '../../components/IeBand.astro';
+import '../../styles/ireland.css';
+import { LEGENDS } from '../../data/ireland.js';
+---
+<Base image="https://sportingbrain.com/og-ireland.png" title="Irish Legends: name the Irish sporting great | SportingBrain" description="Five clues to one of Ireland's sporting greats, hardest first. Hurlers, boxers, jockeys, golfers, footballers, men and women. New every day." page="ielegends">
+  <IeBand current="legends" />
+  <div class="ie">
+    <header class="ie-head"><p class="ga" lang="ga">Cé Mise?</p><h1>Irish Legends</h1><p>Five clues to one of Ireland's sporting greats, north and south, men and women. Hardest clue first. Guess after any clue: the fewer you need, the more points you get. A wrong guess costs you a clue.</p></header>
+    <div id="vs"></div>
+    <section class="pg-card ie-game" id="lg" aria-live="polite"></section>
+    <AdSlot name="game_result" />
+    <p class="ie-note">{LEGENDS.length} legends so far, from Ronnie Delany in Melbourne to Paris 2024. Spotted a mistake? <a data-mistake href="#">Tell us</a>.</p>
+  </div>
+  <script>
+    import { LEGENDS } from '../../data/ireland.js';
+    import { seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share } from '../../scripts/play.js';
+    import { ieDay, countyTag } from '../../scripts/ireland.js';
+    showChallenge(document.getElementById('vs'));
+    const practice = new URLSearchParams(location.search).has('practice'), D = ieDay(), ORD = shuffle(LEGENDS.map((_, i) => i), seeded(1956));
+    const P = practice ? shuffle(LEGENDS)[0] : LEGENDS[ORD[(D - 1) % ORD.length]], key = 'iel_' + D;
+    const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/['’.]/g, '').replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim();
+    const S = (!practice && store.get(key, null)) || { shown: 1, done: false, won: false, tries: [] }, box = document.getElementById('lg');
+    function render() { const pts = S.won ? 6 - S.shown : 0;
+      box.innerHTML = `<p class="pg-step">${esc(P[2])} · ${S.done ? (S.won ? `${pts} point${pts === 1 ? '' : 's'}` : 'The answer') : `Clue ${S.shown} of 5 · worth ${6 - S.shown} point${S.shown === 5 ? '' : 's'}`}</p>
+        <ol class="ie-clues">${P[3].slice(0, S.done ? 5 : S.shown).map((c, i) => `<li class="${i === S.shown - 1 && !S.done ? 'new' : ''}">${esc(c)}</li>`).join('')}</ol>
+        ${S.tries.length ? `<p class="pg-note">Your guesses: ${S.tries.map(esc).join(', ')}</p>` : ''}
+        ${S.done ? `<h2 class="ie-ans">${S.won ? '' : 'It was '}${esc(P[0])}</h2>` : `<form class="ie-form" id="lgF"><label for="lgG" class="vh">Your guess</label><input id="lgG" class="pg-input" autocomplete="off" placeholder="Type a name"><button class="btn gold">Guess</button>${S.shown < 5 ? '<button type="button" class="btn ghost" id="lgNext">Next clue</button>' : '<button type="button" class="btn ghost" id="lgGive">Show me</button>'}</form>`}`;
+      if (!S.done) { const f = document.getElementById('lgF'); f.onsubmit = e => { e.preventDefault(); const g = document.getElementById('lgG').value.trim(); if (!g) return; S.tries.push(g);
+          if (P[1].map(norm).includes(norm(g))) { S.won = true; S.done = true; } else if (S.shown < 5) S.shown++; else S.done = true; save(); };
+        const nx = document.getElementById('lgNext'); if (nx) nx.onclick = () => { S.shown++; save(); };
+        const gv = document.getElementById('lgGive'); if (gv) gv.onclick = () => { S.done = true; save(); };
+        document.getElementById('lgG').focus({ preventScroll: true }); }
+      else { if (!practice) markPlayed('ireland/legends');
+        const grid = Array.from({ length: 5 }, (_, i) => S.won && i === S.shown - 1 ? '🟩' : i < (S.won ? S.shown - 1 : S.shown) ? '⬛' : '⬜').join('');
+        box.insertAdjacentHTML('beforeend', `<p class="ie-grid">${grid}</p><div class="pg-btns"><button class="btn gold" id="lgS">Share</button><a class="btn ghost" href="?practice=1">Practice round</a><a class="btn ghost" href="brain.html">Next: The Irish Brain</a></div>`);
+        box.querySelector('#lgS').onclick = () => share(`SportingBrain Ireland · Irish Legends #${D}\n${grid} ${S.won ? `Got it in ${S.shown}` : 'Beaten today'}${countyTag()}`, location.origin + location.pathname);
+        box.appendChild(challengeBox(pts, 5, 'Irish Legends')); } }
+    const save = () => { if (!practice) store.set(key, S); render(); };
+    render();
+  </script>
+</Base>

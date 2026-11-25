@@ -1,0 +1,82 @@
+/* SportingBrain Ireland: the Irish edition. Deep green, old gold and cream, with a knotwork band. */
+.ie{--ie-g:#0B4D32;--ie-g2:#0E6B45;--ie-gold:#D9A72B;--ie-cream:#FBF6E9;--ie-ink:#0F1E36}
+body.dark .ie{--ie-cream:#14261d}
+.ie-knot{height:14px;background-color:var(--ie-g);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Cg fill='none' stroke='%23D9A72B' stroke-width='2.2'%3E%3Cpath d='M0 7C7 0 13 0 20 7S33 14 40 7'/%3E%3Cpath d='M0 7C7 14 13 14 20 7S33 0 40 7' stroke-dasharray='9 4' stroke-dashoffset='-2'/%3E%3C/g%3E%3C/svg%3E");background-repeat:repeat-x;background-position:center}
+.ie-band{background:var(--ie-g);color:#fff;margin:0 -14px 22px;padding:0}
+@media(min-width:800px){.ie-band{margin:0 0 22px}}
+.ie-band nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:0 10px}
+.ie-band nav::-webkit-scrollbar{display:none}
+.ie-band a{flex:none;color:#E6EFE9;text-decoration:none;font-family:var(--display);font-weight:700;font-size:1.08rem;letter-spacing:.02em;padding:10px 12px;line-height:1.1}
+.ie-band a small{display:block;font-family:var(--serif);font-weight:400;font-size:.72rem;letter-spacing:0;opacity:.8}
+.ie-band a[aria-current],.ie-band a:hover{color:#fff;box-shadow:inset 0 -4px 0 var(--ie-gold)}
+.ie-band .ie-home{color:var(--ie-gold)}
+.ie-head{padding:6px 0 12px;border-bottom:3px solid var(--ie-g);margin-bottom:20px}
+.ie-head .ga{font-family:var(--display);font-weight:800;color:var(--ie-g2);font-size:1.15rem;letter-spacing:.04em;margin:0}
+body.dark .ie-head .ga{color:var(--ie-gold)}
+.ie-head h1{font-size:clamp(2.4rem,6vw,4.2rem);line-height:.95;margin:2px 0 8px}
+.ie-head p{max-width:62ch;margin:0;color:var(--ink-2);font-size:1.08rem}
+/* hub hero */
+.ie-hero{background:radial-gradient(120% 140% at 100% 0%,#14805A 0%,var(--ie-g) 55%,#062E1E 100%);color:#fff;border-radius:4px;padding:26px 22px 22px;position:relative;overflow:hidden;margin-bottom:18px}
+.ie-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;opacity:.13;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23fff' stroke-width='5'%3E%3Cpath d='M50 12C70 40 70 62 50 74C30 62 30 40 50 12Z'/%3E%3Cpath d='M17 69C30 40 50 30 72 42C72 66 50 80 17 69Z'/%3E%3Cpath d='M83 69C50 80 28 66 28 42C50 30 70 40 83 69Z'/%3E%3Ccircle cx='50' cy='52' r='34'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/contain;pointer-events:none}
+.ie-hero .ga{font-family:var(--display);color:var(--ie-gold);font-weight:800;font-size:1.25rem;letter-spacing:.05em;margin:0}
+.ie-hero h1{font-size:clamp(2.6rem,7vw,4.6rem);line-height:.92;margin:4px 0 10px;color:#fff;max-width:14ch}
+.ie-hero p{color:#D7E8DE;max-width:56ch;margin:0 0 16px;font-size:1.08rem}
+.ie-hero .btn.gold{background:var(--ie-gold);color:var(--ie-ink)}
+.ie-hero .btn.ghost{color:#fff}
+/* game tiles */
+.ie-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:0 0 22px}
+.ie-tile{display:flex;flex-direction:column;gap:4px;padding:16px 18px;background:var(--paper);border:1px solid var(--rule);border-top:6px solid var(--ie-g2);border-radius:3px;color:var(--ink);text-decoration:none;min-height:150px}
+.ie-tile:hover,.ie-tile:focus-visible{border-color:var(--ie-g2)}
+.ie-tile .ga{font-family:var(--display);font-weight:700;color:var(--ie-g2);font-size:1rem;letter-spacing:.03em}
+body.dark .ie-tile .ga{color:var(--ie-gold)}
+.ie-tile b{font-family:var(--display);font-size:1.75rem;line-height:1;font-weight:800}
+.ie-tile span{color:var(--ink-2);font-size:.97rem}
+.ie-tile small{margin-top:auto;font-family:var(--display);font-weight:700;font-size:1rem;color:var(--mute)}
+.ie-tile small.done{color:var(--ie-g2)}
+/* county picker and colours */
+.ie-county{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;background:var(--ie-cream);border:1px solid var(--rule);border-left:6px solid var(--ie-gold);padding:14px 16px;border-radius:3px;margin:0 0 22px}
+.ie-county label{font-family:var(--display);font-weight:800;font-size:1.25rem}
+.ie-county select{font:inherit;padding:9px 12px;border:2px solid var(--ie-g);border-radius:3px;background:var(--paper);color:var(--ink);min-width:200px}
+.ie-county p{margin:0;flex-basis:100%;color:var(--ink-2);font-size:.95rem}
+.ie-cols{display:inline-flex;height:22px;border-radius:2px;overflow:hidden;border:1px solid rgba(0,0,0,.25);vertical-align:middle}
+.ie-cols i{width:14px;display:block}
+.ie-chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;font-size:1.05rem}
+/* sections */
+.ie-sec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;border-bottom:2px solid var(--ie-g);margin:28px 0 14px}
+.ie-sec h2{margin:0;font-size:1.9rem}
+.ie-sec span{font-family:var(--display);color:var(--ie-g2);font-weight:700;font-size:1.05rem}
+body.dark .ie-sec span{color:var(--ie-gold)}
+.ie-moment{background:var(--paper);border:1px solid var(--rule);border-radius:3px;padding:16px 18px}
+.ie-moment .yr{font-family:var(--display);font-weight:900;font-size:2.6rem;line-height:1;color:var(--ie-g2)}
+body.dark .ie-moment .yr{color:var(--ie-gold)}
+.ie-moment h3{margin:4px 0 6px;font-size:1.45rem}
+.ie-moment p{margin:0}
+.ie-moments{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.ie-moment.today{border-color:var(--ie-gold);box-shadow:inset 0 0 0 2px var(--ie-gold)}
+.ie-moment .when{font-family:var(--display);font-weight:700;color:var(--mute);font-size:.95rem}
+/* game play */
+.ie-game{border-top:6px solid var(--ie-g2)}
+.ie-pips{display:flex;gap:6px;margin:4px 0 12px}
+.ie-pips i{flex:1;height:8px;border-radius:2px;background:var(--rule)}
+.ie-pips i.ok{background:var(--ie-g2)}.ie-pips i.no{background:var(--signal)}.ie-pips i.cur{background:var(--ie-gold)}
+.ie-game .pg-fact{border-left-color:var(--ie-g2)}
+.ie-lvl{display:inline-block;font-family:var(--display);font-weight:800;font-size:.9rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:2px;background:var(--ie-g);color:#fff;margin-right:6px}
+.ie-lvl.x{background:var(--ie-gold);color:var(--ie-ink)}
+.ie-result{text-align:left}
+.ie-grid{font-size:1.6rem;letter-spacing:.12em;margin:6px 0}
+.ie-brain{font-family:var(--display);font-weight:700;font-size:1.15rem;margin:4px 0 0}
+.ie-arch{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.ie-arch a{font-family:var(--display);font-weight:700;padding:6px 10px;border:2px solid var(--rule);border-radius:3px;text-decoration:none;color:var(--ink)}
+.ie-arch a:hover{border-color:var(--ie-g2)}
+.ie-clues{list-style:none;padding:0;margin:8px 0 14px;counter-reset:c}
+.ie-clues li{counter-increment:c;position:relative;padding:10px 12px 10px 46px;margin:0 0 8px;background:var(--ie-cream);border-left:4px solid var(--ie-g2);font-size:1.1rem;border-radius:2px}
+.ie-clues li::before{content:counter(c);position:absolute;left:12px;top:8px;font-family:var(--display);font-weight:900;font-size:1.4rem;color:var(--ie-g2)}
+body.dark .ie-clues li::before{color:var(--ie-gold)}
+.ie-clues li.new{border-left-color:var(--ie-gold);font-weight:600}
+.ie-ans{font-size:clamp(2.2rem,6vw,3.4rem);margin:6px 0 4px}
+.ie-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ie-form .pg-input{flex:1 1 220px;margin:0;max-width:none}
+.ie-more{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:8px}
+.ie-more a{display:block;padding:12px 14px;border:1px solid var(--rule);border-left:5px solid var(--ie-g2);border-radius:3px;text-decoration:none;color:var(--ink);background:var(--paper)}
+.ie-more a b{font-family:var(--display);font-size:1.3rem;display:block;line-height:1.1}
+.ie-note{font-size:.92rem;color:var(--mute)}

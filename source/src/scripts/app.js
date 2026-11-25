@@ -285,6 +285,7 @@ if(P==='home'){
 
   <section class="blk"><header class="sh"><h2>Today's games</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></header>
     <div class="gtiles">${[...FIX,...rot].map(tile).join('')}</div></section>
+  <a class="ie-promo" href="${BASE}ireland.html" data-track="ie-promo-home"><span class="ie-promo-k" lang="ga">Fáilte</span><b>SportingBrain Ireland</b><span>Three daily games on Irish sport: the Irish Brain, Name the County and Irish Legends. GAA, rugby, racing, boxing and more.</span><em>Play the Irish edition</em></a>
 
   ${AD1}
   ${(()=>{const q=WEEK.quiz[0],st=WEEK.stories[q.story];return `<section class="blk"><header class="sh"><h2>This Week's Quiz</h2><a href="${BASE}this-week.html">All five questions</a></header>

@@ -889,3 +889,11 @@ main:has(.kp) .daily-more{display:none}
 .hook-ask{color:#fff;margin:14px 0 8px;font-size:1.05rem}.hook-more{margin:10px 0 0;color:#C9D2E0}.hook-more .linkbtn,.hook-more a{color:#fff}
 .hook .kp{margin-top:18px}.hook .kp-head h3,.hook .kp-head span{color:#fff}.hook .kp-bar{background:rgba(255,255,255,.25)}.hook .kp-all{color:#F2A900}
 .hook-sub b{color:#F2A900}
+
+/* SportingBrain Ireland promo on the home page */
+.ie-promo{display:grid;grid-template-columns:1fr auto;gap:2px 16px;align-items:center;margin:18px 0 6px;padding:16px 20px;background:#0B4D32;color:#fff;text-decoration:none;border-radius:3px;border-bottom:5px solid #D9A72B}
+.ie-promo-k{grid-column:1;font-family:var(--display);font-weight:800;color:#D9A72B;letter-spacing:.05em}
+.ie-promo b{grid-column:1;font-family:var(--display);font-size:2rem;line-height:1}
+.ie-promo span:not(.ie-promo-k){grid-column:1;color:#D7E8DE}
+.ie-promo em{grid-column:2;grid-row:1/4;font-style:normal;font-family:var(--display);font-weight:800;background:#D9A72B;color:#0F1E36;padding:10px 16px;border-radius:3px;white-space:nowrap}
+@media(max-width:560px){.ie-promo{grid-template-columns:1fr}.ie-promo em{grid-column:1;grid-row:auto;justify-self:start;margin-top:8px}}

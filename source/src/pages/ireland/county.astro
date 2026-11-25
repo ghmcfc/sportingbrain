@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import IeBand from '../../components/IeBand.astro';
+import '../../styles/ireland.css';
+---
+<Base image="https://sportingbrain.com/og-ireland.png" title="Name the County: daily GAA county quiz | SportingBrain" description="Five clues to one of Ireland's 32 counties: All-Ireland history, the county ground, the nickname, the colours. Name it in as few clues as you can." page="iecounty">
+  <IeBand current="county" />
+  <div class="ie">
+    <header class="ie-head"><p class="ga" lang="ga">Cén Contae?</p><h1>Name the County</h1><p>Five clues to one of the 32 counties, hardest first: a piece of GAA history, the county ground, the nickname, the colours, then the province. The fewer clues you need, the more points you get. A wrong guess costs you a clue. New every day.</p></header>
+    <div id="vs"></div>
+    <section class="pg-card ie-game" id="nc" aria-live="polite"></section>
+    <AdSlot name="game_result" />
+    <p class="ie-note">All 32 counties, north and south, each one coming round in turn. Spotted a mistake? <a data-mistake href="#">Tell us</a>.</p>
+  </div>
+  <script>
+    import { COUNTIES, COUNTY_NAMES } from '../../data/ireland.js';
+    import { seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share } from '../../scripts/play.js';
+    import { ieDay, countyTag, colourBar } from '../../scripts/ireland.js';
+    showChallenge(document.getElementById('vs'));
+    const practice = new URLSearchParams(location.search).has('practice'), D = ieDay(), ORD = shuffle(COUNTIES.map((_, i) => i), seeded(1884));
+    const P = practice ? shuffle(COUNTIES)[0] : COUNTIES[ORD[(D - 1) % ORD.length]], key = 'iec_' + D;
+    const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/^(county|co\.?)\s+/, '').replace(/[^a-z]/g, '');
+    const alias = { londonderry: 'derry', tipp: 'tipperary', thedubs: 'dublin', dubs: 'dublin', thekingdom: 'kerry', kingdom: 'kerry', thebanner: 'clare', thedeise: 'waterford', deise: 'waterford', thecats: 'kilkenny' };
+    const S = (!practice && store.get(key, null)) || { shown: 1, done: false, won: false, tries: [] }, box = document.getElementById('nc');
+    function render() { const pts = S.won ? 6 - S.shown : 0;
+      box.innerHTML = `<p class="pg-step">${practice ? 'Practice round' : 'County #' + D} · ${S.done ? (S.won ? `${pts} point${pts === 1 ? '' : 's'}` : 'The answer') : `Clue ${S.shown} of 5 · worth ${6 - S.shown} point${S.shown === 5 ? '' : 's'}`}</p>
+        <ol class="ie-clues">${P[1].slice(0, S.done ? 5 : S.shown).map((c, i) => `<li class="${i === S.shown - 1 && !S.done ? 'new' : ''}">${esc(c)}</li>`).join('')}</ol>
+        ${S.tries.length ? `<p class="pg-note">Your guesses: ${S.tries.map(esc).join(', ')}</p>` : ''}
+        ${S.done ? `<p class="ie-chip">${colourBar(P[0])}</p><h2 class="ie-ans">${S.won ? '' : 'It was '}${esc(P[0])}</h2>` : `<form class="ie-form" id="ncF"><label for="ncG" class="vh">Your guess</label><input id="ncG" class="pg-input" list="ncL" autocomplete="off" placeholder="Type a county"><datalist id="ncL">${COUNTY_NAMES.map(n => `<option value="${n}">`).join('')}</datalist><button class="btn gold">Guess</button>${S.shown < 5 ? '<button type="button" class="btn ghost" id="ncNext">Next clue</button>' : '<button type="button" class="btn ghost" id="ncGive">Show me</button>'}</form>`}`;
+      if (!S.done) { const f = document.getElementById('ncF'); f.onsubmit = e => { e.preventDefault(); const g = document.getElementById('ncG').value.trim(); if (!g) return;
+          let n = norm(g); n = alias[n] || n; if (!COUNTY_NAMES.some(c => norm(c) === n)) { document.getElementById('ncG').setCustomValidity('Pick one of the 32 counties'); document.getElementById('ncG').reportValidity(); setTimeout(() => document.getElementById('ncG') && document.getElementById('ncG').setCustomValidity(''), 1500); return; }
+          S.tries.push(g); if (n === norm(P[0])) { S.won = true; S.done = true; } else if (S.shown < 5) S.shown++; else S.done = true; save(); };
+        const nx = document.getElementById('ncNext'); if (nx) nx.onclick = () => { S.shown++; save(); };
+        const gv = document.getElementById('ncGive'); if (gv) gv.onclick = () => { S.done = true; save(); };
+        document.getElementById('ncG').focus({ preventScroll: true }); }
+      else { if (!practice) markPlayed('ireland/county');
+        const grid = Array.from({ length: 5 }, (_, i) => S.won && i === S.shown - 1 ? '🟩' : i < (S.won ? S.shown - 1 : S.shown) ? '⬛' : '⬜').join('');
+        box.insertAdjacentHTML('beforeend', `<p class="ie-grid">${grid}</p><div class="pg-btns"><button class="btn gold" id="ncS">Share</button><a class="btn ghost" href="?practice=1">Practice round</a><a class="btn ghost" href="legends.html">Next: Irish Legends</a></div>`);
+        box.querySelector('#ncS').onclick = () => share(`SportingBrain Ireland · Name the County #${D}\n${grid} ${S.won ? `Got it in ${S.shown}` : 'Beaten today'}${countyTag()}`, location.origin + location.pathname);
+        box.appendChild(challengeBox(pts, 5, 'Name the County')); } }
+    const save = () => { if (!practice) store.set(key, S); render(); };
+    render();
+  </script>
+</Base>
