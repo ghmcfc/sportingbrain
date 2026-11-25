@@ -1,5 +1,6 @@
 // Shared helpers for SportingBrain Ireland: the day number, your county and its colours, and share text.
 import { COUNTIES, COUNTY_NAMES } from '../data/ireland.js';
+import { IE_PICK } from '../data/teams.js';
 import { store, ukDayNo, esc } from './play.js';
 export const IE_DAY0 = 20781; // Irish Brain #1 was Wednesday 25 November 2026 (UK day 20782)
 export const ieDay = () => Math.max(1, ukDayNo() - IE_DAY0);
@@ -18,11 +19,24 @@ export function countyColours(name) {
 }
 export const colourBar = name => { const c = countyColours(name); return c.length ? `<span class="ie-cols" aria-hidden="true">${c.map(h => `<i style="background:${h}"></i>`).join('')}</span>` : ''; };
 export const countyLine = () => { const c = getCounty(); return c ? `Playing for ${c}` : ''; };
+// What you play for on Irish pages: colours.picks.ie (any Irish county, club or province), falling back to your GAA county.
+export function irishPick() { const c = store.get('colours', null) || {}; const n = (c.picks && (c.picks.ie || c.picks.gaa)) || store.get('ie_county', '');
+  return n && n !== 'Abroad' ? { n, cols: (c.colmap && (c.picks.ie ? c.colmap.ie : c.colmap.gaa)) || countyColours(n) } : null; }
+function setIrish(name) { const y = store.get('colours', { picks: {}, badge: '', cols: [] }); y.picks = y.picks || {}; y.colmap = y.colmap || {};
+  const g = IE_PICK.find(([, , list]) => list.some(t => t[0] === name)), t = g && g[2].find(t => t[0] === name);
+  if (t) { y.picks.ie = name; y.colmap.ie = t[1]; if (g[0] === 'gaa') { y.picks.gaa = name; y.colmap.gaa = t[1]; store.set('ie_county', name); } }
+  else { delete y.picks.ie; delete y.colmap.ie; }
+  if (!y.badge || !y.picks[y.badge]) y.badge = t ? (g[0] === 'gaa' ? 'gaa' : '') || Object.keys(y.picks).find(k => k !== 'ie') || '' : y.badge;
+  y.cols = (y.badge && y.colmap[y.badge]) || []; store.set('colours', y); return t ? t[1] : []; }
 export function countyPicker(el, onChange) {
-  const cur = getCounty();
-  el.innerHTML = `<label for="ieCo">Your county</label><select id="ieCo"><option value="">Pick your county</option>${COUNTY_NAMES.map(n => `<option${n === cur ? ' selected' : ''}>${esc(n)}</option>`).join('')}<option value="Abroad"${cur === 'Abroad' ? ' selected' : ''}>The diaspora (anywhere else)</option></select><span class="ie-chip" id="ieChip"></span><p>Your county goes on every score you share, in its colours. Kept on your device only.</p>`;
-  const chip = el.querySelector('#ieChip'), draw = () => { const c = getCounty(); chip.innerHTML = c ? `${colourBar(c)} ${esc(c === 'Abroad' ? 'The diaspora' : c)}` : ''; };
-  el.querySelector('#ieCo').onchange = e => { setCounty(e.target.value); draw(); window.sbTrack && sbTrack('ie-county-' + (e.target.value || 'none')); onChange && onChange(); };
+  const cur = (irishPick() || {}).n || '';
+  el.innerHTML = `<label for="ieCo">Who do you play for?</label><select id="ieCo"><option value="">Your county, club or province</option>${IE_PICK.map(([, label, list]) => `<optgroup label="${esc(label)}">${list.map(t => `<option${t[0] === cur ? ' selected' : ''}>${esc(t[0])}</option>`).join('')}</optgroup>`).join('')}</select><span class="ie-chip" id="ieChip"></span><p>Your GAA county, League of Ireland or NIFL club, or rugby province. It goes on every Irish score you share, in its colours. Your UK team stays on the UK site. Kept on your device only.</p>`;
+  const chip = el.querySelector('#ieChip'), draw = () => { const p = irishPick(); chip.innerHTML = p ? `<span class="ie-cols" aria-hidden="true">${p.cols.map(h => `<i style="background:${h}"></i>`).join('')}</span> ${esc(p.n)}` : ''; };
+  el.querySelector('#ieCo').onchange = e => { const k = setIrish(e.target.value); draw();
+    const s = document.getElementById('ycStrip'), g = document.getElementById('ycShirtFill');
+    if (s) { s.style.background = k.length ? 'linear-gradient(90deg,' + k.map((h, i) => `${h} ${i * 100 / k.length}% ${(i + 1) * 100 / k.length}%`).join(',') + ')' : ''; s.hidden = !k.length; }
+    if (g) { g.innerHTML = k.map((h, i) => `<rect x="${i * 24 / k.length}" y="0" width="${24 / k.length + .2}" height="24" fill="${h}"/>`).join(''); g.closest('a').classList.toggle('has-team', !!k.length); }
+    window.sbTrack && sbTrack('ie-pick-' + (e.target.value || 'none').replace(/\W+/g, '-')); onChange && onChange(); };
   draw();
 }
-export const countyTag = () => { const c = getCounty(); return !c ? '' : c === 'Abroad' ? ' · Playing for the diaspora' : ` · Playing for ${c}`; };
+export const countyTag = () => { const p = irishPick(); return p ? ` · Playing for ${p.n}` : ''; };

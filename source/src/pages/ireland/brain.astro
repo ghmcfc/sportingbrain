@@ -54,7 +54,6 @@ import '../../styles/ireland.css';
       const st = store.get('ieb_streak', { n: 0, best: 0 });
       box.innerHTML = `<div class="ie-result"><p class="pg-step">${practice ? 'Practice round' : 'Irish Brain #' + day}</p><p class="pg-score">${sc}/5</p><p class="ie-grid" aria-label="${sc} right out of 5">${grid}</p>
         <p class="ie-brain">The Brain scored ${brain}. ${verdict}</p>
-        ${c ? `<p class="ie-chip">${colourBar(c)} ${esc(c === 'Abroad' ? 'Playing for the diaspora' : 'Playing for ' + c)}</p>` : `<p class="ie-note">Pick your county on the <a href="../ireland.html">Ireland page</a> and it goes on your score.</p>`}
         ${!practice && st.n ? `<p class="ie-note">Streak: ${st.n} day${st.n === 1 ? '' : 's'} · Best: ${st.best}</p>` : ''}
         <div class="pg-btns"><button class="btn gold" id="shr">Share my score</button><a class="btn ghost" href="?practice=1">Practice round</a><a class="btn ghost" href="county.html">Next: Name the County</a></div>
         ${day > 1 && !practice ? `<p class="pg-step" style="margin-top:16px">Missed one? Play an earlier day</p><div class="ie-arch">${Array.from({ length: Math.min(14, today - 1) }, (_, k) => today - 1 - k).filter(d => d !== day).map(d => `<a href="?day=${d}">#${d}</a>`).join('')}</div>` : ''}</div>`;

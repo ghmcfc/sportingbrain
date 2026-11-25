@@ -20,12 +20,18 @@ export async function share(text, url) {
   if (navigator.share) { try { await navigator.share({ text: full }); return; } catch (_) { return; } }
   try { await navigator.clipboard.writeText(full); toast('Copied. Paste it anywhere.'); } catch (_) { prompt('Copy this:', full); }
 }
-// Your Colours badge, read straight from storage so this file has no extra imports.
-function withBadgeLazy(text) { const c = store.get('colours', null), n = c && c.badge && c.picks && c.picks[c.badge];
-  if (!n || n === 'Somewhere else' || /Playing for/.test(text)) return text; const i = text.indexOf('\n'); return i < 0 ? text + ' · Playing for ' + n : text.slice(0, i) + ' · Playing for ' + n + text.slice(i); }
-export function badgeLineHTML() { const c = store.get('colours', null), n = c && c.badge && c.picks && c.picks[c.badge];
-  const cols = (c && c.cols) || [], bar = cols.length ? `<span class="yc-cols" aria-hidden="true">${cols.map(h => `<i style="background:${h}"></i>`).join('')}</span>` : '';
-  return n ? `<p class="yc-line">${bar} Playing for <b>${esc(n)}</b> · <a href="${BASE}colours.html">Change</a></p>`
+// Your Colours badge, read straight from storage. On SportingBrain Ireland pages the badge is your GAA county,
+// never your UK club; everywhere else it is the team you chose as your badge.
+const IRISH = () => /\/ireland(\/|\.html|$)/.test(location.pathname);
+function myBadge() { const c = store.get('colours', null) || { picks: {}, colmap: {} };
+  if (IRISH()) { const ie = c.picks && c.picks.ie, n = ie || (c.picks && c.picks.gaa) || store.get('ie_county', ''); return n && n !== 'Abroad' ? { n, cols: (c.colmap && (ie ? c.colmap.ie : c.colmap.gaa)) || [], irish: true } : { n: '', irish: true }; }
+  const n = c.badge && c.picks && c.picks[c.badge]; return { n: n && n !== 'Somewhere else' ? n : '', cols: c.cols || [] }; }
+function withBadgeLazy(text) { const b = myBadge(); if (!b.n || /Playing for/.test(text)) return text;
+  const i = text.indexOf('\n'); return i < 0 ? text + ' · Playing for ' + b.n : text.slice(0, i) + ' · Playing for ' + b.n + text.slice(i); }
+export function badgeLineHTML() { const b = myBadge(), bar = b.cols && b.cols.length ? `<span class="yc-cols" aria-hidden="true">${b.cols.map(h => `<i style="background:${h}"></i>`).join('')}</span>` : '';
+  if (b.irish) return b.n ? `<p class="yc-line">${bar} Playing for <b>${esc(b.n)}</b> · <a href="${BASE}ireland.html#ieCounty">Change</a></p>`
+    : `<p class="yc-line"><a href="${BASE}ireland.html#ieCounty" data-track="ie-county-invite"><b>Pick your county or club</b></a> and it goes on every Irish score you share, in its colours.</p>`;
+  return b.n ? `<p class="yc-line">${bar} Playing for <b>${esc(b.n)}</b> · <a href="${BASE}colours.html">Change</a></p>`
     : `<p class="yc-line"><a href="${BASE}colours.html" data-track="colours-invite"><b>Pick your team</b></a> and it goes on every score you share, in its colours.</p>`; }
 // Challenge-your-mates links: the score travels in the link, nothing is stored on a server.
 export function challengeUrl(name, score, out) { const u = new URL(location.href); u.search = ''; u.searchParams.set('vs', (name || 'A mate').slice(0, 20)); u.searchParams.set('s', score + '/' + out); return u.href; }

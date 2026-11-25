@@ -41,7 +41,7 @@ const count = g => ALL.filter(q => g[3].includes(q[1]) && q[0] >= 2).length;
         box.innerHTML = `<p class="pg-step">${esc(G[1])} quiz</p><p class="pg-score">${sc}/${QS.length}</p><p style="font-size:1.6rem;letter-spacing:.1em;margin:6px 0">${grid}</p>
           <div class="pg-btns"><button class="btn gold" id="shr">Share my score</button><a class="btn ghost" href="?s=${G[0]}">New ${esc(G[1])} quiz</a><a class="btn ghost" href="pick-a-sport.html">Pick another sport</a></div>`;
         box.querySelector('#shr').onclick = () => share(`SportingBrain Pick a Sport · ${G[1]}\n${grid} ${sc}/${QS.length}`, location.href);
-        box.appendChild(challengeBox(sc, QS.length, `the ${G[1]} quiz`)); }
+        box.appendChild(challengeBox(sc, QS.length, `${G[1]} quiz`)); }
       q();
     }
   </script>

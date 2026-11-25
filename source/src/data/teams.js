@@ -46,3 +46,12 @@ const GHEX = { 'sky blue': '#6CACE4', navy: '#13294B', saffron: '#F4C430', orang
 TEAMS.gaa = COUNTIES.map(c => { let s = c[1][3].toLowerCase(); const out = [];
   for (const k of Object.keys(GHEX)) { let i; while ((i = s.indexOf(k)) > -1) { out.push([i, GHEX[k]]); s = s.slice(0, i) + ' '.repeat(k.length) + s.slice(i + k.length); } }
   return [c[0], out.sort((a, b) => a[0] - b[0]).map(x => x[1])]; });
+
+// SportingBrain Ireland: what you can play for on the Irish pages. GAA county, League of Ireland club, NIFL club or rugby province.
+const pick = (list, names) => list.filter(t => names.includes(t[0]));
+export const IE_PICK = [
+  ['gaa', 'GAA county', TEAMS.gaa],
+  ['loi', 'League of Ireland', pick(TEAMS.football, ['Athlone Town','Bohemians','Bray Wanderers','Cobh Ramblers','Cork City','Derry City','Drogheda United','Dundalk','Finn Harps','Galway United','Kerry FC','Longford Town',"St Patrick's Athletic",'Shamrock Rovers','Shelbourne','Sligo Rovers','Treaty United','UCD','Waterford','Wexford'])],
+  ['nifl', 'NIFL Premiership', pick(TEAMS.football, ['Ballymena United','Bangor','Carrick Rangers','Cliftonville','Coleraine','Crusaders','Dungannon Swifts','Glenavon','Glentoran','Larne','Linfield','Portadown'])],
+  ['prov', 'Rugby province', pick(TEAMS.rugby, ['Connacht','Leinster','Munster','Ulster'])],
+];

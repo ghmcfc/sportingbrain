@@ -419,3 +419,21 @@ export const IE_BOOKS = [
 ["Christy Ring","Val Dorgan","Hurling","The classic life of the Cork hurler many still call the greatest of them all."],
 ["The Choice","Philly McMahon","Gaelic football","The Dublin defender on Ballymun, his brother, and the choices that shaped his life."],
 ];
+
+// League of Ireland, 25 Nov 2026
+IE_BANK.push(
+[3,"Football","Shamrock Rovers have played their home games at which ground since 2009?",["Tallaght Stadium","Milltown","Dalymount Park","Tolka Park"],0,"Rovers spent over 20 years without a permanent home after leaving Milltown in 1987."],
+[3,"Football","Which League of Ireland club plays at Oriel Park?",["Dundalk","Drogheda United","Shelbourne","Sligo Rovers"],0,"Oriel Park hosted Dundalk's European nights in 2016."],
+[3,"Football","Sligo Rovers play their home games at which ground?",["The Showgrounds","Ryan McBride Brandywell Stadium","Finn Park","Eamonn Deacy Park"],0,"Sligo have been there since 1928."],
+[3,"Football","St Patrick's Athletic play their home games at which ground?",["Richmond Park","Tolka Park","Dalymount Park","the UCD Bowl"],0,"In Inchicore, west Dublin."],
+[3,"Football","Shelbourne play their home games at which ground?",["Tolka Park","Richmond Park","Dalymount Park","Tallaght Stadium"],0,"In Drumcondra, north Dublin."],
+[3,"Football","Cork City won the League of Ireland and FAI Cup double in which year?",["2017","2015","2019","2005"],0,"Under manager John Caulfield."],
+[3,"Football","Where is the FAI Cup final played?",["The Aviva Stadium","Dalymount Park","Tallaght Stadium","Croke Park"],0,"It moved there when the stadium opened in 2010."],
+[4,"Football","How many League of Ireland titles did Dundalk win between 2014 and 2019?",["Five","Four","Six","Three"],0,"2014, 2015, 2016, 2018 and 2019. Only Cork City broke the run, in 2017."],
+[4,"Football","In 2016, Dundalk reached the Champions League play-off round and lost to which club?",["Legia Warsaw","BATE Borisov","Celtic","Maccabi Tel Aviv"],0,"Dundalk dropped into the Europa League group stage instead."],
+[4,"Football","Derry City won the League of Ireland treble in which season?",["1988-89","1996-97","1985-86","2005-06"],0,"League, FAI Cup and League Cup, under manager Jim McLaughlin."],
+[4,"Football","Athlone Town held which famous club to a 0-0 draw in the 1975 UEFA Cup?",["AC Milan","Juventus","Ajax","Real Madrid"],0,"Athlone missed a penalty at St Mel's Park."],
+[4,"Football","Who is the League of Ireland's record goalscorer?",["Brendan Bradley","Jason Byrne","Turlough O'Connor","Liam Coyle"],0,"Bradley scored over 230 league goals, most of them for Finn Harps."],
+[4,"Football","Which club, from a county with no previous League of Ireland side, joined the league in 2023?",["Kerry FC","Treaty United","Wexford","Cobh Ramblers"],0,"Kerry FC play at Mounthawk Park in Tralee."],
+[4,"Football","Galway United play their home games at which ground?",["Eamonn Deacy Park","Pearse Stadium","Ballybrit","the Sportsground"],0,"Named after the Galway and Aston Villa defender. It was known as Terryland Park until 2015."]
+);
