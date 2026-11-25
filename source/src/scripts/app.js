@@ -263,7 +263,7 @@ if(P==='home'){
 
   main.innerHTML = `
   <div class="fp">
-    <div class="fp-main"><section class="hook" id="hook" aria-live="polite"></section><div data-nl-slot class="nl-slot"></div></div>
+    <div class="fp-main"><section class="hook" id="hook" aria-live="polite"></section><section class="yc-home" id="ycHome" aria-live="polite"></section><div data-nl-slot class="nl-slot"></div></div>
     <aside class="fp-side">
       ${cm?`<section class="board" aria-label="Today's Call It">
         <div class="board-top"><span>Call It #${DAY}</span><span>${ciDone?'Played':'Live'}</span></div>
@@ -286,7 +286,6 @@ if(P==='home'){
 
   <section class="blk"><header class="sh"><h2>Today's games</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></header>
     <div class="gtiles">${[...FIX,...rot].map(tile).join('')}</div></section>
-  <section class="yc-home" id="ycHome" aria-live="polite"></section>
   <a class="ie-promo" href="${BASE}ireland.html" data-track="ie-promo-home"><span class="ie-promo-k" lang="ga">Fáilte</span><b>SportingBrain Ireland</b><span>Three daily games on Irish sport: the Irish Brain, Name the County and Irish Legends. GAA, rugby, racing, boxing and more.</span><em>Play the Irish edition</em></a>
 
   ${AD1}
