@@ -147,7 +147,7 @@ if(ios){document.addEventListener('DOMContentLoaded',function(){fill();bar();});
 </div>}
 <main class:list={['wrap', { wide, jsdraw: !!(S.h1 && page), 'is-game': PLAYLIST.some(x => '/' + x[0] === path.replace(/\.html$/, '')) }]} data-page={page} id="main">{S.h1 && page && <div class="crawl"><h1>{S.h1}</h1>{S.intro && <p class="teaser">{S.intro}</p>}</div>}<slot /></main>
 {showNl && !slotPage && <aside class:list={["wrap nl-box", { wide }]} aria-labelledby="nlb-h">
-  <div class="nlb-copy"><h2 id="nlb-h">The Weekly Brain</h2><p>The week's five hardest questions, the best Call It moment and a forgotten story. Every Friday. Free.</p></div>
+  <div class="nlb-copy"><h2 id="nlb-h">The Weekly Brain</h2><p>{/^\/ireland/.test(path) ? "Every Friday: the week's five hardest questions plus an Irish section, with the Irish question of the week and the Irish sports book. Free." : "The week's five hardest questions, the best Call It moment and a forgotten story. Every Friday. Free."}</p></div>
   <form class="nlb-form" data-nl novalidate>
     <label class="vh" for="nlb-e">Email address</label>
     <input id="nlb-e" type="email" name="EMAIL" autocomplete="email" placeholder="Your email address" required>
@@ -158,7 +158,7 @@ if(ios){document.addEventListener('DOMContentLoaded',function(){fill();bar();});
   <p class="nlb-small">We'll email a link to confirm. Unsubscribe in one click. 13 or over only. <a href={`${base}about.html`}>Privacy</a></p>
 </aside>}
 {showNl && slotPage && <template id="nl-tpl"><aside class="nl-box in-slot" aria-label="The Weekly Brain newsletter">
-  <div class="nlb-copy"><h2 >The Weekly Brain</h2><p>The week's five hardest questions, the best Call It moment and a forgotten story. Every Friday. Free.</p></div>
+  <div class="nlb-copy"><h2 >The Weekly Brain</h2><p>{/^\/ireland/.test(path) ? "Every Friday: the week's five hardest questions plus an Irish section, with the Irish question of the week and the Irish sports book. Free." : "The week's five hardest questions, the best Call It moment and a forgotten story. Every Friday. Free."}</p></div>
   <form class="nlb-form" data-nl novalidate>
     <label class="vh" >Email address</label>
     <input  type="email" name="EMAIL" autocomplete="email" placeholder="Your email address" required>
