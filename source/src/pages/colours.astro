@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SPORTS, TEAMS } from '../data/teams.js';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 <Base title="Your Colours: pick your team | SportingBrain" description="Pick your football club, rugby team, cricket county, GAA county or region. Your team goes on every score you share, in its colours. Saved on your device only." page="colours">
   <header class="pg-head"><h1>Your Colours</h1><p>Pick the teams you follow. Choose one as your badge and it goes on every score you share, in its colours: "Playing for Wrexham". Saved on this device only. No sign-up, and we never see it.</p></header>
@@ -21,6 +22,15 @@ import { SPORTS, TEAMS } from '../data/teams.js';
     </div>
     <p class="pg-note">Clubs are listed A to Z, not by division, so nobody gets relegated off the list. Your club missing? <a data-mistake href="#">Tell us</a> and we will add it.</p>
   </section>
+  <section class="pg-card yc-next">
+    <h2>Now put it to work</h2>
+    <p>Your team is saved. Play a game and it goes on your score.</p>
+    <div class="pg-btns">
+      <a class="btn gold" href={`${base}daily.html`} data-track="colours-next-daily">Play today's Beat the Brain</a>
+      <a class="btn ghost" href={`${base}play.html`}>All games</a>
+      <a class="btn ghost" href={base}>Home</a>
+    </div>
+  </section>
   <script>
     import { getC, setPick, setBadge, bar, withBadge, badgeName } from '../scripts/colours.js';
     import { esc } from '../scripts/play.js';
@@ -30,7 +40,7 @@ import { SPORTS, TEAMS } from '../data/teams.js';
         sel.value = c.picks[s] || ''; const o = sel.selectedOptions[0]; r.querySelector('[data-sw]').innerHTML = o && o.value ? bar(o.dataset.c.split(',')) : '';
         rb.disabled = !c.picks[s]; rb.checked = c.badge === s && !!c.picks[s]; });
       const n = badgeName();
-      prev.innerHTML = n ? `<p class="pg-step">Your badge</p><p class="yc-big">${bar(c.cols)} ${esc(n)}</p><p class="pg-note">How your scores will look when you share them:</p><pre class="yc-sample">${esc(withBadge('SportingBrain Beat the Brain\n🟩🟩🟥🟩🟩 4/5'))}</pre>`
+      prev.innerHTML = n ? `<p class="pg-step">Your badge</p><p class="yc-big">${bar(c.cols)} ${esc(n)}</p><p class="pg-note">How your scores will look when you share them:</p><pre class="yc-sample">${esc(withBadge('SportingBrain Beat the Brain\n🟩🟩🟥🟩🟩 4/5'))}</pre><div class="pg-btns"><a class="btn gold" href="daily.html">Play today's Beat the Brain</a><a class="btn ghost" href="./">Home</a></div>`
         : `<p class="pg-step">No team picked yet</p><p>Choose a team below. The first one you pick becomes your badge; you can switch it any time.</p>`; }
     document.querySelectorAll('.yc-row select').forEach(sel => sel.onchange = () => { const o = sel.selectedOptions[0]; setPick(sel.dataset.s, sel.value, sel.value ? o.dataset.c.split(',') : []); draw(); });
     document.querySelectorAll('.yc-row input[type=radio]').forEach(rb => rb.onchange = () => { setBadge(rb.value); draw(); });
