@@ -942,3 +942,7 @@ header.top .hdr-team.has-team{border-color:#F2A900}
 .sb-first{margin:0 0 10px;padding:10px 14px;background:#0F1E36;color:#fff;border-left:5px solid var(--amber);border-radius:3px;font-size:1rem}
 .sb-first b{font-family:var(--display);font-size:1.15rem;color:#F2A900;margin-right:6px}
 @media(max-width:560px){.blk .ps-groups{grid-template-columns:1fr 1fr;gap:8px}.blk .ps-groups a{padding:10px 12px}.blk .ps-groups a b{font-size:1.2rem}.blk .ps-groups a span{display:none}}
+
+.ps-book{margin:16px 0 0;padding:14px 16px;border:1px solid var(--rule);border-left:5px solid var(--amber);border-radius:3px;background:var(--page)}
+.ps-book b{font-family:var(--display);font-size:1.35rem}.ps-book span{color:var(--ink-2);font-style:italic}
+.ps-book p:not(.pg-step){margin:6px 0 10px}.ps-book small{display:block;margin-top:6px;color:var(--mute);font-size:.82rem}

@@ -2,7 +2,9 @@
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
 import { SB_GROUPS } from '../data/sportgroups.js';
-import { ALL } from '../data/bank_all.js';
+import { ALL as ALL0 } from '../data/bank_all.js';
+import { RACING_EXTRA } from '../data/racing_extra.js';
+const ALL = ALL0.concat(RACING_EXTRA);
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const count = g => ALL.filter(q => g[3].includes(q[1]) && q[0] >= 2).length;
 ---
@@ -17,7 +19,10 @@ const count = g => ALL.filter(q => g[3].includes(q[1]) && q[0] >= 2).length;
   <AdSlot name="game_result" />
   <script>
     import { SB_GROUPS } from '../data/sportgroups.js';
-    import { ALL } from '../data/bank_all.js';
+    import { ALL as ALL0 } from '../data/bank_all.js';
+    import { RACING_EXTRA } from '../data/racing_extra.js';
+    import { bookFor } from '../data/sportgroups.js';
+    const ALL = ALL0.concat(RACING_EXTRA);
     import { btbTexts, btbDay } from '../scripts/qsched.js';
     import { shuffle, esc, markPlayed, challengeBox, showChallenge, share, store, ukDayNo } from '../scripts/play.js';
     showChallenge(document.getElementById('vs'));
@@ -41,6 +46,8 @@ const count = g => ALL.filter(q => g[3].includes(q[1]) && q[0] >= 2).length;
         box.innerHTML = `<p class="pg-step">${esc(G[1])} quiz</p><p class="pg-score">${sc}/${QS.length}</p><p style="font-size:1.6rem;letter-spacing:.1em;margin:6px 0">${grid}</p>
           <div class="pg-btns"><button class="btn gold" id="shr">Share my score</button><a class="btn ghost" href="?s=${G[0]}">New ${esc(G[1])} quiz</a><a class="btn ghost" href="pick-a-sport.html">Pick another sport</a></div>`;
         box.querySelector('#shr').onclick = () => share(`SportingBrain Pick a Sport · ${G[1]}\n${grid} ${sc}/${QS.length}`, location.href);
+        const bk = bookFor(G[0]), q = encodeURIComponent(bk[0] + ' ' + bk[1]).replace(/%20/g, '+');
+        box.insertAdjacentHTML('beforeend', `<aside class="ps-book"><p class="pg-step">Read next</p><b>${esc(bk[0])}</b> <span>by ${esc(bk[1])}</span><p>${esc(bk[3])}</p><a class="btn ghost" href="https://www.amazon.co.uk/s?k=${q}&tag=gmh710f-21" target="_blank" rel="sponsored nofollow noopener" data-track="ps-book-${G[0]}">See it on Amazon</a><small>Amazon affiliate link.</small></aside>`);
         box.appendChild(challengeBox(sc, QS.length, `${G[1]} quiz`)); }
       q();
     }
