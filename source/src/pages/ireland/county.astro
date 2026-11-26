@@ -3,6 +3,8 @@ import Base from '../../layouts/Base.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import IeBand from '../../components/IeBand.astro';
 import '../../styles/ireland.css';
+import GameGuide from '../../components/GameGuide.astro';
+const GUIDE = {"irish": true, "title": "How Name the County works", "intro": ["Name the County gives you five clues to one of Ireland's 32 counties: its All-Ireland record, its county ground, its nickname, its colours and more. Guess after any clue.", "Name it on the first clue for five points, down to one point on the fifth. A wrong guess moves you on a clue. Nicknames work too: type the Dubs, the Kingdom or the Banner and it counts.", "There is a new county every day, and a practice round if you want another go."], "faq": [["Which counties are included?", "All 32 counties on the island of Ireland."], ["Can I type a nickname?", "Yes. Common nicknames such as the Dubs, the Kingdom, the Banner, the Deise and the Cats are accepted."], ["How are points scored?", "Five points on the first clue, down to one on the fifth."]], "links": [["ireland/brain.html", "The Irish Brain"], ["ireland/legends.html", "Irish Legends"], ["ireland/quiz.html", "Irish Pick a Sport"]]};
 ---
 <Base image="https://sportingbrain.com/og-ireland.png" title="Name the County: daily GAA county quiz | SportingBrain" description="Five clues to one of Ireland's 32 counties: All-Ireland history, the county ground, the nickname, the colours. Name it in as few clues as you can." page="iecounty">
   <IeBand current="county" />
@@ -13,6 +15,7 @@ import '../../styles/ireland.css';
     <AdSlot name="game_result" />
     <p class="ie-note">All 32 counties, north and south, each one coming round in turn. Spotted a mistake? <a data-mistake href="#">Tell us</a>.</p>
   </div>
+  <GameGuide {...GUIDE} />
   <script>
     import { COUNTIES, COUNTY_NAMES } from '../../data/ireland.js';
     import { seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share, challengeUrl } from '../../scripts/play.js';

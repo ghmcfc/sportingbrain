@@ -4,6 +4,8 @@ import AdSlot from '../../components/AdSlot.astro';
 import IeBand from '../../components/IeBand.astro';
 import '../../styles/ireland.css';
 import { LEGENDS } from '../../data/ireland.js';
+import GameGuide from '../../components/GameGuide.astro';
+const GUIDE = {"irish": true, "title": "How Irish Legends works", "intro": ["Irish Legends gives you five clues to one of Ireland's sporting greats, hardest first: hurlers and footballers, rugby players, boxers, jockeys, golfers, athletes and soccer stars, men and women.", "Name them on the first clue for five points, down to one point on the fifth. A wrong guess moves you on a clue. There is a new legend every day.", "Share your score and see if your mates can name them quicker."], "faq": [["Who counts as a legend?", "Irish sporting greats from every sport, past and present, men and women."], ["How are points scored?", "Five points on the first clue, down to one on the fifth."], ["Is there a new legend every day?", "Yes."]], "links": [["ireland/brain.html", "The Irish Brain"], ["ireland/county.html", "Name the County"], ["who-am-i.html", "Who Am I? (UK)"]]};
 ---
 <Base image="https://sportingbrain.com/og-ireland.png" title="Irish Legends: name the Irish sporting great | SportingBrain" description="Five clues to one of Ireland's sporting greats, hardest first. Hurlers, boxers, jockeys, golfers, footballers, men and women. New every day." page="ielegends">
   <IeBand current="legends" />
@@ -14,6 +16,7 @@ import { LEGENDS } from '../../data/ireland.js';
     <AdSlot name="game_result" />
     <p class="ie-note">{LEGENDS.length} legends so far, from Ronnie Delany in Melbourne to Paris 2024. Spotted a mistake? <a data-mistake href="#">Tell us</a>.</p>
   </div>
+  <GameGuide {...GUIDE} />
   <script>
     import { LEGENDS } from '../../data/ireland.js';
     import { seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share, challengeUrl } from '../../scripts/play.js';

@@ -6,6 +6,8 @@ import '../../styles/ireland.css';
 import { IE_GROUPS, IE_BANK } from '../../data/ireland.js';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const count = g => IE_BANK.filter(q => g[3].includes(q[1])).length;
+import GameGuide from '../../components/GameGuide.astro';
+const GUIDE = {"irish": true, "title": "How Irish Pick a Sport works", "intro": ["Choose an Irish sport and play ten questions on it: GAA, rugby, soccer, racing, boxing, Olympic sports, golf, or a mix of everything else.", "The questions are drawn fresh every time, so play as often as you like. It is a good warm-up before the Irish Brain, or a way to settle who in the house knows their hurling.", "Share your score at the end and your mate gets the same sport to try."], "faq": [["How many questions are in each quiz?", "Ten."], ["Which sports can I pick?", "GAA, rugby, soccer, racing, boxing, Olympic sports, golf and everything else."], ["Can I play more than once?", "Yes, as often as you like."]], "links": [["ireland/brain.html", "The Irish Brain"], ["ireland/county.html", "Name the County"], ["pick-a-sport.html", "UK Pick a Sport"]]};
 ---
 <Base image="https://sportingbrain.com/og-ireland.png" title="Pick a Sport: Irish sports quizzes | SportingBrain" description="Ten-question quizzes on Irish sport, one sport at a time: GAA, rugby, soccer, racing, boxing, Olympic sports, golf and more. Play as often as you like." page="iequiz">
   <IeBand current="quiz" />
@@ -18,6 +20,7 @@ const count = g => IE_BANK.filter(q => g[3].includes(q[1])).length;
     <section class="pg-card ie-game" id="iq" aria-live="polite" hidden></section>
     <AdSlot name="game_result" />
   </div>
+  <GameGuide {...GUIDE} />
   <script>
     import { IE_GROUPS, IE_BANK, IE_BOOKS } from '../../data/ireland.js';
     import { shuffle, esc, markPlayed, challengeBox, showChallenge, share, store, challengeUrl } from '../../scripts/play.js';

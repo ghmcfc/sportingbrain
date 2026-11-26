@@ -3,6 +3,8 @@ import Base from '../../layouts/Base.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import IeBand from '../../components/IeBand.astro';
 import '../../styles/ireland.css';
+import GameGuide from '../../components/GameGuide.astro';
+const GUIDE = {"irish": true, "title": "How the Irish Brain works", "intro": ["The Irish Brain is a daily quiz on Irish sport: five questions, three Hard then two Expert, the same for everyone, new every day. Hurling and Gaelic football, rugby, the League of Ireland and the national teams, racing, boxing, golf and Olympic sport all turn up.", "The Brain plays first, so you know the score to beat before you start. Pick your county or club and it goes on every score you share, in its colours.", "Share your grid and whoever opens it gets the same five questions, with your score at the top."], "faq": [["How hard is it?", "Three Hard questions and two Expert. No easy ones."], ["What sports are covered?", "GAA (hurling, football, camogie and ladies football), rugby, soccer including the League of Ireland, racing, boxing, golf and Olympic sport."], ["Is it free?", "Yes. No sign-up and nothing to download."]], "links": [["ireland/county.html", "Name the County"], ["ireland/legends.html", "Irish Legends"], ["ireland/quiz.html", "Irish Pick a Sport"], ["daily.html", "Beat the Brain (UK)"]]};
 ---
 <Base image="https://sportingbrain.com/og-ireland.png" title="The Irish Brain: hard daily Irish sports quiz | SportingBrain" description="Five hard questions on Irish sport every day: GAA, rugby, football, racing, boxing, golf and more. Pick your county and share your score." page="iebrain">
   <IeBand current="brain" />
@@ -13,6 +15,7 @@ import '../../styles/ireland.css';
     <AdSlot name="game_result" />
     <p class="ie-note">Spotted a mistake? <a data-mistake href="#">Tell us</a> and we will fix it.</p>
   </div>
+  <GameGuide {...GUIDE} />
   <script>
     import { IE_BANK } from '../../data/ireland.js';
     import { seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share, challengeUrl } from '../../scripts/play.js';

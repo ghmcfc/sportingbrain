@@ -9,6 +9,8 @@ const G = VENUES.map(v => ({ k: slug(v[0]), v })).filter(x => META[x.k]).map(({ 
   k, name: v[1], alt: v[2], sport: v[3], place: v[4], known: v[5], file: META[k].file, opened: META[k].opened, by: META[k].author, lic: META[k].licence, src: META[k].source, f: FOCUS[k] || [50, 50],
 }));
 const sports = [...new Set(G.map(g => g.sport))];
+import GameGuide from '../components/GameGuide.astro';
+const GUIDE = {"title": "How Ground Guesser works", "intro": ["Ground Guesser shows you a close-up of a real sports ground and asks you to name it. Each extra clue zooms the picture out and adds a written hint, and every clue you need costs you a point.", "The daily game has five grounds, worth up to five points each, for a top score of 25. There are football stadiums, cricket grounds, rugby venues, tennis courts, golf courses, racecourses and motor-racing circuits.", "Once you've done the daily five, Endless mode keeps the grounds coming for as long as you like."], "faq": [["What's a perfect score?", "25: five grounds, each named on the first picture."], ["Do I have to spell the name exactly?", "No. Common names and short versions are accepted."], ["Is there more than the daily five?", "Yes. Endless mode lets you keep playing every ground in the game."]], "links": [["daily.html", "Beat the Brain"], ["who-am-i.html", "Who Am I?"], ["pick-a-sport.html", "Pick a Sport"]]};
 ---
 <Base title="Ground Guesser: name the stadium from a close-up | SportingBrain" description={`${G.length} real grounds and venues: football, cricket, rugby, tennis, golf, racing and F1. Start zoomed right in, type your answer, and name them in as few clues as you can.`} page="ground">
   <header class="pg-head"><h1>Ground Guesser</h1><p>A real photo of a real ground, starting zoomed right in. Type your answer whenever you think you know it. Every clue you need costs you a point. {G.length} grounds and venues across {sports.length} sports.</p></header>
@@ -23,6 +25,7 @@ const sports = [...new Set(G.map(g => g.sport))];
   <datalist id="ggNames">{[...new Set(G.map(g => g.name))].sort().map(n => <option value={n} />)}</datalist>
   <AdSlot name="game_result" />
   <p class="pg-note">Photos from Wikimedia Commons under free licences, credited after every ground. Opening years from Wikidata.</p>
+  <GameGuide {...GUIDE} />
   <script id="ggData" type="application/json" set:html={JSON.stringify(G)} />
   <script>
     import { ukDayNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share, SITE, BASE, challengeUrl } from '../scripts/play.js';

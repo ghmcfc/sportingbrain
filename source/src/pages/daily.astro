@@ -3,6 +3,8 @@
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
 import '../styles/ireland.css';
+import GameGuide from '../components/GameGuide.astro';
+const GUIDE = {"title": "How Beat the Brain works", "intro": ["Beat the Brain is SportingBrain's daily sports quiz: five multiple-choice questions, the same for everyone in the UK, with a new set at midnight. The questions cover football, cricket, rugby, tennis, golf, Formula 1, racing, boxing, snooker, darts, athletics and the Olympics, men's and women's sport alike.", "The Brain plays first. Its score is shown before you start, so you know the number to beat. Hard is the standard game. Easy and Medium are gentler, and Expert is for people who know the record books. Get through every day and your streak builds; miss a day and it starts again.", "When you finish, share your grid. Your mates get the same five questions and see your score at the top, so they know exactly what they have to beat."], "faq": [["How many questions are there each day?", "Five. Everyone gets the same five on the same day, and a new set arrives at midnight UK time."], ["Can I play earlier days?", "Yes. After you finish, the result screen lists earlier days you can still play."], ["What are the levels?", "Easy, Medium, Hard and Expert. Hard is the normal daily game, and you can step up to Expert from the result screen."], ["Is it free?", "Yes. No sign-up, no app to download, and it works on any phone or computer."]], "links": [["who-am-i.html", "Who Am I?"], ["ground-guesser.html", "Ground Guesser"], ["pick-a-sport.html", "Pick a Sport"], ["ireland/brain.html", "The Irish Brain"]]};
 ---
 <Base title="Beat the Brain: hard daily sports quiz | SportingBrain" description="Five hard questions on sport every day, from Wembley to Wimbledon. Beat the Brain's score, keep your streak and share it with your team on it.">
   <div class="ie uk">
@@ -12,6 +14,7 @@ import '../styles/ireland.css';
     <AdSlot name="game_result" />
     <p class="ie-note">Spotted a mistake? <a data-mistake href="#">Tell us</a> and we will fix it.</p>
   </div>
+  <GameGuide {...GUIDE} />
   <script>
     import { esc, store, markPlayed, challengeBox, showChallenge, share } from '../scripts/play.js';
     import { DAY, LVNAME, btbQs, btbBrain, brainLine, btbSave } from '../scripts/btb.js';

@@ -1,12 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import GameGuide from '../components/GameGuide.astro';
+const GUIDE = {"title": "How Who Am I? works", "intro": ["Who Am I? gives you five clues to one sporting great, hardest clue first. Guess after any clue: name them on the first clue for five points, the second for four, and so on down to one point on the last.", "A wrong guess costs you a clue, so think before you type. The player changes every day and comes from any sport, men and women, past and present.", "Finished? Share your score and challenge a mate to name them in fewer clues. A practice round is there if you want another go."], "faq": [["How are points scored?", "Five points if you get it on the first clue, down to one point on the fifth. A wrong guess moves you on to the next clue."], ["Which sports are included?", "All of them: football, cricket, rugby, tennis, golf, athletics, boxing, F1, racing and more, men and women."], ["Is there a new player every day?", "Yes, one new sporting great every day for everyone."]], "links": [["daily.html", "Beat the Brain"], ["ground-guesser.html", "Ground Guesser"], ["pick-a-sport.html", "Pick a Sport"], ["ireland/legends.html", "Irish Legends"]]};
 ---
 <Base title="Who Am I? Name the sporting great in five clues | SportingBrain" description="Five clues, hardest first. Name the sporting great in as few as you can. Men and women, every sport. New every day." page="whoami">
   <header class="pg-head"><h1>Who Am I?</h1><p>Five clues, hardest first. Guess after any clue: the fewer you need, the more points you get. One wrong guess costs you a clue. New every day.</p></header>
   <div id="vs"></div>
   <section class="pg-card" id="wa" aria-live="polite"></section>
   <AdSlot name="game_result" />
+  <GameGuide {...GUIDE} />
   <script>
     import { WHOAMI } from '../data/whoami.js';
     import { ukDayNo, seeded, esc, store, markPlayed, challengeBox, showChallenge, shuffle } from '../scripts/play.js';
