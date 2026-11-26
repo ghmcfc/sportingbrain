@@ -947,3 +947,11 @@ header.top .hdr-team.has-team{border-color:#F2A900}
 .ps-book b{font-family:var(--display);font-size:1.35rem}.ps-book span{color:var(--ink-2);font-style:italic}
 .ps-book p:not(.pg-step){margin:6px 0 10px}.ps-book small{display:block;margin-top:6px;color:var(--mute);font-size:.82rem}
 body > .pg-vs, .pg-vs:not(main *){max-width:1100px;margin:12px auto 0;padding:12px 16px;width:calc(100% - 28px);box-sizing:border-box}
+/* Home mirrors SportingBrain Ireland */
+.three.two{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.sh.sm-top{margin-top:26px}
+.blk .botd{max-width:none}
+/* Seven-tab menu: keep every label on one line; scroll sideways on the narrowest phones */
+.sb-tabs a{white-space:nowrap}
+@media(max-width:520px){.sb-tabs .wrap{overflow-x:auto;scrollbar-width:none;gap:2px}.sb-tabs .wrap::-webkit-scrollbar{display:none}.sb-tabs a{flex:0 0 auto;font-size:1.05rem;padding:12px 7px 10px}}
+@media(max-width:400px){.wordmark span{font-size:1.25rem}}

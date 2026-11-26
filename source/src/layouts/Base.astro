@@ -41,17 +41,16 @@ const crumbs = (() => { const parts = pathKey.replace(/\.html$/, '').split('/').
 const ogImage = image || new URL(base + 'og.png', Astro.site).href;
 const nav = [
   ['Today', base, 'today'],
-  ['Play', `${base}play.html`, 'play'],
-  ['Read', `${base}read.html`, 'read'],
-  ['Watch', `${base}watch.html`, 'watch'],
+  ['Brain', `${base}daily.html`, 'brain'],
+  ['Who Am I', `${base}who-am-i.html`, 'whoami'],
+  ['Grounds', `${base}ground-guesser.html`, 'grounds'],
+  ['Sports', `${base}pick-a-sport.html`, 'sports'],
   ['Ireland', `${base}ireland.html`, 'ireland'],
-  ['Kids', `${base}kids.html`, 'kids'],
-  ['Gifts', `${base}gift-guide.html`, 'gifts'],
+  ['More', `${base}more.html`, 'more'],
 ];
 const path = Astro.url.pathname.replace(base, '/').replace(/\.html$/, '');
-const section = /^\/kids/.test(path) ? 'kids' : /^\/ireland/.test(path) ? 'ireland' : /^\/gift-guide/.test(path) ? 'gifts' : /^\/(replays|laughs|watch)/.test(path) ? 'watch'
-  : /^\/(this-week|flashback|on-this-day|stories|sports(\/|$)|round-up|read|newsletter)/.test(path) ? 'read'
-  : (path === '/' || path === '/index') ? 'today' : /^\/(about|credits|settings|offline)/.test(path) ? '' : 'play';
+const section = /^\/kids/.test(path) ? 'kids' : /^\/ireland/.test(path) ? 'ireland' : /^\/daily/.test(path) ? 'brain' : /^\/who-am-i/.test(path) ? 'whoami' : /^\/ground-guesser/.test(path) ? 'grounds' : /^\/pick-a-sport/.test(path) ? 'sports'
+  : (path === '/' || path === '/index') ? 'today' : /^\/(about|credits|settings|offline)/.test(path) ? '' : 'more';
 const isKids = /^\/kids/.test(path);
 const giftPicks = (!noads && !isKids) ? picksFor(path) : null;
 const slotPage = path === '/' || /^\/(index|daily)(\.html)?$/.test(path);

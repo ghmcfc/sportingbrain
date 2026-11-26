@@ -256,7 +256,7 @@ if(P==='home'){
 
   const POOL=['sports-grid','connections','who-am-i','ground-guesser','call-it','call-it-football','daily','name-them-all','weekly-expert','pub-quiz','is-it-a-foul','stat-attack','pick-your-xi','stats-detective','higher-or-lower','speed-round','true-or-false'];
   const FIX=['connections','who-am-i','ground-guesser'];
-  const rot=shuffle(POOL.filter(x=>!FIX.includes(x)),seeded(DAY*13)).slice(0,5);
+  const rot=[]; // home mirrors SportingBrain Ireland: three daily games, everything else under All games
   const dk=ukKey(), ud=Math.floor(Date.UTC(p.y,p.m-1,p.d)/86400000);
   const doneToday={connections:store.get('cx_'+ud,null)?.done,'who-am-i':store.get('wa_'+ud,null)?.done,'ground-guesser':!!store.get('gg3_'+ud,null),'call-it':!!store.get('ci_'+DAY,null),'call-it-football':!!store.get('fc_'+ud,null),daily:!!store.get('daily_'+dk,null)};
   const tile=sl=>{const g=PLAY.find(x=>x[0]===sl); if(!g) return ''; const d=doneToday[sl], daily=sl in doneToday;
@@ -277,13 +277,7 @@ if(P==='home'){
         <p class="q">${esc(cm.q)}</p>
         <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how I did':'Make my call'}</a><a class="ci-alt" href="${BASE}call-it-football.html">Prefer football? Call It: Football</a>
       </section>`:''}
-      ${(()=>{const bk=BOOKS[((DAY-1)%BOOKS.length+BOOKS.length)%BOOKS.length];const q=encodeURIComponent(bk[0]+' '+bk[1]).replace(/%20/g,'+');return `<section class="botd" aria-label="Book of the Day">
-        <div class="botd-top"><span>Book of the Day</span><span>${esc(bk[2])}</span></div>
-        <div class="botd-row"><div class="botd-spine" aria-hidden="true"><b>${esc(bk[0])}</b></div>
-        <div><h2>${esc(bk[0])}</h2><p class="botd-by">${esc(bk[1])}</p><p>${esc(bk[3])}</p>
-        <a class="btn gold sm" href="https://www.amazon.co.uk/s?k=${q}&tag=gmh710f-21" target="_blank" rel="sponsored nofollow noopener">See it on Amazon</a></div></div>
-        <p class="botd-aff">Amazon affiliate link. <a href="${BASE}gift-guide.html">More gift ideas</a></p>
-      </section>`;})()}
+
       <p class="you-line">${streak?`Your streak: <b>${streak} day${streak===1?'':'s'}</b>. `:''}New games in <b class="countdown" id="cd2"></b></p>
     </aside>
   </div>
@@ -292,22 +286,25 @@ if(P==='home'){
     <div class="gtiles">${[...FIX,...rot].map(tile).join('')}</div></section>
   <section class="blk"><header class="sh"><h2>Pick a sport</h2><a href="${BASE}pick-a-sport.html">Ten questions, as often as you like</a></header>
     <div class="ps-groups">${SB_GROUPS.map(g=>`<a href="${BASE}pick-a-sport.html?s=${g[0]}" data-track="ps-home-${g[0]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`).join('')}</div></section>
+  ${(()=>{const wk=Math.floor((ukDayNo()+3)/7), bk=BOOKS[((wk%BOOKS.length)+BOOKS.length)%BOOKS.length], q=encodeURIComponent(bk[0]+' '+bk[1]).replace(/%20/g,'+'); return `<section class="blk"><header class="sh"><h2>Sports Book of the Week</h2><a href="${BASE}gift-guide.html">More gift ideas</a></header>
+    <section class="botd" aria-label="Sports Book of the Week"><div class="botd-top"><span>Book of the Week</span><span>${esc(bk[2])}</span></div>
+      <div class="botd-row"><div class="botd-spine" aria-hidden="true"><b>${esc(bk[0])}</b></div>
+      <div><h2>${esc(bk[0])}</h2><p class="botd-by">${esc(bk[1])}</p><p>${esc(bk[3])}</p>
+      <a class="btn gold sm" href="https://www.amazon.co.uk/s?k=${q}&tag=gmh710f-21" target="_blank" rel="sponsored nofollow noopener" data-track="home-book">See it on Amazon</a></div></div>
+      <p class="botd-aff">Amazon affiliate link: we may earn a small commission, at no cost to you.</p></section></section>`;})()}
   <a class="ie-promo" href="${BASE}ireland.html" data-track="ie-promo-home"><span class="ie-promo-k" lang="ga">Fáilte</span><b>SportingBrain Ireland</b><span>Three daily games on Irish sport: the Irish Brain, Name the County and Irish Legends. GAA, rugby, racing, boxing and more.</span><em>Play the Irish edition</em></a>
 
   ${AD1}
-  ${(()=>{const q=WEEK.quiz[0],st=WEEK.stories[q.story];return `<section class="blk"><header class="sh"><h2>This Week's Quiz</h2><a href="${BASE}this-week.html">All five questions</a></header>
-    <div class="wq-teaser"><p class="wq-k">Question 1 of ${WEEK.quiz.length} · ${esc(st.sport)}</p><h3>${esc(q.q)}</h3><div class="wq-opts">${q.opts.map((o,j)=>`<a href="${BASE}this-week.html?a=${j}#q1" data-track="weekquiz-home">${'ABCD'[j]}. ${esc(o)}</a>`).join('')}</div><p class="wq-foot">Five questions on the past week in sport. Were you paying attention?</p></div></section>`;})()}
 
-  ${VIDS.videos.length?`<section class="blk"><header class="sh"><h2>Laugh of the Day</h2><a href="${BASE}laughs.html">This week's laughs</a></header><div class="home-lotd"><div id="homeLotd"></div></div></section>`:''}
 
   ${AD2}
-  <div class="three">
+  <header class="sh sm-top"><h2>Sporting moments</h2><a href="${BASE}more.html">More from SportingBrain</a></header>
+  <div class="three two">
     <section><header class="sh"><h2>${dlabel(mdNow)} in sport</h2><a href="${BASE}on-this-day.html">More from On This Day</a></header>
       <ul class="otd-mini">${otd.map(e=>`<li><b>${e.y}</b><p>${esc(e.t)}</p></li>`).join('')}</ul></section>
     <section><header class="sh"><h2>Flashback</h2><a href="${BASE}flashback.html">All</a></header>
       <a class="story" href="${BASE}flashback/${fb.id}.html">${figure(fbPh)}<span class="kick">${esc(fb.sport)}, ${yrOf(fb)}${fbAnn?` · ${esc(fbAnn)}`:''}</span><h3>${esc(fb.title)}</h3><p>${esc(fb.standfirst)}</p></a></section>
-    <section><header class="sh"><h2>The Cynical Round-Up</h2><a href="${BASE}round-up.html">Read it</a></header>
-      <a class="ru-mini" href="${BASE}round-up.html"><span class="satire">Satire. Tongue firmly in cheek.</span><h3 class="ru-h">${esc(SB_ROUNDUP.headline)}</h3><p>${esc(SB_ROUNDUP.edition)}. The real week in sport, with an eye-roll.</p></a></section>
+
   </div>`;
   // Pick your team, right on the home page: football first, the other sports one tap away.
   (function(){ const box=document.getElementById('ycHome'); if(!box) return;
