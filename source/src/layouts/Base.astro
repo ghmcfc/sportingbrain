@@ -52,7 +52,7 @@ const section = /^\/kids/.test(path) ? 'kids' : /^\/ireland/.test(path) ? 'irela
 const isKids = /^\/kids/.test(path);
 const ukCur = (path === '/' || path === '/index') ? 'hub' : path === '/daily' ? 'brain' : path === '/who-am-i' ? 'whoami' : path === '/ground-guesser' ? 'grounds' : path === '/pick-a-sport' ? 'sports' : '';
 const giftPicks = (!noads && !isKids) ? picksFor(path) : null;
-const slotPage = path === '/' || /^\/(index|daily)(\.html)?$/.test(path);
+const slotPage = path === '/' || /^\/index(\.html)?$/.test(path);
 const nlBar = !isKids && !noads && /^\/(flashback\/|stories|on-this-day|round-up|gift-guide|sports\/|read)/.test(path);
 const showNl = !isKids && !noads && (!!shareItem || path === '/' || /^\/(index|read|this-week|flashback|on-this-day|round-up|tiktok)(\.html)?$/.test(path)) && !/^\/newsletter/.test(path);
 const SOCIAL = [['X','https://x.com/_sportingbrain'],['Instagram','https://www.instagram.com/_sportingbrain/'],['TikTok','https://www.tiktok.com/@_sportingbrain']];
