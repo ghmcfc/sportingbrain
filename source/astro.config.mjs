@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 // Pages that should not be in the sitemap: F1 (non-commercial data), utility pages and old URLs that redirect to the Kids Zone.
 const SKIP = ['/f1/', '/embed', '/offline', '/which-sport', '/guess-the-sport', '/the-grid', '/guess-the-player', '/legends-xi', '/tiktok', '/insta', '/weekly/'];
 export default defineConfig({ integrations:[sitemap({
+    customPages: ['https://sportingbrain.com/riddlink'],
     filter: p => !SKIP.some(s => new URL(p).pathname.startsWith(s)),
     // Match the canonical tags: every page is served and linked as .html, the home page as /.
     serialize: item => ({ ...item, url: item.url.endsWith('/') ? item.url : item.url + '.html' })

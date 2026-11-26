@@ -5,6 +5,7 @@ export const PLAY = [
   ['laughs', 'Laugh of the Day', 'One hand-picked funny moment from sport, every day.', 'watch', '#F2A900'],
   ['call-it-football', 'Call It: Football', 'A moment from a great final. Who scores next, and how many more?', 'daily', '#C8102E'],
   ['connections', 'Connections: Sport', 'Sixteen names, four hidden groups. One a day.', 'daily', '#9BB8E3'],
+  ['riddlink', 'Riddlink: Football', 'Three linked cryptic football clues, eight guesses. New every day.', 'daily', '#0B6E4F'],
   ['who-am-i', 'Who Am I?', 'Five clues, hardest first. Name the sporting great.', 'daily', '#C8102E'],
   ['ground-guesser', 'Ground Guesser', 'A real venue, zoomed right in. Name it in as few steps as you can.', 'daily', '#0B6E4F'],
   ['sports-grid', 'Sports Grid', 'Nine squares, nine guesses. Name the club that fits the row and the column.', 'daily', '#0B6E4F'],
