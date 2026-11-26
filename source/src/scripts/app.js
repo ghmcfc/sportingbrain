@@ -275,14 +275,15 @@ if(P==='home'){
     ${streak?`<p class="uk-streak">Your streak: <b>${streak} day${streak===1?'':'s'}</b> · New games in <b class="countdown" id="cd2"></b></p>`:`<p class="uk-streak">New games in <b class="countdown" id="cd2"></b></p>`}
   </section>
 
+
+  <section class="yc-home" id="ycHome" aria-live="polite"></section>
+
   ${(()=>{const bk=BOOKS[((DAY-1)%BOOKS.length+BOOKS.length)%BOOKS.length], q=encodeURIComponent(bk[0]+' '+bk[1]).replace(/%20/g,'+'); return `<section class="botd botd-big" aria-label="Book of the Day">
     <div class="botd-top"><span>Book of the Day</span><span>${esc(bk[2])}</span></div>
     <div class="botd-row"><div class="botd-spine" aria-hidden="true"><b>${esc(bk[0])}</b></div>
     <div><h2>${esc(bk[0])}</h2><p class="botd-by">${esc(bk[1])}</p><p>${esc(bk[3])}</p>
     <div class="row"><a class="btn gold" href="https://www.amazon.co.uk/s?k=${q}&tag=gmh710f-21" target="_blank" rel="sponsored nofollow noopener" data-track="home-book-day">See it on Amazon</a><a class="btn ghost" href="${BASE}gift-guide.html" data-track="home-book-shop">Shop more sports gifts</a></div></div></div>
     <p class="botd-aff">Amazon affiliate link: we may earn a small commission, at no cost to you.</p></section>`;})()}
-
-  <section class="yc-home" id="ycHome" aria-live="polite"></section>
 
   <section class="blk"><header class="sh"><h2>Today's games</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></header>
     <div class="gtiles g3">${['daily','who-am-i','ground-guesser'].map(tile).join('')}</div></section>
@@ -554,7 +555,7 @@ document.querySelectorAll('[data-share-text]').forEach(b=>b.addEventListener('cl
 (function(){
   const slug=location.pathname.replace(/\.html$/,'').split('/').filter(Boolean).slice(-2).join('/').replace(/^sportingbrain\//,'');
   const name=slug.split('/').pop();
-  const GAMES={'call-it':['ci_'],'call-it-football':['fc_'],'connections':['cx_'],'who-am-i':['wa_'],'ground-guesser':['gg3_','gg2_'],'daily':['daily_'],'weekly-expert':['expert2_'],
+  const GAMES={'call-it':['ci_'],'call-it-football':['fc_'],'connections':['cx_'],'who-am-i':['wa_'],'ground-guesser':['gg3_','gg2_'],'daily':['daily_','btb_'],'weekly-expert':['expert2_'],
     'pub-quiz':[],'countdown':[],'is-it-a-foul':[],'stat-attack':[],'stats-detective':[],'rewind':[],'advent':[],'bingo':['bingo'],'higher-or-lower':[],'true-or-false':[],'speed-round':[],'name-them-all':[],'sports-grid':['sg_'],
     'challenge':[],'pick-your-xi':['xi_draft'],'guess-the-sport':[],'the-grid':[],'guess-the-player':[],'which-sport':[],'6-8':[],'9-12':[],'archive':[]};
   if(!(name in GAMES)) return;

@@ -97,3 +97,7 @@ body.dark .ie-clues li::before{color:var(--ie-gold)}
 .ie-shelf a b{display:block;font-family:var(--display);font-size:1.15rem;line-height:1.1}
 .ie-shelf a span{font-size:.88rem;color:var(--mute)}
 @media(max-width:520px){.ie-book{grid-template-columns:70px 1fr}.ie-spine{height:104px;font-size:.85rem}}
+
+/* Same layout, UK colours: navy and gold */
+.ie.uk{--ie-g:#0F1E36;--ie-g2:#1F3864;--ie-gold:#F2A900;--ie-cream:#FFF6DB}
+body.dark .ie.uk{--ie-cream:#1b2433;--ie-g2:#F2A900}

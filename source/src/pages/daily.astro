@@ -1,4 +1,62 @@
 ---
+// Beat the Brain: laid out exactly like the Irish Brain (ireland/brain.astro), in navy and gold.
 import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+import '../styles/ireland.css';
 ---
-<Base title="Beat the Brain: today's sports puzzle | SportingBrain" description="Five questions across every sport and a cheeky AI rival to beat. New every day." page="daily" />
+<Base title="Beat the Brain: hard daily sports quiz | SportingBrain" description="Five hard questions on sport every day, from Wembley to Wimbledon. Beat the Brain's score, keep your streak and share it with your team on it.">
+  <div class="ie uk">
+    <header class="ie-head"><p class="ga">Daily challenge</p><h1>Beat the Brain</h1><p id="btbIntro">Five hard questions on sport, new every day. Football, cricket, rugby, tennis, golf, F1, racing and more. The Brain has already had a go. Beat its score.</p></header>
+    <div id="vs"></div>
+    <section class="pg-card ie-game" id="ib" aria-live="polite"></section>
+    <AdSlot name="game_result" />
+    <p class="ie-note">Spotted a mistake? <a data-mistake href="#">Tell us</a> and we will fix it.</p>
+  </div>
+  <script>
+    import { esc, store, markPlayed, challengeBox, showChallenge, share } from '../scripts/play.js';
+    import { DAY, LVNAME, btbQs, btbBrain, brainLine, btbSave } from '../scripts/btb.js';
+    showChallenge(document.getElementById('vs'));
+    const q = new URLSearchParams(location.search);
+    const L = [1, 2, 3, 4].includes(+q.get('level')) ? +q.get('level') : 3;
+    const day = Math.min(DAY, Math.max(1, parseInt(q.get('day') || DAY, 10) || DAY));
+    const QS = btbQs(day, L), brain = btbBrain(day, L), key = `btb_${day}_${L}`;
+    const S = store.get(key, null) || { i: 0, ans: [], done: false }, box = document.getElementById('ib');
+    document.getElementById('btbIntro').insertAdjacentHTML('beforeend', ` <b>Today the Brain got ${brain}/5.</b> ${esc(brainLine(day))}`);
+    const save = () => store.set(key, S);
+    const pips = () => `<div class="ie-pips">${QS.map((_, k) => `<i class="${k < S.ans.length ? (S.ans[k] ? 'ok' : 'no') : k === S.i ? 'cur' : ''}"></i>`).join('')}</div>`;
+    function render() {
+      if (S.done) return result();
+      const x = QS[S.i], answered = S.ans.length > S.i;
+      box.innerHTML = `<p class="pg-step">SportingBrain #${day} · ${LVNAME[L]} · Question ${S.i + 1} of 5</p>${pips()}
+        <p><span class="ie-lvl${x.lv >= 4 ? ' x' : ''}">${LVNAME[x.lv]}</span><span class="pg-step" style="display:inline">${esc(x.sport)}</span></p>
+        <p class="pg-q">${esc(x.q)}</p>
+        <div class="pg-opts">${x.o.map((o, k) => `<button data-k="${k}"${answered ? ' disabled' : ''}>${esc(o)}</button>`).join('')}</div>
+        <div id="after"></div>`;
+      if (answered) after();
+    }
+    function after() {
+      const x = QS[S.i], b = box.querySelectorAll('.pg-opts button');
+      b[x.a].classList.add('ok');
+      box.querySelector('#after').innerHTML = `<p class="pg-fact"><b>${S.ans[S.i] ? 'Right.' : 'No. It was ' + esc(x.o[x.a]) + '.'}</b> ${esc(x.f || '')}</p><div class="pg-btns"><button class="btn gold" id="nx">${S.i < 4 ? 'Next question' : 'See your score'}</button></div>`;
+      box.querySelector('#nx').onclick = () => { if (S.i < 4) S.i++; else { S.done = true; btbSave(day, L, S.ans, brain); } save(); render(); box.scrollIntoView({ block: 'start', behavior: 'smooth' }); };
+      box.querySelector('#nx').focus({ preventScroll: true });
+    }
+    box.addEventListener('click', e => { const b = e.target.closest('.pg-opts button'); if (!b || b.disabled || S.ans.length > S.i) return;
+      const ok = +b.dataset.k === QS[S.i].a; S.ans.push(ok); if (!ok) b.classList.add('no'); box.querySelectorAll('.pg-opts button').forEach(z => z.disabled = true); save(); after(); });
+    function result() {
+      const sc = S.ans.filter(Boolean).length, grid = S.ans.map(a => a ? '🟩' : '🟥').join(''), st = store.get('streak', 0);
+      const verdict = sc === 5 ? 'A perfect five.' : sc > brain ? 'You beat the Brain.' : sc === brain ? 'Level with the Brain.' : 'The Brain wins today.';
+      markPlayed('daily');
+      const u = new URL(location.origin + location.pathname); u.searchParams.set('vs', (store.get('ch_name', '') || 'A mate').slice(0, 20)); u.searchParams.set('s', sc + '/5'); if (L !== 3) u.searchParams.set('level', L); u.searchParams.set('ref', 'share');
+      const card = `SportingBrain #${day} 🧠 ${LVNAME[L]}\n${grid}  ${sc}/5 · ${sc > brain ? 'beat the Brain (' + brain + ')' : sc === brain ? 'level with the Brain (' + brain + ')' : 'the Brain got ' + brain}${st > 1 ? '\n🔥 ' + st + '-day streak' : ''}\nCan you beat ${sc}/5? ${u.href}`;
+      box.innerHTML = `<div class="ie-result"><p class="pg-step">SportingBrain #${day} · ${LVNAME[L]}</p><p class="pg-score">${sc}/5</p><p class="ie-grid" aria-label="${sc} right out of 5">${grid}</p>
+        <p class="ie-brain">The Brain scored ${brain}. ${verdict}</p>
+        ${st ? `<p class="ie-note">Streak: ${st} day${st === 1 ? '' : 's'} · Played: ${store.get('played', 1)} · Beaten the Brain: ${store.get('beaten', 0)}</p>` : ''}
+        <div class="pg-btns"><button class="btn gold" id="shr">Share my score</button>${L < 4 ? '<a class="btn ghost" href="?level=4">Try Expert</a>' : '<a class="btn ghost" href="?level=3">Back to Hard</a>'}<a class="btn ghost" href="who-am-i.html">Next: Who Am I?</a></div>
+        ${day > 1 ? `<p class="pg-step" style="margin-top:16px">Missed one? Play an earlier day</p><div class="ie-arch">${Array.from({ length: Math.min(14, DAY - 1) }, (_, k) => DAY - 1 - k).filter(d => d !== day).map(d => `<a href="?day=${d}">#${d}</a>`).join('')}</div>` : ''}</div>`;
+      box.querySelector('#shr').onclick = () => share(card);
+      box.appendChild(challengeBox(sc, 5, 'Beat the Brain'));
+    }
+    render();
+  </script>
+</Base>

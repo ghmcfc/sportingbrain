@@ -21,6 +21,14 @@ const sorted = MOMENTS.slice().sort((a, b) => a[0].localeCompare(b[0]));
 
     <div class="ie-county" id="ieCounty"></div>
 
+    <div class="ie-sec"><h2>Irish Sports Book of the Week</h2><span lang="ga">Leabhar na Seachtaine</span></div>
+    <div id="ieBook">
+      <article class="ie-book"><div class="ie-spine" aria-hidden="true">{IE_BOOKS[0][0]}</div><div><p class="pg-step">{IE_BOOKS[0][2]}</p><h3>{IE_BOOKS[0][0]}</h3><p class="by">{IE_BOOKS[0][1]}</p><p>{IE_BOOKS[0][3]}</p><a class="btn gold" href={amz(IE_BOOKS[0])} target="_blank" rel="sponsored nofollow noopener" data-track="ie-book">See it on Amazon</a><p class="aff">Amazon affiliate link: we may earn a small commission, at no cost to you.</p></div></article>
+    </div>
+    <details class="pg-card" style="margin-top:12px"><summary><b>The Irish sports bookshelf: all {IE_BOOKS.length} books</b></summary>
+      <div class="ie-shelf">{IE_BOOKS.map(b => <a href={amz(b)} target="_blank" rel="sponsored nofollow noopener" data-track="ie-shelf"><b>{b[0]}</b><span>{b[1]} · {b[2]}</span></a>)}</div>
+    </details>
+
     <div class="ie-sec"><h2>Today's games</h2><span lang="ga">Cluichí an Lae</span></div>
     <div class="ie-tiles">
       <a class="ie-tile" href={`${base}ireland/brain.html`} data-g="ieb"><span class="ga" lang="ga">Dúshlán an Lae</span><b>The Irish Brain</b><span>Five hard questions on Irish sport. Three Hard, two Expert. The Brain has already had a go.</span><small data-st>Not played yet today</small></a>
@@ -33,13 +41,6 @@ const sorted = MOMENTS.slice().sort((a, b) => a[0].localeCompare(b[0]));
       {IE_GROUPS.map(g => <a href={`${base}ireland/quiz.html?s=${g[0]}`}><b>{g[1]}</b><span>{g[2]}</span><small>Ten questions, play as often as you like</small></a>)}
     </div>
 
-    <div class="ie-sec"><h2>Irish Sports Book of the Week</h2><span lang="ga">Leabhar na Seachtaine</span></div>
-    <div id="ieBook">
-      <article class="ie-book"><div class="ie-spine" aria-hidden="true">{IE_BOOKS[0][0]}</div><div><p class="pg-step">{IE_BOOKS[0][2]}</p><h3>{IE_BOOKS[0][0]}</h3><p class="by">{IE_BOOKS[0][1]}</p><p>{IE_BOOKS[0][3]}</p><a class="btn gold" href={amz(IE_BOOKS[0])} target="_blank" rel="sponsored nofollow noopener" data-track="ie-book">See it on Amazon</a><p class="aff">Amazon affiliate link: we may earn a small commission, at no cost to you.</p></div></article>
-    </div>
-    <details class="pg-card" style="margin-top:12px"><summary><b>The Irish sports bookshelf: all {IE_BOOKS.length} books</b></summary>
-      <div class="ie-shelf">{IE_BOOKS.map(b => <a href={amz(b)} target="_blank" rel="sponsored nofollow noopener" data-track="ie-shelf"><b>{b[0]}</b><span>{b[1]} · {b[2]}</span></a>)}</div>
-    </details>
 
     <div class="ie-sec"><h2>How the games work</h2><span lang="ga">Na Cluichí</span></div>
     <div class="ie-more">
