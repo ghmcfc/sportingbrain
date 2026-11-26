@@ -13,5 +13,5 @@ const L = [
 ---
 <div class="ie ie-band">
   <div class="ie-knot" aria-hidden="true"></div>
-  <nav aria-label="SportingBrain Ireland">{L.map(([k, t, ga, h]) => <a href={base + h} class={k === 'hub' ? 'ie-home' : undefined} aria-current={current === k ? 'page' : undefined}><small lang="ga">{ga}</small>{t}</a>)}<a class="ie-uk" href={base}><small>Back to</small>SportingBrain UK</a></nav>
+  <nav aria-label="SportingBrain Ireland">{L.map(([k, t, ga, h]) => <a href={base + h} class={k === 'hub' ? 'ie-home' : undefined} aria-current={current === k ? 'page' : undefined}><small lang="ga">{ga}</small>{t}</a>)}</nav>
 </div>

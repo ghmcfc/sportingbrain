@@ -40,7 +40,7 @@ const crumbs = (() => { const parts = pathKey.replace(/\.html$/, '').split('/').
     { '@type': 'ListItem', position: 3, name: pageTitle.replace(/ \|.*$/, ''), item: canonical } ] }; })();
 const ogImage = image || new URL(base + 'og.png', Astro.site).href;
 const nav = [
-  ['Today', base, 'today'],
+  ['UK', base, 'today'],
   ['Ireland', `${base}ireland.html`, 'ireland'],
   ['Brain', `${base}daily.html`, 'brain'],
   ['Sports', `${base}pick-a-sport.html`, 'sports'],
