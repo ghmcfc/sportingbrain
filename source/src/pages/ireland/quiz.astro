@@ -20,7 +20,7 @@ const count = g => IE_BANK.filter(q => g[3].includes(q[1])).length;
   </div>
   <script>
     import { IE_GROUPS, IE_BANK, IE_BOOKS } from '../../data/ireland.js';
-    import { shuffle, esc, markPlayed, challengeBox, showChallenge, share, store } from '../../scripts/play.js';
+    import { shuffle, esc, markPlayed, challengeBox, showChallenge, share, store, challengeUrl } from '../../scripts/play.js';
     import { countyTag } from '../../scripts/ireland.js';
     showChallenge(document.getElementById('vs'));
     const s = new URLSearchParams(location.search).get('s'), G = IE_GROUPS.find(g => g[0] === s), box = document.getElementById('iq');
@@ -42,7 +42,7 @@ const count = g => IE_BANK.filter(q => g[3].includes(q[1])).length;
       function end() { const sc = ans.filter(Boolean).length, grid = ans.map(a => a ? '🟩' : '🟥').join(''); markPlayed('ireland/quiz');
         box.innerHTML = `<p class="pg-step">${esc(G[1])} quiz</p><p class="pg-score">${sc}/${QS.length}</p><p class="ie-grid">${grid}</p><p class="ie-brain">${sc >= 9 ? 'Maith thú. You know your stuff.' : sc >= 6 ? 'Solid. Go again for a new set.' : 'Tough one. Go again for a new set.'}</p>
           <div class="pg-btns"><button class="btn gold" id="shr">Share my score</button><a class="btn ghost" href="?s=${G[0]}">New ${esc(G[1])} quiz</a><a class="btn ghost" href="quiz.html">Pick another sport</a></div>`;
-        box.querySelector('#shr').onclick = () => share(`SportingBrain Ireland · ${G[1]} quiz\n${grid} ${sc}/${QS.length}${countyTag()}`, location.href);
+        box.querySelector('#shr').onclick = () => share(`SportingBrain Ireland · ${G[1]} quiz\n${grid} ${sc}/${QS.length}${countyTag()}`, challengeUrl('', sc, QS.length));
         const M = { gaa: ['Gaelic football', 'Hurling'], rugby: ['Rugby union'], soccer: ['Football'], racing: ['Horse racing'], olympic: ['Athletics'], more: ['Cycling'] }, L = IE_BOOKS.filter(b => (M[G[0]] || []).includes(b[2])), bk = (L.length ? L : IE_BOOKS)[Math.floor(Math.random() * (L.length || IE_BOOKS.length))];
         const q = encodeURIComponent(bk[0] + ' ' + bk[1].replace(/ with .*/, '')).replace(/%20/g, '+');
         box.insertAdjacentHTML('beforeend', `<aside class="ps-book"><p class="pg-step">Read next</p><b>${esc(bk[0])}</b> <span>by ${esc(bk[1])}</span><p>${esc(bk[3])}</p><a class="btn ghost" href="https://www.amazon.co.uk/s?k=${q}&tag=gmh710f-21" target="_blank" rel="sponsored nofollow noopener" data-track="ie-quiz-book-${G[0]}">See it on Amazon</a><small>Amazon affiliate link.</small></aside>`);

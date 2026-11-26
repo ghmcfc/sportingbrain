@@ -54,7 +54,7 @@ import '../styles/ireland.css';
         ${st ? `<p class="ie-note">Streak: ${st} day${st === 1 ? '' : 's'} · Played: ${store.get('played', 1)} · Beaten the Brain: ${store.get('beaten', 0)}</p>` : ''}
         <div class="pg-btns"><button class="btn gold" id="shr">Share my score</button>${L < 4 ? '<a class="btn ghost" href="?level=4">Try Expert</a>' : '<a class="btn ghost" href="?level=3">Back to Hard</a>'}<a class="btn ghost" href="who-am-i.html">Next: Who Am I?</a></div>
         ${day > 1 ? `<p class="pg-step" style="margin-top:16px">Missed one? Play an earlier day</p><div class="ie-arch">${Array.from({ length: Math.min(14, DAY - 1) }, (_, k) => DAY - 1 - k).filter(d => d !== day).map(d => `<a href="?day=${d}">#${d}</a>`).join('')}</div>` : ''}</div>`;
-      box.querySelector('#shr').onclick = () => share(card);
+      box.querySelector('#shr').onclick = () => { u.searchParams.set('vs', (store.get('ch_name', '') || 'A mate').slice(0, 20)); share(card.replace(/https?:\/\/\S+$/, u.href)); };
       box.appendChild(challengeBox(sc, 5, 'Beat the Brain'));
     }
     render();

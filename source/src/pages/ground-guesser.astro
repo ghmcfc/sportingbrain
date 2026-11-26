@@ -25,7 +25,7 @@ const sports = [...new Set(G.map(g => g.sport))];
   <p class="pg-note">Photos from Wikimedia Commons under free licences, credited after every ground. Opening years from Wikidata.</p>
   <script id="ggData" type="application/json" set:html={JSON.stringify(G)} />
   <script>
-    import { ukDayNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share, SITE, BASE } from '../scripts/play.js';
+    import { ukDayNo, seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share, SITE, BASE, challengeUrl } from '../scripts/play.js';
     const G = JSON.parse(document.getElementById('ggData').textContent), box = document.getElementById('gg');
     showChallenge(document.getElementById('vs'));
     const ZOOM = [450, 300, 200, 140, 100], D = ukDayNo(), KEY = 'gg3_' + D;
@@ -85,7 +85,7 @@ const sports = [...new Set(G.map(g => g.sport))];
         <ol class="gg-list">${R.map(r => { const g = G.find(x => x.k === r.k); return `<li>${r.won ? '✅' : '❌'} <b>${esc(g.name)}</b>, ${esc(g.place)} ${r.won ? `(${pts(r)})` : ''}</li>`; }).join('')}</ol>
         <p>You've named <b>${found().length}</b> of ${G.length} grounds so far.</p>
         <div class="pg-btns"><button class="btn gold" id="ggShare">Share</button>${mode === 'daily' ? '<button class="btn ghost" data-go="endless">Play Endless</button>' : '<button class="btn ghost" data-go="endless">Go again</button>'}</div>`;
-      document.getElementById('ggShare').onclick = () => share(`🏟️ SportingBrain Ground Guesser${mode === 'daily' ? ' #' + D : ''}\n${grid}  ${total}${mode === 'daily' ? '/25' : ''}`, SITE + 'ground-guesser.html');
+      document.getElementById('ggShare').onclick = () => share(`🏟️ SportingBrain Ground Guesser${mode === 'daily' ? ' #' + D : ''}\n${grid}  ${total}${mode === 'daily' ? '/25' : ''}`, challengeUrl('', total, out));
       box.querySelector('[data-go]').onclick = () => setMode('endless');
       box.appendChild(challengeBox(total, out, 'Ground Guesser'));
     }

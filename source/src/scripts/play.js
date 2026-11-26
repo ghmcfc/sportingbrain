@@ -37,7 +37,8 @@ export function badgeLineHTML() { const b = myBadge(), bar = b.cols && b.cols.le
   return b.n ? `<p class="yc-line">${bar} Playing for <b>${esc(b.n)}</b> · <a href="${BASE}colours.html">Change</a></p>`
     : `<p class="yc-line"><a href="${BASE}colours.html" data-track="colours-invite"><b>Pick your team</b></a> and it goes on every score you share, in its colours.</p>`; }
 // Challenge-your-mates links: the score travels in the link, nothing is stored on a server.
-export function challengeUrl(name, score, out) { const u = new URL(location.href); u.search = ''; u.searchParams.set('vs', (name || 'A mate').slice(0, 20)); u.searchParams.set('s', score + '/' + out); return u.href; }
+export function challengeUrl(name, score, out) { const u = new URL(location.href), keep = ['level', 'day', 'sport', 'g'].filter(k => u.searchParams.has(k)).map(k => [k, u.searchParams.get(k)]); u.search = ''; u.hash = ''; keep.forEach(([k, v]) => u.searchParams.set(k, v));
+  u.searchParams.set('vs', (name || store.get('ch_name', '') || 'A mate').slice(0, 20)); u.searchParams.set('s', score + '/' + out); u.searchParams.set('ref', 'share'); return u.href; }
 export function showChallenge(el) {
   const p = new URLSearchParams(location.search), vs = p.get('vs'), s = p.get('s');
   if (!vs || !s || !/^\d{1,3}\/\d{1,3}$/.test(s)) return;
@@ -45,10 +46,10 @@ export function showChallenge(el) {
 }
 export function challengeBox(score, out, label) {
   const d = document.createElement('div'); d.className = 'pg-chal';
-  d.innerHTML = `<label>Your name for the challenge link <input maxlength="20" placeholder="First name"></label><div class="pg-btns"><button class="btn gold" data-a="ch">Challenge a mate</button><button class="btn ghost" data-a="sh">Share score</button></div>`;
-  d.addEventListener('click', e => { const a = e.target.closest('[data-a]'); if (!a) return; const n = d.querySelector('input').value.trim();
-    if (a.dataset.a === 'ch') { if (n) store.set('ch_name', n); } if (a.dataset.a === 'ch') share(`I scored ${score}/${out} on ${label} at SportingBrain. Beat that.`, challengeUrl(n, score, out));
-    else share(`SportingBrain ${label}: ${score}/${out}`, location.origin + location.pathname); });
+  d.innerHTML = `<label>Your name for the challenge link <input maxlength="20" placeholder="First name" value="${esc(store.get('ch_name', ''))}"></label><div class="pg-btns"><button class="btn gold" data-a="ch">Challenge a mate</button><button class="btn ghost" data-a="sh">Share score</button></div>`;
+  d.querySelector('input').addEventListener('input', e => { const v = e.target.value.trim(); v ? store.set('ch_name', v) : store.del ? store.del('ch_name') : store.set('ch_name', ''); });
+  d.addEventListener('click', e => { const a = e.target.closest('[data-a]'); if (!a) return; const n = d.querySelector('input').value.trim(); if (n) store.set('ch_name', n); if (a.dataset.a === 'ch') share(`I scored ${score}/${out} on ${label} at SportingBrain. Beat that.`, challengeUrl(n, score, out));
+    else share(`SportingBrain ${label}: ${score}/${out}. Can you beat it?`, challengeUrl(n, score, out)); });
   d.appendChild(endNav());
   return d;
 }

@@ -15,7 +15,7 @@ import '../../styles/ireland.css';
   </div>
   <script>
     import { IE_BANK } from '../../data/ireland.js';
-    import { seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share } from '../../scripts/play.js';
+    import { seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share, challengeUrl } from '../../scripts/play.js';
     import { ieDay, countyTag, getCounty, colourBar } from '../../scripts/ireland.js';
     showChallenge(document.getElementById('vs'));
     const q = new URLSearchParams(location.search), today = ieDay(), practice = q.has('practice');
@@ -57,7 +57,7 @@ import '../../styles/ireland.css';
         ${!practice && st.n ? `<p class="ie-note">Streak: ${st.n} day${st.n === 1 ? '' : 's'} · Best: ${st.best}</p>` : ''}
         <div class="pg-btns"><button class="btn gold" id="shr">Share my score</button><a class="btn ghost" href="?practice=1">Practice round</a><a class="btn ghost" href="county.html">Next: Name the County</a></div>
         ${day > 1 && !practice ? `<p class="pg-step" style="margin-top:16px">Missed one? Play an earlier day</p><div class="ie-arch">${Array.from({ length: Math.min(14, today - 1) }, (_, k) => today - 1 - k).filter(d => d !== day).map(d => `<a href="?day=${d}">#${d}</a>`).join('')}</div>` : ''}</div>`;
-      box.querySelector('#shr').onclick = () => share(`SportingBrain Ireland · The Irish Brain #${day}\n${grid} ${sc}/5 (the Brain got ${brain})${countyTag()}`, location.origin + location.pathname);
+      box.querySelector('#shr').onclick = () => share(`SportingBrain Ireland · The Irish Brain #${day}\n${grid} ${sc}/5 (the Brain got ${brain})${countyTag()}`, challengeUrl('', sc, 5));
       box.appendChild(challengeBox(sc, 5, 'The Irish Brain'));
     }
     render();

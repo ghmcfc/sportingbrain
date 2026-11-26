@@ -16,7 +16,7 @@ import { LEGENDS } from '../../data/ireland.js';
   </div>
   <script>
     import { LEGENDS } from '../../data/ireland.js';
-    import { seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share } from '../../scripts/play.js';
+    import { seeded, shuffle, esc, store, markPlayed, challengeBox, showChallenge, share, challengeUrl } from '../../scripts/play.js';
     import { ieDay, countyTag } from '../../scripts/ireland.js';
     showChallenge(document.getElementById('vs'));
     const practice = new URLSearchParams(location.search).has('practice'), D = ieDay(), ORD = shuffle(LEGENDS.map((_, i) => i), seeded(1956));
@@ -36,7 +36,7 @@ import { LEGENDS } from '../../data/ireland.js';
       else { if (!practice) markPlayed('ireland/legends');
         const grid = Array.from({ length: 5 }, (_, i) => S.won && i === S.shown - 1 ? '🟩' : i < (S.won ? S.shown - 1 : S.shown) ? '⬛' : '⬜').join('');
         box.insertAdjacentHTML('beforeend', `<p class="ie-grid">${grid}</p><div class="pg-btns"><button class="btn gold" id="lgS">Share</button><a class="btn ghost" href="?practice=1">Practice round</a><a class="btn ghost" href="brain.html">Next: The Irish Brain</a></div>`);
-        box.querySelector('#lgS').onclick = () => share(`SportingBrain Ireland · Irish Legends #${D}\n${grid} ${S.won ? `Got it in ${S.shown}` : 'Beaten today'}${countyTag()}`, location.origin + location.pathname);
+        box.querySelector('#lgS').onclick = () => share(`SportingBrain Ireland · Irish Legends #${D}\n${grid} ${S.won ? `Got it in ${S.shown}` : 'Beaten today'}${countyTag()}`, challengeUrl('', pts, 5));
         box.appendChild(challengeBox(pts, 5, 'Irish Legends')); } }
     const save = () => { if (!practice) store.set(key, S); render(); };
     render();
