@@ -28,7 +28,7 @@ import '../styles/ireland.css';
       if (S.done) return result();
       const x = QS[S.i], answered = S.ans.length > S.i;
       box.innerHTML = `<p class="pg-step">SportingBrain #${day} · ${LVNAME[L]} · Question ${S.i + 1} of 5</p>${pips()}
-        <p><span class="ie-lvl${x.lv >= 4 ? ' x' : ''}">${LVNAME[x.lv]}</span><span class="pg-step" style="display:inline">${esc(x.sport)}</span></p>
+        <p><span class="ie-lvl${x.lv >= 4 ? ' x' : ''}">${x.lv >= 4 ? 'Expert' : 'Hard'}</span><span class="pg-step" style="display:inline">${esc(x.sport)}</span></p>
         <p class="pg-q">${esc(x.q)}</p>
         <div class="pg-opts">${x.o.map((o, k) => `<button data-k="${k}"${answered ? ' disabled' : ''}>${esc(o)}</button>`).join('')}</div>
         <div id="after"></div>`;

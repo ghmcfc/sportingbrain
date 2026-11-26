@@ -14,10 +14,13 @@ export function seeded(s) { let x = (Math.abs(s) % 2147483646) + 1; return () =>
 export function shuffle(a, r = Math.random) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 export const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 export function toast(msg) { let t = document.getElementById('pg-toast'); if (!t) { t = document.createElement('div'); t.id = 'pg-toast'; t.className = 'pg-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); } t.textContent = msg; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2600); }
+// Subject line for email/Outlook shares: the first line of the score card plus a challenge.
+export function subjectFor(text) { const f = String(text).split('\n')[0].replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu, '').replace(/\s+/g, ' ').trim(); return (f || 'SportingBrain') + ': can you beat my score?'; }
 export async function share(text, url) {
   text = withBadgeLazy(text);
   const full = url ? text + '\n' + url : text;
-  if (navigator.share) { try { await navigator.share({ text: full }); return; } catch (_) { return; } }
+  const title = subjectFor(text);
+  if (navigator.share) { try { await navigator.share({ title, text: full }); return; } catch (_) { return; } }
   try { await navigator.clipboard.writeText(full); toast('Copied. Paste it anywhere.'); } catch (_) { prompt('Copy this:', full); }
 }
 // Your Colours badge, read straight from storage. On SportingBrain Ireland pages the badge is your GAA county,

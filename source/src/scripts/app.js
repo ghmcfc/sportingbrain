@@ -76,7 +76,8 @@ function shuffle(a, rnd=Math.random){ a=a.slice(); for(let i=a.length-1;i>0;i--)
 function toast(msg){ let t=$('.toast'); if(!t){t=document.createElement('div');t.className='toast';t.setAttribute('role','status');document.body.appendChild(t);} t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
 async function share(text, raw){
   if(!raw && !KIDZ){ const c=store.get('colours',null), n=c&&c.badge&&c.picks&&c.picks[c.badge]; if(n && n!=='Somewhere else' && !/Playing for/.test(text)){ const i=text.indexOf('\n'); text = i<0 ? text+' · Playing for '+n : text.slice(0,i)+' · Playing for '+n+text.slice(i); } }
-  try{ if(navigator.share){ await navigator.share({text}); return; } }catch(e){ return; }
+  const title=(String(text).split('\n')[0].replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu,'').replace(/\s+/g,' ').trim()||'SportingBrain')+': can you beat my score?';
+  try{ if(navigator.share){ await navigator.share({title,text}); return; } }catch(e){ return; }
   try{ await navigator.clipboard.writeText(text); toast('Copied! Paste it in the group chat'); }catch(e){ prompt('Copy your score card:', text); }
 }
 function confetti(){

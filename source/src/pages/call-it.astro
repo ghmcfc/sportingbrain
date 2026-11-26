@@ -113,7 +113,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
         <div class="pg-btns"><button class="btn gold" id="ciShare">Share my result</button><a class="btn ghost" href="${BASE}replays/${m.slug}.html?g=${m.g}">Full ball-by-ball replay</a><a class="btn ghost" href="?practice=1">Practice another</a></div>`;
       r.appendChild(endNav());
       document.getElementById('ciShare').onclick = () => { const t = `🧠 SportingBrain Call It #${DAY}\n${marks.map(x => x ? '✅' : '❌').join('')}\nCan you call it? ${location.origin + BASE}call-it.html`;
-        if (navigator.share) navigator.share({ text: t }).catch(() => {}); else navigator.clipboard?.writeText(t); };
+        if (navigator.share) navigator.share({ title: 'SportingBrain: can you beat my score?', text: t }).catch(() => {}); else navigator.clipboard?.writeText(t); };
     }
     let revealed = false, locked = !!saved;
     document.addEventListener('click', e => { const b = e.target.closest('.ci-opt'); if (b && !locked) { picks[+b.dataset.q] = +b.dataset.o; renderCalls(); }

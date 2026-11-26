@@ -143,10 +143,11 @@ if(ios){document.addEventListener('DOMContentLoaded',function(){fill();bar();});
   <a class="sqt wa" data-sq="whatsapp" target="_blank" rel="noopener" aria-label="Share on WhatsApp"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2s.2-1.1.1-1.2l-.4-.2z"/></svg><span>WhatsApp</span></a>
   <a class="sqt" data-sq="x" target="_blank" rel="noopener" aria-label="Share on X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.2-8.3L1.8 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5z"/></svg><span class="vh">X</span></a>
   <a class="sqt" data-sq="facebook" target="_blank" rel="noopener" aria-label="Share on Facebook"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M14 8V6.3c0-.8.2-1.3 1.4-1.3H17V2h-2.6C11.3 2 10 3.7 10 6.2V8H8v3h2v11h4V11h2.7l.4-3H14z"/></svg><span class="vh">Facebook</span></a>
+  <a class="sqt" data-sq="email" aria-label="Share by email"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2.4V17h16V7.4l-8 5.3-8-5.3zM5.6 7l6.4 4.2L18.4 7H5.6z"/></svg><span>Email</span></a>
   <button type="button" class="sqt" data-sq="copy">Copy link</button>
   <button type="button" class="sqt nat" data-sq="native" hidden>More</button>
 </div>}
-{ukCur && <div class="wrap uk-band-wrap"><UkBand current={ukCur} /></div>}
+{ukCur && <div class:list={["wrap uk-band-wrap", { wide }]}><UkBand current={ukCur} /></div>}
 <main class:list={['wrap', { wide, jsdraw: !!(S.h1 && page), 'is-game': PLAYLIST.some(x => '/' + x[0] === path.replace(/\.html$/, '')) }]} data-page={page} id="main">{S.h1 && page && <div class="crawl"><h1>{S.h1}</h1>{S.intro && <p class="teaser">{S.intro}</p>}</div>}<slot /></main>
 {showNl && !slotPage && <aside class:list={["wrap nl-box", { wide }]} aria-labelledby="nlb-h">
   <div class="nlb-copy"><h2 id="nlb-h">The Weekly Brain</h2><p>{/^\/ireland/.test(path) ? "Every Friday: the week's five hardest questions plus an Irish section, with the Irish question of the week and the Irish sports book. Free." : "The week's five hardest questions, the best Call It moment and a forgotten story. Every Friday. Free."}</p></div>
@@ -178,6 +179,7 @@ if(ios){document.addEventListener('DOMContentLoaded',function(){fill();bar();});
     <a class="btn ghost" data-sq="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
     <a class="btn ghost" data-sq="x" target="_blank" rel="noopener">X</a>
     <a class="btn ghost" data-sq="facebook" target="_blank" rel="noopener">Facebook</a>
+    <a class="btn ghost" data-sq="email">Email</a>
     <button type="button" class="btn ghost" data-sq="copy">Copy link</button>
   </div>
 </section>}
@@ -188,6 +190,7 @@ if(ios){document.addEventListener('DOMContentLoaded',function(){fill();bar();});
 b.querySelector('[data-sq=whatsapp]').href='https://wa.me/?text='+e(t+' '+u);
 b.querySelector('[data-sq=x]').href='https://twitter.com/intent/tweet?text='+e(t)+'&url='+e(u)+'&via=_sportingbrain';
 b.querySelector('[data-sq=facebook]').href='https://www.facebook.com/sharer/sharer.php?u='+e(u);
+var m=b.querySelector('[data-sq=email]');if(m)m.href='mailto:?subject='+e('Try '+b.dataset.sqTitle+' on SportingBrain')+'&body='+e(t+'\n\n'+u);
 var n=b.querySelector('[data-sq=native]');n.hidden=!navigator.share;n.onclick=function(){navigator.share({title:b.dataset.sqTitle,text:t,url:u}).catch(function(){});};
 var c=b.querySelector('[data-sq=copy]');c.onclick=function(){(navigator.clipboard?navigator.clipboard.writeText(t+' '+u):Promise.reject()).then(function(){c.textContent='Link copied';setTimeout(function(){c.textContent='Copy link'},2000);}).catch(function(){prompt('Copy this link',u);});};});</script>
 <script is:inline>document.addEventListener('click',function(e){var h=e.target.closest('[data-share-page]');if(!h)return;var b=document.querySelector('.sq-btns');if(!b)return;var t=b.dataset.sqText,u=b.dataset.sqUrl;if(navigator.share){navigator.share({title:b.dataset.sqTitle,text:t,url:u}).catch(function(){});}else{b.scrollIntoView({behavior:'smooth',block:'center'});b.classList.add('flash');setTimeout(function(){b.classList.remove('flash')},1200);}});</script>

@@ -1,5 +1,6 @@
 ---
 // The UK game bar: the same idea as the green Irish bar, in navy and gold. Shown on the UK home and the UK daily games.
+import '../styles/ireland.css';
 interface Props { current?: string }
 const { current = '' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
@@ -11,6 +12,7 @@ const L = [
   ['sports', 'Pick a Sport', 'Ten questions', 'pick-a-sport.html'],
 ];
 ---
-<div class="uk-band">
-  <nav aria-label="SportingBrain UK games">{L.map(([k, t, sub, h]) => <a href={base + h} class={k === 'hub' ? 'uk-home' : undefined} aria-current={current === k ? 'page' : undefined}><small>{sub}</small>{t}</a>)}</nav>
+<div class="ie ie-band ukb">
+  <div class="ie-knot ukk" aria-hidden="true"></div>
+  <nav aria-label="SportingBrain UK games">{L.map(([k, t, sub, h]) => <a href={base + h} class={k === 'hub' ? 'ie-home' : undefined} aria-current={current === k ? 'page' : undefined}><small>{sub}</small>{t}</a>)}</nav>
 </div>

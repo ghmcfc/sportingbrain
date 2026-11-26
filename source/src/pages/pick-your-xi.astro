@@ -116,7 +116,7 @@ import { THEMES, SPORTS } from '../data/xi.js';
     $('shareImg').onclick = async () => { if (S.p.filter(Boolean).length < 3) return toast('Pick a few players first.'); markPlayed('pick-your-xi'); renderCard();
       const blob = await new Promise(r => $('card').toBlob(r, 'image/png')); const file = new File([blob], 'my-xi.png', { type: 'image/png' });
       const text = `My ${themeName()}. Rate it out of 10:`; const url = link(S);
-      if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], text: text + ' ' + url }); } catch (_) {} }
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'SportingBrain: can you beat my XI?', text: text + ' ' + url }); } catch (_) {} }
       else { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'my-xi.png'; a.click(); share(text, url); } };
     $('shareLink').onclick = () => { if (S.p.filter(Boolean).length < 3) return toast('Pick a few players first.'); markPlayed('pick-your-xi'); share(`My ${themeName()}. Rate it out of 10:`, link(S)); };
     // ---------- someone else's XI: view and rate ----------
