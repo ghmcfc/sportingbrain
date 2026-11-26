@@ -42,6 +42,7 @@ const crumbs = (() => { const parts = pathKey.replace(/\.html$/, '').split('/').
 const ogImage = image || new URL(base + 'og.png', Astro.site).href;
 const nav = [
   ['Brain', base, 'today'],
+  ['Riddlink', `${base}riddlink.html`, 'riddlink'],
   ['Ireland', `${base}ireland.html`, 'ireland'],
   ['Shop', `${base}gift-guide.html`, 'shop'],
   ['More', `${base}more.html`, 'more'],
