@@ -1,0 +1,918 @@
+// src/data/guides.js
+var GUIDES = [
+	{
+		id: "football",
+		name: "Football",
+		emoji: "⚽",
+		line: "Eleven against eleven, and the cleverest game is the one you don't see on the highlights.",
+		how: [
+			"Two teams of eleven, 90 minutes split into two halves, and the only way to win is to put the ball in the net more often than the other lot. Only the goalkeeper can use their hands, and only inside their own penalty area.",
+			"The offside law is what shapes everything. An attacker is offside if, when the ball is played to them, they are in the opponent's half and nearer the goal line than both the ball and the second-last defender. It is why defences step up together, why strikers run along the line, and why a centimetre on a VAR replay can cancel a goal.",
+			"Most of the game is played without the ball. Elite teams now measure how quickly they win it back (pressing), how high their defensive line sits, and how many passes they let the opponent make before they engage."
+		],
+		scoring: "A goal counts when the whole ball crosses the whole goal line between the posts and under the bar. In league football a win is three points and a draw one.",
+		formats: [
+			"League: everyone plays everyone home and away; most points wins.",
+			"Cup: knockout, with extra time and penalties if level.",
+			"Tournaments such as the World Cup: groups, then knockouts."
+		],
+		watch: [
+			"The defensive line: watch how high it sits and whether it moves up together. That is where offside traps and balls in behind come from.",
+			"Pressing triggers: a back pass, a bad touch or a pass to the touchline is often the signal for a team to swarm.",
+			"The full-backs: in many modern systems one tucks into midfield and the other pushes high, changing the team's shape with and without the ball.",
+			"Set pieces: about a quarter to a third of goals in top leagues come from dead balls, and clubs now employ specialist coaches for them."
+		],
+		greats: [
+			["Pelé", "Three World Cups with Brazil (1958, 1962, 1970)."],
+			["Diego Maradona", "Dragged Argentina to the 1986 World Cup and Napoli to two Serie A titles."],
+			["Lionel Messi", "Record eight Ballon d'Or wins and the 2022 World Cup."],
+			["Marta", "The all-time top scorer at Women's World Cups, with 17 goals."],
+			["Birgit Prinz", "Two World Cups and three-time FIFA World Player of the Year with Germany."],
+			["Alexia Putellas", "Back-to-back Ballon d'Or Féminin winner, 2021 and 2022."]
+		],
+		events: [
+			["August to May", "Domestic league seasons in England and most of Europe."],
+			["Every four years", "Men's World Cup (2026, 2030) and Women's World Cup (2027, 2031)."],
+			["Late May / early June", "Champions League finals, men's and women's."]
+		],
+		uk: [
+			["The Football Association (England)", "https://www.thefa.com"],
+			["Scottish FA", "https://www.scottishfa.co.uk"],
+			["Football Association of Wales", "https://www.faw.cymru"],
+			["Irish FA", "https://www.irishfa.com"]
+		],
+		terms: [
+			["Low block", "A team defending deep, close to its own goal, with little space between the lines."],
+			["Inverted full-back", "A full-back who moves into central midfield when their team has the ball."],
+			["Expected goals (xG)", "The probability that a shot is scored, based on thousands of similar shots."],
+			["Half-space", "The channel between the centre and the wing, where creative players like to receive the ball."],
+			["Rest defence", "The players a team keeps back while it attacks, ready to stop a counter."]
+		]
+	},
+	{
+		id: "cricket",
+		name: "Cricket",
+		emoji: "🏏",
+		line: "A game of patience, pressure and very precise maths, in three very different formats.",
+		how: [
+			"Two teams of eleven take turns to bat and bowl. The batting side scores runs; the fielding side tries to take ten wickets to end the innings. Bowlers deliver six-ball overs from alternate ends.",
+			"There are several ways to be out, but most dismissals are bowled, caught, leg before wicket, run out or stumped. LBW, the one that causes most arguments, depends on where the ball pitched, where it hit the pad and whether it would have gone on to hit the stumps.",
+			"The ball is the hidden character. A new ball swings and bounces; an old one can reverse swing; a worn pitch helps spinners. Captains plan around all of it."
+		],
+		scoring: "Runs come from running between the wickets, or from boundaries: four if the ball reaches the rope after bouncing, six if it clears it. Extras such as wides and no-balls add to the total.",
+		formats: [
+			"Test: up to five days, two innings each. The purest test of skill and stamina.",
+			"One-day international: 50 overs a side.",
+			"Twenty20: 20 overs a side, about three hours, and the format of the franchise leagues.",
+			"The Hundred: 100 balls a side, played in England and Wales."
+		],
+		watch: [
+			"Field placings: a third man and a fine leg back mean the captain expects the edge; a short leg and silly point mean the spinner is attacking.",
+			"Run rate versus required rate: in a chase, watch the gap. Once it climbs above about 10 an over in T20, sides usually start losing.",
+			"The new ball: in Tests the first hour can decide the day.",
+			"Bowling changes: who comes on, from which end and with which field, tells you what the captain is thinking."
+		],
+		greats: [
+			["Don Bradman", "A Test batting average of 99.94, about 40 runs higher than anyone else with a long career."],
+			["Sachin Tendulkar", "100 international centuries."],
+			["Muttiah Muralitharan", "800 Test wickets."],
+			["Rachael Heyhoe Flint", "Captained England to the first ever Cricket World Cup, in 1973."],
+			["Ellyse Perry", "Australian all-rounder, also a football international."],
+			["Garfield Sobers", "The first to hit six sixes in an over in first-class cricket, in 1968."]
+		],
+		events: [
+			["Every two years or so", "Men's and women's T20 World Cups."],
+			["Every four years", "The 50-over World Cups."],
+			["English summer", "County Championship, the Hundred, and touring Test sides."],
+			["Regularly", "The Ashes, England against Australia, for men and women."]
+		],
+		uk: [
+			["England and Wales Cricket Board", "https://www.ecb.co.uk"],
+			["Cricket Scotland", "https://www.cricketscotland.com"],
+			["Cricket Ireland", "https://www.cricketireland.ie"]
+		],
+		terms: [
+			["Reverse swing", "An old ball swinging the opposite way to a new one, at pace."],
+			["Nightwatchman", "A lower-order batter sent in late in the day to protect a better one."],
+			["Powerplay", "Overs where only a few fielders may be outside the inner circle."],
+			["Doosra", "An off-spinner's delivery that turns the other way."],
+			["Declaration", "A captain ending their side's innings early to have time to bowl the opposition out."]
+		]
+	},
+	{
+		id: "rugby-union",
+		name: "Rugby union",
+		emoji: "🏉",
+		line: "Fifteen-a-side, and much of it is a fight for the ball you can barely see.",
+		how: [
+			"Two teams of 15 try to carry, pass or kick the ball over the opponents' try line. Passes must go sideways or backwards. Knock the ball forwards and play stops for a scrum.",
+			"When a player is tackled they must release the ball, and players from both sides compete for it in a ruck. Most penalties come from this contest: going off your feet, coming in from the side, or not releasing.",
+			"Set pieces restart the game: scrums after knock-ons and forward passes, lineouts when the ball goes out of play. A dominant scrum or lineout can win a match on its own."
+		],
+		scoring: "Try 5 points. Conversion 2. Penalty goal 3. Drop goal 3.",
+		formats: ["Fifteens: 80 minutes, two halves.", "Sevens: seven-a-side, seven-minute halves, and an Olympic sport since 2016."],
+		watch: [
+			"The breakdown: count how many players each side commits to a ruck. Too many and the defence is short; too few and the ball is stolen.",
+			"The gain line: is the ball carrier going forwards when tackled? Teams that win the gain line usually win the game.",
+			"The kicking battle: box kicks from the scrum-half and long touch-finders are about territory, not possession.",
+			"The bench: replacements around the 50th minute, especially in the front row, often decide the last half hour."
+		],
+		greats: [
+			["Jonah Lomu", "15 World Cup tries for New Zealand."],
+			["Richie McCaw", "Captained New Zealand to the 2011 and 2015 World Cups."],
+			["Jonny Wilkinson", "The drop goal that won the 2003 World Cup."],
+			["Portia Woodman-Wickliffe", "Record-breaking New Zealand try scorer in fifteens and sevens."],
+			["Emily Scarratt", "England centre, 2014 World Cup winner and World Rugby Player of the Year in 2019."],
+			["Gareth Edwards", "Wales scrum-half, scorer of \"that try\" for the Barbarians in 1973."]
+		],
+		events: [
+			["February and March", "Men's and women's Six Nations."],
+			["Every four years", "Men's Rugby World Cup (2027, Australia)."],
+			["Every few years", "Women's Rugby World Cup (England won in 2025)."]
+		],
+		uk: [
+			["Rugby Football Union (England)", "https://www.englandrugby.com"],
+			["Scottish Rugby", "https://scottishrugby.org"],
+			["Welsh Rugby Union", "https://www.wru.wales"],
+			["Irish Rugby (IRFU)", "https://www.irishrugby.ie"]
+		],
+		terms: [
+			["Jackal", "A defender who gets over the ball at a ruck to steal it."],
+			["Bomb squad", "A heavy bench of forwards brought on to dominate late."],
+			["Crossing", "Obstructing a defender with a decoy runner. A penalty."],
+			["Pod", "A group of forwards set up to take the ball up together."],
+			["Advantage", "Play continues after an offence while the other side gains from it."]
+		]
+	},
+	{
+		id: "tennis",
+		name: "Tennis",
+		emoji: "🎾",
+		line: "A one-on-one fight where the scoring system is designed to produce drama.",
+		how: [
+			"Players hit the ball over the net into the opponent's court. The ball may bounce once. Serve goes diagonally into the service box, and you get two attempts.",
+			"Scoring is nested: points make games, games make sets, sets make matches. You must win a game by two points and a set by two games, until a tie-break settles it at 6-6.",
+			"Surfaces matter. Clay is slow and high-bouncing and rewards patience and spin. Grass is fast and low and rewards serving and short points. Hard courts sit in between."
+		],
+		scoring: "Points go 15, 30, 40, game. At 40-40 (deuce) you need two clear points. Sets are first to six games with a two-game lead, or a tie-break at 6-6.",
+		formats: [
+			"Best of three sets: most tour events.",
+			"Best of five sets: men's singles at the four Grand Slams.",
+			"Doubles and mixed doubles."
+		],
+		watch: [
+			"First-serve percentage: below about 60 per cent, a big server is in trouble.",
+			"Break points saved: tells you who is winning the pressure moments.",
+			"Court position: who is standing on the baseline and who has been pushed back behind it.",
+			"Second-serve return: aggressive returners stand inside the baseline and attack it."
+		],
+		greats: [
+			["Serena Williams", "23 Grand Slam singles titles in the Open era."],
+			["Novak Djokovic", "The record for men's Grand Slam singles titles."],
+			["Rafael Nadal", "14 French Open titles."],
+			["Roger Federer", "Eight Wimbledon titles."],
+			["Steffi Graf", "The 1988 Golden Slam: all four majors and Olympic gold."],
+			["Martina Navratilova", "Nine Wimbledon singles titles."]
+		],
+		events: [
+			["January", "Australian Open."],
+			["May to June", "French Open at Roland Garros."],
+			["June to July", "Wimbledon."],
+			["August to September", "US Open."]
+		],
+		uk: [["Lawn Tennis Association", "https://www.lta.org.uk"], ["Tennis Scotland", "https://www.tennisscotland.org"]],
+		terms: [
+			["Break of serve", "Winning a game when your opponent is serving."],
+			["Bagel", "Winning a set 6-0."],
+			["Golden set", "Winning a set without dropping a single point. Very rare."],
+			["Hawk-Eye", "Ball-tracking system used for line calls."],
+			["Moonball", "A deliberately high, looping shot to push an opponent back."]
+		]
+	},
+	{
+		id: "golf",
+		name: "Golf",
+		emoji: "⛳",
+		line: "The fewest shots wins, and the hardest opponent is the course.",
+		how: [
+			"Players play 18 holes, each with a par: the number of shots a good player should take. The aim is to complete the round in as few strokes as possible.",
+			"Professional tournaments usually last four rounds over four days, with a cut after two rounds that halves the field.",
+			"The course changes everything: wind on a links course, firm greens in a US Open, the slopes at Augusta. Strategy is about where to miss as much as where to aim."
+		],
+		scoring: "Stroke play: total strokes over the event. Match play: each hole is won, lost or halved, and you win the match by winning more holes.",
+		formats: [
+			"Stroke play: most professional events.",
+			"Match play: the Ryder Cup and Solheim Cup.",
+			"Team events: Ryder Cup (men, Europe v USA) and Solheim Cup (women)."
+		],
+		watch: [
+			"Strokes gained: shows whether a player is winning shots with driving, approach play, short game or putting.",
+			"Pin positions: a Sunday flag tucked by water changes who attacks and who plays safe.",
+			"The leaderboard pressure: final-round leaders often play the back nine very differently from the front."
+		],
+		greats: [
+			["Jack Nicklaus", "18 men's majors."],
+			["Tiger Woods", "15 men's majors, including the \"Tiger Slam\" of four in a row in 2000-01."],
+			["Annika Sörenstam", "10 women's majors and the first woman to shoot 59 in an LPGA event."],
+			["Patty Berg", "15 women's majors, the record."],
+			["Seve Ballesteros", "Five majors and the soul of the modern Ryder Cup."]
+		],
+		events: [
+			["April", "The Masters."],
+			["May to July", "PGA Championship, US Open, The Open."],
+			["Through the year", "Five women's majors."],
+			["Every two years", "Ryder Cup (men) and Solheim Cup (women)."]
+		],
+		uk: [
+			["England Golf", "https://www.englandgolf.org"],
+			["Scottish Golf", "https://www.scottishgolf.org"],
+			["Wales Golf", "https://www.walesgolf.org"]
+		],
+		terms: [
+			["Albatross", "Three under par on a hole."],
+			["Up and down", "Getting into the hole in two shots from off the green."],
+			["Links", "A coastal course on sandy ground, like St Andrews."],
+			["Fourball", "Pairs, each player plays their own ball, best score counts."],
+			["Foursomes", "Pairs take alternate shots with one ball."]
+		]
+	},
+	{
+		id: "formula-1",
+		name: "Formula 1",
+		emoji: "🏎️",
+		line: "The fastest racing on earth, decided as much in the garage and the pit lane as on track.",
+		how: [
+			"Twenty drivers in ten teams race on circuits around the world. Qualifying on Saturday decides the starting grid; the race is usually about 305km.",
+			"Every car must use at least two different tyre compounds in a dry race, so every driver stops at least once. Pit strategy, choosing when to stop and on which tyres, is often where races are won.",
+			"Teams build their own cars within tight technical rules, and a budget cap limits spending. The car matters enormously, which is why the battle between teammates is the clearest measure of a driver."
+		],
+		scoring: "Points go to the top ten: 25, 18, 15, 12, 10, 8, 6, 4, 2, 1. Some weekends also have a shorter sprint race with points for the top eight.",
+		formats: ["Grand Prix weekends: practice, qualifying, race.", "Sprint weekends: a short Saturday race as well as the Sunday Grand Prix."],
+		watch: [
+			"The undercut: pit first, use fresh tyres to go faster, and come out ahead when your rival stops.",
+			"Tyre degradation: watch lap times creep up as the tyres wear out.",
+			"Track position: on circuits where overtaking is hard, qualifying is almost everything.",
+			"Safety cars: a cheap pit stop under the safety car can turn a race."
+		],
+		greats: [
+			["Lewis Hamilton", "Seven world titles and the record for wins and pole positions."],
+			["Michael Schumacher", "Seven world titles, five in a row with Ferrari."],
+			["Ayrton Senna", "Three world titles and a reputation as the greatest qualifier of all."],
+			["Max Verstappen", "Four world titles in a row from 2021 to 2024."],
+			["Lella Lombardi", "The only woman to score World Championship points, in 1975."]
+		],
+		events: [["March to December", "The championship season, around 24 races."]],
+		uk: [["Motorsport UK", "https://www.motorsportuk.org"]],
+		terms: [
+			["DRS", "A flap on the rear wing that opens to help an attacking car overtake."],
+			["Undercut", "Pitting before your rival to gain time on fresh tyres."],
+			["Parc fermé", "Rules that stop teams changing the car between qualifying and the race."],
+			["Dirty air", "Turbulent air behind a car that makes following closely hard."],
+			["Box, box", "Radio call telling a driver to come into the pits."]
+		]
+	},
+	{
+		id: "athletics",
+		name: "Athletics",
+		emoji: "🏃",
+		line: "Run, jump, throw. The simplest sport there is, measured to the hundredth.",
+		how: [
+			"Athletics covers track running (from 100m to 10,000m, plus hurdles, steeplechase and relays), field events (jumps and throws), road running such as the marathon, race walking, and the combined events.",
+			"Sprints and hurdles are run in lanes. From 800m upwards athletes break from their lanes, and tactics take over: who leads, who sits in, when to kick.",
+			"In the field events athletes get a set number of attempts and their best counts. In the high jump and pole vault they choose the heights they attempt, and three failures at a height ends their competition."
+		],
+		scoring: "First across the line wins a race (measured by the torso). In field events the longest or highest valid attempt wins. The heptathlon and decathlon use points tables.",
+		formats: [
+			"Track and field meetings, from local leagues to the Diamond League.",
+			"Road races and marathons.",
+			"Cross country.",
+			"Combined events: women's heptathlon (seven events), men's decathlon (ten)."
+		],
+		watch: [
+			"The bell lap in middle distance: who has the gears for the final 200m?",
+			"Reaction times in the 100m: under 0.1 seconds is a false start.",
+			"Splits in distance races: an even pace usually means a fast time; a slow early pace means a sprint finish.",
+			"Takeoff boards in the long jump: a centimetre over and the jump is a foul."
+		],
+		greats: [
+			["Usain Bolt", "Eight Olympic golds and the 100m and 200m world records."],
+			["Fanny Blankers-Koen", "Four golds at the 1948 Olympics, aged 30, with two children at home."],
+			["Jackie Joyner-Kersee", "Two Olympic heptathlon golds and the world record."],
+			["Faith Kipyegon", "Three Olympic 1500m titles in a row (2016, 2020, 2024)."],
+			["Mondo Duplantis", "Has broken the pole vault world record many times since 2020."],
+			["Jesse Owens", "Four golds at the 1936 Berlin Olympics."]
+		],
+		events: [
+			["Every four years", "The Olympics."],
+			["Every two years", "World Championships."],
+			["Summer", "The Diamond League circuit."],
+			["Spring and autumn", "The big city marathons."]
+		],
+		uk: [
+			["UK Athletics", "https://www.uka.org.uk"],
+			["England Athletics", "https://www.englandathletics.org"],
+			["parkrun (free weekly 5k)", "https://www.parkrun.org.uk"]
+		],
+		terms: [
+			["Kick", "The final burst of speed in a distance race."],
+			["PB", "Personal best."],
+			["Pacemaker", "A runner paid to set the pace who usually drops out."],
+			["Wind-assisted", "A sprint or jump with a tailwind over 2m/s. It can't count as a record."],
+			["Fosbury Flop", "The backwards high-jump technique introduced by Dick Fosbury in 1968."]
+		]
+	},
+	{
+		id: "netball",
+		name: "Netball",
+		emoji: "🏐",
+		line: "Fast, physical and tactical, with no running with the ball and a three-second rule.",
+		how: [
+			"Two teams of seven. Each player wears a bib showing their position, and each position is restricted to certain thirds of the court.",
+			"You can't run with the ball, and you must pass or shoot within three seconds. Defenders must stay at least 0.9m (three feet) from the player with the ball.",
+			"Only the Goal Shooter and Goal Attack can score, and only from inside the goal circle. The game is about moving the ball fast through the thirds and creating a clean feed into the circle."
+		],
+		scoring: "One point per goal. In Super Shot periods in some leagues, goals from the outer part of the circle score two.",
+		formats: ["Four quarters of 15 minutes.", "Fast5: a shorter, five-a-side variant."],
+		watch: [
+			"Centre-pass conversion: the percentage of their own centre passes a team scores from. The best convert well over 80 per cent.",
+			"Gains: intercepts and deflections that win the ball back.",
+			"Feeding into the circle: the space the Wing Attack and Goal Attack create for the shooter.",
+			"Shooting percentages under pressure."
+		],
+		greats: [
+			["Irene van Dyk", "Over 200 caps across South Africa and New Zealand."],
+			["Laura Geitz", "Australian captain who won world and Commonwealth titles."],
+			["Jhaniele Fowler-Nembhard", "Jamaican shooter with remarkable accuracy and volume."],
+			["Geva Mentor", "England's long-serving defender and a 2018 Commonwealth gold medallist."]
+		],
+		events: [
+			["Every four years", "Netball World Cup."],
+			["Every four years", "Commonwealth Games (England won gold in 2018)."],
+			["Spring and summer", "Netball Super League in the UK."]
+		],
+		uk: [
+			["England Netball", "https://www.englandnetball.co.uk"],
+			["Netball Scotland", "https://www.netballscotland.com"],
+			["Wales Netball", "https://www.walesnetball.com"]
+		],
+		terms: [
+			["Footwork", "The rule about which foot you can move once you've caught the ball."],
+			["Contact", "Touching an opponent so as to affect their play. A penalty."],
+			["Obstruction", "Defending closer than 0.9m to the player with the ball."],
+			["Centre pass", "The restart after every goal, alternating between teams."],
+			["Held ball", "Holding the ball for more than three seconds."]
+		]
+	},
+	{
+		id: "snooker",
+		name: "Snooker",
+		emoji: "🎱",
+		line: "Geometry under pressure, and a 147 is the perfect frame.",
+		how: [
+			"Players pot 15 reds and six colours. Pot a red, then a colour, then a red, and so on. The colours come back onto the table until the reds are gone, then they are potted in order from yellow to black.",
+			"The real game is position: where the cue ball finishes after each shot. A good break is planned several shots ahead.",
+			"When you can't pot, you play safe, leaving the opponent without a shot, or snooker them so they can't hit the ball they need to."
+		],
+		scoring: "Red 1, yellow 2, green 3, brown 4, blue 5, pink 6, black 7. Fouls give your opponent at least four points.",
+		formats: ["Frames: matches are best-of a set number of frames. The World Championship final is best of 35."],
+		watch: [
+			"Safety exchanges: long, tense battles where nobody wants to give the other a chance.",
+			"Break-building: does the player keep the cue ball in the middle of the table?",
+			"Snookers required: when a player is behind by more than is left on the table, they need the opponent to give away fouls."
+		],
+		greats: [
+			["Ronnie O'Sullivan", "Seven world titles and the fastest 147 ever made."],
+			["Stephen Hendry", "Seven world titles in the 1990s."],
+			["Steve Davis", "Six world titles in the 1980s."],
+			["Reanne Evans", "Twelve women's world titles."],
+			["Joe Davis", "Won the first 15 World Championships, 1927 to 1946."]
+		],
+		events: [["April to May", "World Championship at the Crucible, Sheffield."], ["November to January", "UK Championship and the Masters."]],
+		uk: [["World Snooker Tour", "https://www.wst.tv"], ["EPSB (English amateur body)", "https://www.epsb.co.uk"]],
+		terms: [
+			["Century", "A break of 100 or more."],
+			["Plant", "Hitting one ball onto another to pot it."],
+			["Free ball", "After a foul leaves you snookered, you can nominate any ball as a red."],
+			["Re-spotted black", "The decider used when scores are level at the end of a frame."],
+			["Long pot", "A pot from distance, usually the length of the table."]
+		]
+	},
+	{
+		id: "darts",
+		name: "Darts",
+		emoji: "🎯",
+		line: "Three darts, a board 2.37m away, and the maths has to be done in your head.",
+		how: [
+			"Players start at 501 and take turns throwing three darts to score points down to exactly zero. You must finish on a double (or the bullseye, which counts as double 25).",
+			"The board is split into 20 numbered segments, each with a thin double ring around the outside and a treble ring halfway in. Treble 20 (60) is the highest single dart.",
+			"The top players average around 100 per three darts. The difference between winning and losing is usually the doubles."
+		],
+		scoring: "Score down from 501. Highest three-dart score 180. Highest checkout 170 (treble 20, treble 20, bull). The nine-dart finish is the perfect leg.",
+		formats: ["Sets and legs: the PDC World Championship is played in sets (best of five legs).", "Legs only: most other tournaments."],
+		watch: [
+			"Three-dart average: above 100 is elite.",
+			"Checkout percentage: how often a player hits the double when they have a chance.",
+			"Setting up: leaving a preferred double, such as 32 (double 16), so a miss still leaves another double."
+		],
+		greats: [
+			["Phil Taylor", "16 world titles."],
+			["Michael van Gerwen", "Three PDC world titles and a long spell as world number one."],
+			["Fallon Sherrock", "The first woman to win a match at the PDC World Championship, in 2019."],
+			["Luke Littler", "Won the PDC world title in 2025 aged 17."],
+			["Eric Bristow", "Five world titles and the man who made darts a TV sport."]
+		],
+		events: [["December to January", "PDC World Championship at Alexandra Palace."], ["Spring", "Premier League Darts."]],
+		uk: [["Professional Darts Corporation", "https://www.pdc.tv"]],
+		terms: [
+			["Ton-80", "A score of 180."],
+			["Shanghai", "Single, double and treble of the same number in one visit."],
+			["Bed and breakfast", "A score of 26: single 20, single 5, single 1."],
+			["Madhouse", "Double 1, the last resort."],
+			["Nine-darter", "A perfect leg of 501 in nine darts."]
+		]
+	},
+	{
+		id: "boxing",
+		name: "Boxing",
+		emoji: "🥊",
+		line: "The hardest sport to get good at, and the easiest to understand.",
+		how: [
+			"Two boxers fight over a set number of rounds, usually three minutes each for men and two for women in professional boxing. They can only punch with closed fists, above the belt.",
+			"A fight ends by knockout, stoppage (the referee or a corner decides a boxer can't continue), disqualification, or on the judges' scorecards.",
+			"Fighters compete in weight classes, from minimumweight to heavyweight. Each class has world champions from four main bodies: WBA, WBC, IBF and WBO. Holding all four makes you undisputed."
+		],
+		scoring: "Three judges score each round, usually 10-9 to the boxer who won it. A knockdown usually makes it 10-8.",
+		formats: ["Professional: up to 12 rounds for title fights.", "Amateur and Olympic: three rounds, scored differently."],
+		watch: [
+			"The jab: the most important punch in boxing, used to control distance.",
+			"Body shots: they don't look dramatic but they slow a fighter down in the later rounds.",
+			"Ring generalship: who is controlling where the fight happens."
+		],
+		greats: [
+			["Muhammad Ali", "Three-time heavyweight champion."],
+			["Sugar Ray Robinson", "Widely rated the best pound-for-pound fighter ever."],
+			["Claressa Shields", "Two Olympic golds and undisputed titles in more than one weight class."],
+			["Katie Taylor", "Undisputed lightweight champion and Olympic gold medallist in 2012."],
+			["Joe Louis", "Heavyweight champion for nearly twelve years."]
+		],
+		events: [["All year", "Big fights are made by promoters, not to a fixed calendar."], ["Every four years", "Olympic boxing."]],
+		uk: [["British Boxing Board of Control", "https://www.bbbofc.com"], ["England Boxing", "https://www.englandboxing.org"]],
+		terms: [
+			["Southpaw", "A boxer who leads with the right hand and right foot."],
+			["Pound for pound", "Rankings of the best boxers regardless of weight."],
+			["Clinch", "Holding to stop the opponent punching."],
+			["Undisputed", "Holding all four major world titles in a weight class."],
+			["TKO", "Technical knockout: the referee stops the fight."]
+		]
+	},
+	{
+		id: "cycling",
+		name: "Cycling",
+		emoji: "🚴",
+		line: "An individual sport that is won by teams, and decided by the wind and the mountains.",
+		how: [
+			"Road racing is the best-known form: one-day races and multi-day stage races such as the Tour de France, Giro d'Italia and Vuelta a España.",
+			"Riding in another rider's slipstream saves a lot of energy, so teams work together to protect their leader, chase down breakaways and set up sprints.",
+			"In a stage race the overall winner is the rider with the lowest total time. Most of the time gaps are made in the mountains and the time trials."
+		],
+		scoring: "Stage races: lowest total time wins the yellow jersey. There are also points (green) and mountains (polka dot) classifications.",
+		formats: [
+			"Grand Tours: three weeks.",
+			"One-day Classics, such as Paris-Roubaix.",
+			"Track cycling: sprint, keirin, team pursuit, omnium, madison.",
+			"BMX and mountain biking."
+		],
+		watch: [
+			"The breakaway: a small group goes clear early. Does the peloton let them go?",
+			"Echelons: crosswinds split the bunch into diagonal lines, and anyone at the back loses time.",
+			"Lead-out trains: teams line up riders to deliver their sprinter at full speed in the final 200m."
+		],
+		greats: [
+			["Eddy Merckx", "Five Tours, five Giros, and the most wins in the sport's history."],
+			["Marianne Vos", "World champion in road, cyclo-cross and track."],
+			["Annemiek van Vleuten", "Won the first modern Tour de France Femmes in 2022."],
+			["Laura Kenny", "Five Olympic track golds for Great Britain."],
+			["Jason Kenny", "Seven Olympic golds, a British record."]
+		],
+		events: [
+			["July", "Tour de France."],
+			["August", "Tour de France Femmes."],
+			["May", "Giro d'Italia."],
+			["Spring", "The Classics."]
+		],
+		uk: [["British Cycling", "https://www.britishcycling.org.uk"]],
+		terms: [
+			["Peloton", "The main group of riders."],
+			["Domestique", "A rider who works for the team leader."],
+			["Bonk", "Running out of energy."],
+			["Bidon", "A water bottle."],
+			["Lanterne rouge", "The rider in last place overall."]
+		]
+	},
+	{
+		id: "horse-racing",
+		name: "Horse racing",
+		emoji: "🏇",
+		line: "Speed, stamina and form, on the Flat and over jumps.",
+		how: [
+			"Flat racing is run without obstacles over distances from five furlongs to over two miles. Jump racing (National Hunt) is run over hurdles or bigger, solid fences called chases.",
+			"Handicaps give better horses more weight to carry, to even out the field. Weight-for-age races adjust for younger horses.",
+			"Form is everything to racing fans: previous runs, the going (how firm or soft the ground is), the distance and the trainer."
+		],
+		scoring: "First past the post wins, subject to the stewards.",
+		formats: ["Flat: the Classics, such as the Derby and the 2,000 Guineas.", "Jumps: hurdles and chases, including the Cheltenham Gold Cup and Grand National."],
+		watch: [
+			"The going: some horses only run well on soft ground, some only on fast.",
+			"The pace: a slow early pace suits horses with speed at the finish.",
+			"Jumping: in National Hunt, a bad jump at the second-last can lose a race."
+		],
+		greats: [
+			["Frankel", "Unbeaten in 14 races."],
+			["Red Rum", "Three Grand Nationals."],
+			["Rachael Blackmore", "The first woman to win the Grand National as a jockey, in 2021."],
+			["Lester Piggott", "Nine Derby wins."],
+			["AP McCoy", "Champion jump jockey 20 years in a row."]
+		],
+		events: [
+			["March", "Cheltenham Festival."],
+			["April", "Grand National."],
+			["June", "The Derby and Royal Ascot."]
+		],
+		uk: [["British Horseracing Authority", "https://www.britishhorseracing.com"]],
+		terms: [
+			["Furlong", "An eighth of a mile, about 201 metres."],
+			["Going", "The condition of the ground."],
+			["Bumper", "A Flat race for jump horses before they go hurdling."],
+			["Handicap", "Weights adjusted so every horse has a chance."],
+			["Odds-on", "A favourite expected to win more often than not."]
+		]
+	},
+	{
+		id: "basketball",
+		name: "Basketball",
+		emoji: "🏀",
+		line: "Ten players, a 24-second shot clock and a scoring run every few minutes.",
+		how: [
+			"Two teams of five try to shoot the ball through a hoop 10 feet (3.05m) high. You must dribble to move with the ball.",
+			"The shot clock forces a team to shoot within 24 seconds. That pace means momentum swings fast.",
+			"Modern basketball is driven by the three-point shot. Teams spread the floor with shooters to create space to drive to the rim."
+		],
+		scoring: "Two points for a shot inside the arc, three from beyond it, one for a free throw.",
+		formats: ["NBA and WNBA games: four quarters, 12 minutes (NBA) or 10 minutes (WNBA and FIBA).", "3x3 basketball, an Olympic sport since 2020."],
+		watch: [
+			"Pick and roll: the most common play in the game.",
+			"Spacing: shooters in the corners stretch the defence.",
+			"Rebounding: second chances often decide close games."
+		],
+		greats: [
+			["Michael Jordan", "Six NBA titles and six Finals MVPs."],
+			["LeBron James", "The NBA's all-time leading scorer."],
+			["Diana Taurasi", "The WNBA's all-time leading scorer and multiple Olympic golds."],
+			["Bill Russell", "11 NBA titles in 13 seasons."],
+			["Lisa Leslie", "The first WNBA player to dunk in a game, in 2002."]
+		],
+		events: [["October to June", "NBA season."], ["May to October", "WNBA season."]],
+		uk: [["Basketball England", "https://www.basketballengland.co.uk"]],
+		terms: [
+			["Triple-double", "Ten or more in three categories, such as points, rebounds and assists."],
+			["And-one", "A basket scored while being fouled, with a free throw to come."],
+			["Paint", "The rectangular area near the basket."],
+			["Fast break", "Attacking before the defence is set."],
+			["Zone defence", "Guarding areas instead of players."]
+		]
+	},
+	{
+		id: "hockey",
+		name: "Hockey",
+		emoji: "🏑",
+		line: "Fast, skilful and played with a stick that only has one usable side.",
+		how: [
+			"Two teams of eleven use sticks to hit, push or flick a ball into the opponents' goal. Only the flat side of the stick can be used.",
+			"Goals can only be scored from inside the shooting circle, the D-shaped area in front of goal.",
+			"Penalty corners are a key set piece: the attacking side injects the ball from the backline and the defenders sprint out from behind the goal line."
+		],
+		scoring: "One goal for every ball into the net from inside the circle.",
+		formats: ["Four quarters of 15 minutes.", "Indoor hockey."],
+		watch: [
+			"Penalty corner routines: drag flicks and deflections.",
+			"Aerials: lifted passes over the top of the press.",
+			"Rolling substitutions: changes happen constantly."
+		],
+		greats: [
+			["Teun de Nooijer", "Three-time world player of the year with the Netherlands."],
+			["Luciana Aymar", "Eight-time world player of the year with Argentina."],
+			["Kate Richardson-Walsh", "Captained Great Britain to Olympic gold in 2016."]
+		],
+		events: [["Every four years", "Olympics and World Cup."], ["Season-long", "FIH Pro League."]],
+		uk: [
+			["England Hockey", "https://www.englandhockey.co.uk"],
+			["Scottish Hockey", "https://www.scottish-hockey.org.uk"],
+			["Hockey Wales", "https://www.hockeywales.org.uk"]
+		],
+		terms: [
+			["Drag flick", "A powerful, lifted shot used at penalty corners."],
+			["Reverse stick", "Using the flat side of the stick on your left."],
+			["Aerial", "A ball lifted high over the defence."],
+			["Green card", "A two-minute suspension."],
+			["Shootout", "A one-on-one decider, started from 23m out."]
+		]
+	},
+	{
+		id: "swimming",
+		name: "Swimming",
+		emoji: "🏊",
+		line: "Four strokes, eight lanes and a lot of hundredths.",
+		how: [
+			"Races are swum in four strokes: freestyle (in practice front crawl), backstroke, breaststroke and butterfly, plus individual medley (all four) and relays.",
+			"Pools are 50m (long course) or 25m (short course). The start, the turns and the underwater phase after each wall make a big difference.",
+			"Swimmers are seeded through heats and semi-finals into an eight-lane final. The fastest swimmers go in the middle lanes."
+		],
+		scoring: "Fastest time wins.",
+		formats: [
+			"Long course (50m) for the Olympics.",
+			"Short course (25m) championships.",
+			"Open water: 10km races."
+		],
+		watch: [
+			"Splits: the time at each 50m tells you who went out too fast.",
+			"Underwater kicking off the walls.",
+			"The touch: races are often won by the length of a fingernail."
+		],
+		greats: [
+			["Michael Phelps", "23 Olympic golds."],
+			["Katie Ledecky", "Won the Olympic 800m freestyle at four Games in a row, 2012 to 2024."],
+			["Adam Peaty", "Two Olympic 100m breaststroke golds."],
+			["Mark Spitz", "Seven golds at the 1972 Olympics."]
+		],
+		events: [["Every four years", "Olympics."], ["Every year or two", "World Championships."]],
+		uk: [["Swim England", "https://www.swimming.org"], ["Scottish Swimming", "https://www.scottishswimming.com"]],
+		terms: [
+			["Medley", "A race using all four strokes."],
+			["Taper", "Reducing training before a big race."],
+			["Long course", "A 50m pool."],
+			["Reaction time", "Time from the start signal to leaving the block."],
+			["Dolphin kick", "The underwater kick used off starts and turns."]
+		]
+	},
+	{
+		id: "squash",
+		name: "Squash",
+		emoji: "🟡",
+		line: "Two players in a glass box, and the fittest usually wins.",
+		how: [
+			"Two players take turns hitting the ball against the front wall of an enclosed court. The ball can bounce once on the floor and use the side and back walls.",
+			"Getting to the T, the centre of the court, is the key. From there you can reach anything; your opponent is forced into the corners.",
+			"Players must give each other room to play their shot. If they don't, the referee awards a let (replay) or a stroke (point)."
+		],
+		scoring: "Professional matches use point-a-rally scoring to 11, best of five games, winning by two.",
+		formats: ["Singles and doubles."],
+		watch: [
+			"Length: tight drives down the walls push the opponent to the back.",
+			"The drop shot: a soft shot into the front corner.",
+			"Movement: the best players glide to the ball and back to the T."
+		],
+		greats: [
+			["Jahangir Khan", "555 matches unbeaten from 1981 to 1986."],
+			["Heather McKay", "16 British Open titles in a row."],
+			["Nour El Sherbini", "Several women's world titles for Egypt."],
+			["Jansher Khan", "Eight world titles."]
+		],
+		events: [["Year-round", "PSA World Tour."], ["Every year", "World Championships and the British Open."]],
+		uk: [["England Squash", "https://www.englandsquash.com"], ["Scottish Squash", "https://www.scottishsquash.org"]],
+		terms: [
+			["The T", "The centre of the court."],
+			["Let", "A replayed point."],
+			["Stroke", "A point awarded after interference."],
+			["Boast", "A shot off the side wall first."],
+			["Nick", "The join between wall and floor. A ball that hits it dies."]
+		]
+	},
+	{
+		id: "hurling",
+		name: "Hurling",
+		emoji: "🏑",
+		line: "Ireland's ancient game, and possibly the fastest field sport in the world.",
+		how: [
+			"Two teams of 15 use a wooden stick (hurley) to strike a small ball (sliotar). Players can catch the ball, and carry it on the stick.",
+			"You can only hold the ball in your hand for four steps; then you must bounce it on the stick or pass.",
+			"The women's version is camogie, governed by the Camogie Association."
+		],
+		scoring: "A goal (under the bar) is three points. A point (over the bar between the posts) is one.",
+		formats: ["Inter-county championship for the Liam MacCarthy Cup.", "Club championships."],
+		watch: [
+			"Puck-outs: the goalkeeper's restarts are now tactical set plays.",
+			"Striking off either side.",
+			"Catching the high ball under pressure."
+		],
+		greats: [
+			["Henry Shefflin", "Ten All-Ireland titles with Kilkenny."],
+			["Christy Ring", "Eight All-Ireland titles with Cork."],
+			["Angela Downey", "Twelve All-Ireland camogie titles with Kilkenny."]
+		],
+		events: [["Summer", "All-Ireland Hurling Championship."]],
+		uk: [["GAA (Britain)", "https://www.gaa.ie"]],
+		terms: [
+			["Sliotar", "The ball."],
+			["Hurley", "The stick."],
+			["Puck-out", "The goalkeeper's restart."],
+			["Camogie", "The women's game."],
+			["Free", "A free hit after a foul."]
+		]
+	},
+	{
+		id: "gaelic-football",
+		name: "Gaelic football",
+		emoji: "🏐",
+		line: "Ireland's biggest sport: part football, part handball, played at a pace that surprises everyone the first time.",
+		how: [
+			"Two teams of 15 play with a round ball, slightly heavier than a soccer ball. You can kick it, catch it and hand-pass it with a closed fist, but not throw it.",
+			"You can carry the ball for four steps. Then you must bounce it, pass it, or solo it: drop it onto your foot and kick it back into your hands while running. You cannot bounce it twice in a row.",
+			"New rules from 2025 changed the game a lot: a two-point score from outside a 40-metre arc, three players from each side kept in the opposition half, a mark from the kickout, and a \"solo and go\" from a free. Ladies' football, run by the LGFA, has brought in the same headline changes."
+		],
+		scoring: "A goal (into the net under the crossbar) is three points. A point (over the bar between the posts) is one, or two from outside the 40-metre arc.",
+		formats: [
+			"The All-Ireland senior championship, for the Sam Maguire Cup, after the four provincial championships.",
+			"The Tailteann Cup for the counties outside the top tier.",
+			"The National League in spring.",
+			"Club championships, from parish to All-Ireland level."
+		],
+		watch: [
+			"The kickout: whoever wins the restart usually wins the game.",
+			"The solo run at full pace.",
+			"Long-range two-point attempts from outside the arc."
+		],
+		greats: [
+			["Mick O'Dwyer", "Won four All-Irelands as a Kerry player and eight more as manager."],
+			["Peter Canavan", "Captained Tyrone to their first All-Ireland in 2003."],
+			["Cora Staunton", "Mayo's ladies' football great, who also played professional Australian rules."]
+		],
+		events: [["Spring", "National Football League."], ["Summer", "All-Ireland Football Championship, ending at Croke Park."]],
+		uk: [["Gaelic Athletic Association", "https://www.gaa.ie"], ["Ladies Gaelic Football Association", "https://ladiesgaelic.ie"]],
+		terms: [
+			["Solo", "Kicking the ball from your foot back to your hands while running."],
+			["Hand pass", "A pass struck with the hand, not thrown."],
+			["Mark", "A clean catch that earns a free kick."],
+			["Sam Maguire", "The trophy for the men's All-Ireland champions."],
+			["Brendan Martin Cup", "The trophy for the ladies' senior champions."]
+		]
+	},
+	{
+		id: "curling",
+		name: "Curling",
+		emoji: "🥌",
+		line: "Chess on ice, with sweeping.",
+		how: [
+			"Two teams of four take turns sliding granite stones towards a target called the house. Each team throws eight stones per end.",
+			"Sweepers brush the ice in front of the stone to make it travel further and straighter.",
+			"Tactics revolve around the hammer, the advantage of throwing the last stone of an end."
+		],
+		scoring: "After each end, the team with the stone closest to the centre scores a point for each of its stones closer than the opponent's nearest stone.",
+		formats: ["Fours.", "Mixed doubles, an Olympic event since 2018."],
+		watch: [
+			"The hammer: teams with the last stone want to score two or more.",
+			"Guards: stones placed in front of the house to protect others.",
+			"Takeouts: knocking opponents' stones out of play."
+		],
+		greats: [
+			["Eve Muirhead", "Captained Great Britain to Olympic gold in 2022."],
+			["Rhona Martin", "Skipped Great Britain to Olympic gold in 2002."],
+			["Kevin Martin", "Canadian skip, Olympic champion in 2010."]
+		],
+		events: [["Every four years", "Winter Olympics."], ["Every year", "World Championships."]],
+		uk: [["Scottish Curling", "https://www.scottishcurling.org"], ["English Curling Association", "https://www.englishcurling.co.uk"]],
+		terms: [
+			["Hammer", "The last stone of an end."],
+			["House", "The target circles."],
+			["Skip", "The team captain who calls the shots."],
+			["Blank end", "An end with no score, used to keep the hammer."],
+			["Button", "The centre of the house."]
+		]
+	},
+	{
+		id: "kabaddi",
+		name: "Kabaddi",
+		emoji: "🤼",
+		line: "A contact sport of tag and wrestling, played in one breath.",
+		how: [
+			"Two teams of seven. A raider crosses into the opposition half, tries to touch defenders and get back, all while chanting \"kabaddi\" to show they are holding their breath.",
+			"Defenders try to tackle the raider and stop them returning to their own half.",
+			"Players who are touched or tackled go out, and come back as their team scores."
+		],
+		scoring: "A point for each defender touched by a successful raider, or for tackling a raider. Bonus points for getting all of a team out.",
+		formats: ["Pro Kabaddi League in India.", "Asian Games."],
+		watch: [
+			"Do-or-die raids: the third raid in a row must score.",
+			"Ankle holds: the classic defensive tackle.",
+			"Super tackles: when only a few defenders are left, a tackle is worth extra."
+		],
+		greats: [["Pardeep Narwal", "Record raid points in the Pro Kabaddi League."], ["Anup Kumar", "Captained India to Asian Games gold."]],
+		events: [["Annually", "Pro Kabaddi League."], ["Every four years", "Asian Games."]],
+		uk: [["England Kabaddi Federation", "https://www.englandkabaddi.co.uk"]],
+		terms: [
+			["Raider", "The attacking player."],
+			["Cant", "The chant of \"kabaddi\"."],
+			["Super raid", "A raid scoring three or more points."],
+			["All out", "When every player on a team is out."],
+			["Bonus line", "A line in the defending half that earns a raider an extra point."]
+		]
+	},
+	{
+		id: "sepak-takraw",
+		name: "Sepak takraw",
+		emoji: "🦶",
+		line: "Volleyball, but with feet, knees, chest and head. The overhead kicks are absurd.",
+		how: ["Two teams of three play over a net about 1.5m high, using a rattan or plastic ball. Hands are not allowed.", "Each side gets three touches to return the ball. The spike, an overhead kick known as the roll spike, is the signature move."],
+		scoring: "Rally scoring to 21, best of three sets.",
+		formats: ["Regu (three-a-side).", "Doubles and quad events."],
+		watch: ["The roll spike, a scissor kick over the net.", "The serve, kicked from a circle near the back."],
+		greats: [["Thailand's national teams", "Have dominated Asian Games competition for decades."]],
+		events: [["Every four years", "Asian Games."]],
+		uk: [["International Sepaktakraw Federation", "https://www.sepaktakraw.org"]],
+		terms: [
+			["Tekong", "The server."],
+			["Regu", "A team of three."],
+			["Roll spike", "The overhead scissor-kick attack."]
+		]
+	},
+	{
+		id: "american-football",
+		name: "American football",
+		emoji: "",
+		line: "Chess with collisions: four attempts to gain ten yards, again and again.",
+		how: [
+			"Two teams of 11. The attacking side (the offense) has four plays, called downs, to move the ball ten yards. Make it and they get four more.",
+			"Each play starts from a set position and stops when the ball carrier is tackled or a pass falls incomplete, so every play is planned in advance.",
+			"Teams use separate units for attack, defence and kicking, so squads are huge: 53 players in the NFL."
+		],
+		scoring: "Touchdown 6 points, then an extra point kick (1) or a two-point try. Field goal 3. Safety (tackling the ball carrier in his own end zone) 2.",
+		formats: [
+			"NFL: 32 teams, a 17-game regular season, play-offs, then the Super Bowl in February.",
+			"College football in the USA, with crowds of over 100,000.",
+			"The NFL plays regular-season games in London most years."
+		],
+		watch: [
+			"Third down: the play that decides whether a drive lives or dies.",
+			"The quarterback reading the defence before the snap and changing the play.",
+			"The battle in the trenches: the offensive and defensive lines."
+		],
+		greats: [
+			["Tom Brady", "Seven Super Bowl wins, more than any franchise."],
+			["Jerry Rice", "The NFL records for career receptions, receiving yards and touchdowns."],
+			["Lawrence Taylor", "Changed how defences rush the quarterback."],
+			["Walter Payton", "For years the NFL's career rushing leader."]
+		],
+		events: [["February", "The Super Bowl."], ["Autumn", "NFL games in London."]],
+		uk: [["British American Football Association", "https://www.britishamericanfootball.org"]],
+		terms: [
+			["Down", "One attempt to move the ball. Four per set."],
+			["Snap", "The ball being passed back to start a play."],
+			["Red zone", "Inside the opponent's 20-yard line."],
+			["Sack", "Tackling the quarterback behind the line before he throws."],
+			["Interception", "A pass caught by the defence."]
+		]
+	},
+	{
+		id: "rugby-league",
+		name: "Rugby league",
+		emoji: "",
+		line: "Thirteen a side, six tackles, and nowhere to hide.",
+		how: [
+			"Two teams of 13. The attacking side has six tackles to score or gain ground. After the sixth, the ball goes to the other side.",
+			"After each tackle the tackled player gets up and rolls the ball back with his or her foot: the play-the-ball. There are no rucks or lineouts.",
+			"Teams usually kick on the last tackle to gain ground or try to score, which is why the fifth and sixth tackles matter so much."
+		],
+		scoring: "Try 4 points, conversion 2, penalty goal 2, drop goal 1. A drop goal from 40 metres or more in some competitions is worth 2.",
+		formats: [
+			"Super League in Europe, with the Grand Final at Old Trafford.",
+			"The NRL in Australia and New Zealand, and the State of Origin series.",
+			"The Challenge Cup, final at Wembley.",
+			"The Women's Super League and the NRLW.",
+			"A World Cup for men, women and wheelchair rugby league."
+		],
+		watch: [
+			"Set completion: how many sets a team finishes without losing the ball.",
+			"The ruck speed: how fast the play-the-ball happens decides how stretched the defence is.",
+			"The last-tackle kick: a grubber, a bomb or a 40/20."
+		],
+		greats: [
+			["Wally Lewis", "The King of Queensland, the face of State of Origin in the 1980s."],
+			["Ellery Hanley", "Captain of Wigan and Great Britain, and a coach after."],
+			["Sam Burgess", "Leader of South Sydney's 2014 title win, playing with a broken cheekbone."],
+			["Jessica Sergis", "A star of the NRLW and Australia's Jillaroos."]
+		],
+		events: [
+			["Spring", "Challenge Cup final at Wembley."],
+			["Summer", "State of Origin in Australia."],
+			["October", "Super League Grand Final at Old Trafford."]
+		],
+		uk: [["Rugby Football League", "https://www.rugby-league.com"]],
+		terms: [
+			["Set", "Six tackles in a row for one team."],
+			["Play-the-ball", "How play restarts after a tackle."],
+			["40/20", "A kick from your own half that bounces out inside the opponent's 20: you get the ball back."],
+			["Golden point", "Extra time where the next score wins."],
+			["Dummy-half", "The player who picks up from the play-the-ball."]
+		]
+	}
+];
+export { GUIDES as t };

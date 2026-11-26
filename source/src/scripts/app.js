@@ -161,7 +161,7 @@ function welcome(USP, force){ USP=USP||DEFAULT_USP;
   w.innerHTML=`<div class="w-back"></div><div class="w-box"><button class="w-x" aria-label="Close">✕</button>
     <div class="w-head"><div><span class="mark" aria-hidden="true">SB</span><h2 id="wtitle">The smartest free sports site in the world.</h2><p class="w-sub">A daily game built on real matches, the stories nobody else tells, and data you can play with. No betting, ever.</p></div></div>
     <ul class="usp in-w">${pts.map(u=>`<li><span>${u[0]}</span><div><b>${u[1]}</b>${mobile?'':`<small>${u[2]}</small>`}</div></li>`).join('')}</ul>
-    <div class="row w-btns"><a class="btn gold" href="${BASE}#hook">Play today's challenge</a><button class="btn ghost light w-look">Look around first</button></div></div>`;
+    <div class="row w-btns"><a class="btn gold" href="${BASE}daily.html">Play today's challenge</a><button class="btn ghost light w-look">Look around first</button></div></div>`;
   document.body.appendChild(w); document.body.classList.add('w-open');
   const close=()=>{ w.classList.add('out'); document.body.classList.remove('w-open'); setTimeout(()=>w.remove(),250); document.removeEventListener('keydown',esc_); };
   const esc_=e=>{ if(e.key==='Escape') close(); };
@@ -266,46 +266,53 @@ if(P==='home'){
   const fbPh=photoFor(fb.title+' '+(fb.standfirst||''),fb.sport,DAY);
 
   main.innerHTML = `
-  <div class="fp">
-    <div class="fp-main">${(store.get('played',0)>0||Object.keys(store.get('pg_played',{})).length||store.get('playdays',[]).length)?'':`<p class="sb-first"><b>New here?</b>Free daily sports games built on real matches. No sign-up, no betting. Start with today's puzzle below.</p>`}<section class="hook" id="hook" aria-live="polite"></section><section class="yc-home" id="ycHome" aria-live="polite"></section><div data-nl-slot class="nl-slot"></div></div>
-    <aside class="fp-side">
-      ${cm?`<section class="board" aria-label="Today's Call It">
-        <div class="board-top"><span>Call It #${DAY}</span><span>${ciDone?'Played':'Live'}</span></div>
-        <h2>${esc(cm.team)} v ${esc(cm.opp)}</h2>
-        <p class="ctx">${esc(cm.match)}, ${cm.innings?'second':'first'} innings</p>
-        <div class="lamp"><b>${esc(cm.score)}</b><span>after ${esc(cm.at)} overs${cm.need?`<br>${esc(cm.need.replace(cm.team+' ',''))}`:''}</span></div>
-        <p class="q">${esc(cm.q)}</p>
-        <a class="btn gold" href="${BASE}call-it.html">${ciDone?'See how I did':'Make my call'}</a><a class="ci-alt" href="${BASE}call-it-football.html">Prefer football? Call It: Football</a>
-      </section>`:''}
+  <section class="uk-hero">
+    <p class="ga">SportingBrain</p>
+    <h1>Britain's daily sports games</h1>
+    <p>Three new games every day on sport, from Wembley to Wimbledon, Lord's to Twickenham. Football, men's and women's, cricket, rugby, tennis, golf, F1, racing and more. Hard questions, real matches. Free, no sign-up, no betting.</p>
+    <div class="row"><a class="btn gold" href="${BASE}daily.html" data-track="uk-hero-play">Play today's Beat the Brain</a><a class="btn ghost" href="#moments">Sporting moments</a></div>
+    ${streak?`<p class="uk-streak">Your streak: <b>${streak} day${streak===1?'':'s'}</b> · New games in <b class="countdown" id="cd2"></b></p>`:`<p class="uk-streak">New games in <b class="countdown" id="cd2"></b></p>`}
+  </section>
 
-      <p class="you-line">${streak?`Your streak: <b>${streak} day${streak===1?'':'s'}</b>. `:''}New games in <b class="countdown" id="cd2"></b></p>
-    </aside>
-  </div>
+  <section class="yc-home" id="ycHome" aria-live="polite"></section>
 
   <section class="blk"><header class="sh"><h2>Today's games</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></header>
-    <div class="gtiles">${[...FIX,...rot].map(tile).join('')}</div></section>
-  <section class="blk"><header class="sh"><h2>Pick a sport</h2><a href="${BASE}pick-a-sport.html">Ten questions, as often as you like</a></header>
-    <div class="ps-groups">${SB_GROUPS.map(g=>`<a href="${BASE}pick-a-sport.html?s=${g[0]}" data-track="ps-home-${g[0]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`).join('')}</div></section>
+    <div class="gtiles g3">${['daily','who-am-i','ground-guesser'].map(tile).join('')}</div></section>
+
+  <section class="blk"><header class="sh"><h2>Pick a sport</h2><a href="${BASE}pick-a-sport.html">Ten questions, play as often as you like</a></header>
+    <div class="ps-groups">${SB_GROUPS.map(g=>`<a href="${BASE}pick-a-sport.html?s=${g[0]}" data-track="ps-home-${g[0]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`).join('')}<a class="ps-ie" href="${BASE}ireland/quiz.html"><b>Irish sport</b><span>GAA, Irish rugby, the League of Ireland and more</span></a></div></section>
+
+  ${AD1}
   ${(()=>{const wk=Math.floor((ukDayNo()+3)/7), bk=BOOKS[((wk%BOOKS.length)+BOOKS.length)%BOOKS.length], q=encodeURIComponent(bk[0]+' '+bk[1]).replace(/%20/g,'+'); return `<section class="blk"><header class="sh"><h2>Sports Book of the Week</h2><a href="${BASE}gift-guide.html">More gift ideas</a></header>
     <section class="botd" aria-label="Sports Book of the Week"><div class="botd-top"><span>Book of the Week</span><span>${esc(bk[2])}</span></div>
       <div class="botd-row"><div class="botd-spine" aria-hidden="true"><b>${esc(bk[0])}</b></div>
       <div><h2>${esc(bk[0])}</h2><p class="botd-by">${esc(bk[1])}</p><p>${esc(bk[3])}</p>
       <a class="btn gold sm" href="https://www.amazon.co.uk/s?k=${q}&tag=gmh710f-21" target="_blank" rel="sponsored nofollow noopener" data-track="home-book">See it on Amazon</a></div></div>
       <p class="botd-aff">Amazon affiliate link: we may earn a small commission, at no cost to you.</p></section></section>`;})()}
-  <a class="ie-promo" href="${BASE}ireland.html" data-track="ie-promo-home"><span class="ie-promo-k" lang="ga">Fáilte</span><b>SportingBrain Ireland</b><span>Three daily games on Irish sport: the Irish Brain, Name the County and Irish Legends. GAA, rugby, racing, boxing and more.</span><em>Play the Irish edition</em></a>
 
-  ${AD1}
-
-
-  ${AD2}
-  <header class="sh sm-top"><h2>Sporting moments</h2><a href="${BASE}more.html">More from SportingBrain</a></header>
+  <header class="sh sm-top" id="moments"><h2>Sporting moments</h2><a href="${BASE}on-this-day.html">On This Day</a></header>
   <div class="three two">
-    <section><header class="sh"><h2>${dlabel(mdNow)} in sport</h2><a href="${BASE}on-this-day.html">More from On This Day</a></header>
+    <section><header class="sh"><h2>${dlabel(mdNow)} in sport</h2><a href="${BASE}on-this-day.html">More</a></header>
       <ul class="otd-mini">${otd.map(e=>`<li><b>${e.y}</b><p>${esc(e.t)}</p></li>`).join('')}</ul></section>
     <section><header class="sh"><h2>Flashback</h2><a href="${BASE}flashback.html">All</a></header>
       <a class="story" href="${BASE}flashback/${fb.id}.html">${figure(fbPh)}<span class="kick">${esc(fb.sport)}, ${yrOf(fb)}${fbAnn?` · ${esc(fbAnn)}`:''}</span><h3>${esc(fb.title)}</h3><p>${esc(fb.standfirst)}</p></a></section>
+  </div>
 
-  </div>`;
+  ${AD2}
+  <section class="blk"><header class="sh"><h2>What's on SportingBrain</h2></header>
+    <div class="uk-about"><p>SportingBrain is a free daily sports site for Britain and Ireland. Every day there is a new Beat the Brain, five hard questions where you play against the Brain's score, plus Who Am I? and Ground Guesser. Pick a Sport gives you ten questions on the sport you know best, as often as you like.</p>
+    <p>Pick your team and it goes on every score you share. Women's sport gets the same space as men's. Facts are checked when we write them, and if you spot something wrong, <a data-mistake href="#">tell us</a> and we will fix it.</p></div></section>
+
+  <a class="ie-promo" href="${BASE}ireland.html" data-track="ie-promo-home"><span class="ie-promo-k" lang="ga">Fáilte</span><b>SportingBrain Ireland</b><span>The Irish edition: the Irish Brain, Name the County, Irish Legends and Pick a Sport. GAA, rugby, the League of Ireland and more.</span><em>Play the Irish edition</em></a>
+
+  <section class="blk"><header class="sh"><h2>More from SportingBrain</h2><a href="${BASE}more.html">Everything</a></header>
+    <div class="ps-groups">
+      <a href="${BASE}call-it.html"><b>Call It</b><span>A real match, frozen. Call what happens next.${cm?` Today: ${esc(cm.team)} v ${esc(cm.opp)}.`:''}</span></a>
+      <a href="${BASE}connections.html"><b>Connections: Sport</b><span>Sixteen names, four groups. New every day.</span></a>
+      <a href="${BASE}pub-quiz.html"><b>Pub and Club Quiz</b><span>Four rounds with answers, free to print.</span></a>
+      <a href="${BASE}newsletter.html"><b>The Weekly Brain</b><span>The week's hardest questions, every Friday. Free.</span></a>
+    </div></section>
+  <div data-nl-slot class="nl-slot"></div>`;
   // Pick your team, right on the home page: football first, the other sports one tap away.
   (function(){ const box=document.getElementById('ycHome'); if(!box) return;
     import('../data/teams.js').then(({TEAMS,SPORTS})=>{
@@ -369,7 +376,7 @@ if(P==='home'){
   // streak at risk: a small banner, not a pop-up (Super Prompt 5A)
   (function(){ const y=new Date(); y.setDate(y.getDate()-1); const h=+new Date().toLocaleString('en-GB',{timeZone:'Europe/London',hour:'2-digit',hour12:false});
     if(store.get('streak_banner_off',false) || store.get('lastday',null)!==ukKey(y) || store.get('hook_'+DAY,null) || h<18) return;
-    const b=document.createElement('p'); b.className='streak-risk'; b.innerHTML=`Your ${store.get('streak',1)}-day streak ends at midnight. <a href="#hook">Play today's challenge</a>`; main.prepend(b); })();
+    const b=document.createElement('p'); b.className='streak-risk'; b.innerHTML=`Your ${store.get('streak',1)}-day streak ends at midnight. <a href="${BASE}daily.html">Play today's challenge</a>`; main.prepend(b); })();
   // first-visit welcome after 5 seconds or the first scroll, never before
   { let fired=false; const go=()=>{ if(fired) return; fired=true; welcome(USP,false); }; setTimeout(go,5000); addEventListener('scroll',go,{once:true,passive:true}); }
 

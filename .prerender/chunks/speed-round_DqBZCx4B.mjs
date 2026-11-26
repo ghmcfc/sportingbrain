@@ -1,0 +1,22 @@
+import { t as __exportAll } from "./rolldown-runtime_D8jQpDG7.mjs";
+import { c as renderComponent, m as renderTemplate } from "./server_CmGXGesc.mjs";
+import { t as createComponent } from "./compiler_BTQQOE5i.mjs";
+import { t as $$Base } from "./Base_BwtY1iqR.mjs";
+// src/pages/speed-round.astro
+var speed_round_exports = /* @__PURE__ */ __exportAll({
+	default: () => $$SpeedRound,
+	file: () => $$file,
+	url: () => $$url
+});
+var $$SpeedRound = createComponent(($$result, $$props, $$slots) => {
+	return renderTemplate`${renderComponent($$result, "Base", $$Base, {
+		"title": "Speed Round: 60 seconds | SportingBrain",
+		"description": "Sixty seconds. As many right answers as you can.",
+		"page": "speed"
+	})}`;
+}, "/home/claude/sportingbrain/source/src/pages/speed-round.astro", void 0);
+var $$file = "/home/claude/sportingbrain/source/src/pages/speed-round.astro";
+var $$url = "/speed-round.html";
+// \0virtual:astro:page:src/pages/speed-round@_@astro
+var page = () => speed_round_exports;
+export { page };
