@@ -17,6 +17,7 @@ import { amz, picksFor } from '../data/shop.js';
 import { SEO } from '../data/seo.js';
 import { SHARE } from '../data/sharetext.js';
 import { PLAY as PLAYLIST } from '../data/playlist.js';
+import UkBand from '../components/UkBand.astro';
 const adsOn = !!ADS.client && !noads && !/^\/kids/.test(Astro.url.pathname);
 // Game pages: no ads while people play. AdSense loads once a game is finished (markPlayed calls SB_loadAds).
 const isGamePage = PLAYLIST.some(x => '/' + x[0] === Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '')) || /^\/(daily|ireland\/(brain|county|legends|quiz)|pick-a-sport)/.test(Astro.url.pathname);
@@ -40,16 +41,16 @@ const crumbs = (() => { const parts = pathKey.replace(/\.html$/, '').split('/').
     { '@type': 'ListItem', position: 3, name: pageTitle.replace(/ \|.*$/, ''), item: canonical } ] }; })();
 const ogImage = image || new URL(base + 'og.png', Astro.site).href;
 const nav = [
-  ['UK', base, 'today'],
+  ['Brain', base, 'today'],
   ['Ireland', `${base}ireland.html`, 'ireland'],
-  ['Brain', `${base}daily.html`, 'brain'],
-  ['Sports', `${base}pick-a-sport.html`, 'sports'],
+  ['Shop', `${base}gift-guide.html`, 'shop'],
   ['More', `${base}more.html`, 'more'],
 ];
 const path = Astro.url.pathname.replace(base, '/').replace(/\.html$/, '');
-const section = /^\/kids/.test(path) ? 'kids' : /^\/ireland/.test(path) ? 'ireland' : /^\/daily/.test(path) ? 'brain' : /^\/who-am-i/.test(path) ? 'whoami' : /^\/ground-guesser/.test(path) ? 'grounds' : /^\/pick-a-sport/.test(path) ? 'sports'
-  : (path === '/' || path === '/index') ? 'today' : /^\/(about|credits|settings|offline)/.test(path) ? '' : 'more';
+const section = /^\/kids/.test(path) ? 'kids' : /^\/ireland/.test(path) ? 'ireland' : /^\/gift-guide/.test(path) ? 'shop'
+  : (path === '/' || path === '/index' || /^\/(daily|who-am-i|ground-guesser|pick-a-sport)/.test(path)) ? 'today' : /^\/(about|credits|settings|offline)/.test(path) ? '' : 'more';
 const isKids = /^\/kids/.test(path);
+const ukCur = (path === '/' || path === '/index') ? 'hub' : path === '/daily' ? 'brain' : path === '/who-am-i' ? 'whoami' : path === '/ground-guesser' ? 'grounds' : path === '/pick-a-sport' ? 'sports' : '';
 const giftPicks = (!noads && !isKids) ? picksFor(path) : null;
 const slotPage = path === '/' || /^\/(index|daily)(\.html)?$/.test(path);
 const nlBar = !isKids && !noads && /^\/(flashback\/|stories|on-this-day|round-up|gift-guide|sports\/|read)/.test(path);
@@ -145,6 +146,7 @@ if(ios){document.addEventListener('DOMContentLoaded',function(){fill();bar();});
   <button type="button" class="sqt" data-sq="copy">Copy link</button>
   <button type="button" class="sqt nat" data-sq="native" hidden>More</button>
 </div>}
+{ukCur && <div class="wrap uk-band-wrap"><UkBand current={ukCur} /></div>}
 <main class:list={['wrap', { wide, jsdraw: !!(S.h1 && page), 'is-game': PLAYLIST.some(x => '/' + x[0] === path.replace(/\.html$/, '')) }]} data-page={page} id="main">{S.h1 && page && <div class="crawl"><h1>{S.h1}</h1>{S.intro && <p class="teaser">{S.intro}</p>}</div>}<slot /></main>
 {showNl && !slotPage && <aside class:list={["wrap nl-box", { wide }]} aria-labelledby="nlb-h">
   <div class="nlb-copy"><h2 id="nlb-h">The Weekly Brain</h2><p>{/^\/ireland/.test(path) ? "Every Friday: the week's five hardest questions plus an Irish section, with the Irish question of the week and the Irish sports book. Free." : "The week's five hardest questions, the best Call It moment and a forgotten story. Every Friday. Free."}</p></div>

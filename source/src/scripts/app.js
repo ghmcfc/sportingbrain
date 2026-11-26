@@ -93,7 +93,8 @@ function next3(items){ return `<div class="gtiles three-up">${items.map(i=>{ con
 const MORE = PLAY.filter(g=>!['archive','passport','sports-day','challenge','advent'].includes(g[0])).map(g=>['',g[1],BASE+g[0]+'.html']);
 const KIDZ = !!document.querySelector('.kz');
 const KIDS_GAMES=[['kids/9-12','Junior Brain quiz'],['kids/6-8','Little Legends quiz'],['kids/true-or-false','True or False'],['kids/guess-the-sport','Guess the Sport'],['kids/guess-the-player','Guess the Player'],['kids/the-grid','The Grid'],['kids/which-sport','Which Sport Are You?'],['kids/academy','Brain Academy']];
-const endNavHTML=()=>{ const here=location.pathname.replace(/\.html$/,''); const pool=(KIDZ?KIDS_GAMES:PLAY.filter(g=>!['archive','passport','sports-day','laughs'].includes(g[0])).map(g=>[g[0],g[1]])).filter(g=>!here.endsWith('/'+g[0])); const g=pool[Math.floor(Math.random()*pool.length)];
+const UK_CORE=[['daily','Beat the Brain'],['who-am-i','Who Am I?'],['ground-guesser','Ground Guesser'],['pick-a-sport','Pick a Sport']];
+const endNavHTML=()=>{ const here=location.pathname.replace(/\.html$/,''); if(!KIDZ && UK_CORE.some(g=>here.endsWith('/'+g[0]))){ const o=UK_CORE.filter(g=>!here.endsWith('/'+g[0])), g=o[Math.floor(Math.random()*o.length)]; return `<div class="end-nav">${badgeLineHTML()}<a class="btn gold" href="${BASE}${g[0]}.html">Next: ${esc(g[1])}</a><a class="btn ghost" href="${BASE}">SportingBrain UK home</a><a class="btn ghost" href="${BASE}ireland.html">SportingBrain Ireland</a><div data-app-card></div></div>`; } const pool=(KIDZ?KIDS_GAMES:PLAY.filter(g=>!['archive','passport','sports-day','laughs'].includes(g[0])).map(g=>[g[0],g[1]])).filter(g=>!here.endsWith('/'+g[0])); const g=pool[Math.floor(Math.random()*pool.length)];
   return `<div class="end-nav">${KIDZ?'':badgeLineHTML()}<a class="btn gold" href="${BASE}${g[0]}.html">Next game: ${esc(g[1])}</a><a class="btn ghost" href="${BASE}${KIDZ?'kids.html':''}">${KIDZ?'Kids Zone home':'Home'}</a></div>`; };
 const moreExcept = href => KIDZ ? '' : next3(shuffle(MORE.filter(m=>!href||!m[2].endsWith(href))).slice(0,3));
 
@@ -274,6 +275,13 @@ if(P==='home'){
     ${streak?`<p class="uk-streak">Your streak: <b>${streak} day${streak===1?'':'s'}</b> · New games in <b class="countdown" id="cd2"></b></p>`:`<p class="uk-streak">New games in <b class="countdown" id="cd2"></b></p>`}
   </section>
 
+  ${(()=>{const bk=BOOKS[((DAY-1)%BOOKS.length+BOOKS.length)%BOOKS.length], q=encodeURIComponent(bk[0]+' '+bk[1]).replace(/%20/g,'+'); return `<section class="botd botd-big" aria-label="Book of the Day">
+    <div class="botd-top"><span>Book of the Day</span><span>${esc(bk[2])}</span></div>
+    <div class="botd-row"><div class="botd-spine" aria-hidden="true"><b>${esc(bk[0])}</b></div>
+    <div><h2>${esc(bk[0])}</h2><p class="botd-by">${esc(bk[1])}</p><p>${esc(bk[3])}</p>
+    <div class="row"><a class="btn gold" href="https://www.amazon.co.uk/s?k=${q}&tag=gmh710f-21" target="_blank" rel="sponsored nofollow noopener" data-track="home-book-day">See it on Amazon</a><a class="btn ghost" href="${BASE}gift-guide.html" data-track="home-book-shop">Shop more sports gifts</a></div></div></div>
+    <p class="botd-aff">Amazon affiliate link: we may earn a small commission, at no cost to you.</p></section>`;})()}
+
   <section class="yc-home" id="ycHome" aria-live="polite"></section>
 
   <section class="blk"><header class="sh"><h2>Today's games</h2><a href="${BASE}play.html">All ${PLAY.length} games</a></header>
@@ -283,12 +291,6 @@ if(P==='home'){
     <div class="ps-groups">${SB_GROUPS.map(g=>`<a href="${BASE}pick-a-sport.html?s=${g[0]}" data-track="ps-home-${g[0]}"><b>${esc(g[1])}</b><span>${esc(g[2])}</span></a>`).join('')}<a class="ps-ie" href="${BASE}ireland/quiz.html"><b>Irish sport</b><span>GAA, Irish rugby, the League of Ireland and more</span></a></div></section>
 
   ${AD1}
-  ${(()=>{const wk=Math.floor((ukDayNo()+3)/7), bk=BOOKS[((wk%BOOKS.length)+BOOKS.length)%BOOKS.length], q=encodeURIComponent(bk[0]+' '+bk[1]).replace(/%20/g,'+'); return `<section class="blk"><header class="sh"><h2>Sports Book of the Week</h2><a href="${BASE}gift-guide.html">More gift ideas</a></header>
-    <section class="botd" aria-label="Sports Book of the Week"><div class="botd-top"><span>Book of the Week</span><span>${esc(bk[2])}</span></div>
-      <div class="botd-row"><div class="botd-spine" aria-hidden="true"><b>${esc(bk[0])}</b></div>
-      <div><h2>${esc(bk[0])}</h2><p class="botd-by">${esc(bk[1])}</p><p>${esc(bk[3])}</p>
-      <a class="btn gold sm" href="https://www.amazon.co.uk/s?k=${q}&tag=gmh710f-21" target="_blank" rel="sponsored nofollow noopener" data-track="home-book">See it on Amazon</a></div></div>
-      <p class="botd-aff">Amazon affiliate link: we may earn a small commission, at no cost to you.</p></section></section>`;})()}
 
   <header class="sh sm-top" id="moments"><h2>Sporting moments</h2><a href="${BASE}on-this-day.html">On This Day</a></header>
   <div class="three two">
@@ -407,7 +409,7 @@ if(P==='daily'){
           <a class="btn gold res-main" id="shWa" target="_blank" rel="noopener" data-track="daily-result-whatsapp">Challenge my mates on WhatsApp</a>
           <p class="res-more"><button type="button" class="linkbtn" id="sh" data-track="daily-result-share">More ways to share</button> · <button type="button" class="linkbtn" id="shCopy" data-track="daily-result-copy">Copy my score</button></p></div>
         ${keepPlaying('daily')}<div class="stats"><div><b>${store.get('streak',1)}</b>day streak</div><div><b>${store.get('played',1)}</b>played</div><div><b>${store.get('beaten',0)}</b>times you beat the Brain</div></div>
-        ${next?`<div class="row res-next">${next}</div>`:''}<p class="small">New questions in <span class="countdown" id="cd"></span></p><div data-app-card></div>`;
+        ${next?`<div class="row res-next">${next}</div>`:''}${endNavHTML()}<p class="small">New questions in <span class="countdown" id="cd"></span></p><div data-app-card></div>`;
       g.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ level=+b.dataset.lv; store.set('daily_level',level); render(); window.scrollTo({top:0,behavior:'smooth'}); });
       $('#shWa').href='https://wa.me/?text='+encodeURIComponent(card);
       $('#sh').onclick=()=>share(card);

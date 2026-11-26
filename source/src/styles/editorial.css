@@ -967,3 +967,17 @@ body > .pg-vs, .pg-vs:not(main *){max-width:1100px;margin:12px auto 0;padding:12
 .gtiles.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
 .uk-about{background:var(--paper);border:1px solid var(--rule);border-radius:3px;padding:16px 18px}
 .uk-about p{margin:0 0 10px}.uk-about p:last-child{margin:0}
+/* UK game bar: mirrors the green Irish bar */
+.uk-band-wrap{padding-top:0;padding-bottom:0}
+.uk-band{background:#0F1E36;color:#fff;margin:0 -14px 16px;border-bottom:4px solid #F2A900}
+@media(min-width:800px){.uk-band{margin:0 0 16px;border-radius:0 0 3px 3px}}
+.uk-band nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:0 10px}
+.uk-band nav::-webkit-scrollbar{display:none}
+.uk-band a{flex:none;color:#DCE3EE;text-decoration:none;font-family:var(--display);font-weight:700;font-size:1.08rem;letter-spacing:.02em;padding:10px 12px;line-height:1.1}
+.uk-band a small{display:block;font-family:var(--serif);font-weight:400;font-size:.72rem;letter-spacing:0;opacity:.8}
+.uk-band a[aria-current],.uk-band a:hover{color:#fff;box-shadow:inset 0 -4px 0 #F2A900}
+.uk-band .uk-home{color:#F2A900}
+.botd.botd-big{margin:0 0 18px;border-top:6px solid var(--amber);padding:18px 20px}
+.botd.botd-big h2{font-size:clamp(1.8rem,4vw,2.4rem)}
+.botd.botd-big .botd-spine{min-height:150px;width:104px}
+.botd.botd-big .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
