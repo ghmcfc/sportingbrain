@@ -222,8 +222,7 @@ h1{text-transform:uppercase;letter-spacing:.5px}
   <p id="sMsg"></p>
   <a class="sLink" id="sLink" href="#" target="_blank" rel="noopener"></a>
   <div class="share" id="shareG"></div>
-  <div class="sRow"><button class="btn" id="bCopyG">Copy link</button><button class="btn alt" id="bCopyI">Copy image</button></div>
-  <p class="sTip">Posting on WhatsApp, LinkedIn or Facebook? Copy the image too and paste it with your message so it always shows.</p>
+  <button class="btn" id="bCopyG">Copy link</button>
 </div></div>
 
 <div class="ov" id="ovApp"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="aH">
@@ -244,6 +243,7 @@ h1{text-transform:uppercase;letter-spacing:.5px}
   <div class="appcard" id="appCard" hidden><img src="/assets/riddlink-192.png" alt="" width="48" height="48"><div><b>Tomorrow's chain, one tap away</b><p>Put Riddlink on your home screen or desktop. Free, nothing to download, keeps your streak.</p><button class="btn" data-app-go="end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 7v7M9 11l3 3 3-3"/></svg> Add to home screen</button></div></div>
   <div id="shareBox">
     <div class="lbl">Share your result</div>
+    <button class="btn" id="bShareNative" hidden>Share your result</button>
     <div class="share" id="shareRow"></div>
     <div class="lbl">Challenge a friend</div>
     <p style="font-size:14px;color:var(--soft);margin:4px 0 0">They get the same three words and your score to beat.</p>
@@ -466,8 +466,13 @@ $('bHard').onclick=()=>{store.set('hard',!store.get('hard',false));showHard();if
 const PITCH='Riddlink Football: three linked cryptic football clues, a new chain every day. Can you crack it?';
 function gameText(){return PITCH+' '+SHARE_URL}
 function openShareG(){$('sMsg').textContent=PITCH;$('sLink').href=SHARE_URL;$('sLink').textContent=SHARE_URL;const t=gameText();$('shareG').innerHTML=[['WhatsApp',`https://wa.me/?text=${enc(t)}`],['X',`https://twitter.com/intent/tweet?text=${enc(t)}`],['LinkedIn',`https://www.linkedin.com/sharing/share-offsite/?url=${enc(SHARE_URL)}`],['Facebook',`https://www.facebook.com/sharer/sharer.php?u=${enc(SHARE_URL)}`]].map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${n}</a>`).join('');open('ovShare')}
-$('bShareG').onclick=openShareG;
-$('bCopyI').onclick=async()=>{try{const b=await (await fetch('riddlink-share.png')).blob();await navigator.clipboard.write([new ClipboardItem({'image/png':b})]);toast('Image copied. Paste it with your post')}catch(e){toast('Copy blocked here. Press and hold the image to save it',2600)}};$('bCopyG').onclick=()=>copy(gameText(),'Link copied. Paste it anywhere');
+let SHIMG=null;
+if(window.fetch)fetch('riddlink-share.png').then(r=>r.blob()).then(b=>{try{SHIMG=new File([b],'riddlink.png',{type:'image/png'})}catch(e){}}).catch(()=>{});
+function nativeShare(text){if(!navigator.share)return Promise.resolve(false);const d={text};try{if(SHIMG&&navigator.canShare&&navigator.canShare({files:[SHIMG]}))d.files=[SHIMG]}catch(e){}
+  return navigator.share(d).then(()=>true,e=>e&&e.name==='AbortError')}
+$('bShareG').onclick=()=>{if(navigator.share)nativeShare(gameText()).then(ok=>{if(!ok)openShareG()});else openShareG()};
+$('bShareNative').hidden=!navigator.share;
+$('bShareNative').onclick=()=>nativeShare(shareText()).then(ok=>{if(!ok)toast('Use the buttons below to share')});
 (function(){
   const ua=navigator.userAgent,ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1),and=/Android/.test(ua),mac=/Macintosh/.test(ua)&&!ios,safari=/Safari/.test(ua)&&!/Chrome|CriOS|Edg|FxiOS|Firefox/.test(ua);
   const inApp=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
