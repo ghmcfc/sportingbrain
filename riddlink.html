@@ -211,8 +211,7 @@ header{border-bottom:2px solid var(--ink);padding-top:14px}
   <p id="sMsg"></p>
   <a class="sLink" id="sLink" href="#" target="_blank" rel="noopener"></a>
   <div class="share" id="shareG"></div>
-  <div class="sRow"><button class="btn" id="bCopyG">Copy link</button><button class="btn alt" id="bCopyI">Copy image</button></div>
-  <p class="sTip">Posting on WhatsApp, LinkedIn or Facebook? Copy the image too and paste it with your message so it always shows.</p>
+  <button class="btn" id="bCopyG">Copy link</button>
 </div></div>
 
 <div class="ov" id="ovEnd"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="eH">
@@ -224,6 +223,7 @@ header{border-bottom:2px solid var(--ink);padding-top:14px}
   <div class="ans" id="eAns"></div>
   <div id="shareBox">
     <div class="lbl">Share your result</div>
+    <button class="btn" id="bShareNative" hidden>Share your result</button>
     <div class="share" id="shareRow"></div>
     <div class="lbl">Challenge a friend</div>
     <p style="font-size:14px;color:var(--soft);margin:4px 0 0">They get the same three words and your score to beat.</p>
@@ -446,8 +446,13 @@ $('bHard').onclick=()=>{store.set('hard',!store.get('hard',false));showHard();if
 const PITCH='Riddlink Business: three linked cryptic clues from the working world, a new chain every day. Can you crack it?';
 function gameText(){return PITCH+' '+SHARE_URL}
 function openShareG(){$('sMsg').textContent=PITCH;$('sLink').href=SHARE_URL;$('sLink').textContent=SHARE_URL;const t=gameText();$('shareG').innerHTML=[['WhatsApp',`https://wa.me/?text=${enc(t)}`],['X',`https://twitter.com/intent/tweet?text=${enc(t)}`],['LinkedIn',`https://www.linkedin.com/sharing/share-offsite/?url=${enc(SHARE_URL)}`],['Facebook',`https://www.facebook.com/sharer/sharer.php?u=${enc(SHARE_URL)}`]].map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${n}</a>`).join('');open('ovShare')}
-$('bShareG').onclick=openShareG;
-$('bCopyI').onclick=async()=>{try{const b=await (await fetch('riddlink-share.png')).blob();await navigator.clipboard.write([new ClipboardItem({'image/png':b})]);toast('Image copied. Paste it with your post')}catch(e){toast('Copy blocked here. Press and hold the image to save it',2600)}};$('bCopyG').onclick=()=>copy(gameText(),'Link copied. Paste it anywhere');
+let SHIMG=null;
+if(window.fetch)fetch('riddlink-share.png').then(r=>r.blob()).then(b=>{try{SHIMG=new File([b],'riddlink.png',{type:'image/png'})}catch(e){}}).catch(()=>{});
+function nativeShare(text){if(!navigator.share)return Promise.resolve(false);const d={text};try{if(SHIMG&&navigator.canShare&&navigator.canShare({files:[SHIMG]}))d.files=[SHIMG]}catch(e){}
+  return navigator.share(d).then(()=>true,e=>e&&e.name==='AbortError')}
+$('bShareG').onclick=()=>{if(navigator.share)nativeShare(gameText()).then(ok=>{if(!ok)openShareG()});else openShareG()};
+$('bShareNative').hidden=!navigator.share;
+$('bShareNative').onclick=()=>nativeShare(shareText()).then(ok=>{if(!ok)toast('Use the buttons below to share')});
 $('bHelp').onclick=()=>open('ovHelp');
 $('bStats').onclick=showEnd;
 async function copy(t,msg){try{await navigator.clipboard.writeText(t);toast(msg)}catch(e){toast('Copy blocked here. Try another browser')}}
