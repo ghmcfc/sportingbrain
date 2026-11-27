@@ -122,5 +122,5 @@ body.dark .ie.uk{--ie-cream:#1b2433;--ie-g2:#F2A900}
 .iec-res{grid-template-columns:1fr;margin:18px 0 6px;text-align:left}
 .iec-tile{border-top-color:var(--ie-gold);background:linear-gradient(180deg,#fff8e1,var(--paper))}
 body.dark .iec-tile{background:var(--paper)}
-@media(max-width:600px){.iec{grid-template-columns:1fr;padding:18px 16px}.iec-art{display:none}.iec-slim{grid-template-columns:minmax(0,1fr) auto}}
+@media(max-width:600px){.iec{grid-template-columns:1fr;padding:16px 16px 18px}.iec h2{font-size:2.3rem}.iec p{font-size:.98rem;margin-bottom:12px}.iec .iec-btn{display:block;text-align:center}.iec-art{display:none}.iec-slim{grid-template-columns:minmax(0,1fr) auto}}
 @media(prefers-reduced-motion:reduce){.iec:hover{transform:none}}
