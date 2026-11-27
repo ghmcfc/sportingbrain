@@ -172,7 +172,6 @@ header{border-bottom:2px solid var(--ink);padding-top:14px}
 <main id="main">
   <div class="mode" id="mode"></div>
   <button class="today" id="bToday">Back to today's puzzle</button>
-  <button class="today on" id="bPrac">Practice: random puzzle</button>
   <div class="chain" id="chain"></div>
   <div class="meter"><span><b id="left"></b> guesses left</span><div class="pips" id="pips"></div></div>
   <div class="clue" id="clue"></div>
@@ -223,7 +222,6 @@ header{border-bottom:2px solid var(--ink);padding-top:14px}
   <div class="meta" id="eMeta"></div>
   <div class="vs" id="eVs" hidden></div>
   <div class="ans" id="eAns"></div>
-  <button class="btn alt" id="bPrac2">Play a practice puzzle</button>
   <div id="shareBox">
     <div class="lbl">Share your result</div>
     <div class="share" id="shareRow"></div>
@@ -433,9 +431,6 @@ function showEnd(){
   open('ovEnd');
 }
 $('arch').addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(!b)return;closeAll();CH=null;newGame(+b.dataset.d,true);resetSlots();renderBoard();renderChain();$('bToday').classList.add('on')});
-function randChain(){const W=Object.keys(CLUES),pk=a=>a[Math.random()*a.length|0];for(let t=0;t<800;t++){const a=pk(W),b=W.filter(x=>x!==a&&x[0]===a.slice(-1));if(!b.length)continue;const m=pk(b),c=W.filter(x=>x!==a&&x!==m&&x[0]===m.slice(-1));if(!c.length)continue;const ch=[a,m,pk(c)];if(t>600||ch.some(x=>x.length!==5))return ch}return chainFor(dayNum())}
-function newPractice(){closeAll();CH=null;practice=true;G=blank(dayNum());G.chain=randChain();G.free=true;resetSlots();renderBoard();renderChain();$('bToday').classList.add('on')}
-$('bPrac').onclick=newPractice;$('bPrac2').onclick=newPractice;
 $('bToday').onclick=()=>{newGame(dayNum());resetSlots();renderBoard();renderChain();$('bToday').classList.remove('on');if(G.over)setTimeout(showEnd,300)};
 function open(id){$(id).classList.add('show')}
 function closeAll(){document.querySelectorAll('.ov').forEach(o=>o.classList.remove('show'))}
