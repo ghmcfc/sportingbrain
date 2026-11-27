@@ -316,7 +316,7 @@ function renderChain(){
   $('left').textContent=s;
   $('pips').innerHTML=Array.from({length:pool()},(_,i)=>`<div class="pip ${i>=s?'used':s<=3?'warn':''}"></div>`).join('');
   const md=$('mode');md.className='mode'+(CH?' ch':'');
-  md.textContent=(G.hard?'Hard mode · ':'')+(CH?`${CH.name}'s challenge: ${CH.spare<0?'they snapped, so just finish it':`beat ${CH.spare} spare`}`:G.free?'Practice puzzle · random words · not counted':practice?`Archive #${G.day} · ${fmtDate(G.day)} · doesn't count toward your streak`:`${ED.short} #${G.day} · ${dayInfo(G.day)[0]} (${dayInfo(G.day)[1]})`);
+  md.textContent=(G.hard?'Hard mode · ':'')+(CH&&CH.old?`${CH.name} sent you ${ED.short} · here's today's chain`:CH?`${CH.name}'s challenge: ${CH.spare<0?'they snapped, so just finish it':`beat ${CH.spare} spare`}`:G.free?'Practice puzzle · random words · not counted':practice?`Archive #${G.day} · ${fmtDate(G.day)} · doesn't count toward your streak`:`${ED.short} #${G.day} · ${dayInfo(G.day)[0]} (${dayInfo(G.day)[1]})`);
   const st=store.get('stats',{streak:0});
   $('streak').textContent=st.streak?`🔥 ${st.streak}`:'';$('streak').title=st.streak?st.streak+' day streak':'';
 }
@@ -435,8 +435,8 @@ function showEnd(){
   ['eMsg','shareBox','eAns','eMeta'].forEach(i=>$(i).style.display=live?'none':'');
   if(!live){$('nm').value=store.get('name','');shareLinks()}
   if(G.free)$('shareBox').style.display='none';
-  const vs=$('eVs');vs.hidden=!(CH&&G.over);
-  if(CH&&G.over){const me=won?s:-1,th=CH.spare;vs.className='vs'+(me>th?' win':'');vs.textContent=me>th?`You beat ${CH.name}!`:me===th?`Dead heat with ${CH.name}.`:`${CH.name} wins this one. Challenge them back.`}
+  const vs=$('eVs');vs.hidden=!(CH&&!CH.old&&G.over);
+  if(CH&&!CH.old&&G.over){const me=won?s:-1,th=CH.spare;vs.className='vs'+(me>th?' win':'');vs.textContent=me>th?`You beat ${CH.name}!`:me===th?`Dead heat with ${CH.name}.`:`${CH.name} wins this one. Challenge them back.`}
   $('eH').textContent=live?'Statistics':won?rankOf(true,s)+'!':ED.lost;
   $('eMsg').textContent=won?(s>=4?`All three with ${s} guesses to spare. Brilliant.`:`Done, with ${s} to spare. Can you beat it tomorrow?`):'Out of guesses. The three words were:';
   const h=helpsUsed();$('eMeta').textContent=[took()&&`Time ${took()}`,`${h} help${h===1?'':'s'} used`].filter(Boolean).join(' · ');
@@ -512,8 +512,10 @@ function tick(){const n=new Date(),m=new Date(n);m.setHours(24,0,0,0);const d=Ma
 setInterval(tick,1000);
 CH=readChallenge();
 const today=dayNum();
-if(CH&&CH.seed>=1&&CH.seed<today)newGame(CH.seed,true);else newGame(today);
-if(CH&&!used()&&!G.over)G.hard=CH.hard;
+const fresh=!store.get('seen',false)&&!store.get('stats',null)&&!store.get('day',null);
+if(CH&&fresh&&CH.seed!==today)CH.old=true;
+if(CH&&!fresh&&CH.seed>=1&&CH.seed<today)newGame(CH.seed,true);else newGame(today);
+if(CH&&!fresh&&!CH.old&&!used()&&!G.over)G.hard=CH.hard;
 G.restored=true;resetSlots();renderBoard();renderChain();tick();
 if(!store.get('seen',false)&&!G.over){store.set('seen',true);open('ovHelp')}
 else if(G.over)setTimeout(showEnd,400);
