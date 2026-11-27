@@ -10,6 +10,7 @@ const GUIDE = {"irish": true, "title": "How the Irish Brain works", "intro": ["T
   <IeBand current="brain" />
   <div class="ie">
     <header class="ie-head"><p class="ga" lang="ga">Dúshlán an Lae</p><h1>The Irish Brain</h1><p>Five hard questions on Irish sport, new every day. Three Hard, then two Expert. Hurling and football, rugby, racing, boxing, the League of Ireland and the rest. No easy ones.</p></header>
+    <a class="iec iec-slim" href="clash-hurling.html" data-track="iebrain-clash-top"><span class="iec-new">New</span><div class="iec-txt"><h2>Clash Hurling</h2><p>Our free hurling game. Catch, strike, hook and block. Play a two-minute match after today's quiz.</p></div><span class="btn gold iec-btn">Play</span></a>
     <div id="vs"></div>
     <section class="pg-card ie-game" id="ib" aria-live="polite"></section>
     <AdSlot name="game_result" />
@@ -59,6 +60,7 @@ const GUIDE = {"irish": true, "title": "How the Irish Brain works", "intro": ["T
         <p class="ie-brain">The Brain scored ${brain}. ${verdict}</p>
         ${!practice && st.n ? `<p class="ie-note">Streak: ${st.n} day${st.n === 1 ? '' : 's'} · Best: ${st.best}</p>` : ''}
         <div class="pg-btns"><button class="btn gold" id="shr">Share my score</button><a class="btn ghost" href="?practice=1">Practice round</a><a class="btn ghost" href="county.html">Next: Name the County</a></div>
+        <a class="iec iec-res" href="clash-hurling.html" data-track="iebrain-clash-result"><span class="iec-new">New</span><div class="iec-txt"><p class="ga" lang="ga">Anois</p><h2>Now play Clash Hurling</h2><p>Take your county into a two-minute match. Attack, defend, penalties if it's level.</p><span class="btn gold iec-btn">Play Clash Hurling</span></div></a>
         ${day > 1 && !practice ? `<p class="pg-step" style="margin-top:16px">Missed one? Play an earlier day</p><div class="ie-arch">${Array.from({ length: Math.min(14, today - 1) }, (_, k) => today - 1 - k).filter(d => d !== day).map(d => `<a href="?day=${d}">#${d}</a>`).join('')}</div>` : ''}</div>`;
       box.querySelector('#shr').onclick = () => share(`SportingBrain Ireland · The Irish Brain #${day}\n${grid} ${sc}/5 (the Brain got ${brain})${countyTag()}`, challengeUrl('', sc, 5));
       box.appendChild(challengeBox(sc, 5, 'The Irish Brain'));

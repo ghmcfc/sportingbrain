@@ -16,8 +16,14 @@ const sorted = MOMENTS.slice().sort((a, b) => a[0].localeCompare(b[0]));
       <p class="ga" lang="ga">Fáilte</p>
       <h1>Ireland's daily sports games</h1>
       <p>Three new games every day on Irish sport, from Croke Park to Cheltenham, Thomond Park to Tallaght. Hurling and football, camogie and ladies' football, rugby, the League of Ireland, boxing, racing, golf and more. Hard questions, all 32 counties, men's and women's sport. Free, no sign-up, no betting.</p>
-      <div class="row"><a class="btn gold" href={`${base}ireland/brain.html`} data-track="ie-hero-play">Play today's Irish Brain</a><a class="btn ghost" href="#moments">Irish sporting moments</a></div>
+      <div class="row"><a class="btn gold" href={`${base}ireland/brain.html`} data-track="ie-hero-play">Play today's Irish Brain</a><a class="btn gold" href={`${base}ireland/clash-hurling.html`} data-track="ie-hero-clash">Play Clash Hurling</a><a class="btn ghost" href="#moments">Irish sporting moments</a></div>
     </section>
+
+    <a class="iec" href={`${base}ireland/clash-hurling.html`} data-track="ie-clash-banner">
+      <span class="iec-new">New · Nua</span>
+      <div class="iec-txt"><p class="ga" lang="ga">Cluiche Iománaíochta</p><h2>Clash Hurling</h2><p>The free hurling game for your phone. Catch it, strike it, hand pass it. Then hook, block and intercept to keep them out. Pick your county, play a two-minute match or a penalty shootout.</p><span class="btn gold iec-btn">Play Clash Hurling</span></div>
+      <svg class="iec-art" viewBox="0 0 220 150" aria-hidden="true"><g stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M150 8V100M196 8V100M150 62H196"/></g><path d="M152 64h42v36h-42z" fill="rgba(255,255,255,.14)"/><path d="M40 130l84-100" stroke="#c98f52" stroke-width="7" stroke-linecap="round"/><ellipse cx="128" cy="24" rx="16" ry="9" transform="rotate(-50 128 24)" fill="#e9bd82" stroke="#10223a" stroke-width="2"/><path d="M150 28q20-14 30-6" stroke="rgba(255,255,255,.7)" stroke-width="3" fill="none" stroke-dasharray="4 5"/><circle cx="184" cy="26" r="7" fill="#fffdf4" stroke="#10223a" stroke-width="2"/></svg>
+    </a>
 
     <div class="ie-county" id="ieCounty"></div>
 
@@ -34,6 +40,7 @@ const sorted = MOMENTS.slice().sort((a, b) => a[0].localeCompare(b[0]));
       <a class="ie-tile" href={`${base}ireland/brain.html`} data-g="ieb"><span class="ga" lang="ga">Dúshlán an Lae</span><b>The Irish Brain</b><span>Five hard questions on Irish sport. Three Hard, two Expert. The Brain has already had a go.</span><small data-st>Not played yet today</small></a>
       <a class="ie-tile" href={`${base}ireland/county.html`} data-g="iec"><span class="ga" lang="ga">Cén Contae?</span><b>Name the County</b><span>Five clues to one of the 32 counties. History, ground, nickname, colours.</span><small data-st>Not played yet today</small></a>
       <a class="ie-tile" href={`${base}ireland/legends.html`} data-g="iel"><span class="ga" lang="ga">Cé Mise?</span><b>Irish Legends</b><span>Five clues to one of Ireland's sporting greats. Hardest clue first.</span><small data-st>Not played yet today</small></a>
+      <a class="ie-tile iec-tile" href={`${base}ireland/clash-hurling.html`} data-track="ie-clash-tile"><span class="ga" lang="ga">Cluiche Nua</span><b>Clash Hurling</b><span>Our new hurling game. Attack, defend, then penalties if it's level. Two minutes a match.</span><small>New · play any time</small></a>
     </div>
 
     <div class="ie-sec"><h2>Pick a sport</h2><span lang="ga">Rogha Spóirt</span></div>

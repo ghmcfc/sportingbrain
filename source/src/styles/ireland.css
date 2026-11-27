@@ -107,3 +107,20 @@ body.dark .ie.uk{--ie-cream:#1b2433;--ie-g2:#F2A900}
 .ie-knot.ukk{background-color:#1F4B99;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='14' viewBox='0 0 20 14'%3E%3Cpath d='M0 10L5 4L10 10L15 4L20 10' fill='none' stroke='%23F2A900' stroke-width='2.2'/%3E%3C/svg%3E")}
 .uk-band-wrap{padding-top:0;padding-bottom:0}
 .uk-band-wrap:not(.wide){max-width:780px}
+
+/* Clash Hurling feature */
+.iec{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:10px;align-items:center;margin:0 0 18px;padding:22px 22px 20px;border-radius:6px;text-decoration:none;color:#fff;background:linear-gradient(135deg,#1e6bd6 0%,#0F1E36 70%);border:3px solid var(--ie-gold);box-shadow:0 6px 0 #0b1526;overflow:hidden}
+.iec:hover,.iec:focus-visible{transform:translateY(-2px);box-shadow:0 8px 0 #0b1526}
+.iec-new{position:absolute;top:12px;right:-34px;transform:rotate(35deg);background:var(--ie-gold);color:var(--ie-ink);font:800 .8rem/1 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:6px 40px}
+.iec .ga{font-family:var(--display);color:var(--ie-gold);font-weight:800;letter-spacing:.05em;margin:0}
+.iec h2{font-size:clamp(2.1rem,6vw,3.4rem);line-height:.95;margin:2px 0 8px;color:#fff}
+.iec p{color:#dbe6f2;margin:0 0 14px;max-width:52ch}
+.iec .iec-btn{background:var(--ie-gold);color:var(--ie-ink);font-size:1.1rem;padding:12px 22px}
+.iec-art{width:100%;height:auto}
+.iec-slim{grid-template-columns:minmax(0,1fr) auto;padding:14px 18px;margin-bottom:14px}
+.iec-slim h2{font-size:1.7rem;margin:0 0 4px}.iec-slim p{margin:0;font-size:.95rem}
+.iec-res{grid-template-columns:1fr;margin:18px 0 6px;text-align:left}
+.iec-tile{border-top-color:var(--ie-gold);background:linear-gradient(180deg,#fff8e1,var(--paper))}
+body.dark .iec-tile{background:var(--paper)}
+@media(max-width:600px){.iec{grid-template-columns:1fr;padding:18px 16px}.iec-art{display:none}.iec-slim{grid-template-columns:minmax(0,1fr) auto}}
+@media(prefers-reduced-motion:reduce){.iec:hover{transform:none}}
