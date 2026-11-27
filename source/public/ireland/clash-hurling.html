@@ -374,7 +374,7 @@ function land(now){
  if(score){if(f.out==='goal'){T.g++;if(mine){const p=P3(f.to.x,f.to.z,f.to.h);FX.ripple={X:p.X,Y:p.Y,t0:now}}shake(7)}else T.p++;
   if(mine)M.flag={c:f.out==='goal'?'#22a04a':'#ffffff',side:f.to.x<0?-1:1,t0:now}}
  if(mine){if(score){cheer();excite();if(f.out==='goal')confetti();seq(E.me,[['cheer',250],['cheer',400],['idle',300]])}else{groan();seq(E.me,[['slump',250]])}
-  flash(score?(f.out==='goal'?'GOAL!':'POINT!'):f.out==='saved'?'SAVED':'WIDE',score?(f.sub||'Over the bar'):f.out==='saved'?'Keeper got down to it':(f.sub||'Pulled it'),score);endPoss(score)}
+  flash(score?(f.out==='goal'?'GOAL!':'POINT!'):f.out==='saved'?'SAVED':'WIDE',score?(f.sub||(f.out==='goal'?'In the back of the net':'Over the bar')):f.out==='saved'?'Keeper got down to it':(f.sub||'Pulled it'),score);endPoss(score)}
  else{if(score){groan();seq(E.fwd,[['cheer',250]])}else{cheer();excite();seq(E.keep,[['cheer',250],['idle',400]])}
   flash(score?(f.out==='goal'?'GOAL':'POINT'):f.out==='saved'?'SAVED!':'WIDE!',score?C[opp].n+' score':f.out==='saved'?'Your keeper stands tall':'Let off',!score);endPoss(!score)}
 }
