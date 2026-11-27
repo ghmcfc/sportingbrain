@@ -124,3 +124,11 @@ body.dark .ie.uk{--ie-cream:#1b2433;--ie-g2:#F2A900}
 body.dark .iec-tile{background:var(--paper)}
 @media(max-width:600px){.iec{grid-template-columns:1fr;padding:16px 16px 18px}.iec h2{font-size:2.3rem}.iec p{font-size:.98rem;margin-bottom:12px}.iec .iec-btn{display:block;text-align:center}.iec-art{display:none}.iec-slim{grid-template-columns:minmax(0,1fr) auto}}
 @media(prefers-reduced-motion:reduce){.iec:hover{transform:none}}
+
+/* Clash Hurling and the welcome banner side by side on wider screens */
+.ie-top{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:18px}
+.ie-top>.iec,.ie-top>.ie-hero{margin:0}
+@media(min-width:860px){.ie-top{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}
+ .ie-top>.iec{grid-template-columns:minmax(0,1fr) 120px;align-content:center}
+ .ie-top .ie-hero h1{font-size:clamp(2.4rem,4.2vw,3.6rem)}
+ .ie-top .ie-hero p{font-size:1rem}}

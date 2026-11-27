@@ -12,6 +12,7 @@ const sorted = MOMENTS.slice().sort((a, b) => a[0].localeCompare(b[0]));
 <Base image="https://sportingbrain.com/og-ireland.png" title="SportingBrain Ireland: daily Irish sports quizzes and games" description="Free daily games on Irish sport: the Irish Brain quiz, Name the County and Irish Legends. GAA, rugby, football, racing, boxing and more. Pick your county or club and play." page="ireland" wide>
   <IeBand current="hub" />
   <div class="ie">
+   <div class="ie-top">
     <a class="iec" href={`${base}ireland/clash-hurling.html`} data-track="ie-clash-banner">
       <span class="iec-new">New · Nua</span>
       <div class="iec-txt"><p class="ga" lang="ga">Cluiche Iománaíochta</p><h2>Clash Hurling</h2><p>The free hurling game for your phone. Catch it, strike it, hand pass it. Then hook, block and intercept to keep them out. Pick your county, play a two-minute match or a penalty shootout.</p><span class="btn gold iec-btn">Play Clash Hurling</span></div>
@@ -21,8 +22,9 @@ const sorted = MOMENTS.slice().sort((a, b) => a[0].localeCompare(b[0]));
       <p class="ga" lang="ga">Fáilte</p>
       <h1>Ireland's daily sports games</h1>
       <p>Three new games every day on Irish sport, from Croke Park to Cheltenham, Thomond Park to Tallaght. Hurling and football, camogie and ladies' football, rugby, the League of Ireland, boxing, racing, golf and more. Hard questions, all 32 counties, men's and women's sport. Free, no sign-up, no betting.</p>
-      <div class="row"><a class="btn gold" href={`${base}ireland/brain.html`} data-track="ie-hero-play">Play today's Irish Brain</a><a class="btn gold" href={`${base}ireland/clash-hurling.html`} data-track="ie-hero-clash">Play Clash Hurling</a><a class="btn ghost" href="#moments">Irish sporting moments</a></div>
+      <div class="row"><a class="btn gold" href={`${base}ireland/brain.html`} data-track="ie-hero-play">Play today's Irish Brain</a><a class="btn ghost" href="#moments">Irish sporting moments</a></div>
     </section>
+   </div>
 
 
     <div class="ie-county" id="ieCounty"></div>

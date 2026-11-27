@@ -32,6 +32,9 @@ canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;displa
 .ov{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;gap:14px;padding:22px 18px 28px;overflow-y:auto;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.94) 34%,#fff);color:var(--ink)}
 .ov[hidden]{display:none}
 .ov>*{flex:none}
+.big[hidden],.icon[hidden]{display:none}
+#over,.sheet{background:#fff}
+.row .big{font-size:23px}
 h1{font:clamp(72px,22vw,104px)/.86 Anton,Impact,sans-serif;margin:6px 0 0;color:#10223a;-webkit-text-stroke:0}
 h2{font:46px/1 Anton,Impact,sans-serif;margin:24px 0 0}
 .sub{margin:0;color:var(--mut);font-weight:600;font-size:17px}
@@ -52,21 +55,42 @@ details p,details li{color:#2b3f57;font-size:15px;max-width:62ch}
 details ul{padding-left:18px;margin:6px 0}
 .res{font:56px/1 Anton,Impact,sans-serif;margin:0}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sheet{justify-content:center;background:#fff}
+.pick{display:flex;align-items:center;gap:10px}.pick i{flex:none;width:44px;height:44px;border-radius:50%;border:3px solid #10223a;background:linear-gradient(90deg,var(--ca,#1a1a1a) 50%,var(--cb,#f2b705) 50%)}
+.pick select{flex:1;height:52px;border-radius:14px;border:3px solid #0b1526;background:#fff;color:#10223a;font:22px Anton,Impact,sans-serif;padding:0 12px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.seg button{height:48px;border-radius:14px;border:3px solid #0b1526;background:#fff;color:#10223a;font:19px Anton,Impact,sans-serif;cursor:pointer}.seg button[aria-pressed=true]{background:#10223a;color:#fff}
+.path{list-style:none;margin:0;padding:0;display:grid;gap:8px}.path li{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 14px;border-radius:14px;border:2px solid rgba(16,34,58,.18);font:600 15px Barlow,sans-serif}
+.path li b{font:18px Anton,Impact,sans-serif}.path li em{font-style:normal;font-weight:700;color:#4d6178}.path li.won{background:#e6f7ea;border-color:#3fd16a}.path li.now{background:#fff4c9;border-color:#ffd23f;border-width:3px}
+.links{display:grid;gap:10px}
+.links a,.links button{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:16px;border:3px solid #0b1526;background:#fff;color:#10223a;font:22px/1 Anton,Impact,sans-serif;text-decoration:none;box-shadow:0 5px 0 #0b1526;cursor:pointer}
+.links .wa{background:#25d366}
+.steps{font:600 17px/1.5 Barlow,sans-serif;color:#10223a;padding-left:22px;margin:0}
+.toast{position:absolute;left:50%;bottom:120px;transform:translateX(-50%);background:#10223a;color:#fff;font:700 15px Barlow,sans-serif;padding:12px 18px;border-radius:12px;z-index:9;pointer-events:none}
+@media(max-width:420px){.mark b{display:none}.icon{padding:0 10px}}
 @media (prefers-reduced-motion:reduce){.ctl button:active,.big:active{transform:none}}
 </style><link rel="canonical" href="https://sportingbrain.com/ireland/clash-hurling.html">
 <meta property="og:image" content="https://sportingbrain.com/og-ireland.png">
 <script data-goatcounter="https://sportingbrain.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="manifest" href="/ireland/clash-hurling.webmanifest">
+<link rel="apple-touch-icon" href="/ireland/clash-180.png">
+<meta name="theme-color" content="#13233a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Clash Hurling">
 </head><body>
 <div class="app" id="main">
-  <div class="top"><div class="mark"><a href="/ireland.html" style="color:#8fb3d9;text-decoration:none;font:600 14px Barlow,sans-serif;margin-right:8px">&larr; SportingBrain</a>CLASH <b>hurling</b></div><div class="icons"><button class="icon" id="snd" aria-pressed="false">Sound on</button><button class="icon" id="menuBtn">Menu</button></div></div>
+  <div class="top"><div class="mark"><a href="/ireland.html" style="color:#8fb3d9;text-decoration:none;font:600 14px Barlow,sans-serif;margin-right:8px">&larr; SportingBrain</a>CLASH <b>hurling</b></div><div class="icons"><button class="icon" id="shareTop">Share</button><button class="icon" id="snd" aria-pressed="false" aria-label="Sound on">Sound</button><button class="icon" id="menuBtn">Menu</button></div></div>
   <div class="stage"><canvas id="c" aria-label="Hurling game"></canvas>
     <div class="ov" id="menu">
       <h1>CLASH</h1>
       <p class="sub">Quick-fire hurling. Six attacks, six defences, turn about. Under two minutes a match.</p>
       <p class="lbl">Your county</p>
-      <div class="chips" id="counties"></div>
-      <button class="big pri" data-m="match">Play a match<small>Attack, then defend, then attack. Level after twelve plays? Penalties.</small></button>
+      <div class="pick"><i id="swatch"></i><select id="counties" aria-label="Your county"></select></div>
+      <p class="lbl">Level</p>
+      <div class="seg" id="diff"><button data-d="0">Club</button><button data-d="1">County</button><button data-d="2">All-Star</button></div>
+      <button class="big pri" data-m="champ">All-Ireland Championship<small>Four knockout games to Croke Park. Each round gets harder.</small></button>
+      <button class="big" data-m="match">Quick match<small>Six attacks, six defences, turn about. Level? Penalties.</small></button>
       <button class="big" data-m="pens">Penalty shootout<small>Five each from the 20m line, then sudden death.</small></button>
+      <div class="row"><button class="big" id="shareGame">Share the game<small>WhatsApp, text, socials</small></button><button class="big" id="install">Add to home screen<small>Play it like an app</small></button></div>
       <p class="best" id="best"></p>
       <details><summary>How to play</summary>
         <p><b>Your ball.</b> A teammate sends it in and a ring closes on the sliotar. Act as it meets the inner circle.</p>
@@ -89,9 +113,12 @@ details ul{padding-left:18px;margin:6px 0}
     <div class="ov" id="over" hidden>
       <h2 id="ovT">Full time</h2>
       <p class="res" id="ovR"></p>
+      <ol class="path" id="ovPath" hidden></ol>
       <p class="sub" id="ovS"></p>
+      <button class="big" id="shareRes">Share your result<small>Challenge your mates to beat it</small></button>
       <div class="row"><button class="big pri" id="again">Play again</button><button class="big" id="toMenu">Menu</button></div>
     </div>
+    <div class="ov sheet" id="sheet" hidden><h2 id="shT">Share</h2><p class="sub" id="shP"></p><div id="shL" class="links"></div><button class="big" id="shClose">Close</button></div>
   </div>
 </div>
 <script>
@@ -99,18 +126,20 @@ details ul{padding-left:18px;margin:6px 0}
 const $=s=>document.querySelector(s);
 const cv=$('#c');let ctx=cv.getContext('2d');
 const W=360,H=560,POSS=6;let VH=620,PRESS={i:-1,t:0};
-const C=[
- {n:'Kilkenny',s:'KIL',a:'#1a1a1a',b:'#f2b705'},{n:'Cork',s:'COR',a:'#d0021b',b:'#ffffff'},{n:'Tipperary',s:'TIP',a:'#1e4fa3',b:'#f2c200'},
- {n:'Limerick',s:'LIM',a:'#0a8a43',b:'#ffffff'},{n:'Galway',s:'GAL',a:'#7a1230',b:'#ffffff'},{n:'Clare',s:'CLA',a:'#f5c400',b:'#1d4fa0'},
- {n:'Waterford',s:'WAT',a:'#f7f7f7',b:'#1f5aa6'},{n:'Wexford',s:'WEX',a:'#5b2a86',b:'#f2c200'},{n:'Dublin',s:'DUB',a:'#6cb4e4',b:'#0b2a5b'},
- {n:'Antrim',s:'ANT',a:'#f2c200',b:'#ffffff'}];
+const C=[{n:'Antrim',s:'ANT',a:'#f2c200',b:'#ffffff'},{n:'Armagh',s:'ARM',a:'#f28c00',b:'#ffffff'},{n:'Carlow',s:'CAR',a:'#0a8a43',b:'#f2c200'},{n:'Cavan',s:'CAV',a:'#1e4fa3',b:'#ffffff'},{n:'Clare',s:'CLA',a:'#f5c400',b:'#1d4fa0'},{n:'Cork',s:'COR',a:'#d0021b',b:'#ffffff'},{n:'Derry',s:'DER',a:'#c8102e',b:'#ffffff'},{n:'Donegal',s:'DON',a:'#f2c200',b:'#0a8a43'},{n:'Down',s:'DOW',a:'#d0021b',b:'#1a1a1a'},{n:'Dublin',s:'DUB',a:'#6cb4e4',b:'#0b2a5b'},{n:'Fermanagh',s:'FER',a:'#0a8a43',b:'#ffffff'},{n:'Galway',s:'GAL',a:'#7a1230',b:'#ffffff'},{n:'Kerry',s:'KER',a:'#0a8a43',b:'#f2c200'},{n:'Kildare',s:'KDE',a:'#f7f7f7',b:'#7d8794'},{n:'Kilkenny',s:'KIL',a:'#1a1a1a',b:'#f2b705'},{n:'Laois',s:'LAO',a:'#1f4fa3',b:'#ffffff'},{n:'Leitrim',s:'LEI',a:'#0a8a43',b:'#f2c200'},{n:'Limerick',s:'LIM',a:'#0a8a43',b:'#ffffff'},{n:'Longford',s:'LON',a:'#1e4fa3',b:'#f2c200'},{n:'Louth',s:'LOU',a:'#d0021b',b:'#ffffff'},{n:'Mayo',s:'MAY',a:'#0a8a43',b:'#d0021b'},{n:'Meath',s:'MEA',a:'#0a8a43',b:'#f2c200'},{n:'Monaghan',s:'MON',a:'#f7f7f7',b:'#1e4fa3'},{n:'Offaly',s:'OFF',a:'#0a8a43',b:'#f2c200'},{n:'Roscommon',s:'ROS',a:'#f2c200',b:'#1e4fa3'},{n:'Sligo',s:'SLI',a:'#1a1a1a',b:'#ffffff'},{n:'Tipperary',s:'TIP',a:'#1e4fa3',b:'#f2c200'},{n:'Tyrone',s:'TYR',a:'#f7f7f7',b:'#d0021b'},{n:'Waterford',s:'WAT',a:'#f7f7f7',b:'#1f5aa6'},{n:'Westmeath',s:'WES',a:'#7a1230',b:'#ffffff'},{n:'Wexford',s:'WEX',a:'#5b2a86',b:'#f2c200'},{n:'Wicklow',s:'WIC',a:'#1e4fa3',b:'#f2c200'}];
 const store={get(k){try{return +localStorage.getItem(k)||0}catch(e){return 0}},set(k,v){try{localStorage.setItem(k,String(v))}catch(e){}}};
-let me=Math.min(C.length-1,store.get('clash-county')),opp=1,mode='menu',muted=false,BTN=[],last='match',ovPrimary=null;
+const jget=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},jset=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const startCounty=()=>{let n=jget('clash-county-name',null);if(!n){try{n=JSON.parse(localStorage.getItem('sb_ie_county')||'""')}catch(e){}}const i=C.findIndex(c=>c.n===n);return i<0?C.findIndex(c=>c.n==='Kilkenny'):i};
+const DIFS=[{n:'Club',w:1.3,s:1.15},{n:'County',w:1,s:1},{n:'All-Star',w:.75,s:.85}];let dif=Math.min(2,jget('clash-diff',1)),CH=null;
+const ROUNDS=['Round 1','Quarter-final','Semi-final','All-Ireland Final'];
+const DK=()=>{const d=DIFS[dif],r=CH?CH.r*.07:0;return{w:d.w*(1-r),s:d.s*(1-r*.8)}};
+const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16)*.3+(n>>8&255)*.59+(n&255)*.11)/255};
+let me=startCounty(),opp=1,mode='menu',muted=false,BTN=[],last='match',ovPrimary=null;
 const rnd=(a,b)=>a+Math.random()*(b-a),lerp=(a,b,t)=>a+(b-a)*t,cl=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 const pad=n=>n<10?'0'+n:''+n,sc=t=>t.g+'-'+pad(t.p),tot=t=>t.g*3+t.p;
 function pickOpp(){let o;do{o=Math.random()*C.length|0}while(o===me);return o}
-const keeperKit=c=>({a:c.b==='#ffffff'?'#22a04a':c.b,b:c.a==='#f7f7f7'?'#1f5aa6':c.a,h:'#1a1a1a'});
-const kit=c=>({a:c.a,b:c.b,h:c.a==='#f7f7f7'||c.a==='#f2c200'||c.a==='#f5c400'?'#1a1a1a':c.a});
+const keeperKit=c=>({a:c.b==='#ffffff'?(c.a==='#0a8a43'?'#ff8a1f':'#22a04a'):c.b,b:c.a==='#f7f7f7'?'#1f5aa6':c.a,h:'#1a1a1a'});
+const kit=c=>({a:c.a,b:c.b,h:lum(c.a)>.6?'#1a1a1a':c.a});
 
 /* sizing */
 let scale=1,ox=0,oy=0,dpr=1;
@@ -270,7 +299,7 @@ function msgDraw(m,now,y=232){if(!m)return;const e=now-m.t0;if(e>1350)return;con
 /* ---------- MATCH: turn-about possessions ---------- */
 const M={},E={me:mkA('ready'),mate:mkA(),def:mkA('ready'),fwd:mkA(),keep:mkA()};
 const HAND={x:.045,z:.06,h:.93},FOOT={x:.1,z:.06};
-function startMatch(){last='match';opp=pickOpp();Object.assign(M,{my:{g:0,p:0},th:{g:0,p:0},n:0,log:[],chain:0,msg:null,fl:null,flag:null,kx:0,next:0,nextFn:null,phase:'wait',ball:null,att:null,turn:'att'});mode='match';hide();whistle(1);nextPoss()}
+function startMatch(o){last=CH?'champ':'match';opp=o!==undefined?o:pickOpp();Object.assign(M,{my:{g:0,p:0},th:{g:0,p:0},n:0,log:[],chain:0,msg:null,fl:null,flag:null,kx:0,next:0,nextFn:null,phase:'wait',ball:null,att:null,turn:'att'});mode='match';hide();whistle(1);nextPoss()}
 function sched(ms,fn){M.next=performance.now()+ms;M.nextFn=fn}
 function flash(t,sub,good,sub2){M.msg={t,sub,good,sub2,t0:performance.now()}}
 function nextPoss(){
@@ -285,7 +314,7 @@ function endPoss(good){M.log.push({t:M.turn,good});M.n++;M.phase='result';sched(
 /* attack */
 function nextBall(fromPass){
  const now=performance.now(),k=M.n/(POSS*2),ground=!fromPass&&Math.random()<.25,side=Math.random()<.5?-1:1;
- const D=lerp(1300,950,k)*(fromPass?.85:1);
+ const D=lerp(1300,950,k)*(fromPass?.85:1)*DK().s;
  const src=fromPass?{x:side*rnd(.6,1.2),z:rnd(.28,.4),h:1}:{x:rnd(-1.3,1.3),z:rnd(.55,.8),h:ground?.08:1};
  const dst=ground?{x:.3,z:.06,h:.12}:{...HAND};
  M.ball={src,dst,peak:ground?0:fromPass?.6:rnd(1.4,2.3),ground,t0:now+(fromPass?320:650),D,fromPass,hit:0};
@@ -296,14 +325,14 @@ function atkButtons(){
  else setButtons([{l:'Catch',fn:()=>act('catch')},{l:'Hit',pri:1,fn:()=>act('hit')},{l:'Hand pass',fn:()=>act('pass')}])}
 function ballPos(b,now){const q=cl((now-b.t0)/b.D,0,1.3);return{x:lerp(b.src.x,b.dst.x,q),z:lerp(b.src.z,b.dst.z,q),h:Math.max(.03,lerp(b.src.h,b.dst.h,q)+b.peak*4*q*(1-q))}}
 const zones=()=>{const c=Math.min(3,M.chain),pw=.42+.06*c,gw=.13+.035*c;return{p0:.5-pw/2,p1:.5+pw/2,g0:.5-gw/2,g1:.5+gw/2}};
-function needle(now){return .5-.5*Math.cos((now-M.shotT0)*(.0042+M.n/(POSS*2)*.0015))}
+function needle(now){return .5-.5*Math.cos((now-M.shotT0)*(.0042+M.n/(POSS*2)*.0015)/DK().s)}
 function lost(t,sub){M.chain=0;flash(t,sub,false);groan();seq(E.me,[['slump',250]]);endPoss(false)}
 const swing=a=>seq(a,[['back',110],['strike',80],['follow',260],['idle',520]]);
 function act(k){
  const now=performance.now();
  if(M.phase==='incoming'){
   const b=M.ball;if(now<b.t0)return;
-  const dt=now-(b.t0+b.D),ad=Math.abs(dt),gr=ad<=65?3:ad<=135?2:ad<=225?1:0,gn=['','Scrappy','Good','Perfect'][gr];
+  const dt=now-(b.t0+b.D),ad=Math.abs(dt),gr=ad<=65*DK().w?3:ad<=135*DK().w?2:ad<=225*DK().w?1:0,gn=['','Scrappy','Good','Perfect'][gr];
   if(k==='hit'){swing(E.me);
    if(!gr)return lost('AIR SWING',dt<0?'Too early':'Too late');
    setTimeout(()=>{tok();shake(gr===3?5:2);const p=P3(b.dst.x,b.dst.z,b.dst.h);burst(p.X,p.Y,12,['#fffdf4','#3fae50','#c98f52'])},140);
@@ -344,7 +373,7 @@ function land(now){
 const YOU={x:0,tx:0};
 function nextAttack(){
  const now=performance.now(),k=M.n/(POSS*2),type=Math.random()<.3?'ball':'run';
- const a={type,t0:now+550,ap:lerp(1700,1200,k),st:'approach',T:0,D:1,tried:0,jinks:[]};
+ const a={type,t0:now+550,ap:lerp(1700,1200,k)*DK().s,st:'approach',T:0,D:1,tried:0,jinks:[]};
  const nj=1+(Math.random()<.55?1:0);for(let i=0;i<nj;i++)a.jinks.push({t:a.t0+a.ap*(.2+.5*i/nj+rnd(0,.12)),dx:rnd(.35,.65)*(Math.random()<.5?-1:1)});
  a.fx=a.tx=rnd(-.6,.6);
  if(type==='ball'){a.st='ball';a.jinks=[];a.land={x:rnd(-.75,.75),z:.3};a.src={x:rnd(-1.1,1.1),z:.95,h:1};a.T=a.t0+a.ap;a.D=a.ap;a.peak=rnd(1.6,2.3);a.fx=a.tx=cl(a.land.x+rnd(-.5,.5),-1,1)}
@@ -367,7 +396,7 @@ function updDefend(now){const a=M.att;YOU.x=lerp(YOU.x,YOU.tx,.22);E.me.run=Math
  if(a.st==='round'&&now>=a.T+160)theyShoot('clear',a.why||'He went round you')}
 function tackle(){const now=performance.now(),a=M.att;if(M.phase!=='defend'||now<a.t0||a.tried)return;a.tried=1;
  if(a.st==='approach'){seq(E.me,[['hook',100],['ready',400]]);a.why='Dived in too early';goRound(a,now,420);a.tried=1;flash('DIVED IN','He skips past you',false);return}
- const dt=now-a.T,ad=Math.abs(dt),perfect=ad<=75,good=ad<=150,kind=a.st==='ball'?'intercept':a.st==='round'?'hook':'block';
+ const dt=now-a.T,ad=Math.abs(dt),perfect=ad<=75*DK().w,good=ad<=150*DK().w,kind=a.st==='ball'?'intercept':a.st==='round'?'hook':'block';
  const near=kind==='intercept'?Math.abs(YOU.x-a.land.x)<.3:kind==='hook'?Math.abs(YOU.x-a.fx)<.5:covers(a);
  seq(E.me,kind==='intercept'?[['catch',110],['hold',300]]:kind==='hook'?[['hook',100],['ready',400]]:[['block',100],['block',250],['ready',300]]);
  if(good&&near)return won(kind,perfect);
@@ -383,7 +412,9 @@ function theyShoot(kind,why){const now=performance.now(),a=M.att,r=Math.random()
  a.zd=fz(a,now);a.struck=1;a.st='done';E.fwd.run=0;swing(E.fwd);flash(kind==='harried'?'HARRIED':'SHOT AWAY',why,false);
  const side=Math.random()<.5?-1:1,to=out==='goal'||out==='saved'?{x:rnd(-.3,.3),z:-.7,h:.5}:out==='point'?{x:rnd(-.4,.4),z:-.7,h:4.2}:{x:side*rnd(1.4,2),z:-.7,h:3.5};
  M.phase='flightwait';shoot(out,{x:a.fx,z:a.zd,h:.9},'','them',150,to);setTimeout(tok,150)}
-function fullTime(){const a=tot(M.my),b=tot(M.th),line=C[me].n+' '+sc(M.my)+' ('+a+')  ·  '+C[opp].n+' '+sc(M.th)+' ('+b+')';whistle(3);
+function record(res){const st=jget('clash-stats',{pl:0,w:0,d:0,l:0,g:0,p:0,tro:0,best:0});st.pl++;st[res]++;st.g+=M.my.g;st.p+=M.my.p;const m=tot(M.my)-tot(M.th);if(m>st.best)st.best=m;jset('clash-stats',st);return st}
+function fullTime(){const a=tot(M.my),b=tot(M.th),line=C[me].n+' '+sc(M.my)+' ('+a+')  ·  '+C[opp].n+' '+sc(M.th)+' ('+b+')';whistle(3);record(a>b?'w':a<b?'l':'d');
+ if(CH&&a!==b)return chResult(a>b,line);
  if(a===b){showOver('Level!',sc(M.my)+' – '+sc(M.th),line+'. It goes to penalties.',{l:'Penalties',fn:()=>startPens(true)});return}
  if(a>b)store.set('clash-wins',store.get('clash-wins')+1);
  showOver(a>b?'You win!':'Beaten',sc(M.my)+' – '+sc(M.th),line+(a>b?' · Won by ':' · Lost by ')+Math.abs(a-b)+' · Match wins: '+store.get('clash-wins'))}
@@ -488,7 +519,7 @@ function decide(){const a=P.you,b=P.them,sa=sum(a),sb=sum(b);
  if(a.length===b.length){const n=a.length;if(n>=5&&sa!==sb)return endPens(sa>sb);if(n<5){const r=5-n;if(sa>sb+r||sb>sa+r)return endPens(sa>sb)}return beginTake()}
  if(a.length<=5){if(sa>sb+(5-b.length))return endPens(true);if(sb>sa+(5-a.length))return endPens(false)}
  return beginSave()}
-function endPens(win){whistle(3);const key=P.fromMatch?'clash-wins':'clash-pens-wins';if(win)store.set(key,store.get(key)+1);
+function endPens(win){whistle(3);if(P.fromMatch&&CH)return chResult(win,C[me].n+' '+sc(M.my)+' · '+C[opp].n+' '+sc(M.th)+' after normal time, '+sum(P.you)+'–'+sum(P.them)+' on penalties.');const key=P.fromMatch?'clash-wins':'clash-pens-wins';if(win)store.set(key,store.get(key)+1);
  const pre=P.fromMatch?C[me].n+' '+sc(M.my)+' · '+C[opp].n+' '+sc(M.th)+' after normal time. ':'';
  showOver(win?'You win it!':'Beaten on penalties',sum(P.you)+' – '+sum(P.them)+' on pens',pre+(P.fromMatch?'Match wins: ':'Shootout wins: ')+store.get(key))}
 function penPitch(){for(let i=0;i<12;i++){ctx.fillStyle=i%2?'#3fae50':'#4bbb5b';ctx.fillRect(-500,150+i*i*6,W+1000,(i+1)*(i+1)*6-i*i*6+.5)}
@@ -539,17 +570,50 @@ cv.addEventListener('pointerdown',e=>{e.preventDefault();au();const r=cv.getBoun
 addEventListener('keydown',e=>{if(mode==='menu')return;if(mode==='match'&&M.phase==='defend'){if(e.key==='ArrowLeft'){step(-1);return}if(e.key==='ArrowRight'){step(1);return}if(e.key==='ArrowUp'){tackle();return}}if(mode==='pens'&&P.phase==='read'&&e.key&&'qweasd'.includes(e.key)){P.zone='qweasd'.indexOf(e.key);return}
  const bs=BTN.filter(b=>b.fn);let i=-1;if(e.key==='1')i=0;else if(e.key==='2')i=1;else if(e.key==='3')i=2;else if(e.key===' ')i=bs.length>1?1:0;
  if(bs[i]){e.preventDefault();au();PRESS={i,t:performance.now()};bs[i].fn()}});
-function paintMenu(){$('#counties').innerHTML=C.map((c,i)=>'<button class="chip" data-c="'+i+'" aria-pressed="'+(i===me)+'" style="--ca:'+c.a+';--cb:'+c.b+'"><i></i>'+c.n+'</button>').join('');
- const w=store.get('clash-wins'),pw=store.get('clash-pens-wins');$('#best').textContent=w||pw?'Match wins: '+w+' · Shootout wins: '+pw:'No results yet. Pick a county and go.'}
-$('#counties').addEventListener('click',e=>{const t=e.target.closest('.chip');if(!t)return;me=+t.dataset.c;store.set('clash-county',me);if(opp===me)opp=pickOpp();paintMenu()});
-document.querySelectorAll('[data-m]').forEach(b=>b.addEventListener('click',()=>{au();b.dataset.m==='match'?startMatch():startPens(false)}));
+function startChamp(){const pool=C.map((c,i)=>i).filter(i=>i!==me).sort(()=>Math.random()-.5);CH={r:0,opps:pool.slice(0,4),res:[]};chScreen('Win four matches to lift the Liam MacCarthy Cup.')}
+function chPath(){return ROUNDS.map((r,i)=>'<li class="'+(i<CH.r?'won':i===CH.r?'now':'')+'"><b>'+r+'</b><span>v '+C[CH.opps[i]].n+'</span><em>'+(CH.res[i]||(i===CH.r?'Next':''))+'</em></li>').join('')}
+function chScreen(msg){showOver('All-Ireland Championship',ROUNDS[CH.r],msg,{l:'Play v '+C[CH.opps[CH.r]].s,fn:()=>startMatch(CH.opps[CH.r])});$('#ovPath').innerHTML=chPath();$('#ovPath').hidden=false}
+function chResult(win,line){CH.res[CH.r]=win?(M.my.g+'-'+pad(M.my.p)+' to '+M.th.g+'-'+pad(M.th.p)):'Lost';
+ if(!win){const r=ROUNDS[CH.r];const path=chPath();CH=null;showOver('Knocked out',r==='Round 1'?'Out in round 1':'Out in the '+(r==='All-Ireland Final'?'final':r.toLowerCase()),line,{l:'Go again',fn:startChamp});$('#ovPath').innerHTML=path;$('#ovPath').hidden=false;return}
+ CH.r++;if(CH.r===4){const st=jget('clash-stats',{});st.tro=(st.tro||0)+1;jset('clash-stats',st);const path=chPath();CH=null;confetti();confetti();cheer();excite();
+  showOver('All-Ireland champions!',C[me].n,'You lifted the Liam MacCarthy Cup. '+line+' All-Ireland titles: '+st.tro,{l:'Defend title',fn:startChamp});$('#ovPath').innerHTML=path;$('#ovPath').hidden=false;return}
+ chScreen('Through! '+line)}
+function paintMenu(){$('#counties').innerHTML=C.map((c,i)=>'<option value="'+i+'"'+(i===me?' selected':'')+'>'+c.n+'</option>').join('');$('#swatch').style.setProperty('--ca',C[me].a);$('#swatch').style.setProperty('--cb',C[me].b);
+ document.querySelectorAll('#diff button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.d===dif));
+ const st=jget('clash-stats',null),pw=store.get('clash-pens-wins');$('#best').textContent=st&&st.pl?'Your record: played '+st.pl+', won '+st.w+', drew '+st.d+', lost '+st.l+' · scored '+st.g+'-'+pad(st.p)+' · All-Irelands '+(st.tro||0)+(pw?' · shootout wins '+pw:''):'No results yet. Pick your county and go.'}
+$('#counties').addEventListener('change',e=>{me=+e.target.value;jset('clash-county-name',C[me].n);if(opp===me)opp=pickOpp();BG.key='';paintMenu()});
+$('#diff').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;dif=+b.dataset.d;jset('clash-diff',dif);paintMenu()});
+document.querySelectorAll('[data-m]').forEach(b=>b.addEventListener('click',()=>{au();CH=null;const m=b.dataset.m;m==='champ'?startChamp():m==='match'?startMatch():startPens(false)}));
 function hide(){$('#menu').hidden=true;$('#over').hidden=true}
-function showMenu(){mode='menu';$('#over').hidden=true;$('#menu').hidden=false;paintMenu();setButtons([{note:'Pick a mode to start'}])}
-function showOver(t,r,s,primary){mode='menu';ovPrimary=primary||{l:'Play again',fn:()=>last==='match'?startMatch():startPens(false)};$('#again').textContent=ovPrimary.l;
+function showMenu(){mode='menu';CH=null;$('#over').hidden=true;$('#menu').hidden=false;paintMenu();setButtons([{note:'Pick a mode to start'}])}
+function showOver(t,r,s,primary){$('#ovPath').hidden=true;$('#menu').hidden=true;$('#sheet').hidden=true;mode='menu';lastRes=(t==='Level!'?'Level at full time on Clash Hurling: ':t+' '+r+' on Clash Hurling. ')+C[me].n+' v '+C[opp].n+'. Can you do better?';$('#shareRes').hidden=t==='All-Ireland Championship'||t==='Level!';ovPrimary=primary||{l:'Play again',fn:()=>last==='match'?startMatch():startPens(false)};$('#again').textContent=ovPrimary.l;
  $('#ovT').textContent=t;$('#ovR').textContent=r;$('#ovS').textContent=s;$('#over').hidden=false;setButtons([{note:t}])}
 $('#again').addEventListener('click',()=>{au();ovPrimary.fn()});
 $('#toMenu').addEventListener('click',showMenu);$('#menuBtn').addEventListener('click',showMenu);
-$('#snd').addEventListener('click',e=>{muted=!muted;e.currentTarget.textContent=muted?'Sound off':'Sound on';e.currentTarget.setAttribute('aria-pressed',muted)});
+$('#snd').addEventListener('click',e=>{muted=!muted;e.currentTarget.textContent=muted?'Muted':'Sound';e.currentTarget.setAttribute('aria-label',muted?'Sound off':'Sound on')});
+const URL_='https://sportingbrain.com/ireland/clash-hurling.html';let lastRes='';
+const ev=n=>{try{window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:'event/'+n,title:n,event:true})}catch(e){}};
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;$('.stage').appendChild(d);setTimeout(()=>d.remove(),2200)}
+function sheet(title,para,html){$('#shT').textContent=title;$('#shP').textContent=para;$('#shL').innerHTML=html;$('#sheet').hidden=false}
+$('#shClose').addEventListener('click',()=>$('#sheet').hidden=true);
+async function doShare(text,tag){ev('clash-share-'+tag);const full=text+' '+URL_;
+ if(navigator.share){try{await navigator.share({title:'Clash Hurling',text,url:URL_});return}catch(e){if(e&&e.name==='AbortError')return}}
+ const q=encodeURIComponent(full);
+ sheet('Share Clash Hurling',text,'<a class="wa" href="https://wa.me/?text='+q+'" target="_blank" rel="noopener">WhatsApp</a><a href="https://twitter.com/intent/tweet?text='+q+'" target="_blank" rel="noopener">X</a><a href="https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(URL_)+'" target="_blank" rel="noopener">Facebook</a><button id="cpy">Copy link</button>');
+ $('#cpy').onclick=async()=>{try{await navigator.clipboard.writeText(full);toast('Link copied')}catch(e){toast(URL_)}}}
+$('#shareTop').addEventListener('click',()=>doShare('Play Clash Hurling, the free hurling game. Pick your county and take me on.','top'));
+$('#shareGame').addEventListener('click',()=>doShare('Play Clash Hurling, the free hurling game. Pick your county and take me on.','menu'));
+$('#shareRes').addEventListener('click',()=>doShare(lastRes||'Play Clash Hurling, the free hurling game.','result'));
+let deferred=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e});
+const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+if(standalone())$('#install').hidden=true;
+addEventListener('appinstalled',()=>{$('#install').hidden=true;toast('Added to your home screen');ev('clash-installed')});
+$('#install').addEventListener('click',async()=>{ev('clash-install-tap');
+ if(deferred){deferred.prompt();try{await deferred.userChoice}catch(e){}deferred=null;return}
+ const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ if(ios)sheet('Add to your home screen','On iPhone or iPad, in Safari:','<ol class="steps"><li>Tap the <b>Share</b> button at the bottom of Safari (the square with an arrow).</li><li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>. Clash Hurling now opens like an app.</li></ol>');
+ else sheet('Add to your home screen','On Android, in Chrome:','<ol class="steps"><li>Tap the <b>three dots</b> at the top right of Chrome.</li><li>Tap <b>Add to Home screen</b> or <b>Install app</b>.</li><li>Tap <b>Install</b>. Clash Hurling now opens like an app.</li></ol>')});
+if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
 const IDLE=mkA('idle');
 function frame(now){
  let sx=0,sy=0;const se=now-FX.shakeT;if(se<260&&FX.shake){const k=FX.shake*(1-se/260);sx=rnd(-k,k);sy=rnd(-k,k)}
