@@ -123,7 +123,7 @@ function isoWeek(d=new Date()){ const t=new Date(Date.UTC(d.getFullYear(),d.getM
 window.addEventListener('message',e=>{ try{ const d=typeof e.data==='string'?JSON.parse(e.data):e.data; if(d&&d.event==='Tally.FormSubmitted'){ store.set('nl_done',true); toast("You're in! See you in the morning."); } }catch(_){} });
 function saverAvailable(){ return store.get('saver_week','')!==isoWeek(); }
 function streakSaverLine(){ return saverAvailable()?'Streak saver ready this week':'Streak saver used this week'; }
-function markPlayed(g){ window.SB_loadAds&&window.SB_loadAds(); store.set('pl_'+g,true); const d=store.get('playdays',[]), k=ukKey(); if(!d.includes(k)){ d.push(k); store.set('playdays',d.slice(-30)); } }
+const _fin=new Set(); function markPlayed(g){ if(!_fin.has(g)){ _fin.add(g); window.sbTrack&&sbTrack('finished-'+g); } window.SB_loadAds&&window.SB_loadAds(); store.set('pl_'+g,true); const d=store.get('playdays',[]), k=ukKey(); if(!d.includes(k)){ d.push(k); store.set('playdays',d.slice(-30)); } }
 // Prompt rules (Super Prompt 5A): one interruptive prompt per visit, two a week, none if tips are switched off.
 const PROMPT={ ok(){ if(store.get('tips_off',false)) return false; try{ if(sessionStorage.getItem('sb_prompt')) return false; }catch(e){} const w=store.get('prompt_week',{w:'',n:0}); return !(w.w===isoWeek()&&w.n>=2); },
   used(){ try{ sessionStorage.setItem('sb_prompt','1'); }catch(e){} const w=store.get('prompt_week',{w:'',n:0}); store.set('prompt_week',{w:isoWeek(),n:(w.w===isoWeek()?w.n:0)+1}); } };

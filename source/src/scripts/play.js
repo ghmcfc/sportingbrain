@@ -53,7 +53,8 @@ export function challengeBox(score, out, label) {
   d.appendChild(endNav());
   return d;
 }
-export function markPlayed(g) { window.SB_loadAds && window.SB_loadAds(); store.set('pl_' + g, true); const p = store.get('pg_played', {}); p[g] = (p[g] || 0) + 1; store.set('pg_played', p);
+const _fin = new Set();
+export function markPlayed(g) { if (!_fin.has(g)) { _fin.add(g); window.sbTrack && window.sbTrack('finished-' + g.replace(/\//g, '-')); } window.SB_loadAds && window.SB_loadAds(); store.set('pl_' + g, true); const p = store.get('pg_played', {}); p[g] = (p[g] || 0) + 1; store.set('pg_played', p);
   const u = ukNow(), k = `${u.getFullYear()}-${String(u.getMonth() + 1).padStart(2, '0')}-${String(u.getDate()).padStart(2, '0')}`, d = store.get('playdays', []); if (!d.includes(k)) { d.push(k); store.set('playdays', d.slice(-30)); }
   setTimeout(() => window.SB_maybeNewsletter && window.SB_maybeNewsletter(), 1500); }
 

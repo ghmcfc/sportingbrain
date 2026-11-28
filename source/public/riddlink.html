@@ -286,6 +286,7 @@ function score(g,a){
 }
 const RANKS=ED.ranks;
 const rankOf=(won,s)=>won?RANKS.filter(r=>r[0]<=s).pop()[1]:ED.lost;
+const RT=n=>{try{window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:'event/riddlink-'+n,title:'riddlink-'+n,event:true})}catch(e){}};
 let G,CH=null,slots=['','','','',''],busy=false,practice=false,pend=[];
 const blank=(day)=>({day,hard:!!store.get('hard',false),chain:chainFor(day),guesses:[[],[],[]],hints:[[],[],[]],plain:[0,0,0],labels:[0,0,0],w:0,over:false,won:false});
 function newGame(day,isPractice){
@@ -382,7 +383,7 @@ function submit(){
   const word=slots.join('');
   if(slots.some(c=>!c)){toast('Not enough letters');bad('Fill every box, then press Enter.');return shake()}
   if(!VALID.has(word)){toast(`${word.toUpperCase()} isn't a word`);bad(`${word.toUpperCase()} isn't in the dictionary, so it costs nothing. Press Delete and try a real word.`);return shake()}
-  G.restored=false;G.guesses[G.w].push(word);resetSlots();
+  G.restored=false;G.guesses[G.w].push(word);if(G.w===0&&G.guesses[0].length===1)RT(practice?'practice-started':'started');resetSlots();
   const solved=word===G.chain[G.w];
   renderBoard();renderChain();save();
   if(!solved&&spare()>0){if(spare()===1)toast('Last guess!');else if(spare()===3)toast('3 guesses left');return}
@@ -400,6 +401,7 @@ function submit(){
   },700);
 }
 function finish(won){
+  if(!G.over)RT((practice?'practice-':'')+(won?'won':'lost'));
   G.over=true;G.won=won;if(won)G.w=3;pend=[];if(!G.t1)G.t1=Date.now();save();
   if(practice&&!G.free){const a=archDone();a[G.day]=won?spare():'x';store.set('arch',a)}
   if(!practice){

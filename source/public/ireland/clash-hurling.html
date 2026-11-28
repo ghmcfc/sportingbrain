@@ -308,7 +308,7 @@ function msgDraw(m,now,y=232){if(!m)return;const e=now-m.t0;if(e>1350)return;con
 /* ---------- MATCH: turn-about possessions ---------- */
 const M={},E={me:mkA('ready'),mate:mkA(),def:mkA('ready'),fwd:mkA(),keep:mkA()};
 const HAND={x:.045,z:.06,h:.93},FOOT={x:.1,z:.06};
-function startMatch(o){last=CH?'champ':'match';opp=o!==undefined?o:pickOpp();Object.assign(M,{my:{g:0,p:0},th:{g:0,p:0},n:0,log:[],chain:0,msg:null,fl:null,flag:null,kx:0,next:0,nextFn:null,phase:'wait',ball:null,att:null,turn:'att'});mode='match';hide();whistle(1);nextPoss()}
+function startMatch(o){ev(CH?'clash-champ-start':'clash-match-start');last=CH?'champ':'match';opp=o!==undefined?o:pickOpp();Object.assign(M,{my:{g:0,p:0},th:{g:0,p:0},n:0,log:[],chain:0,msg:null,fl:null,flag:null,kx:0,next:0,nextFn:null,phase:'wait',ball:null,att:null,turn:'att'});mode='match';hide();whistle(1);nextPoss()}
 function sched(ms,fn){M.next=performance.now()+ms;M.nextFn=fn}
 function flash(t,sub,good,sub2){M.msg={t,sub,good,sub2,t0:performance.now()}}
 function nextPoss(){
@@ -422,7 +422,7 @@ function theyShoot(kind,why){const now=performance.now(),a=M.att,r=Math.random()
  const side=Math.random()<.5?-1:1,to=out==='goal'||out==='saved'?{x:rnd(-.3,.3),z:-.7,h:.5}:out==='point'?{x:rnd(-.4,.4),z:-.7,h:4.2}:{x:side*rnd(1.4,2),z:-.7,h:3.5};
  M.phase='flightwait';shoot(out,{x:a.fx,z:a.zd,h:.9},'','them',150,to);setTimeout(tok,150)}
 function record(res){const st=jget('clash-stats',{pl:0,w:0,d:0,l:0,g:0,p:0,tro:0,best:0});st.pl++;st[res]++;st.g+=M.my.g;st.p+=M.my.p;const m=tot(M.my)-tot(M.th);if(m>st.best)st.best=m;jset('clash-stats',st);return st}
-function fullTime(){const a=tot(M.my),b=tot(M.th),line=C[me].n+' '+sc(M.my)+' ('+a+')  ·  '+C[opp].n+' '+sc(M.th)+' ('+b+')';whistle(3);record(a>b?'w':a<b?'l':'d');
+function fullTime(){const a=tot(M.my),b=tot(M.th);ev('clash-fulltime-'+(a>b?'won':a<b?'lost':'level'));const line=C[me].n+' '+sc(M.my)+' ('+a+')  ·  '+C[opp].n+' '+sc(M.th)+' ('+b+')';whistle(3);record(a>b?'w':a<b?'l':'d');
  if(CH&&a!==b)return chResult(a>b,line);
  if(a===b){showOver('Level!',sc(M.my)+' – '+sc(M.th),line+'. It goes to penalties.',{l:'Penalties',fn:()=>startPens(true)});return}
  if(a>b)store.set('clash-wins',store.get('clash-wins')+1);
@@ -496,7 +496,7 @@ const zc=z=>({x:(ZX[z%3]+ZX[z%3+1])/2,y:(ZY[z/3|0]+ZY[(z/3|0)+1])/2});
 const zoneAt=(x,y)=>x<60||x>300||y<225||y>345?-1:Math.min(2,(x-60)/80|0)+(y<290?0:3);
 function wpick(w){let r=Math.random()*w.reduce((a,b)=>a+b);for(let i=0;i<w.length;i++){r-=w[i];if(r<0)return i}return w.length-1}
 const sum=a=>a.filter(Boolean).length;
-function startPens(fromMatch){if(!fromMatch){last='pens';opp=pickOpp()}Object.assign(P,{you:[],them:[],msg:null,next:0,nextFn:null,fromMatch:!!fromMatch});mode='pens';hide();whistle(1);beginTake()}
+function startPens(fromMatch){if(!fromMatch)ev('clash-pens-start');if(!fromMatch){last='pens';opp=pickOpp()}Object.assign(P,{you:[],them:[],msg:null,next:0,nextFn:null,fromMatch:!!fromMatch});mode='pens';hide();whistle(1);beginTake()}
 function resetK(){P.kz=-1;P.kt0=0;P.ball=null;FX.trail=[];seq(PE.kp,[['ready',200]]);PE.tk.run=0;seq(PE.tk,[['idle',200]])}
 function beginTake(){resetK();P.turn='take';P.phase='aim';P.zone=-1;setButtons([{note:'Tap the goal to pick your spot'}])}
 function beginSave(){resetK();const now=performance.now();P.turn='save';P.phase='read';P.zone=-1;P.t0=now;P.shot=wpick(KW);P.miss=Math.random()<.12;PE.tk.run=1;P.sw=0;
@@ -528,7 +528,7 @@ function decide(){const a=P.you,b=P.them,sa=sum(a),sb=sum(b);
  if(a.length===b.length){const n=a.length;if(n>=5&&sa!==sb)return endPens(sa>sb);if(n<5){const r=5-n;if(sa>sb+r||sb>sa+r)return endPens(sa>sb)}return beginTake()}
  if(a.length<=5){if(sa>sb+(5-b.length))return endPens(true);if(sb>sa+(5-a.length))return endPens(false)}
  return beginSave()}
-function endPens(win){whistle(3);if(P.fromMatch&&CH)return chResult(win,C[me].n+' '+sc(M.my)+' · '+C[opp].n+' '+sc(M.th)+' after normal time, '+sum(P.you)+'–'+sum(P.them)+' on penalties.');const key=P.fromMatch?'clash-wins':'clash-pens-wins';if(win)store.set(key,store.get(key)+1);
+function endPens(win){ev('clash-pens-'+(win?'won':'lost'));whistle(3);if(P.fromMatch&&CH)return chResult(win,C[me].n+' '+sc(M.my)+' · '+C[opp].n+' '+sc(M.th)+' after normal time, '+sum(P.you)+'–'+sum(P.them)+' on penalties.');const key=P.fromMatch?'clash-wins':'clash-pens-wins';if(win)store.set(key,store.get(key)+1);
  const pre=P.fromMatch?C[me].n+' '+sc(M.my)+' · '+C[opp].n+' '+sc(M.th)+' after normal time. ':'';
  showOver(win?'You win it!':'Beaten on penalties',sum(P.you)+' – '+sum(P.them)+' on pens',pre+(P.fromMatch?'Match wins: ':'Shootout wins: ')+store.get(key))}
 function penPitch(){for(let i=0;i<12;i++){ctx.fillStyle=i%2?'#3fae50':'#4bbb5b';ctx.fillRect(-500,150+i*i*6,W+1000,(i+1)*(i+1)*6-i*i*6+.5)}
